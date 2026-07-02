@@ -15,7 +15,9 @@
     "commentaries/wesley/manifest.json",
     "commentaries/tsk/manifest.json"
   ],
-  "dictionaries": [],
+  "dictionaries": [
+    "dictionaries/strong-verbo/manifest.json"
+  ],
   "exegesis": [],
   "library": [],
   "gospel": [

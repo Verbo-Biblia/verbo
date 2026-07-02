@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "id": "strong-verbo",
+  "type": "dictionary",
+  "name": "Diccionario Strong",
+  "abbreviation": "Strong",
+  "language": "es",
+  "strong": true,
+  "description": "Diccionario léxico completo de números Strong (hebreo y griego). Incluye lema original, transliteración, pronunciación (hebreo), derivación etimológica con enlaces cruzados a otros números Strong, y definición/traducciones según la King James Version. Construido a partir de la edición estructurada de Open Scriptures, derivada del texto de dominio público de James Strong (1890).",
+  "license": "Obra fuente: Dominio público (James Strong, 1890). Estructura JSON: Open Scriptures, CC BY-SA 3.0.",
+  "source": "James Strong, Strong's Exhaustive Concordance, 1890",
+  "editor": "Verbo",
+  "entryFiles": {
+    "H": "entries-H.json",
+    "G": "entries-G.json"
+  },
+  "indexFile": "index.json",
+  "coverage": {
+    "hebrew": "H1-H8674 (8674 entradas)",
+    "greek": "G1-G5624 (5523 entradas)"
+  }
+}
