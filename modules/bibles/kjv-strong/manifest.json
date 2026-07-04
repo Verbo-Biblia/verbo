@@ -1,0 +1,411 @@
+{
+  "schemaVersion": 2,
+  "id": "kjv-strong",
+  "type": "bible",
+  "name": "King James Version (1769) with Strong's Numbers",
+  "abbreviation": "KJV+",
+  "language": "en",
+  "year": 1769,
+  "description": "CrossWire KJV 3.1 with embedded Strong's numbers and morphology.",
+  "license": "GPL; CrossWire grants a general public license to use this text for any purpose.",
+  "source": "CrossWire Bible Society KJV 3.1",
+  "hasStrongs": true,
+  "books": [
+    {
+      "id": "GEN",
+      "name": "Genesis",
+      "number": 1,
+      "file": "books/GEN.json"
+    },
+    {
+      "id": "EXO",
+      "name": "Exodus",
+      "number": 2,
+      "file": "books/EXO.json"
+    },
+    {
+      "id": "LEV",
+      "name": "Leviticus",
+      "number": 3,
+      "file": "books/LEV.json"
+    },
+    {
+      "id": "NUM",
+      "name": "Numbers",
+      "number": 4,
+      "file": "books/NUM.json"
+    },
+    {
+      "id": "DEU",
+      "name": "Deuteronomy",
+      "number": 5,
+      "file": "books/DEU.json"
+    },
+    {
+      "id": "JOS",
+      "name": "Joshua",
+      "number": 6,
+      "file": "books/JOS.json"
+    },
+    {
+      "id": "JDG",
+      "name": "Judges",
+      "number": 7,
+      "file": "books/JDG.json"
+    },
+    {
+      "id": "RUT",
+      "name": "Ruth",
+      "number": 8,
+      "file": "books/RUT.json"
+    },
+    {
+      "id": "1SA",
+      "name": "1 Samuel",
+      "number": 9,
+      "file": "books/1SA.json"
+    },
+    {
+      "id": "2SA",
+      "name": "2 Samuel",
+      "number": 10,
+      "file": "books/2SA.json"
+    },
+    {
+      "id": "1KI",
+      "name": "1 Kings",
+      "number": 11,
+      "file": "books/1KI.json"
+    },
+    {
+      "id": "2KI",
+      "name": "2 Kings",
+      "number": 12,
+      "file": "books/2KI.json"
+    },
+    {
+      "id": "1CH",
+      "name": "1 Chronicles",
+      "number": 13,
+      "file": "books/1CH.json"
+    },
+    {
+      "id": "2CH",
+      "name": "2 Chronicles",
+      "number": 14,
+      "file": "books/2CH.json"
+    },
+    {
+      "id": "EZR",
+      "name": "Ezra",
+      "number": 15,
+      "file": "books/EZR.json"
+    },
+    {
+      "id": "NEH",
+      "name": "Nehemiah",
+      "number": 16,
+      "file": "books/NEH.json"
+    },
+    {
+      "id": "EST",
+      "name": "Esther",
+      "number": 17,
+      "file": "books/EST.json"
+    },
+    {
+      "id": "JOB",
+      "name": "Job",
+      "number": 18,
+      "file": "books/JOB.json"
+    },
+    {
+      "id": "PSA",
+      "name": "Psalms",
+      "number": 19,
+      "file": "books/PSA.json"
+    },
+    {
+      "id": "PRO",
+      "name": "Proverbs",
+      "number": 20,
+      "file": "books/PRO.json"
+    },
+    {
+      "id": "ECC",
+      "name": "Ecclesiastes",
+      "number": 21,
+      "file": "books/ECC.json"
+    },
+    {
+      "id": "SNG",
+      "name": "Song of Solomon",
+      "number": 22,
+      "file": "books/SNG.json"
+    },
+    {
+      "id": "ISA",
+      "name": "Isaiah",
+      "number": 23,
+      "file": "books/ISA.json"
+    },
+    {
+      "id": "JER",
+      "name": "Jeremiah",
+      "number": 24,
+      "file": "books/JER.json"
+    },
+    {
+      "id": "LAM",
+      "name": "Lamentations",
+      "number": 25,
+      "file": "books/LAM.json"
+    },
+    {
+      "id": "EZK",
+      "name": "Ezekiel",
+      "number": 26,
+      "file": "books/EZK.json"
+    },
+    {
+      "id": "DAN",
+      "name": "Daniel",
+      "number": 27,
+      "file": "books/DAN.json"
+    },
+    {
+      "id": "HOS",
+      "name": "Hosea",
+      "number": 28,
+      "file": "books/HOS.json"
+    },
+    {
+      "id": "JOL",
+      "name": "Joel",
+      "number": 29,
+      "file": "books/JOL.json"
+    },
+    {
+      "id": "AMO",
+      "name": "Amos",
+      "number": 30,
+      "file": "books/AMO.json"
+    },
+    {
+      "id": "OBA",
+      "name": "Obadiah",
+      "number": 31,
+      "file": "books/OBA.json"
+    },
+    {
+      "id": "JON",
+      "name": "Jonah",
+      "number": 32,
+      "file": "books/JON.json"
+    },
+    {
+      "id": "MIC",
+      "name": "Micah",
+      "number": 33,
+      "file": "books/MIC.json"
+    },
+    {
+      "id": "NAH",
+      "name": "Nahum",
+      "number": 34,
+      "file": "books/NAH.json"
+    },
+    {
+      "id": "HAB",
+      "name": "Habakkuk",
+      "number": 35,
+      "file": "books/HAB.json"
+    },
+    {
+      "id": "ZEP",
+      "name": "Zephaniah",
+      "number": 36,
+      "file": "books/ZEP.json"
+    },
+    {
+      "id": "HAG",
+      "name": "Haggai",
+      "number": 37,
+      "file": "books/HAG.json"
+    },
+    {
+      "id": "ZEC",
+      "name": "Zechariah",
+      "number": 38,
+      "file": "books/ZEC.json"
+    },
+    {
+      "id": "MAL",
+      "name": "Malachi",
+      "number": 39,
+      "file": "books/MAL.json"
+    },
+    {
+      "id": "MAT",
+      "name": "Matthew",
+      "number": 40,
+      "file": "books/MAT.json"
+    },
+    {
+      "id": "MRK",
+      "name": "Mark",
+      "number": 41,
+      "file": "books/MRK.json"
+    },
+    {
+      "id": "LUK",
+      "name": "Luke",
+      "number": 42,
+      "file": "books/LUK.json"
+    },
+    {
+      "id": "JHN",
+      "name": "John",
+      "number": 43,
+      "file": "books/JHN.json"
+    },
+    {
+      "id": "ACT",
+      "name": "Acts",
+      "number": 44,
+      "file": "books/ACT.json"
+    },
+    {
+      "id": "ROM",
+      "name": "Romans",
+      "number": 45,
+      "file": "books/ROM.json"
+    },
+    {
+      "id": "1CO",
+      "name": "1 Corinthians",
+      "number": 46,
+      "file": "books/1CO.json"
+    },
+    {
+      "id": "2CO",
+      "name": "2 Corinthians",
+      "number": 47,
+      "file": "books/2CO.json"
+    },
+    {
+      "id": "GAL",
+      "name": "Galatians",
+      "number": 48,
+      "file": "books/GAL.json"
+    },
+    {
+      "id": "EPH",
+      "name": "Ephesians",
+      "number": 49,
+      "file": "books/EPH.json"
+    },
+    {
+      "id": "PHP",
+      "name": "Philippians",
+      "number": 50,
+      "file": "books/PHP.json"
+    },
+    {
+      "id": "COL",
+      "name": "Colossians",
+      "number": 51,
+      "file": "books/COL.json"
+    },
+    {
+      "id": "1TH",
+      "name": "1 Thessalonians",
+      "number": 52,
+      "file": "books/1TH.json"
+    },
+    {
+      "id": "2TH",
+      "name": "2 Thessalonians",
+      "number": 53,
+      "file": "books/2TH.json"
+    },
+    {
+      "id": "1TI",
+      "name": "1 Timothy",
+      "number": 54,
+      "file": "books/1TI.json"
+    },
+    {
+      "id": "2TI",
+      "name": "2 Timothy",
+      "number": 55,
+      "file": "books/2TI.json"
+    },
+    {
+      "id": "TIT",
+      "name": "Titus",
+      "number": 56,
+      "file": "books/TIT.json"
+    },
+    {
+      "id": "PHM",
+      "name": "Philemon",
+      "number": 57,
+      "file": "books/PHM.json"
+    },
+    {
+      "id": "HEB",
+      "name": "Hebrews",
+      "number": 58,
+      "file": "books/HEB.json"
+    },
+    {
+      "id": "JAS",
+      "name": "James",
+      "number": 59,
+      "file": "books/JAS.json"
+    },
+    {
+      "id": "1PE",
+      "name": "1 Peter",
+      "number": 60,
+      "file": "books/1PE.json"
+    },
+    {
+      "id": "2PE",
+      "name": "2 Peter",
+      "number": 61,
+      "file": "books/2PE.json"
+    },
+    {
+      "id": "1JN",
+      "name": "1 John",
+      "number": 62,
+      "file": "books/1JN.json"
+    },
+    {
+      "id": "2JN",
+      "name": "2 John",
+      "number": 63,
+      "file": "books/2JN.json"
+    },
+    {
+      "id": "3JN",
+      "name": "3 John",
+      "number": 64,
+      "file": "books/3JN.json"
+    },
+    {
+      "id": "JUD",
+      "name": "Jude",
+      "number": 65,
+      "file": "books/JUD.json"
+    },
+    {
+      "id": "REV",
+      "name": "Revelation",
+      "number": 66,
+      "file": "books/REV.json"
+    }
+  ]
+}

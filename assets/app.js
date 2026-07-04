@@ -441,17 +441,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
 
         <article class="license-card">
-          <h3>Reina-Valera Gómez 2004</h3>
-          <p><strong>Texto bíblico:</strong> copyright © 2004, 2010 y 2023, Dr. Humberto Gómez Caballero.</p>
-          <p>Usado como texto bíblico de la versión <strong>RVG-+ V</strong>. El texto se conserva sin modificaciones. Su reproducción con fines de lucro está prohibida.</p>
-          <a href="https://ebible.org/sparvg/copyright.htm" target="_blank" rel="noopener noreferrer">Consultar aviso de copyright</a>
+          <h3>King James Version con Strong</h3>
+          <p>La versión <strong>KJV+</strong> procede del módulo KJV 3.1 de CrossWire Bible Society e incluye sus números Strong y datos morfológicos originales.</p>
+          <p>CrossWire distribuye el módulo bajo GPL y concede una licencia pública general para utilizar el texto y su etiquetado para cualquier propósito.</p>
+          <a href="https://wiki.crosswire.org/CrossWire_KJV" target="_blank" rel="noopener noreferrer">Consultar información de CrossWire KJV</a>
         </article>
 
         <article class="license-card">
-          <h3>Etiquetado Strong y fuente de alineación</h3>
-          <p>La capa de correspondencias Strong fue desarrollada para Verbo utilizando como apoyo los datos etiquetados de la <strong>CrossWire KJV</strong>. CrossWire concede una licencia pública general para utilizar ese trabajo.</p>
-          <p>La alineación española, la estructura JSON y la integración visual de <strong>RVG-+ V</strong> son una elaboración técnica de Verbo; no son una edición oficial de la RVG ni de CrossWire.</p>
-          <a href="https://wiki.crosswire.org/CrossWire_KJV" target="_blank" rel="noopener noreferrer">Consultar información de CrossWire KJV</a>
+          <h3>Biblia Verbo RV2026</h3>
+          <p>Edición Verbo basada en la Reina-Valera 1909 de dominio público. Actualmente se publica sin una capa Strong española.</p>
         </article>
 
         <article class="license-card">
@@ -465,7 +463,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <article class="license-card license-card--notice">
           <h3>Aviso de precisión</h3>
-          <p>Los números Strong de <strong>RVG-+ V</strong> constituyen una ayuda de estudio generada mediante alineación lingüística y revisión técnica. No sustituyen el análisis directo de los textos hebreo y griego. Si se detecta una asociación que necesite corrección, puede informarse al equipo de Verbo.</p>
+          <p>Los números Strong constituyen una ayuda de estudio y no sustituyen el análisis directo de los textos hebreo y griego. Si se detecta una asociación que necesite corrección, puede informarse al equipo de Verbo.</p>
         </article>
 
         <p class="license-page__footer">Verbo reconoce y agradece el trabajo de traductores, editores y proyectos bíblicos que hacen posible el estudio responsable de las Escrituras.</p>

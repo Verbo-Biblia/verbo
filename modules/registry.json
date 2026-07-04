@@ -4,7 +4,8 @@
   "bibles": [
     "bibles/rva-1909/manifest.json",
     "bibles/asv-1901/manifest.json",
-    "bibles/rv-verbo/manifest.json"
+    "bibles/rv-verbo/manifest.json",
+    "bibles/kjv-strong/manifest.json"
   ],
   "commentaries": [
     "commentaries/ireneo-contra-herejias/manifest.json",
