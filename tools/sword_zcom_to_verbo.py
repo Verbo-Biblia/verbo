@@ -367,7 +367,7 @@ KNOWN_MODULES = {
     'jfb': {
         'folder': 'JFB',
         'full_name': "Jamieson, Fausset, and Brown Commentary",
-        'abbreviation': "Jamieson, Fausset, and Brown Commentary",
+        'abbreviation': 'JFB',
         'author': 'Robert Jamieson, A. R. Fausset, and David Brown',
         'description': 'Classic evangelical commentary covering all 66 books. First published 1871.',
         'license': 'Public Domain',
@@ -399,7 +399,7 @@ KNOWN_MODULES = {
     'kd': {
         'folder': 'KD',
         'full_name': "Keil & Delitzsch Commentary on the Old Testament",
-        'abbreviation': "Keil & Delitzsch Commentary on the Old Testament",
+        'abbreviation': 'K&D',
         'author': 'C. F. Keil and F. Delitzsch',
         'description': 'Scholarly Hebrew exegesis of the entire Old Testament. First published 1861–1875.',
         'license': 'Public Domain',
@@ -407,7 +407,7 @@ KNOWN_MODULES = {
     'tsk': {
         'folder': 'TSK',
         'full_name': "Treasury of Scripture Knowledge",
-        'abbreviation': "Treasury of Scripture Knowledge",
+        'abbreviation': 'TSK',
         'author': 'R. A. Torrey (editor)',
         'description': 'Comprehensive cross-reference tool covering every verse of the Bible.',
         'license': 'Public Domain',
