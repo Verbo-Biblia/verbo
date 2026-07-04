@@ -5,6 +5,7 @@
     "bibles/rva-1909/manifest.json",
     "bibles/asv-1901/manifest.json",
     "bibles/rv-verbo/manifest.json",
+    "bibles/rv-verbo-strong-provisional/manifest.json",
     "bibles/kjv-strong/manifest.json"
   ],
   "commentaries": [
