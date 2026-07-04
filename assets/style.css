@@ -193,6 +193,12 @@ body {
   z-index: 200;
 }
 
+@media (min-width: 761px) {
+  .version-picker__dropdown {
+    width: 240px;
+  }
+}
+
 .version-picker__option {
   padding: 7px 12px;
   cursor: pointer;
