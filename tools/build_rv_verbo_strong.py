@@ -337,7 +337,8 @@ def lcs_mapping(source: list[str], target: list[str]) -> dict[int, int]:
     return result
 
 
-def align_reference(text: str, groups: list[dict], reference: str) -> tuple[list[dict], Counter]:
+def align_reference(text: str, groups: list[dict], reference: str,
+                    independent: list[dict]) -> tuple[list[dict], Counter]:
     """Transfiere solo coincidencias exactas confirmadas además por STEPBible."""
     segments = [{"text": token} for token in WORD.findall(text)]
     tokens = [norm(segment["text"]) for segment in segments]
@@ -370,11 +371,17 @@ def align_reference(text: str, groups: list[dict], reference: str) -> tuple[list
         segment["strong"] = accepted[0]
         if len(accepted) > 1:
             segment["strongs"] = accepted
+        independent_codes = set(independent[target].get("strongs") or
+                                ([independent[target]["strong"]] if independent[target].get("strong") else []))
+        independently_verified = all(code in independent_codes for code in accepted)
+        status = "verified-open" if independently_verified else "provisional-reference"
         segment["strongMeta"] = {
-            "status": "verified",
-            "method": "rv1909-exact+step-verse",
-            "confidence": 1.0,
+            "status": status,
+            "method": ("step-open-alignment" if independently_verified
+                       else "reference-position+step-verse"),
+            "confidence": 1.0 if independently_verified else 0.85,
         }
+        stats["verifiedOpen" if independently_verified else "provisionalReference"] += len(accepted)
         code_morphs = [morphs[code][used[code] - 1] for code in accepted
                        if len(morphs[code]) >= used[code]]
         if code_morphs:
@@ -411,7 +418,11 @@ def build(out_id: str, selected_books: set[str], reference_sqlite: Path | None =
                 groups = tagged.get((book["id"], chapter, verse), [])
                 reference_text = reference.get((book["id"], chapter, verse))
                 if reference_text is not None:
-                    segments, stats = align_reference(text, groups, reference_text)
+                    if book["number"] < 40:
+                        independent, _ = align_strict_ot(text, groups, ot_lexicon)
+                    else:
+                        independent, _ = align_strict_nt(text, groups)
+                    segments, stats = align_reference(text, groups, reference_text, independent)
                 elif book["number"] < 40:
                     segments, stats = align_strict_ot(text, groups, ot_lexicon)
                 else:
@@ -475,6 +486,8 @@ def build(out_id: str, selected_books: set[str], reference_sqlite: Path | None =
         readme.extend([
             "",
             "Referencia provisional no comercial: Bible SuperSearch `rv_1909_strongs.sqlite`; etiquetado RV1909 desarrollado por Rubén Gómez.",
+            "",
+            "Estados de asociación: `verified-open` se reproduce solo con RV2026 y STEPBible; `provisional-reference` usa otra versión únicamente como sugerencia de ubicación y queda pendiente de revisión editorial.",
             "",
             "Este módulo debe reemplazar progresivamente esa referencia por revisión editorial propia antes de adoptar una licencia abierta definitiva.",
         ])
