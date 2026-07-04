@@ -13,13 +13,14 @@ Usage:
     python3 tools/split_commentary_by_chapter.py clarke
     python3 tools/split_commentary_by_chapter.py wesley
     python3 tools/split_commentary_by_chapter.py tsk
+    python3 tools/split_commentary_by_chapter.py --root /tmp/output wesley tsk
 """
 
-import json, sys, os
+import argparse, json, shutil
 from pathlib import Path
 
-def split_module(module_id):
-    base = Path('modules/commentaries') / module_id
+def split_module(module_id, root):
+    base = root / module_id
     books_dir = base / 'books'
     manifest_path = base / 'manifest.json'
 
@@ -54,18 +55,17 @@ def split_module(module_id):
         for entry in entries:
             ref = entry['reference']
             ch_start = ref.get('chapterStart', 1)
-            ch_end = ref.get('chapterEnd', ch_start)
-
             if ch_start == 0:
                 # Chapter/book intro: put in chapter 1
                 by_chapter.setdefault(1, []).append(entry)
             else:
-                # Entry may span multiple chapters — add to each
-                for ch in range(ch_start, ch_end + 1):
-                    by_chapter.setdefault(ch, []).append(entry)
+                # Store each entry once, under the chapter where its range starts.
+                by_chapter.setdefault(ch_start, []).append(entry)
 
         # Write per-chapter files
         out_dir = books_dir / book_id
+        if out_dir.exists():
+            shutil.rmtree(out_dir)
         out_dir.mkdir(exist_ok=True)
 
         for ch, ch_entries in sorted(by_chapter.items()):
@@ -93,10 +93,16 @@ def split_module(module_id):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        sys.exit('Usage: python3 tools/split_commentary_by_chapter.py <module_id>')
+    project_root = Path(__file__).resolve().parent.parent
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('module_ids', nargs='+')
+    parser.add_argument(
+        '--root', type=Path,
+        default=project_root / 'modules' / 'commentaries',
+        help='Directory containing commentary modules',
+    )
+    args = parser.parse_args()
 
-    os.chdir(Path(__file__).parent.parent)
-    for mid in sys.argv[1:]:
+    for mid in args.module_ids:
         print(f'\n=== Splitting {mid} ===')
-        split_module(mid)
+        split_module(mid, args.root)
