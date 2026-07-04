@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let searchState = null;
   let currentCommentary = localStorage.getItem('verbo:lastCommentary') || null;
   let commentaryLangPref = localStorage.getItem('verbo:commentaryLang') || 'es';
+  let dictionaryLangPref = localStorage.getItem('verbo:dictionaryLang') || 'es';
   let currentDictionary = localStorage.getItem('verbo:lastDictionary') || null;
   let currentExegesis = localStorage.getItem('verbo:lastExegesis') || null;
   let gospelData=null;
@@ -572,6 +573,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
     }
+  }
+
+  async function translateDictionaryEntry(code, htmlContent){
+    const cacheKey=translationCacheKey(`strong:${code}`,htmlContent);
+    const cached=tcacheGet(cacheKey); if(cached) return cached;
+    const box=document.createElement('div'); box.innerHTML=htmlContent;
+    const paragraphs=[...box.querySelectorAll('.lexicon-section > p')];
+    for(const paragraph of paragraphs){
+      // Traducir solo el texto fuente. Los enlaces Strong quedan como nodos
+      // independientes para que sigan abriendo sus respectivas entradas.
+      const textNodes=[];
+      const walker=document.createTreeWalker(paragraph,NodeFilter.SHOW_TEXT);
+      while(walker.nextNode()) if(walker.currentNode.textContent.trim()) textNodes.push(walker.currentNode);
+      for(const node of textNodes){
+        const translated=await googleTranslate(node.textContent);
+        if(translated) node.textContent=translated;
+      }
+    }
+    const result=`<p class="note-card__translation-note">Traducción automática al español; consulta EN para el texto original.</p>${box.innerHTML}`;
+    tcacheSet(cacheKey,result);
+    return result;
   }
   // ─────────────────────────────────────────────────────────────────────────
 
@@ -1119,9 +1141,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       const result=await VerboModules.getDictionaryEntry(code, currentDictionary);
       if(!result){ els.panelBody.innerHTML=emptyState('🔎',`No se encontró una entrada para ${code} en el diccionario seleccionado.`); return; }
       const html=result.entry.html||result.entry.definition||result.entry.content||'';
-      els.panelBody.innerHTML=`<article class="dict-entry"><div class="dict-entry__term">${result.code}</div><div class="dict-entry__source">${result.manifest.name}</div><button class="note-card__copy" id="copyDictEntry" type="button">Copiar diccionario</button><div class="dict-entry__def">${html}</div></article>`;
-      document.getElementById('copyDictEntry')?.addEventListener('click',()=>copyToClipboard(`${result.code}\n${String(html).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`));
-      wireDictionaryLinks(els.panelBody);
+      const renderEntry=async()=>{
+        const showEnglish=dictionaryLangPref==='en';
+        els.panelToolbar.innerHTML=`<button class="commentary-lang-btn ${showEnglish?'commentary-lang-btn--active':''}" id="dictionaryLangToggle" title="${showEnglish?'Ver en español':'Ver original en inglés'}">${showEnglish?'ES ↩':'EN ↗'}</button>`;
+        els.panelBody.innerHTML=`<article class="dict-entry"><div class="dict-entry__term">${result.code}</div><div class="dict-entry__source">${escapeHTML(result.manifest.name)}</div><button class="note-card__copy" id="copyDictEntry" type="button">Copiar diccionario</button><div class="dict-entry__def" id="dictionaryEntryBody">${showEnglish?html:`<p class="note-card__translating">Traduciendo al español…</p>${html}`}</div></article>`;
+        document.getElementById('dictionaryLangToggle')?.addEventListener('click',()=>{
+          dictionaryLangPref=dictionaryLangPref==='es'?'en':'es';
+          localStorage.setItem('verbo:dictionaryLang',dictionaryLangPref);
+          renderEntry();
+        });
+        const body=document.getElementById('dictionaryEntryBody');
+        if(!showEnglish && body){
+          const translated=await translateDictionaryEntry(result.code,html);
+          if(dictionaryLangPref==='es' && document.getElementById('dictionaryEntryBody')===body){
+            body.innerHTML=translated;
+            wireDictionaryLinks(body);
+          }
+        } else if(body) wireDictionaryLinks(body);
+        document.getElementById('copyDictEntry')?.addEventListener('click',()=>{
+          const visible=document.getElementById('dictionaryEntryBody')?.innerHTML||html;
+          copyToClipboard(`${result.code}\n${String(visible).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`);
+        });
+      };
+      await renderEntry();
     }catch(error){console.error(error);els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir esta entrada del diccionario.');}
   }
   function updateNavButtons(){ const idx=catalog.books.findIndex(b=>b.id===currentBook); const atStart=idx===0&&currentChapter===1; const atEnd=idx===catalog.books.length-1&&currentChapter===els.chapter.options.length; els.prev.disabled=atStart; els.next.disabled=atEnd; if(els.innerPrev) els.innerPrev.disabled=atStart; if(els.innerNext) els.innerNext.disabled=atEnd; }

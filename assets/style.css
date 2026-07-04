@@ -690,6 +690,14 @@ body {
   font-style: italic;
   margin: 0 0 4px;
 }
+.note-card__translation-note {
+  padding: 8px 10px;
+  border-left: 3px solid var(--wine-soft);
+  background: color-mix(in srgb, var(--wine-soft) 7%, transparent);
+  color: var(--text-muted, #756b64);
+  font-size: 12px;
+  font-style: italic;
+}
 
 .compare-verse-list {
   padding-top: 12px;
