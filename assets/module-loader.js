@@ -3,7 +3,7 @@ const VerboModules = (() => {
   const cache = new Map();
   async function getJSON(url) {
     if (cache.has(url)) return cache.get(url);
-    const response = await fetch(url);
+    const response = await fetch(url, { cache:'no-cache' });
     if (!response.ok) throw new Error(`No se pudo cargar ${url} (${response.status})`);
     const json = await response.json(); cache.set(url, json); return json;
   }
