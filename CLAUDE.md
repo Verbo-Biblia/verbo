@@ -129,3 +129,44 @@ En la raíz del repo (sin comitear — es material de trabajo, no contenido fina
   **⚠️ Estrategia cambiada (2026-06-28):** Se abandona la traducción manual del MH. Ver sección "Estrategia de comentarios" arriba. El módulo `matthew-henry-es` se retira del registry; se construye `matthew-henry-en` con los 66 libros del ZIP fuente + botón de traducción en el panel.
 
   **Fix app.js comiteados:** `83bb693` (panel sin selector redundante), `4fea476` (scroll con delay 320ms para animación del panel).
+
+## Revisión de errores en RV-Verbo (iniciada 2026-07-01, en curso)
+
+Juan reportó que la Biblia RV-Verbo (66 libros modernizados, commit `a86cee8`) tiene muchos errores. Se encontró que el script automático que modernizó "vosotros"→"ustedes" tiene varios bugs sistemáticos, no son errores aislados. Metodología: para cada categoría, se cruzó palabra por palabra contra el original `rva-1909` (mismo libro/capítulo/versículo) para confirmar el bug antes de corregir — evita falsos positivos sobre texto ya correctamente modernizado.
+
+**Commits completados y pusheados a GitHub:**
+
+1. `0a84a7c` — arcaísmos residuales: "é" conjunción antigua antes de i-/hi- (630 casos), "Á" preposición aislada (1 caso, LUK 17:1), 7 formas verbales "vosotros" sin convertir, "empero"→"pero" (402 casos), "aqueste/aquesta"→"este/esta" (53 casos).
+2. `a7e2766` — **780 verbos futuros rotos**: el script convertía mal "-aréis/-eréis/-iréis" (futuro, forma vosotros) a "-aren/-eren/-iren" (inválido en español) en vez de "-arán/-erán/-irán". Ejemplo real, Génesis 3:3-4 (palabras de la serpiente): decía "no comeren... no moriren", ahora "no comerán... no morirán".
+3. `a5215a1` — **87 verbos con diptongación rota**: verbos irregulares (pensar, morir, volver, entender, contar, etc.) perdieron el cambio de raíz e→ie/o→ue al convertir de "vosotros". Ejemplo: Génesis 3:3 decía "no muran" (inválido), ahora "no mueran".
+4. `491fbe5` — **1068 imperativos "vosotros" sin convertir**: 87 palabras (cantad→canten, venid→vengan, oid→oigan, poned→pongan, volveos→vuélvanse, etc., incluyendo reflexivos con su cambio de acentuación). Se excluyó deliberadamente "libertad" (sustantivo "freedom", no verbo, en sus 28 apariciones — falso positivo detectado y evitado).
+5. `fec2eed` (2026-07-02) — **311 imperativos "vosotros" + pronombre enclítico pegado**: 102 verbos únicos, 159 combinaciones verbo+pronombre (cantadle→cántenle, dadme→denme, oidme→óiganme, traedme→tráiganme, etc.). Requirió calcular bien la acentuación al pegar el pronombre: diptongos (traedme→tráiganme, NO traíganme — el acento va en la vocal fuerte del diptongo "ai"), la "u" muda de verbos -car/-gar antes de e (buscadme→búsquenme, no "búsqumenme"), y el caso irregular "estad"→estenle/estenme (sin tilde, porque el pronombre pegado desplaza la sílaba tónica a una posición que ya no la requiere — mismo patrón que "denme"). Verificado: 0 casos residuales del patrón, JSON válido en los 44 archivos.
+6. `a60aeec` (2026-07-02) — **14 casos de "estén" (subjuntivo) sin tilde**: encontrado de rebote revisando el fix anterior. El script que convirtió "estéis"(vosotros)→"ustedes" dejó "esten" sin tilde en vez de "estén" (subjuntivo presente de "estar", irregular: la tilde cae en la propia terminación). Confirmado contra rva-1909, ej. Colosenses 4:12 "para que estéis firmes"→"para que estén firmes". No se tocaron los "estenle"/"estenme" del punto 5 (esos sí van sin tilde, correctamente).
+7. `4158165` (2026-07-02) — **subjuntivo futuro tras "si" modernizado a indicativo presente**.
+8. `dcdd58f` (2026-07-02) — **subjuntivo futuro tras "cuando" modernizado a subjuntivo presente**.
+
+**Pendiente, encontrado pero NO corregido todavía:**
+
+- Es probable que existan más categorías de bugs no descubiertas aún — cada categoría se encontró revisando manualmente ejemplos de la anterior, no por un barrido exhaustivo único (el punto 6 es un ejemplo: apareció mientras se revisaba el punto 5). Antes de dar la Biblia RV-Verbo por "lista", conviene un muestreo adicional (o revisión capítulo por capítulo) antes del lanzamiento de prueba.
+
+Los ocho commits anteriores ya forman parte de `main` y de `origin/main`.
+
+### Subjuntivo futuro arcaico — lotes "si" y "cuando" completados (2026-07-02)
+
+**Decisión de Juan (2026-07-02):** SÍ modernizar el subjuntivo futuro arcaico ("si guardare", "cuando oraren"). Es coherente con el propósito de RV-Verbo — dejarlo tal cual sería inconsistente con el resto de la modernización ya hecha.
+
+**Hallazgo clave que cambia el alcance:** la nota de la sesión anterior decía "461 casos". Un barrido más preciso encontró en realidad **2,204 apariciones reales, 470 formas verbales únicas** (461 era una subestimación). Además, **no es un fix mecánico de un solo paso** como los 6 commits anteriores: la conversión correcta depende de la conjunción que introduce la cláusula, verificado contra cómo RV1960 modernizó este mismo texto base (RV1909):
+- **"si" + subjuntivo futuro → indicativo presente** (ej. "si confesáremos" → "si confesamos").
+- **"cuando" + subjuntivo futuro → subjuntivo presente** (ej. "cuando viniere el Espíritu" → "cuando venga el Espíritu").
+- **"el que"/"quien" + subjuntivo futuro → indicativo presente** en varios casos (ej. "el que hallare su vida" → "el que halla su vida"), pero no es 100% mecánico — a veces es criterio editorial verso por verso, no una regla gramatical única.
+
+Por eso se decidió trabajar **por lotes según la conjunción**, empezando por "si" (el lote más grande y de regla más simple).
+
+**Metodología empleada para el lote "si":**
+
+1. Lista de falsos positivos ya identificada (palabras que terminan en "-are"/"-iere" por coincidencia de letras, NO son subjuntivo futuro): `quiere, quieren, hiere, pare, paren, declare, desampare, desamparen, thare (nombre propio, Taré), adquiere, adquieren, requiere, requieren, inquiere, inquieren, difiere, difieren, digiere, digieren, zahiere, zahieren, profiere, profieren, reparen, separe, separen, ampare, amparen, compare, comparen`. Regex base usado: `\b([a-záéíóúñ]+(?:are|iere)n?)\b` sobre `modules/bibles/rv-verbo/books/*.json`, excluyendo esa lista.
+2. Detección de cláusula "si": para cada verbo candidato, se busca el límite de cláusula más cercano hacia atrás (`.`, `;`, `:`, `,`), y se revisa si ese fragmento empieza con "si" Y no contiene otra conjunción que dispute la cláusula (`cuando, quien, donde, aunque, mientras, porque, para que, el que, la que, los que, las que, como, según, do`).
+3. Resultado: **203 pares "si + subjuntivo futuro"**, 113 formas verbales únicas (hubiere×10, hablare×6, pecare×6, hiciere×6, viniere×6, tuviere×5, volviere×5, tocare×5, quisiere×4, muriere×4, subiere×4, agradare×4, hallare×4, y ~100 formas más con 1-3 apariciones cada una).
+4. El archivo con los 203 casos y su texto completo (`si_pairs.txt`) se generó en el scratchpad temporal de la sesión anterior — **ese archivo YA NO EXISTE** (es de `/tmp`, no sobrevive entre sesiones). Hay que regenerarlo con el script de arriba (regex + filtro de falsos positivos + detección de cláusula "si") al retomar.
+
+Los diccionarios de conjugación se aplicaron y verificaron en los commits `4158165` ("si") y `dcdd58f` ("cuando"). Los contextos "el que"/"quien" y otros siguen requiriendo criterio editorial caso por caso.
