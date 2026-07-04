@@ -6,7 +6,7 @@
   "abbreviation": "TSK",
   "language": "en",
   "author": "R. A. Torrey (editor)",
-  "description": "Comprehensive cross-reference tool covering every verse of the Bible. Public domain.",
+  "description": "Comprehensive cross-reference tool covering every verse of the Bible.",
   "license": "Public Domain",
   "books": [
     {
@@ -130,6 +130,81 @@
       "file": "books/JER.json"
     },
     {
+      "id": "LAM",
+      "name": "Lamentations",
+      "file": "books/LAM.json"
+    },
+    {
+      "id": "EZK",
+      "name": "Ezekiel",
+      "file": "books/EZK.json"
+    },
+    {
+      "id": "DAN",
+      "name": "Daniel",
+      "file": "books/DAN.json"
+    },
+    {
+      "id": "HOS",
+      "name": "Hosea",
+      "file": "books/HOS.json"
+    },
+    {
+      "id": "JOL",
+      "name": "Joel",
+      "file": "books/JOL.json"
+    },
+    {
+      "id": "AMO",
+      "name": "Amos",
+      "file": "books/AMO.json"
+    },
+    {
+      "id": "OBA",
+      "name": "Obadiah",
+      "file": "books/OBA.json"
+    },
+    {
+      "id": "JON",
+      "name": "Jonah",
+      "file": "books/JON.json"
+    },
+    {
+      "id": "MIC",
+      "name": "Micah",
+      "file": "books/MIC.json"
+    },
+    {
+      "id": "NAH",
+      "name": "Nahum",
+      "file": "books/NAH.json"
+    },
+    {
+      "id": "HAB",
+      "name": "Habakkuk",
+      "file": "books/HAB.json"
+    },
+    {
+      "id": "ZEP",
+      "name": "Zephaniah",
+      "file": "books/ZEP.json"
+    },
+    {
+      "id": "HAG",
+      "name": "Haggai",
+      "file": "books/HAG.json"
+    },
+    {
+      "id": "ZEC",
+      "name": "Zechariah",
+      "file": "books/ZEC.json"
+    },
+    {
+      "id": "MAL",
+      "name": "Malachi",
+      "file": "books/MAL.json"
+    },
+    {
       "id": "MAT",
       "name": "Matthew",
       "file": "books/MAT.json"
@@ -193,6 +268,76 @@
       "id": "1TH",
       "name": "1 Thessalonians",
       "file": "books/1TH.json"
+    },
+    {
+      "id": "2TH",
+      "name": "2 Thessalonians",
+      "file": "books/2TH.json"
+    },
+    {
+      "id": "1TI",
+      "name": "1 Timothy",
+      "file": "books/1TI.json"
+    },
+    {
+      "id": "2TI",
+      "name": "2 Timothy",
+      "file": "books/2TI.json"
+    },
+    {
+      "id": "TIT",
+      "name": "Titus",
+      "file": "books/TIT.json"
+    },
+    {
+      "id": "PHM",
+      "name": "Philemon",
+      "file": "books/PHM.json"
+    },
+    {
+      "id": "HEB",
+      "name": "Hebrews",
+      "file": "books/HEB.json"
+    },
+    {
+      "id": "JAS",
+      "name": "James",
+      "file": "books/JAS.json"
+    },
+    {
+      "id": "1PE",
+      "name": "1 Peter",
+      "file": "books/1PE.json"
+    },
+    {
+      "id": "2PE",
+      "name": "2 Peter",
+      "file": "books/2PE.json"
+    },
+    {
+      "id": "1JN",
+      "name": "1 John",
+      "file": "books/1JN.json"
+    },
+    {
+      "id": "2JN",
+      "name": "2 John",
+      "file": "books/2JN.json"
+    },
+    {
+      "id": "3JN",
+      "name": "3 John",
+      "file": "books/3JN.json"
+    },
+    {
+      "id": "JUD",
+      "name": "Jude",
+      "file": "books/JUD.json"
+    },
+    {
+      "id": "REV",
+      "name": "Revelation",
+      "file": "books/REV.json"
     }
   ],
   "chapterSplit": true

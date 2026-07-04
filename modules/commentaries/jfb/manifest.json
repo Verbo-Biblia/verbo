@@ -3,10 +3,10 @@
   "id": "jfb",
   "type": "commentary",
   "name": "Jamieson, Fausset, and Brown Commentary",
-  "abbreviation": "Jamieson, Fausset & Brown",
+  "abbreviation": "JFB",
   "language": "en",
   "author": "Robert Jamieson, A. R. Fausset, and David Brown",
-  "description": "A classic evangelical commentary covering all 66 books. First published 1871. Public domain.",
+  "description": "Classic evangelical commentary covering all 66 books. First published 1871.",
   "license": "Public Domain",
   "books": [
     {
