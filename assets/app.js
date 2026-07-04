@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const entries=Object.entries(data.notes).filter(([,note])=>note.commentaryId===currentCommentary);
       els.panelBody.innerHTML=entries.length?entries.map(([id,n])=>{
         const bodyHtml=isEnglishCommentary&&commentaryLangPref==='es'
-          ? (tcacheGet(id)||`<p class="note-card__translating">Traduciendo…</p>${n.body}`)
+          ? (tcacheGet(translationCacheKey(id,n.body))||`<p class="note-card__translating">Traduciendo…</p>${n.body}`)
           : n.body;
         return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${data.meta.book} ${data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">Copiar comentario</button><div class="note-card__body">${bodyHtml}</div></div>`;
       }).join(''):emptyState('📖','Este capítulo todavía no tiene comentarios cargados.');
@@ -476,6 +476,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const T_PREFIX = 'verbo:t:';
   function tcacheGet(key){ try{ return JSON.parse(localStorage.getItem(T_PREFIX+key)); }catch{ return null; } }
   function tcacheSet(key,val){ try{ localStorage.setItem(T_PREFIX+key, JSON.stringify(val)); }catch{} }
+  function translationCacheKey(noteId, htmlContent){
+    let hash=2166136261;
+    const value=String(htmlContent||'');
+    for(let i=0;i<value.length;i++){
+      hash^=value.charCodeAt(i);
+      hash=Math.imul(hash,16777619);
+    }
+    return `v2:${noteId}:${(hash>>>0).toString(16)}`;
+  }
   function htmlToPlainText(html){ return html.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim(); }
 
   function splitTextIntoChunks(text, maxLen=4500){
@@ -515,7 +524,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function translateEntry(noteId, htmlContent){
-    const cached=tcacheGet(noteId); if(cached) return cached;
+    const cacheKey=translationCacheKey(noteId,htmlContent);
+    const cached=tcacheGet(cacheKey); if(cached) return cached;
     const text=htmlToPlainText(htmlContent);
     if(!text || text.length<10) return htmlContent;
     try{
@@ -531,7 +541,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       if(para) paras.push(para);
       const result=paras.map(p=>`<p>${p}</p>`).join('');
-      tcacheSet(noteId, result);
+      tcacheSet(cacheKey, result);
       return result;
     }catch{ return htmlContent; }
   }
