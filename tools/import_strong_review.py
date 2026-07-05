@@ -146,7 +146,7 @@ def apply_decisions(payload: dict, grouped: dict) -> None:
             if len(decisions) == len(old_codes):
                 segment["strongMeta"] = {
                     "status": "editorial-reviewed",
-                    "method": "human-review",
+                    "method": "editorial-review",
                     "confidence": 1.0,
                 }
             elif old_meta:

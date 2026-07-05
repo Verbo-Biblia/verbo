@@ -30,3 +30,21 @@ python3 tools/import_strong_review.py review/strong/GEN.csv --output /tmp/GEN.re
 ```
 
 El importador exige `reviewer` para toda decisión, acepta solamente `approve`, `reject` o `correct`, y verifica que cualquier `corrected_strong` exista en el diccionario instalado.
+
+## Asociaciones faltantes
+
+El flujo separado de adiciones compara el módulo contra STEPBible y exporta los grupos todavía no asociados:
+
+```bash
+python3 tools/export_strong_additions.py GEN
+python3 tools/import_strong_additions.py review/strong/GEN-additions.csv
+```
+
+En esos CSV, `decision` acepta `add` o `skip`. `add` exige indicar el `target_segment_index` de la palabra española; `skip` documenta que el elemento hebreo o griego no tiene equivalente explícito en la traducción. Para generar una copia revisada se usa también `--output`.
+
+Para encadenar decisiones sobre asociaciones existentes y adiciones sin modificar la línea base provisional:
+
+```bash
+python3 tools/import_strong_review.py review/strong/GEN.csv --output /tmp/GEN.reviewed.json
+python3 tools/import_strong_additions.py review/strong/GEN-additions.csv --input /tmp/GEN.reviewed.json --output /tmp/GEN.complete.json
+```

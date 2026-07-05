@@ -1,8 +1,8 @@
 ﻿row_id,reference,segment_index,code_index,verse_text,word,strong,morphology,step_gloss,status,confidence,reviewer,decision,corrected_strong,notes
-584f6f95b6dba837fb38,GEN 1:1,2,0,En el principio creó Dios los cielos y la tierra.,principio,H7225,HR/Ncfsa,in/ beginning,provisional-reference,0.85,,,,
-04de89e9af54786dd4bb,GEN 1:1,4,0,En el principio creó Dios los cielos y la tierra.,Dios,H430,HNcmpa,God,provisional-reference,0.85,,,,
-f0a6720fa31c0bb54c70,GEN 1:1,6,0,En el principio creó Dios los cielos y la tierra.,cielos,H8064,HTd/Ncmpa,the/ heavens,provisional-reference,0.85,,,,
-9404901e23f4cd98c5ff,GEN 1:1,9,0,En el principio creó Dios los cielos y la tierra.,tierra.,H776,HTd/Ncfsa,the/ earth,verified-open,1.0,,,,
+584f6f95b6dba837fb38,GEN 1:1,2,0,En el principio creó Dios los cielos y la tierra.,principio,H7225,HR/Ncfsa,in/ beginning,provisional-reference,0.85,Codex-assisted,approve,,Correspondencia directa: principio; confirmada por STEPBible y léxico Strong.
+04de89e9af54786dd4bb,GEN 1:1,4,0,En el principio creó Dios los cielos y la tierra.,Dios,H430,HNcmpa,God,provisional-reference,0.85,Codex-assisted,approve,,Correspondencia directa: Dios; confirmada por STEPBible y léxico Strong.
+f0a6720fa31c0bb54c70,GEN 1:1,6,0,En el principio creó Dios los cielos y la tierra.,cielos,H8064,HTd/Ncmpa,the/ heavens,provisional-reference,0.85,Codex-assisted,approve,,Correspondencia directa: cielos; confirmada por STEPBible y léxico Strong.
+9404901e23f4cd98c5ff,GEN 1:1,9,0,En el principio creó Dios los cielos y la tierra.,tierra.,H776,HTd/Ncfsa,the/ earth,verified-open,1.0,Codex-assisted,approve,,Correspondencia directa: tierra; confirmada por STEPBible y léxico Strong.
 8b22e68ae686504e9eef,GEN 1:2,2,0,"Y la tierra estaba desordenada y vacía, y las tinieblas estaban sobre la haz del abismo, y el Espíritu de Dios se movía sobre la haz de las aguas.",tierra,H776,HC/Td/Ncfsa,and/ the/ earth,verified-open,1.0,,,,
 154419063d90c44681c6,GEN 1:2,3,0,"Y la tierra estaba desordenada y vacía, y las tinieblas estaban sobre la haz del abismo, y el Espíritu de Dios se movía sobre la haz de las aguas.",estaba,H1961,HVqp3fs,<it> was,provisional-reference,0.85,,,,
 f097a55758324f83e826,GEN 1:2,4,0,"Y la tierra estaba desordenada y vacía, y las tinieblas estaban sobre la haz del abismo, y el Espíritu de Dios se movía sobre la haz de las aguas.",desordenada,H8414,HNcmsa,formlessness,provisional-reference,0.85,,,,
