@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 from collections import Counter, defaultdict, deque
 from pathlib import Path
 
@@ -12,6 +13,16 @@ import build_rv_verbo_strong as builder
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MODULE = ROOT / "modules/bibles/rv-verbo-strong-provisional"
+
+
+def row_id(book_id: str, chapter: str, verse: str, segment_index: int,
+           code_index: int, verse_text: str, word: str, strong: str,
+           morphology: str, step_gloss: str, status: str, confidence: str) -> str:
+    """Identificador reproducible que impide aplicar una decisión a otra palabra."""
+    raw = "\x1f".join((book_id, chapter, verse, str(segment_index),
+                       str(code_index), verse_text, word, strong, morphology,
+                       step_gloss, status, confidence))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:20]
 
 
 def export_book(book_id: str, module: Path, output: Path) -> Counter:
@@ -24,18 +35,19 @@ def export_book(book_id: str, module: Path, output: Path) -> Counter:
     stats = Counter()
     output.parent.mkdir(parents=True, exist_ok=True)
     fields = [
-        "reference", "verse_text", "word", "strong", "morphology", "step_gloss",
-        "status", "confidence", "reviewer", "decision", "corrected_strong", "notes",
+        "row_id", "reference", "segment_index", "code_index", "verse_text", "word",
+        "strong", "morphology", "step_gloss", "status", "confidence", "reviewer",
+        "decision", "corrected_strong", "notes",
     ]
     with output.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         for chapter, verses in payload["chapters"].items():
             for verse, record in verses.items():
                 groups = defaultdict(deque)
                 for group in step.get((book_id, chapter, verse), []):
                     groups[group["code"]].append(group)
-                for segment in record.get("segments", []):
+                for segment_index, segment in enumerate(record.get("segments", [])):
                     codes = segment.get("strongs") or ([segment["strong"]] if segment.get("strong") else [])
                     if not codes:
                         continue
@@ -44,16 +56,24 @@ def export_book(book_id: str, module: Path, output: Path) -> Counter:
                     for index, code in enumerate(codes):
                         group = groups[code].popleft() if groups[code] else {}
                         status = meta.get("status", "unclassified")
+                        morphology = morphs[index] if index < len(morphs) else group.get("morph", "")
+                        step_gloss = group.get("gloss", "")
+                        confidence = str(meta.get("confidence", ""))
                         stats[status] += 1
                         writer.writerow({
+                            "row_id": row_id(book_id, chapter, verse, segment_index,
+                                             index, record["text"], segment.get("text", ""),
+                                             code, morphology, step_gloss, status, confidence),
                             "reference": f"{book_id} {chapter}:{verse}",
+                            "segment_index": segment_index,
+                            "code_index": index,
                             "verse_text": record["text"],
                             "word": segment.get("text", ""),
                             "strong": code,
-                            "morphology": morphs[index] if index < len(morphs) else group.get("morph", ""),
-                            "step_gloss": group.get("gloss", ""),
+                            "morphology": morphology,
+                            "step_gloss": step_gloss,
                             "status": status,
-                            "confidence": meta.get("confidence", ""),
+                            "confidence": confidence,
                             "reviewer": "",
                             "decision": "",
                             "corrected_strong": "",
