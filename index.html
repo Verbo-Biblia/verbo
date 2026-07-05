@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location.hostname)) {
+  location.replace(`https://${location.host}${location.pathname}${location.search}${location.hash}`);
+}
+</script>
 <title>Verbo — Estudio bíblico en español</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
