@@ -1593,7 +1593,7 @@ body[data-theme="rosewood"] {
 .lexicon-entry-head{display:flex;gap:.75rem;align-items:flex-start;padding-bottom:.65rem;border-bottom:1px solid var(--border,#ddd)}
 .lexicon-entry-head h3{margin:0;font-size:1.28rem}
 .lexicon-code{display:inline-flex;align-items:center;justify-content:center;min-width:4.4rem;padding:.3rem .55rem;border-radius:999px;background:var(--accent-soft,#efe7d6);font-weight:800;letter-spacing:.03em}
-.lexicon-pronunciation{margin:.2rem 0 0;font-size:.9rem;opacity:.8}
+.lexicon-pronunciation,.lexicon-transliteration{margin:.2rem 0 0;font-size:.9rem;opacity:.8}
 .lexicon-section{margin-top:.85rem}
 .lexicon-section h4{margin:0 0 .25rem;font-size:.9rem;text-transform:uppercase;letter-spacing:.04em;opacity:.72}
 .lexicon-section p{margin:.15rem 0;line-height:1.55}

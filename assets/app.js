@@ -932,6 +932,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     return installed.find(d=>d.id==='strong-verbo') || installed[0] || null;
   }
 
+  function formatStrongEntryHtml(code, entry, html){
+    if(!/^G\d+$/i.test(code) || !entry?.term) return html;
+    const box=document.createElement('div');
+    box.innerHTML=html;
+    const heading=box.querySelector('.lexicon-entry-head h3');
+    if(!heading || box.querySelector('.lexicon-transliteration')) return html;
+    const transliteration=String(entry.term).trim();
+    const suffix=` — ${transliteration}`;
+    if(heading.textContent.endsWith(suffix)) heading.textContent=heading.textContent.slice(0,-suffix.length);
+    const line=document.createElement('p');
+    line.className='lexicon-transliteration';
+    const label=document.createElement('strong');
+    label.textContent='Transliteración:';
+    line.append(label,` ${transliteration}`);
+    heading.insertAdjacentElement('afterend',line);
+    return box.innerHTML;
+  }
+
   async function renderDictionaryPanel(focus=null){
     els.panelToolbar.innerHTML='';
     const selected=getStrongDictionary();
@@ -1194,7 +1212,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     try{
       const result=await VerboModules.getDictionaryEntry(code, currentDictionary);
       if(!result){ els.panelBody.innerHTML=emptyState('🔎',`No se encontró una entrada para ${code} en el diccionario seleccionado.`); return; }
-      const html=result.entry.html||result.entry.definition||result.entry.content||'';
+      const rawHtml=result.entry.html||result.entry.definition||result.entry.content||'';
+      const html=formatStrongEntryHtml(result.code,result.entry,rawHtml);
       const renderEntry=async()=>{
         const showEnglish=dictionaryLangPref==='en';
         els.panelToolbar.innerHTML=`<button class="commentary-lang-btn ${showEnglish?'commentary-lang-btn--active':''}" id="dictionaryLangToggle" title="${showEnglish?'Ver en español':'Ver original en inglés'}">${showEnglish?'ES ↩':'EN ↗'}</button>`;
