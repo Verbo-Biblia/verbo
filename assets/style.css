@@ -1580,6 +1580,15 @@ body[data-theme="rosewood"] {
 .license-page__footer { margin:18px 0 0; font-size:.86rem; line-height:1.5; color:var(--muted); font-style:italic; }
 @media (max-width:760px){ .license-page__intro { gap:10px; } .license-page__seal { flex-basis:36px; height:36px; } }
 
+.bible-attribution {
+  margin: 28px 0 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(112,83,53,.16);
+  color: var(--muted);
+  font-size: .76rem;
+  line-height: 1.5;
+}
+
 /* Diccionario Strong Verbo */
 .lexicon-entry-head{display:flex;gap:.75rem;align-items:flex-start;padding-bottom:.65rem;border-bottom:1px solid var(--border,#ddd)}
 .lexicon-entry-head h3{margin:0;font-size:1.28rem}

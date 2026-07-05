@@ -24,9 +24,22 @@ const VerboModules = (() => {
   }
   async function getCatalog() {
     const registry = await getJSON('modules/registry.json');
-    const bibles = await loadModuleList(registry.bibles || []);
-    if (!bibles.length) throw new Error('No hay Biblias disponibles en modules/registry.json');
-    const primary = bibles.find(x => x.manifest.id === registry.defaultBible) || bibles[0];
+    const localBibles = await loadModuleList(registry.bibles || []);
+    if (!localBibles.length) throw new Error('No hay Biblias disponibles en modules/registry.json');
+    const primary = localBibles.find(x => x.manifest.id === registry.defaultBible) || localBibles[0];
+    const remoteBibles = (registry.apiBible?.bibles || []).map(item => ({
+      path: null,
+      remote: true,
+      manifest: {
+        id: item.id,
+        abbreviation: item.abbreviation,
+        name: item.name,
+        language: item.language,
+        books: primary.manifest.books,
+        remote: { provider:'apiBible', bibleId:item.bibleId }
+      }
+    }));
+    const bibles = [...localBibles, ...remoteBibles];
     const commentaries = await loadModuleList(registry.commentaries || []);
     const dictionaries = await loadModuleList(registry.dictionaries || []);
     const exegesis = await loadModuleList(registry.exegesis || []);
@@ -34,6 +47,90 @@ const VerboModules = (() => {
     const gospel = await loadModuleList(registry.gospel || []);
     const patristic = await loadModuleList(registry.patristic || []);
     return { registry, bibles, commentaries, dictionaries, exegesis, library, gospel, patristic, primary, books: primary.manifest.books };
+  }
+
+  function apiBibleProxy(registry) {
+    const value = String(registry.apiBible?.proxyUrl || '').trim().replace(/\/+$/, '');
+    if (!value) throw new Error('API.Bible todavía no está configurada: falta apiBible.proxyUrl en modules/registry.json');
+    return value;
+  }
+
+  function apiBibleEntry(registry, versionId) {
+    const entry = (registry.apiBible?.bibles || []).find(item => item.id === versionId);
+    if (!entry) throw new Error(`Versión remota desconocida: ${versionId}`);
+    return entry;
+  }
+
+  function parseApiBibleChapter(content) {
+    if (typeof DOMParser === 'undefined') throw new Error('El contenido remoto requiere un navegador con DOMParser');
+    const document = new DOMParser().parseFromString(String(content || ''), 'text/html');
+    const markers = [...document.querySelectorAll('.v[data-number], [data-number].v')];
+    const verses = {};
+    markers.forEach((marker, index) => {
+      const number = String(marker.dataset.number || '').trim();
+      if (!number) return;
+      const range = document.createRange();
+      range.setStartAfter(marker);
+      if (markers[index + 1]) range.setEndBefore(markers[index + 1]);
+      else range.setEndAfter(document.body.lastChild || document.body);
+      const text = range.cloneContents().textContent.replace(/\s+/g, ' ').trim();
+      if (text) verses[number] = text;
+    });
+    if (!Object.keys(verses).length) throw new Error('API.Bible devolvió un capítulo sin marcadores de versículo');
+    return verses;
+  }
+
+  async function apiBibleRequest(path, params={}) {
+    const registry = await getJSON('modules/registry.json');
+    const url = new URL(`${apiBibleProxy(registry)}${path}`);
+    Object.entries(params).forEach(([key,value]) => {
+      if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, String(value));
+    });
+    const response = await fetch(url.toString(), { headers:{ Accept:'application/json' } });
+    if (!response.ok) {
+      const message = response.status === 429 ? 'Se alcanzó el límite de API.Bible' : `API.Bible respondió ${response.status}`;
+      throw new Error(message);
+    }
+    return response.json();
+  }
+
+  async function loadRemoteBible(versionId, bookId, chapter) {
+    const registry = await getJSON('modules/registry.json');
+    const entry = apiBibleEntry(registry, versionId);
+    const result = await apiBibleRequest(`/v1/bibles/${encodeURIComponent(entry.bibleId)}/chapters/${encodeURIComponent(`${bookId}.${chapter}`)}`, {
+      'content-type':'html',
+      'include-notes':'false',
+      'include-titles':'false',
+      'include-chapter-numbers':'false',
+      'include-verse-numbers':'true',
+      'include-verse-spans':'true',
+      'fums-version':'3'
+    });
+    return {
+      manifest: { id:entry.id, abbreviation:entry.abbreviation, name:entry.name, language:entry.language, remote:true },
+      verses: parseApiBibleChapter(result.data?.content),
+      copyright: result.data?.copyright || '',
+      fumsToken: result.meta?.fumsToken || ''
+    };
+  }
+
+  async function searchRemoteBible(versionId, query, { testament='all' }={}) {
+    const registry = await getJSON('modules/registry.json');
+    const entry = apiBibleEntry(registry, versionId);
+    const range = testament === 'nt' ? 'MAT-REV' : testament === 'ot' ? 'GEN-MAL' : '';
+    const result = await apiBibleRequest(`/v1/bibles/${encodeURIComponent(entry.bibleId)}/search`, {
+      query, limit:100, offset:0, sort:'canonical', range
+    });
+    return (result.data?.verses || []).map(verse => {
+      const parts = String(verse.id || verse.orgId || '').split('.');
+      return {
+        bookId: parts[0],
+        book: verse.reference?.replace(/\s+\d+:.*/, '') || parts[0],
+        chapter: Number(parts[1]),
+        verse: Number(parts[2]),
+        text: String(verse.text || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+      };
+    }).filter(item => item.bookId && item.chapter && item.verse);
   }
   async function getBookInfo(bookId) {
     const catalog = await getCatalog();
@@ -311,5 +408,5 @@ const VerboModules = (() => {
     return null;
   }
 
-  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadCommentary,loadLinkedEntries,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible };
+  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadLinkedEntries,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible };
 })();

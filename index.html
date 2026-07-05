@@ -87,6 +87,7 @@
           <button class="chapter-nav-btn chapter-nav-btn--next" id="innerNext" type="button" aria-label="Capítulo siguiente">›</button>
         </div>
         <div id="verseList"></div>
+        <div class="bible-attribution" id="bibleAttribution" hidden></div>
       </div>
     </main>
 
@@ -207,7 +208,9 @@
     <button class="verse-action-bar__close" id="closeVerseAction" type="button" aria-label="Cerrar">✕</button>
   </div>
 
-  <script src="assets/module-loader.js?v=20260704-3"></script>
-  <script src="assets/app.js?v=20260704-3"></script>
+  <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
+  <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
+  <script src="assets/module-loader.js?v=20260704-4"></script>
+  <script src="assets/app.js?v=20260704-4"></script>
 </body>
 </html>

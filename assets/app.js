@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     versionDropdown: document.getElementById('versionDropdown'),
     nativeVersionSelect: document.getElementById('nativeVersionSelect'),
     list: document.getElementById('verseList'),
+    attribution: document.getElementById('bibleAttribution'),
     eyebrow: document.querySelector('.chapter-eyebrow'),
     title: document.querySelector('.chapter-title'),
     side: document.getElementById('sidePanel'),
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     backdrop: document.getElementById('sheetBackdrop')
   };
 
-  let catalog, data, activeTab = null, currentVersion = null, compareVersion = null;
+  let catalog, data, activeTab = null, currentVersion = localStorage.getItem('verbo:lastVersion') || null, compareVersion = null;
   let selectedVerses = new Set();
   let highlights = JSON.parse(localStorage.getItem('verbo:highlights') || '{}');
   let suppressCommentSync = false;
@@ -62,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const saveHighlights = () => localStorage.setItem('verbo:highlights', JSON.stringify(highlights));
   const HL_COLORS = ['hl-yellow','hl-green','hl-blue','hl-pink','hl-coral','hl-violet'];
   const escapeHTML = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[ch]));
-  const bibleCatalog = () => catalog.bibles.map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, lang:item.manifest.language || 'es' }));
+  const bibleCatalog = () => catalog.bibles.map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, lang:item.manifest.language || 'es', remote:Boolean(item.remote || item.manifest.remote), manifest:item.manifest }));
   const commentaryCatalog = () => (catalog.commentaries || []).map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, manifest:item.manifest }));
   // Léxico Strong: módulos numéricos (G1234 / H1234) consultados al tocar una etiqueta Strong en el texto.
   const isStrongLexicon = item => Boolean(item.manifest.strong);
@@ -126,7 +127,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const previous = preserveVersion ? currentVersion : null;
       data = await VerboModules.buildChapterData({bookId: currentBook, chapter: currentChapter, commentaryId: currentCommentary});
+      if (previous && bibleCatalog().some(version => version.id === previous)) {
+        try { await ensureVersionLoaded(previous); }
+        catch (error) { console.warn(`No se pudo restaurar ${previous}; se usará la Biblia local.`, error); }
+      }
       currentVersion = previous && data.versions[previous] ? previous : data.meta.version;
+      localStorage.setItem('verbo:lastVersion', currentVersion);
       const availableCompare = bibleCatalog();
       const preferredCompare = availableCompare.find(v => v.id !== currentVersion)?.id || currentVersion;
       compareVersion = compareVersion && availableCompare.some(v => v.id === compareVersion)
@@ -144,6 +150,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.error(error);
       els.list.innerHTML = emptyState('⚠️', 'No se pudo cargar este pasaje.');
     } finally { setLoading(false); }
+  }
+
+  async function ensureVersionLoaded(versionId) {
+    if (data.versions[versionId]) return true;
+    const selected = bibleCatalog().find(version => version.id === versionId);
+    if (!selected?.remote) return false;
+    const loaded = await VerboModules.loadRemoteBible(versionId, currentBook, currentChapter);
+    data.versions[versionId] = {
+      label: loaded.manifest.abbreviation,
+      full: loaded.manifest.name,
+      hasStrongs: false,
+      remote: true,
+      copyright: loaded.copyright,
+      fumsToken: loaded.fumsToken
+    };
+    data.verses.forEach(verse => { verse.text[versionId] = loaded.verses[String(verse.n)] || ''; });
+    return true;
   }
 
   function populateVersions() {
@@ -196,12 +219,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     els.versionInput.readOnly = true;
   }
 
-  function selectBibleVersion(id) {
+  async function selectBibleVersion(id) {
     const v = activeVerse();
-    currentVersion = id;
-    if (compareVersion === currentVersion) compareVersion = Object.keys(data.versions).find(x => x !== currentVersion) || currentVersion;
     closeVersionDropdown();
-    populateVersions();
     // Si la versión seleccionada no tiene el libro actual, navegar a su primer libro
     const bibleEntry = catalog.bibles.find(b => b.manifest.id === id);
     if (bibleEntry?.manifest.books?.length) {
@@ -214,8 +234,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
     }
-    renderChapter(v);
-    if (activeTab === 'comparar') renderCompare(v);
+    setLoading(true);
+    try {
+      await ensureVersionLoaded(id);
+      currentVersion = id;
+      localStorage.setItem('verbo:lastVersion', currentVersion);
+      if (compareVersion === currentVersion) compareVersion = bibleCatalog().find(x => x.id !== currentVersion)?.id || currentVersion;
+      populateVersions();
+      renderChapter(v);
+      if (activeTab === 'comparar') await renderCompare(v);
+    } catch (error) {
+      console.error(error);
+      toast(error.message || 'No se pudo cargar la Biblia en línea');
+      populateVersions();
+    } finally { setLoading(false); }
   }
 
   function renderChapter(restoreVerse=null) {
@@ -263,6 +295,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       text.addEventListener('contextmenu',(e)=>{ e.preventDefault(); selectVerse(row,v); });
       text.querySelectorAll('.strongs-tag').forEach(tag=>tag.addEventListener('click',e=>{e.stopPropagation(); openDictionary(tag.dataset.strongCode);}));
     });
+    const version = data.versions[currentVersion];
+    if (els.attribution) {
+      els.attribution.hidden = !version?.copyright;
+      els.attribution.textContent = version?.copyright || '';
+    }
+    if (version?.fumsToken && !version.fumsReported) {
+      window.fums('trackView', version.fumsToken);
+      version.fumsReported = true;
+    }
   }
 
   function selectVerse(row, verse) {
@@ -454,6 +495,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         </article>
 
         <article class="license-card">
+          <h3>Biblias en línea de API.Bible</h3>
+          <p>LBLA, NTV y NASB 2020 se consultan bajo demanda mediante API.Bible. Cada capítulo muestra junto al texto el aviso de copyright devuelto por el proveedor y reporta su visualización mediante FUMS.</p>
+          <a href="https://api.bible" target="_blank" rel="noopener noreferrer">Consultar API.Bible</a>
+        </article>
+
+        <article class="license-card">
           <h3>Diccionarios Strong</h3>
           <p>Los diccionarios hebreo y griego de James Strong proceden de obras de dominio público. Los módulos base de CrossWire se distribuyen como <strong>Public Domain</strong>.</p>
           <div class="license-card__links">
@@ -630,9 +677,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(!data.versions[compareVersion]){
       els.panelBody.innerHTML=emptyState('⌛','Cargando versión para comparar…');
       const selected=installed.find(v=>v.id===compareVersion);
-      const loaded=selected ? await VerboModules.loadBible(selected.path,currentBook,currentChapter) : null;
-      if(!loaded){ els.panelBody.innerHTML=emptyState('⚠️','Esta versión no contiene el pasaje seleccionado.'); return; }
-      verses=data.verses.map(v=>({ ...v, text:{...v.text,[compareVersion]:(typeof loaded.verses[String(v.n)]==='string'?loaded.verses[String(v.n)]:loaded.verses[String(v.n)]?.text)||''} }));
+      if (selected?.remote) {
+        try { await ensureVersionLoaded(compareVersion); verses=data.verses; }
+        catch (error) { console.error(error); els.panelBody.innerHTML=emptyState('⚠️',escapeHTML(error.message || 'No se pudo cargar la versión en línea.')); return; }
+      } else {
+        const loaded=selected ? await VerboModules.loadBible(selected.path,currentBook,currentChapter) : null;
+        if(!loaded){ els.panelBody.innerHTML=emptyState('⚠️','Esta versión no contiene el pasaje seleccionado.'); return; }
+        verses=data.verses.map(v=>({ ...v, text:{...v.text,[compareVersion]:(typeof loaded.verses[String(v.n)]==='string'?loaded.verses[String(v.n)]:loaded.verses[String(v.n)]?.text)||''} }));
+      }
     }
     els.panelBody.innerHTML=verses.map(v=>`<div class="compare-verse${v.n===focus?' compare-verse--active':''}" data-verse-n="${v.n}"><span class="compare-verse__num">${v.n}</span><span class="compare-verse__text">${escapeHTML(v.text[compareVersion]||'')}</span></div>`).join('');
     document.getElementById('compareVersionSelect')?.addEventListener('change',async e=>{compareVersion=e.target.value;await renderCompare(activeVerse());});
@@ -721,10 +773,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       const selected=bibleCatalog().find(v=>v.id===versionId);
       els.panelBody.innerHTML=emptyState('⌛','Buscando…');
       try{
-        const results=await VerboModules.searchBible(selected.path,query,{
-          testament,
-          onProgress:p=>{els.panelBody.innerHTML=emptyState('⌛',`Buscando en ${escapeHTML(p.book)} · ${p.current}/${p.total}`);}
-        });
+        const results=selected.remote
+          ? await VerboModules.searchRemoteBible(selected.id,query,{testament})
+          : await VerboModules.searchBible(selected.path,query,{
+            testament,
+            onProgress:p=>{els.panelBody.innerHTML=emptyState('⌛',`Buscando en ${escapeHTML(p.book)} · ${p.current}/${p.total}`);}
+          });
         const scopeLabel={nt:'NT',ot:'AT',all:'Biblia'}[testament];
         searchState={query, versionId, testament, results, page:0, scopeLabel};
         if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',`No se encontraron resultados para “${escapeHTML(query)}”.`); return; }

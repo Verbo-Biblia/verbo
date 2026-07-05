@@ -1,6 +1,32 @@
 {
   "schemaVersion": 2,
   "defaultBible": "rva-1909",
+  "apiBible": {
+    "proxyUrl": "https://verbo-api-bible.juanjosevenegas78.workers.dev",
+    "bibles": [
+      {
+        "id": "api-lbla",
+        "bibleId": "e3f420b9665abaeb-01",
+        "abbreviation": "LBLA",
+        "name": "La Biblia de las Américas",
+        "language": "es"
+      },
+      {
+        "id": "api-ntv",
+        "bibleId": "826f63861180e056-01",
+        "abbreviation": "NTV",
+        "name": "Nueva Traducción Viviente",
+        "language": "es"
+      },
+      {
+        "id": "api-nasb2020",
+        "bibleId": "a761ca71e0b3ddcf-01",
+        "abbreviation": "NASB 2020",
+        "name": "New American Standard Bible 2020",
+        "language": "en"
+      }
+    ]
+  },
   "bibles": [
     "bibles/rva-1909/manifest.json",
     "bibles/asv-1901/manifest.json",
