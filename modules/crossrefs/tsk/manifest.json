@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "id": "tsk-crossrefs",
+  "type": "crossrefs",
+  "name": "Referencias cruzadas (Treasury of Scripture Knowledge)",
+  "source": "Treasury of Scripture Knowledge, R. A. Torrey (editor)",
+  "license": "Public Domain",
+  "stats": {
+    "totalEntries": 29648,
+    "entriesWithoutRefs": 200,
+    "totalReferences": 378980,
+    "books": 66
+  },
+  "books": [
+    {
+      "id": "1CH",
+      "file": "books/1CH.json"
+    },
+    {
+      "id": "1CO",
+      "file": "books/1CO.json"
+    },
+    {
+      "id": "1JN",
+      "file": "books/1JN.json"
+    },
+    {
+      "id": "1KI",
+      "file": "books/1KI.json"
+    },
+    {
+      "id": "1PE",
+      "file": "books/1PE.json"
+    },
+    {
+      "id": "1SA",
+      "file": "books/1SA.json"
+    },
+    {
+      "id": "1TH",
+      "file": "books/1TH.json"
+    },
+    {
+      "id": "1TI",
+      "file": "books/1TI.json"
+    },
+    {
+      "id": "2CH",
+      "file": "books/2CH.json"
+    },
+    {
+      "id": "2CO",
+      "file": "books/2CO.json"
+    },
+    {
+      "id": "2JN",
+      "file": "books/2JN.json"
+    },
+    {
+      "id": "2KI",
+      "file": "books/2KI.json"
+    },
+    {
+      "id": "2PE",
+      "file": "books/2PE.json"
+    },
+    {
+      "id": "2SA",
+      "file": "books/2SA.json"
+    },
+    {
+      "id": "2TH",
+      "file": "books/2TH.json"
+    },
+    {
+      "id": "2TI",
+      "file": "books/2TI.json"
+    },
+    {
+      "id": "3JN",
+      "file": "books/3JN.json"
+    },
+    {
+      "id": "ACT",
+      "file": "books/ACT.json"
+    },
+    {
+      "id": "AMO",
+      "file": "books/AMO.json"
+    },
+    {
+      "id": "COL",
+      "file": "books/COL.json"
+    },
+    {
+      "id": "DAN",
+      "file": "books/DAN.json"
+    },
+    {
+      "id": "DEU",
+      "file": "books/DEU.json"
+    },
+    {
+      "id": "ECC",
+      "file": "books/ECC.json"
+    },
+    {
+      "id": "EPH",
+      "file": "books/EPH.json"
+    },
+    {
+      "id": "EST",
+      "file": "books/EST.json"
+    },
+    {
+      "id": "EXO",
+      "file": "books/EXO.json"
+    },
+    {
+      "id": "EZK",
+      "file": "books/EZK.json"
+    },
+    {
+      "id": "EZR",
+      "file": "books/EZR.json"
+    },
+    {
+      "id": "GAL",
+      "file": "books/GAL.json"
+    },
+    {
+      "id": "GEN",
+      "file": "books/GEN.json"
+    },
+    {
+      "id": "HAB",
+      "file": "books/HAB.json"
+    },
+    {
+      "id": "HAG",
+      "file": "books/HAG.json"
+    },
+    {
+      "id": "HEB",
+      "file": "books/HEB.json"
+    },
+    {
+      "id": "HOS",
+      "file": "books/HOS.json"
+    },
+    {
+      "id": "ISA",
+      "file": "books/ISA.json"
+    },
+    {
+      "id": "JAS",
+      "file": "books/JAS.json"
+    },
+    {
+      "id": "JDG",
+      "file": "books/JDG.json"
+    },
+    {
+      "id": "JER",
+      "file": "books/JER.json"
+    },
+    {
+      "id": "JHN",
+      "file": "books/JHN.json"
+    },
+    {
+      "id": "JOB",
+      "file": "books/JOB.json"
+    },
+    {
+      "id": "JOL",
+      "file": "books/JOL.json"
+    },
+    {
+      "id": "JON",
+      "file": "books/JON.json"
+    },
+    {
+      "id": "JOS",
+      "file": "books/JOS.json"
+    },
+    {
+      "id": "JUD",
+      "file": "books/JUD.json"
+    },
+    {
+      "id": "LAM",
+      "file": "books/LAM.json"
+    },
+    {
+      "id": "LEV",
+      "file": "books/LEV.json"
+    },
+    {
+      "id": "LUK",
+      "file": "books/LUK.json"
+    },
+    {
+      "id": "MAL",
+      "file": "books/MAL.json"
+    },
+    {
+      "id": "MAT",
+      "file": "books/MAT.json"
+    },
+    {
+      "id": "MIC",
+      "file": "books/MIC.json"
+    },
+    {
+      "id": "MRK",
+      "file": "books/MRK.json"
+    },
+    {
+      "id": "NAM",
+      "file": "books/NAM.json"
+    },
+    {
+      "id": "NEH",
+      "file": "books/NEH.json"
+    },
+    {
+      "id": "NUM",
+      "file": "books/NUM.json"
+    },
+    {
+      "id": "OBA",
+      "file": "books/OBA.json"
+    },
+    {
+      "id": "PHM",
+      "file": "books/PHM.json"
+    },
+    {
+      "id": "PHP",
+      "file": "books/PHP.json"
+    },
+    {
+      "id": "PRO",
+      "file": "books/PRO.json"
+    },
+    {
+      "id": "PSA",
+      "file": "books/PSA.json"
+    },
+    {
+      "id": "REV",
+      "file": "books/REV.json"
+    },
+    {
+      "id": "ROM",
+      "file": "books/ROM.json"
+    },
+    {
+      "id": "RUT",
+      "file": "books/RUT.json"
+    },
+    {
+      "id": "SNG",
+      "file": "books/SNG.json"
+    },
+    {
+      "id": "TIT",
+      "file": "books/TIT.json"
+    },
+    {
+      "id": "ZEC",
+      "file": "books/ZEC.json"
+    },
+    {
+      "id": "ZEP",
+      "file": "books/ZEP.json"
+    }
+  ]
+}

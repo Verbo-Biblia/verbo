@@ -173,8 +173,18 @@ Todos son **comentarios completos en inglés** de alta calidad histórica, domin
 - Debajo de cada versículo se listan sus referencias cruzadas (solo la lista de referencias, no el comentario largo).
 - Click en una referencia cruzada → se abre/despliega el panel "Comparar versiones" (`renderCompare`, ya existente) mostrando ese pasaje referenciado; el usuario elige ahí en qué versión ver la referencia.
 - Si el usuario hace click en otro versículo del texto principal (navegación normal), el panel de comparación vuelve a su comportamiento estándar — **solo** el click en una referencia cruzada dispara este modo especial de "comparar con referencia".
+- Formato de la lista: chips clicables en su propio renglón bajo el versículo (ej. `[Jn 3:16] [Ro 5:8]`), sin ícono adicional — aparecen siempre que el versículo tenga referencias.
+- Límite de 10 chips visibles por versículo; si hay más, un botón "+N más" al final expande el resto sin recargar (decisión de Juan 2026-07-07, tras ver que versículos muy citados como Gn 1:1 mostraban 66 de una vez).
+- Al abrir una referencia, el panel Comparar recuerda la última versión alterna elegida por el usuario (misma variable `compareVersion` que ya usaba el modo normal).
 
-**Estado:** especificado, sin empezar. Pendiente: decidir mecánica exacta de layout (cuánto se expande el texto, dónde vive la lista de referencias en el DOM) antes de tocar `assets/app.js`/`assets/style.css`.
+**Estado: implementado y verificado en navegador (2026-07-07), pendiente de comitear/publicar.**
+- `tools/build_tsk_crossrefs.py` — parsea los 66 libros de `modules/commentaries/tsk/books/` (formato TSK: "palabra clave. Libro cap:vers;...") y genera `modules/crossrefs/tsk/` (manifest + un JSON por libro, `chapter → verse → [{book,chapter,verseStart,verseEnd,label}]`). 29,648 entradas fuente → 378,980 referencias normalizadas; 200 entradas (0.7%) sin referencias (notas de traducción puras, correctamente vacías). Corrigió un bug de origen: TSK usa `NAH` para Nahúm, el sitio usa `NAM` — ya normalizado.
+- `modules/registry.json` — se quitó `commentaries/tsk/manifest.json` del array `commentaries`; se agregó `crossrefs: ["crossrefs/tsk/manifest.json"]` (array nuevo).
+- `assets/module-loader.js` — nueva función `loadCrossrefs()`; `buildChapterData()` adjunta `verse.crossrefs` a cada versículo.
+- `assets/app.js` — `renderChapter()` pinta los chips bajo cada versículo; `openCrossref(ref)` activa un modo especial (`xrefTarget`/`xrefData`) en `renderCompare()` que carga el libro/capítulo referenciado (vía `buildChapterData`) en vez del capítulo actual; se resetea (`resetXrefMode()`) al hacer click en otro versículo, cambiar de pestaña, o navegar de capítulo.
+- `assets/style.css` — `.verse__xrefs`/`.verse__xref-chip` (chips) + `@media (min-width:1024px){ .reading-pane__inner{max-width:720px} }` (expansión horizontal solo desktop).
+- Verificado con Playwright headless sobre servidor local: chips visibles en Génesis 1 (27 versículos con referencias, 66 chips en Gn 1:1), click en chip abre Comparar mostrando Proverbios 8:22-24 en ASV con los versículos correctos resaltados, click en Génesis 1:3 restaura el comportamiento normal del panel. Sin errores de consola.
+- Nada de esto está comiteado a git todavía — pendiente de revisión de Juan antes de subir.
 
 ---
 

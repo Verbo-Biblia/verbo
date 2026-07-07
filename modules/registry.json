@@ -40,8 +40,7 @@
     "commentaries/jfb/manifest.json",
     "commentaries/kd/manifest.json",
     "commentaries/scofield/manifest.json",
-    "commentaries/wesley/manifest.json",
-    "commentaries/tsk/manifest.json"
+    "commentaries/wesley/manifest.json"
   ],
   "dictionaries": [
     "dictionaries/strong-verbo/manifest.json"
@@ -53,5 +52,8 @@
   ],
   "patristic": [
     "patristic/ireneo-contra-herejias/manifest.json"
+  ],
+  "crossrefs": [
+    "crossrefs/tsk/manifest.json"
   ]
 }

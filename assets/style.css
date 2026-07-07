@@ -245,6 +245,11 @@ body {
   padding: 0 32px;
 }
 
+/* Espacio extra en escritorio para las referencias cruzadas bajo cada versículo */
+@media (min-width: 1024px) {
+  .reading-pane__inner { max-width: 720px; }
+}
+
 /* Marca de app en reading pane — solo móvil */
 .reading-pane__app-mark {
   display: none;
@@ -361,6 +366,43 @@ body {
   cursor: help;
   vertical-align: 2px;
 }
+
+.verse__xrefs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -2px 0 10px;
+  padding: 0 10px 0 38px;
+}
+
+.verse__xref-chip {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--wine-soft);
+  background: rgba(122, 46, 46, 0.06);
+  border: 1px solid rgba(122, 46, 46, 0.15);
+  border-radius: 10px;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.verse__xref-chip:hover {
+  background: var(--wine-soft);
+  color: #fff;
+}
+
+.verse__xref-more {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--sepia);
+  background: none;
+  border: 1px dashed rgba(122, 46, 46, 0.3);
+  border-radius: 10px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+.verse__xref-more:hover { color: var(--wine-soft); border-color: var(--wine-soft); }
 
 /* Marginalia — el elemento de firma */
 

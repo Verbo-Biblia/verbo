@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   let catalog, data, activeTab = null, currentVersion = localStorage.getItem('verbo:lastVersion') || null, compareVersion = null;
+  let xrefTarget = null, xrefData = null;
+  function resetXrefMode(){ xrefTarget = null; xrefData = null; }
   let selectedVerses = new Set();
   let highlights = JSON.parse(localStorage.getItem('verbo:highlights') || '{}');
   let suppressCommentSync = false;
@@ -124,6 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function loadPassage({preserveVersion=true}={}) {
     setLoading(true);
+    resetXrefMode();
     try {
       const previous = preserveVersion ? currentVersion : null;
       data = await VerboModules.buildChapterData({bookId: currentBook, chapter: currentChapter, commentaryId: currentCommentary});
@@ -292,6 +295,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         row.appendChild(indicator);
       }
       row.appendChild(margin); els.list.appendChild(row);
+      if((v.crossrefs||[]).length){
+        const XREF_LIMIT=10;
+        const xrefRow=document.createElement('div'); xrefRow.className='verse__xrefs';
+        const addChip=ref=>{
+          const chip=document.createElement('button');
+          chip.type='button'; chip.className='verse__xref-chip'; chip.textContent=ref.label;
+          chip.title=`Ver referencia cruzada: ${ref.label}`;
+          chip.addEventListener('click',(e)=>{ e.stopPropagation(); openCrossref(ref); });
+          xrefRow.appendChild(chip);
+        };
+        v.crossrefs.slice(0,XREF_LIMIT).forEach(addChip);
+        if(v.crossrefs.length>XREF_LIMIT){
+          const rest=v.crossrefs.slice(XREF_LIMIT);
+          const more=document.createElement('button');
+          more.type='button'; more.className='verse__xref-more'; more.textContent=`+${rest.length} más`;
+          more.addEventListener('click',(e)=>{
+            e.stopPropagation();
+            rest.forEach(addChip);
+            more.remove();
+          });
+          xrefRow.appendChild(more);
+        }
+        els.list.appendChild(xrefRow);
+      }
       text.addEventListener('click',()=>{ selectVerse(row,v); });
       text.addEventListener('contextmenu',(e)=>{ e.preventDefault(); selectVerse(row,v); });
       text.querySelectorAll('.strongs-tag').forEach(tag=>tag.addEventListener('click',e=>{e.stopPropagation(); openDictionary(tag.dataset.strongCode);}));
@@ -313,6 +340,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(selectedVerses.has(verse.n)) selectedVerses.delete(verse.n); else selectedVerses.add(verse.n);
     row.classList.toggle('verse--selected', selectedVerses.has(verse.n));
     updateActionBar();
+    resetXrefMode();
     const firstNote=verse.commentaries?.find(c=>c.commentaryId===currentCommentary)?.noteIds?.[0]||null;
     if (activeTab === 'comentario') renderPanel('comentario', firstNote);
     if (activeTab === 'comparar') renderCompare(verse.n);
@@ -660,7 +688,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(noteId) scrollCommentToNote(noteId);
   }
 
+  async function renderCrossrefCompare() {
+    const installed=bibleCatalog();
+    if(!installed.length){ els.panelToolbar.innerHTML=''; els.panelBody.innerHTML=emptyState('📚','No hay otra Biblia instalada para comparar.'); return; }
+    if(!installed.some(v=>v.id===compareVersion)) compareVersion=installed[0].id;
+    const {book,chapter,verseStart,verseEnd,label}=xrefTarget;
+    if(!xrefData){
+      els.panelToolbar.innerHTML='';
+      els.panelBody.innerHTML=emptyState('⌛','Cargando referencia cruzada…');
+      try { xrefData=await VerboModules.buildChapterData({bookId:book,chapter}); }
+      catch(error){ console.error(error); els.panelBody.innerHTML=emptyState('⚠️','No se pudo cargar la referencia cruzada.'); return; }
+    }
+    const options=installed.map(v=>`<option value="${v.id}" ${v.id===compareVersion?'selected':''}>${escapeHTML(v.label)}${v.id===currentVersion?' (actual)':''}</option>`).join('');
+    els.panelToolbar.innerHTML=`<div class="compare-toolbar"><span class="compare-toolbar__label">Referencia cruzada · ${escapeHTML(label)}</span><select class="compare-toolbar__select" id="compareVersionSelect">${options}</select></div>`;
+    let verses=xrefData.verses;
+    if(!xrefData.versions[compareVersion]){
+      els.panelBody.innerHTML=emptyState('⌛','Cargando versión para comparar…');
+      const selected=installed.find(v=>v.id===compareVersion);
+      if (selected?.remote) {
+        try {
+          const loaded=await VerboModules.loadRemoteBible(compareVersion,book,chapter);
+          xrefData.versions[compareVersion]={label:loaded.manifest.abbreviation,full:loaded.manifest.name,hasStrongs:false,remote:true,copyright:loaded.copyright,fumsToken:loaded.fumsToken};
+          xrefData.verses.forEach(v=>{ v.text[compareVersion]=loaded.verses[String(v.n)]||''; });
+          verses=xrefData.verses;
+        } catch (error) { console.error(error); els.panelBody.innerHTML=emptyState('⚠️',escapeHTML(error.message || 'No se pudo cargar la versión en línea.')); return; }
+      } else {
+        const loaded=selected ? await VerboModules.loadBible(selected.path,book,chapter) : null;
+        if(!loaded){ els.panelBody.innerHTML=emptyState('⚠️','Esta versión no contiene el pasaje referenciado.'); return; }
+        verses=xrefData.verses.map(v=>({ ...v, text:{...v.text,[compareVersion]:(typeof loaded.verses[String(v.n)]==='string'?loaded.verses[String(v.n)]:loaded.verses[String(v.n)]?.text)||''} }));
+        xrefData.verses=verses;
+      }
+    }
+    els.panelBody.innerHTML=verses.map(v=>`<div class="compare-verse${v.n>=verseStart&&v.n<=(verseEnd||verseStart)?' compare-verse--active':''}" data-verse-n="${v.n}"><span class="compare-verse__num">${v.n}</span><span class="compare-verse__text">${escapeHTML(v.text[compareVersion]||'')}</span></div>`).join('');
+    document.getElementById('compareVersionSelect')?.addEventListener('change',async e=>{compareVersion=e.target.value;await renderCrossrefCompare();});
+    els.panelBody.querySelector(`[data-verse-n="${verseStart}"]`)?.scrollIntoView({block:'center'});
+  }
+
   async function renderCompare(focus) {
+    if(xrefTarget){ await renderCrossrefCompare(); return; }
     const installed=bibleCatalog();
     if(!installed.length){ els.panelToolbar.innerHTML=''; els.panelBody.innerHTML=emptyState('📚','No hay otra Biblia instalada para comparar.'); return; }
     if(!installed.some(v=>v.id===compareVersion)) compareVersion=installed[0].id;
@@ -682,6 +747,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     els.panelBody.innerHTML=verses.map(v=>`<div class="compare-verse${v.n===focus?' compare-verse--active':''}" data-verse-n="${v.n}"><span class="compare-verse__num">${v.n}</span><span class="compare-verse__text">${escapeHTML(v.text[compareVersion]||'')}</span></div>`).join('');
     document.getElementById('compareVersionSelect')?.addEventListener('change',async e=>{compareVersion=e.target.value;await renderCompare(activeVerse());});
     if(focus) els.panelBody.querySelector(`[data-verse-n="${focus}"]`)?.scrollIntoView({block:'center'});
+  }
+
+  function openCrossref(ref){
+    xrefTarget=ref; xrefData=null;
+    openPanel('comparar');
   }
 
   async function openSearchResult(r, versionId){
@@ -1328,6 +1398,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       clearMobileToolArm();
     }
+    resetXrefMode();
     activeTab===b.dataset.tab ? closePanel() : openPanel(b.dataset.tab);
   }));
   els.search.addEventListener('click',()=>openPanel('buscar'));

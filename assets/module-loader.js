@@ -46,7 +46,8 @@ const VerboModules = (() => {
     const library = await loadModuleList(registry.library || []);
     const gospel = await loadModuleList(registry.gospel || []);
     const patristic = await loadModuleList(registry.patristic || []);
-    return { registry, bibles, commentaries, dictionaries, exegesis, library, gospel, patristic, primary, books: primary.manifest.books };
+    const crossrefs = await loadModuleList(registry.crossrefs || []);
+    return { registry, bibles, commentaries, dictionaries, exegesis, library, gospel, patristic, crossrefs, primary, books: primary.manifest.books };
   }
 
   function apiBibleProxy(registry) {
@@ -163,6 +164,15 @@ const VerboModules = (() => {
       const start=entry.reference.chapterStart, end=entry.reference.chapterEnd ?? start;
       return (chapter >= start && chapter <= end) || (chapter === 1 && start === 0);
     }) };
+  }
+  async function loadCrossrefs(manifestPath, bookId, chapter) {
+    const manifest = await getJSON(manifestPath);
+    const bookInfo = manifest.books.find(book => book.id === bookId);
+    if (!bookInfo) return {};
+    try {
+      const bookData = await getJSON(resolveFromManifest(manifestPath, bookInfo.file));
+      return bookData[String(chapter)] || {};
+    } catch { return {}; }
   }
   async function getDictionaryEntry(code, dictionaryId=null) {
     const registry = await getJSON('modules/registry.json');
@@ -312,6 +322,10 @@ const VerboModules = (() => {
       catch (error) { console.warn(`Comentario omitido: modules/${path}`, error); return null; }
     }))).filter(Boolean);
 
+    const crossrefsByVerse=(registry.crossrefs || []).length
+      ? await (async()=>{ try { return await loadCrossrefs(`modules/${registry.crossrefs[0]}`,bookId,chapter); } catch (error) { console.warn('Referencias cruzadas omitidas', error); return {}; } })()
+      : {};
+
     const versions={};
     bibleResults.forEach(({manifest:m})=>versions[m.id]={label:m.abbreviation,full:m.name,year:m.year,hasStrongs:Boolean(m.hasStrongs)});
     const allVerseNumbers=[...new Set(bibleResults.flatMap(b=>Object.keys(b.verses).map(Number)))].sort((a,b)=>a-b);
@@ -362,7 +376,8 @@ const VerboModules = (() => {
         return { commentaryId, noteIds, label:note?.commentaryLabel || commentaryId, name:note?.commentaryName || commentaryId };
       });
       const noteIds=commentaries.flatMap(item=>item.noteIds);
-      return {n,text,segments,hasNote:noteIds.length>0,noteIds,commentaries};
+      const crossrefs=crossrefsByVerse[String(n)] || [];
+      return {n,text,segments,hasNote:noteIds.length>0,noteIds,commentaries,crossrefs};
     });
     const first=bibleResults.find(b=>b.manifest.id===registry.defaultBible)||bibleResults[0];
     return {meta:{book:first.bookInfo.name,bookId,chapter,version:first.manifest.id,versionFull:first.manifest.name},versions,verses,notes};
