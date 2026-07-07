@@ -35,8 +35,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   let commentSyncTimer = null;
   let searchState = null;
   let currentCommentary = localStorage.getItem('verbo:lastCommentary') || null;
-  let commentaryLangPref = localStorage.getItem('verbo:commentaryLang') || 'es';
-  let dictionaryLangPref = localStorage.getItem('verbo:dictionaryLang') || 'es';
   let currentDictionary = localStorage.getItem('verbo:lastDictionary') || null;
   let currentExegesis = localStorage.getItem('verbo:lastExegesis') || null;
   let gospelData=null;
@@ -64,6 +62,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const HL_COLORS = ['hl-yellow','hl-green','hl-blue','hl-pink','hl-coral','hl-violet'];
   const escapeHTML = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[ch]));
   const bibleCatalog = () => catalog.bibles.map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, lang:item.manifest.language || 'es', remote:Boolean(item.remote || item.manifest.remote), manifest:item.manifest }));
+  // Idioma de Strong/comentarios sigue a la Biblia activa: sin selector propio.
+  const contentLang = () => bibleCatalog().find(v => v.id === currentVersion)?.lang || 'es';
   const commentaryCatalog = () => (catalog.commentaries || []).map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, manifest:item.manifest }));
   // Léxico Strong: módulos numéricos (G1234 / H1234) consultados al tocar una etiqueta Strong en el texto.
   const isStrongLexicon = item => Boolean(item.manifest.strong);
@@ -243,6 +243,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       populateVersions();
       renderChapter(v);
       if (activeTab === 'comparar') await renderCompare(v);
+      if (activeTab === 'comentario') renderPanel('comentario');
     } catch (error) {
       console.error(error);
       toast(error.message || 'No se pudo cargar la Biblia en línea');
@@ -424,10 +425,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const isEnglishCommentary=currentManifest?.language==='en';
       if(installed.length){
         const options=installed.map(c=>`<option value="${c.id}" ${c.id===currentCommentary?'selected':''}>${escapeHTML(c.label)}</option>`).join('');
-        const langBtn=isEnglishCommentary
-          ?`<button class="commentary-lang-btn ${commentaryLangPref==='en'?'commentary-lang-btn--active':''}" id="commentaryLangToggle" title="${commentaryLangPref==='en'?'Ver en español':'Ver en inglés'}">${commentaryLangPref==='en'?'ES ↩':'EN ↗'}</button>`
-          :'';
-        els.panelToolbar.innerHTML=`<div class="compare-toolbar"><select class="compare-toolbar__select" id="commentarySelect">${options}</select>${langBtn}</div>`;
+        els.panelToolbar.innerHTML=`<div class="compare-toolbar"><select class="compare-toolbar__select" id="commentarySelect">${options}</select></div>`;
         document.getElementById('commentarySelect')?.addEventListener('change', e=>{
           currentCommentary=e.target.value;
           localStorage.setItem('verbo:lastCommentary', currentCommentary);
@@ -436,11 +434,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           const moduleInfo=selectedVerse?.commentaries?.find(c=>c.commentaryId===currentCommentary);
           renderPanel('comentario', moduleInfo?.noteIds?.[0] || null);
         });
-        document.getElementById('commentaryLangToggle')?.addEventListener('click', ()=>{
-          commentaryLangPref=commentaryLangPref==='es'?'en':'es';
-          localStorage.setItem('verbo:commentaryLang', commentaryLangPref);
-          renderPanel('comentario', focus, verseCommentaries, false);
-        });
       }
       if(verseCommentaries && verseCommentaries.length && !focus){
         const curNote=verseCommentaries.find(c=>c.commentaryId===currentCommentary);
@@ -448,14 +441,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       const entries=Object.entries(data.notes).filter(([,note])=>note.commentaryId===currentCommentary);
       els.panelBody.innerHTML=entries.length?entries.map(([id,n])=>{
-        const bodyHtml=isEnglishCommentary&&commentaryLangPref==='es'
+        const bodyHtml=isEnglishCommentary&&contentLang()==='es'
           ? (tcacheGet(translationCacheKey(id,n.body))||`<p class="note-card__translating">Traduciendo…</p>${n.body}`)
           : n.body;
         return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${data.meta.book} ${data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">Copiar comentario</button><div class="note-card__body">${bodyHtml}</div></div>`;
       }).join(''):emptyState('📖','Este capítulo todavía no tiene comentarios cargados.');
       els.panelBody.querySelectorAll('[data-copy-note]').forEach(btn=>btn.addEventListener('click',()=>{ const note=data.notes[btn.dataset.copyNote]; if(note) copyToClipboard(`${note.title}\n${String(note.body).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`); }));
       if(focus){ if(delayScroll) setTimeout(()=>scrollCommentToNote(focus),320); else scrollCommentToNote(focus); }
-      if(isEnglishCommentary && commentaryLangPref==='es') setTimeout(()=>applyCommentaryTranslation(focus), 150);
+      if(isEnglishCommentary && contentLang()==='es') setTimeout(()=>applyCommentaryTranslation(focus), 150);
     }
     if(tab==='comparar'){ els.panelTitle.textContent='Comparar versiones'; renderCompare(focus||activeVerse()); }
     if(tab==='diccionario') renderDictionaryPanel(focus || activeVerse());
@@ -593,7 +586,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function applyCommentaryTranslation(focusNoteId=null){
-    if(commentaryLangPref==='en') return;
+    if(contentLang()==='en') return;
     const manifest=catalog?.commentaries?.find(c=>c.manifest.id===currentCommentary)?.manifest;
     if(manifest?.language!=='en') return;
     const cards=[...els.panelBody.querySelectorAll('.note-card[data-note-id]')];
@@ -638,7 +631,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(translated) node.textContent=translated;
       }
     }
-    const result=`<p class="note-card__translation-note">Traducción automática al español; consulta EN para el texto original.</p>${box.innerHTML}`;
+    const result=`<p class="note-card__translation-note">Traducción automática al español.</p>${box.innerHTML}`;
     tcacheSet(cacheKey,result);
     return result;
   }
@@ -1215,18 +1208,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       const rawHtml=result.entry.html||result.entry.definition||result.entry.content||'';
       const html=formatStrongEntryHtml(result.code,result.entry,rawHtml);
       const renderEntry=async()=>{
-        const showEnglish=dictionaryLangPref==='en';
-        els.panelToolbar.innerHTML=`<button class="commentary-lang-btn ${showEnglish?'commentary-lang-btn--active':''}" id="dictionaryLangToggle" title="${showEnglish?'Ver en español':'Ver original en inglés'}">${showEnglish?'ES ↩':'EN ↗'}</button>`;
+        const showEnglish=contentLang()==='en';
+        els.panelToolbar.innerHTML='';
         els.panelBody.innerHTML=`<article class="dict-entry"><div class="dict-entry__term">${result.code}</div><div class="dict-entry__source">${escapeHTML(result.manifest.name)}</div><button class="note-card__copy" id="copyDictEntry" type="button">Copiar diccionario</button><div class="dict-entry__def" id="dictionaryEntryBody">${showEnglish?html:`<p class="note-card__translating">Traduciendo al español…</p>${html}`}</div></article>`;
-        document.getElementById('dictionaryLangToggle')?.addEventListener('click',()=>{
-          dictionaryLangPref=dictionaryLangPref==='es'?'en':'es';
-          localStorage.setItem('verbo:dictionaryLang',dictionaryLangPref);
-          renderEntry();
-        });
         const body=document.getElementById('dictionaryEntryBody');
         if(!showEnglish && body){
           const translated=await translateDictionaryEntry(result.code,html);
-          if(dictionaryLangPref==='es' && document.getElementById('dictionaryEntryBody')===body){
+          if(contentLang()==='es' && document.getElementById('dictionaryEntryBody')===body){
             body.innerHTML=translated;
             wireDictionaryLinks(body);
           }

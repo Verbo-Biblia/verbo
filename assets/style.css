@@ -671,25 +671,6 @@ body {
   border-color: var(--wine-soft);
 }
 
-.commentary-lang-btn {
-  margin-left: 8px;
-  padding: 3px 10px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .04em;
-  border: 1.5px solid var(--wine-soft);
-  border-radius: 4px;
-  background: transparent;
-  color: var(--wine-soft);
-  cursor: pointer;
-  transition: background .15s, color .15s;
-  flex-shrink: 0;
-}
-.commentary-lang-btn--active {
-  background: var(--wine-soft);
-  color: #fff;
-}
-.commentary-lang-btn:hover { opacity: .8; }
 .note-card__translating {
   font-size: 11px;
   color: var(--text-faint, #aaa);
