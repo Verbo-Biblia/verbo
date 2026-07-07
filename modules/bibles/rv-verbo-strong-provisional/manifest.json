@@ -411,5 +411,10 @@
   "strongSource": "STEPBible Data (CC BY 4.0)",
   "alignmentMethod": "Referencia RV1909+ alineada por subsecuencia textual exacta y confirmada por STEPBible.",
   "referenceSource": "Bible SuperSearch rv_1909_strongs.sqlite (uso no comercial)",
-  "strongEditorAttribution": "Etiquetado RV1909 de referencia desarrollado por Rubén Gómez"
+  "strongEditorAttribution": "Etiquetado RV1909 de referencia desarrollado por Rubén Gómez",
+  "crossVerification": {
+    "method": "unique-open-word-code-crosscheck",
+    "minimumOccurrences": 5,
+    "promotedAssociations": 8254
+  }
 }

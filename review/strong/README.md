@@ -1,5 +1,12 @@
 # Revisión editorial Strong
 
+## Progreso
+
+- Génesis 1: completado. Sus 396 asociaciones están en estado
+  `editorial-reviewed` y no quedan grupos STEPBible pendientes sin una decisión.
+- Génesis 2: completado. Sus 310 asociaciones están en estado
+  `editorial-reviewed` y no quedan grupos STEPBible pendientes sin una decisión.
+
 Cada CSV corresponde a un libro de RV2026+ y puede abrirse en Excel o LibreOffice.
 
 ## Columnas que completa el revisor
@@ -10,6 +17,10 @@ Cada CSV corresponde a un libro de RV2026+ y puede abrirse en Excel o LibreOffic
 - `notes`: explicación breve cuando sea útil.
 
 `verified-open` identifica asociaciones reproducibles solo con RV2026 y STEPBible. `provisional-reference` identifica ubicaciones sugeridas por otra versión y confirmadas únicamente a nivel de código por versículo; estas requieren prioridad de revisión.
+
+`cross-verified-open` identifica asociaciones confirmadas además por una relación
+palabra–código inequívoca, observada repetidamente en datos `verified-open`. Se genera
+con `tools/promote_strong_evidence.py`; no se presenta como revisión humana.
 
 No se debe modificar `reference`, `verse_text`, `word`, `strong`, `morphology`, `step_gloss`, `status` ni `confidence`, porque permiten importar después las decisiones de forma reproducible.
 

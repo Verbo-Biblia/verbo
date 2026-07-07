@@ -82,16 +82,58 @@ def export_book(book_id: str, module: Path, output: Path) -> Counter:
     return stats
 
 
+def decision_key(row: dict) -> tuple[str, ...]:
+    """Identidad estable aunque cambien estado/confianza por otra verificación."""
+    return tuple(row.get(field, "") for field in (
+        "reference", "segment_index", "code_index", "verse_text", "word",
+        "strong", "morphology", "step_gloss",
+    ))
+
+
+def merge_decisions(current: Path, previous: Path) -> Counter:
+    """Copia decisiones cuyo contenido y ubicación siguen siendo idénticos."""
+    with previous.open(encoding="utf-8-sig", newline="") as handle:
+        old_rows = list(csv.DictReader(handle))
+    decisions = {
+        decision_key(row): row for row in old_rows
+        if row.get("decision", "").strip()
+    }
+    with current.open(encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        fields = list(reader.fieldnames or [])
+        rows = list(reader)
+    stats = Counter()
+    for row in rows:
+        old = decisions.get(decision_key(row))
+        if not old:
+            continue
+        for field in ("reviewer", "decision", "corrected_strong", "notes"):
+            row[field] = old.get(field, "")
+        stats["preserved"] += 1
+    with current.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+    stats["notPreserved"] = len(decisions) - stats["preserved"]
+    return stats
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("book", help="ID del libro, por ejemplo GEN o JHN")
     parser.add_argument("--module", type=Path, default=DEFAULT_MODULE)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--preserve-decisions-from", type=Path)
     args = parser.parse_args()
     book_id = args.book.upper()
     output = args.output or ROOT / f"review/strong/{book_id}.csv"
     stats = export_book(book_id, args.module, output)
-    print({"output": str(output), "rows": sum(stats.values()), "statuses": dict(stats)})
+    result = {"output": str(output), "rows": sum(stats.values()), "statuses": dict(stats)}
+    if args.preserve_decisions_from:
+        if args.preserve_decisions_from.resolve() == output.resolve():
+            parser.error("--preserve-decisions-from debe ser distinto de --output")
+        result["merge"] = dict(merge_decisions(output, args.preserve_decisions_from))
+    print(result)
 
 
 if __name__ == "__main__":

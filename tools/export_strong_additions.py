@@ -47,8 +47,16 @@ def export_book(book_id: str, module: Path, output: Path) -> Counter:
             for verse, record in verses.items():
                 assigned = Counter(code for segment in record.get("segments", [])
                                    for code in segment_codes(segment))
+                reviewed_skips = {
+                    (int(item["stepIndex"]), item.get("code", ""))
+                    for item in record.get("strongReview", [])
+                    if item.get("decision") == "skip" and str(item.get("stepIndex", "")).isdigit()
+                }
                 for step_index, group in enumerate(step.get((book_id, chapter, verse), [])):
                     code = group["code"]
+                    if (step_index, code) in reviewed_skips:
+                        stats["reviewedSkip"] += 1
+                        continue
                     if assigned[code]:
                         assigned[code] -= 1
                         continue
@@ -71,16 +79,51 @@ def export_book(book_id: str, module: Path, output: Path) -> Counter:
     return stats
 
 
+def merge_decisions(current: Path, previous: Path) -> Counter:
+    with previous.open(encoding="utf-8-sig", newline="") as handle:
+        old = {row["row_id"]: row for row in csv.DictReader(handle)
+               if row.get("decision", "").strip()}
+    with current.open(encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        fields = list(reader.fieldnames or [])
+        rows = list(reader)
+    stats = Counter()
+    for row in rows:
+        prior = old.get(row["row_id"])
+        if not prior:
+            continue
+        immutable = ("reference", "step_index", "verse_text", "strong",
+                     "morphology", "step_gloss")
+        if any(row[field] != prior[field] for field in immutable):
+            stats["changed"] += 1
+            continue
+        for field in ("reviewer", "decision", "target_segment_index", "notes"):
+            row[field] = prior.get(field, "")
+        stats["preserved"] += 1
+    with current.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+    stats["alreadyAppliedOrRemoved"] = len(old) - stats["preserved"] - stats["changed"]
+    return stats
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("book", help="ID del libro, por ejemplo GEN o JHN")
     parser.add_argument("--module", type=Path, default=DEFAULT_MODULE)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--preserve-decisions-from", type=Path)
     args = parser.parse_args()
     book_id = args.book.upper()
     output = args.output or ROOT / f"review/strong/{book_id}-additions.csv"
     stats = export_book(book_id, args.module, output)
-    print({"output": str(output), "rows": sum(stats.values()), "statuses": dict(stats)})
+    result = {"output": str(output), "rows": stats["unassigned"], "statuses": dict(stats)}
+    if args.preserve_decisions_from:
+        if args.preserve_decisions_from.resolve() == output.resolve():
+            parser.error("--preserve-decisions-from debe ser distinto de --output")
+        result["merge"] = dict(merge_decisions(output, args.preserve_decisions_from))
+    print(result)
 
 
 if __name__ == "__main__":

@@ -8,4 +8,9 @@ Referencia provisional no comercial: Bible SuperSearch `rv_1909_strongs.sqlite`;
 
 Estados de asociación: `verified-open` se reproduce solo con RV2026 y STEPBible; `provisional-reference` usa otra versión únicamente como sugerencia de ubicación y queda pendiente de revisión editorial.
 
+`cross-verified-open` identifica una asociación provisional promovida mediante una
+relación palabra–código inequívoca observada al menos cinco veces en asociaciones
+`verified-open`. `editorial-reviewed` identifica decisiones aplicadas desde los CSV
+de revisión. Ninguno de estos estados se asigna por cobertura o proximidad solamente.
+
 Este módulo debe reemplazar progresivamente esa referencia por revisión editorial propia antes de adoptar una licencia abierta definitiva.
