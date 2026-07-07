@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       row.appendChild(margin); els.list.appendChild(row);
       if((v.crossrefs||[]).length){
-        const XREF_LIMIT=10;
+        const XREF_LIMIT=window.innerWidth<=760?5:10;
         const xrefRow=document.createElement('div'); xrefRow.className='verse__xrefs';
         const addChip=ref=>{
           const chip=document.createElement('button');
