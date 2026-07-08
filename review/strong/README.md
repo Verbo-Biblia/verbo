@@ -10,6 +10,8 @@
   `editorial-reviewed` y no quedan grupos STEPBible pendientes sin una decisión.
 - Génesis 4: completado. Sus asociaciones están en estado
   `editorial-reviewed` y no quedan grupos STEPBible pendientes sin una decisión.
+- Génesis 5:1-5: completado. Sus asociaciones están en estado
+  `editorial-reviewed` y no quedan grupos STEPBible pendientes sin una decisión.
 
 Cada CSV corresponde a un libro de RV2026+ y puede abrirse en Excel o LibreOffice.
 

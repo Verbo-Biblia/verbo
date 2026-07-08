@@ -1,13 +1,4 @@
 ﻿row_id,reference,step_index,verse_text,strong,morphology,step_gloss,reviewer,decision,target_segment_index,notes
-d3178959189aa291006d,GEN 5:1,5,"Este es el libro de las generaciones de Adam. El día en que creó Dios al hombre, a la semejanza de Dios lo hizo;",H1254,HVqcc,created,,,,
-776669dab51799e6fd29,GEN 5:1,11,"Este es el libro de las generaciones de Adam. El día en que creó Dios al hombre, a la semejanza de Dios lo hizo;",H853,HTo/Sp3ms,<obj.>/ him,,,,
-720df9fbeb4e917737b4,GEN 5:2,4,"Varón y hembra los creó; y los bendijo, y llamó el nombre de ellos Adam, el día en que fueron criados.",H853,HTo/Sp3mp,<obj.>/ them,,,,
-9c9412d867cf1115041e,GEN 5:2,6,"Varón y hembra los creó; y los bendijo, y llamó el nombre de ellos Adam, el día en que fueron criados.",H853,HTo,<obj.>,,,,
-e2718dd93d61d1fd477a,GEN 5:2,10,"Varón y hembra los creó; y los bendijo, y llamó el nombre de ellos Adam, el día en que fueron criados.",H1254,HVNcc/Sp3mp,were created/ they,,,,
-913dc74f23a4868b987a,GEN 5:3,9,"Y vivió Adam ciento y treinta años, y engendró un hijo a su semejanza, conforme a su imagen, y llamó su nombre Seth.",H853,HTo,<obj.>,,,,
-805722f94e5b4dc33f48,GEN 5:4,5,"Y fueron los días de Adam, después que engendró a Seth, ochocientos años: y engendró hijos e hijas.",H853,HTo,<obj.>,,,,
-f1671e8acc058b820753,GEN 5:5,5,"Y fueron todos los días que vivió Adam novecientos y treinta años, y murió.",H2421,HVqp3ms,he lived,,,,
-5dd87677ddc4c6a75ac0,GEN 5:5,10,"Y fueron todos los días que vivió Adam novecientos y treinta años, y murió.",H8141,HNcfsa,year[s],,,,
 540129772533435fe2f7,GEN 5:6,5,"Y vivió Seth ciento y cinco años, y engendró a Enós.",H8141,HNcfsa,year[s],,,,
 eda89ca8a50637b560af,GEN 5:6,7,"Y vivió Seth ciento y cinco años, y engendró a Enós.",H853,HTo,<obj.>,,,,
 24ccb3290145bf4d5b7b,GEN 5:7,4,"Y vivió Seth, después que engendró a Enós, ochocientos y siete años: y engendró hijos e hijas.",H853,HTo,<obj.>,,,,

@@ -45,16 +45,16 @@ o rechazarse; no debe publicarse como verificada.
 - Génesis 4 está cerrado: asociaciones existentes y omisiones revisadas,
   reasignaciones aplicadas y cero errores de auditoría.
 
-Última auditoría completa aprobada, después de cerrar Génesis 4:
+Última auditoría completa aprobada, después de cerrar Génesis 5:1-5:
 
-- 342.983 asociaciones totales.
-- 1.345 `editorial-reviewed`.
-- 274.096 provisionales.
-- 59.294 `verified-open`.
+- 342.989 asociaciones totales.
+- 1.402 `editorial-reviewed`.
+- 274.050 provisionales.
+- 59.289 `verified-open`.
 - 8.248 `cross-verified-open`.
 - Cero errores de auditoría.
 
-## Punto exacto de pausa: Génesis 5:1
+## Punto exacto de pausa: Génesis 5:6
 
 En Génesis 3:16-24 se revisaron 117 asociaciones existentes. Se rechazaron y
 reasignaron cuatro enlaces desplazados: H859 a `vuelvas` (3:19), H1931 a `ella`
@@ -88,9 +88,15 @@ asociaciones explícitas (`acicalador`, `obra`, dos componentes compuestos de
 `Tubal-Caín`, `oigan`, `escuchen`, `llamarse`) y cinco omisiones se marcaron
 como `skip`.
 
+Génesis 5:1-5 quedó cerrado. H1254 se retiró de `criados` cuando correspondía a
+`creó` en 5:2, y se añadió otro H1254 pasivo a `criados`. También se añadieron
+H1254 a `creó` (5:1), H853 con sufijo a `lo` (5:1), H853 con sufijo a `los`
+(5:2), H2421 a `vivió` (5:5) y un segundo H8141 a `años` (5:5). Tres H853 sin
+equivalente léxico independiente se marcaron `skip`.
+
 ## Reanudación exacta
 
-Revisar editorialmente Génesis 5:1 en adelante. Para regenerar los archivos de trabajo
+Revisar editorialmente Génesis 5:6 en adelante. Para regenerar los archivos de trabajo
 sin perder decisiones anteriores:
 
 ```bash
@@ -100,8 +106,8 @@ python3 tools/export_strong_additions.py GEN --output /tmp/GEN-additions-next.cs
   --preserve-decisions-from review/strong/GEN-additions.csv
 ```
 
-No hay un lote parcialmente aplicado. Génesis 1-4 están cerrados en el módulo y
-en los CSV de revisión.
+No hay un lote parcialmente aplicado. Génesis 1-4 y Génesis 5:1-5 están cerrados
+en el módulo y en los CSV de revisión.
 
 ## Archivos con cambios propios de esta revisión
 
