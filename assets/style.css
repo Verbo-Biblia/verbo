@@ -1687,3 +1687,193 @@ body[data-theme="rosewood"] {
 
   /* Panels full-screen (buscar, notas, padres, etc.) no cambian */
 }
+
+/* ---------- Modo Preparación de Bosquejo/Estudio ---------- */
+
+.sermon-mode-toggle {
+  white-space: nowrap;
+}
+
+.sermon-mode-toggle--active {
+  border-color: var(--wine, #7f2d35);
+  color: var(--wine, #7f2d35);
+  background: var(--gold-glow, rgba(201,166,107,.16));
+}
+
+@media (max-width: 900px) {
+  .sermon-mode-toggle span:last-child { display: none; }
+}
+
+.editor-pane {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-pane__toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 24px;
+  background: var(--chrome, var(--paper-raised));
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+
+.editor-toolbar__btn {
+  border: 1px solid transparent;
+  background: none;
+  color: var(--sepia);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.editor-toolbar__btn:hover {
+  background: var(--rule);
+  color: var(--ink);
+}
+
+.editor-toolbar__btn.is-active {
+  background: var(--wine, #7f2d35);
+  color: #fff;
+}
+
+.editor-toolbar__sep {
+  width: 1px;
+  align-self: stretch;
+  background: var(--rule);
+  margin: 4px 6px;
+}
+
+.editor-pane__inner {
+  flex: 1;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px;
+  position: relative;
+}
+
+.editor-pane__surface {
+  min-height: 60vh;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink);
+  outline: none;
+}
+
+.editor-pane__surface .ProseMirror {
+  outline: none;
+  min-height: 60vh;
+}
+
+.editor-pane__surface h1 { font-family: var(--font-display); font-size: 1.7em; margin: 0.6em 0 0.3em; }
+.editor-pane__surface h2 { font-family: var(--font-display); font-size: 1.3em; margin: 0.6em 0 0.3em; }
+.editor-pane__surface p { margin: 0.5em 0; }
+.editor-pane__surface ul, .editor-pane__surface ol { padding-left: 1.4em; margin: 0.5em 0; }
+.editor-pane__surface li { margin: 0.2em 0; }
+
+.editor-pane__dropline {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--wine, #7f2d35);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.editor-pane__surface.is-drag-over {
+  background: rgba(201,166,107,.06);
+  border-radius: 8px;
+}
+
+/* Versículos/comentarios arrastrables en modo sermón */
+body.sermon-mode .verse__text,
+body.sermon-mode .note-card {
+  cursor: grab;
+}
+
+body.sermon-mode .verse--dragging,
+body.sermon-mode .note-card--dragging {
+  opacity: 0.45;
+}
+
+.sermon-drag-ghost {
+  position: fixed;
+  z-index: 3000;
+  pointer-events: none;
+  max-width: 280px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--paper-raised);
+  border: 1px solid var(--wine-soft, #a5636c);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink);
+  opacity: 0.95;
+}
+
+/* Panel lateral "Biblia" del modo sermón */
+.sermon-bible-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 24px;
+  flex-wrap: wrap;
+}
+
+.sermon-bible-toolbar__select {
+  border: 1px solid rgba(112,83,53,.25);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 12.5px;
+  background: #fffdf8;
+}
+
+.sermon-bible-toolbar__nav {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.sermon-bible-toolbar__navbtn {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-raised);
+  border-radius: 6px;
+  padding: 4px 9px;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--sepia);
+}
+
+.sermon-bible-toolbar__navbtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.sermon-bible-toolbar__navbtn:not(:disabled):hover {
+  color: var(--wine);
+  border-color: var(--wine-soft);
+}
+
+@media (max-width: 760px) {
+  .editor-pane__toolbar { padding: 8px 16px; }
+  .editor-pane__inner { padding: 20px 16px; }
+  .sermon-bible-toolbar { padding: 8px 16px; }
+}

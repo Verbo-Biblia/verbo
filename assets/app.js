@@ -25,12 +25,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     copyVerseText: document.getElementById('copyVerseText'),
     copyVerseRef: document.getElementById('copyVerseRef'),
     closeVerseAction: document.getElementById('closeVerseAction'),
-    backdrop: document.getElementById('sheetBackdrop')
+    backdrop: document.getElementById('sheetBackdrop'),
+    sermonToggle: document.getElementById('sermonModeToggle'),
+    readingPane: document.getElementById('readingPane'),
+    editorPane: document.getElementById('editorPane'),
+    editorSurface: document.getElementById('editorSurface'),
+    editorToolbar: document.getElementById('editorToolbar'),
+    editorDropline: document.getElementById('editorDropline')
   };
 
   let catalog, data, activeTab = null, currentVersion = localStorage.getItem('verbo:lastVersion') || null, compareVersion = null;
   let xrefTarget = null, xrefData = null;
   function resetXrefMode(){ xrefTarget = null; xrefData = null; }
+  let sermonMode = false;
+  let sermonEditor = null;
+  let sermonEditorContent = null;
+  let sermonBible = null;
+  let sermonTouchDrag = null;
   let selectedVerses = new Set();
   let highlights = JSON.parse(localStorage.getItem('verbo:highlights') || '{}');
   let suppressCommentSync = false;
@@ -295,6 +306,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         row.appendChild(indicator);
       }
       row.appendChild(margin); els.list.appendChild(row);
+      wireSermonDrag(row, 'verse', ()=>({
+        type:'verse',
+        text: String(v.text[currentVersion] || Object.values(v.text)[0] || '').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
+        ref: `${bookAbbr[currentBook]||currentBook} ${currentChapter}:${v.n}, ${bibleCatalog().find(x=>x.id===currentVersion)?.label||currentVersion}`
+      }));
       if((v.crossrefs||[]).length){
         const XREF_LIMIT=window.innerWidth<=760?5:10;
         const xrefRow=document.createElement('div'); xrefRow.className='verse__xrefs';
@@ -475,10 +491,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${data.meta.book} ${data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">Copiar comentario</button><div class="note-card__body">${bodyHtml}</div></div>`;
       }).join(''):emptyState('📖','Este capítulo todavía no tiene comentarios cargados.');
       els.panelBody.querySelectorAll('[data-copy-note]').forEach(btn=>btn.addEventListener('click',()=>{ const note=data.notes[btn.dataset.copyNote]; if(note) copyToClipboard(`${note.title}\n${String(note.body).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`); }));
+      els.panelBody.querySelectorAll('.note-card[data-note-id]').forEach(card=>{
+        wireSermonDrag(card, 'note', ()=>{
+          const note=data.notes[card.dataset.noteId];
+          const bodyHtml=card.querySelector('.note-card__body')?.innerHTML || note?.body || '';
+          return {
+            type:'commentary',
+            text: String(bodyHtml).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
+            ref: `${note?.title||card.querySelector('.note-card__title')?.textContent.trim()||''} — ${note?.author||card.querySelector('.note-card__author')?.textContent.trim()||''}`
+          };
+        });
+      });
       if(focus){ if(delayScroll) setTimeout(()=>scrollCommentToNote(focus),320); else scrollCommentToNote(focus); }
       if(isEnglishCommentary && contentLang()==='es') setTimeout(()=>applyCommentaryTranslation(focus), 150);
     }
-    if(tab==='comparar'){ els.panelTitle.textContent='Comparar versiones'; renderCompare(focus||activeVerse()); }
+    if(tab==='comparar'){
+      if(sermonMode){ renderSermonBiblePanel(focus||activeVerse()); }
+      else { els.panelTitle.textContent='Comparar versiones'; renderCompare(focus||activeVerse()); }
+    }
     if(tab==='diccionario') renderDictionaryPanel(focus || activeVerse());
     if(tab==='biblioteca') renderLibraryPanel(focus || activeVerse());
     if(tab==='evangelio') renderGospelPanel();
@@ -752,6 +782,377 @@ document.addEventListener('DOMContentLoaded', async () => {
   function openCrossref(ref){
     xrefTarget=ref; xrefData=null;
     openPanel('comparar');
+  }
+
+  // ── Modo Preparación de Bosquejo/Estudio ───────────────────────────────────
+
+  function updateBibleTabForSermonMode(active){
+    document.querySelectorAll('[data-tab="comparar"]').forEach(btn=>{
+      const label = active ? 'Biblia' : 'Comparar versiones';
+      btn.title = label;
+      btn.setAttribute('aria-label', label);
+      const mobileLabel = btn.querySelector('.mobile-tool-label');
+      if(mobileLabel) mobileLabel.textContent = active ? 'Biblia' : 'Comparar';
+    });
+  }
+
+  async function toggleSermonMode(){
+    sermonMode = !sermonMode;
+    els.sermonToggle?.classList.toggle('sermon-mode-toggle--active', sermonMode);
+    els.sermonToggle?.setAttribute('aria-pressed', String(sermonMode));
+    document.body.classList.toggle('sermon-mode', sermonMode);
+    if(els.readingPane) els.readingPane.hidden = sermonMode;
+    if(els.editorPane) els.editorPane.hidden = !sermonMode;
+    updateBibleTabForSermonMode(sermonMode);
+    if(sermonMode) await initSermonEditor();
+    if(data) renderChapter(activeVerse());
+    if(activeTab) renderPanel(activeTab);
+  }
+
+  els.sermonToggle?.addEventListener('click', toggleSermonMode);
+
+  // ── Editor de texto (Tiptap, sin React, cargado vía import dinámico) ───────
+
+  async function initSermonEditor(){
+    if(sermonEditor) return sermonEditor;
+    if(!els.editorSurface) return null;
+    try{
+      const [{ Editor }, StarterKitMod] = await Promise.all([
+        import('https://esm.sh/@tiptap/core@2'),
+        import('https://esm.sh/@tiptap/starter-kit@2')
+      ]);
+      const StarterKit = StarterKitMod.default;
+      sermonEditor = new Editor({
+        element: els.editorSurface,
+        extensions: [
+          StarterKit.configure({
+            italic:false, strike:false, code:false, codeBlock:false,
+            blockquote:false, horizontalRule:false, heading:{levels:[1,2]}
+          })
+        ],
+        content: sermonEditorContent || '<p></p>',
+        onUpdate: ({editor})=>{ sermonEditorContent = editor.getJSON(); }
+      });
+      wireEditorToolbar();
+      wireEditorDropZone();
+    }catch(error){
+      console.error('No se pudo cargar el editor de texto', error);
+      els.editorSurface.innerHTML = emptyState('⚠️','No se pudo cargar el editor de texto. Verifica tu conexión a internet.');
+    }
+    return sermonEditor;
+  }
+
+  function wireEditorToolbar(){
+    els.editorToolbar?.querySelectorAll('[data-cmd]').forEach(btn=>{
+      // Evita que el botón robe el foco del editor antes del click (perdería la primera tecla escrita después).
+      btn.addEventListener('mousedown', e=>e.preventDefault());
+      btn.addEventListener('click', ()=>{
+        if(!sermonEditor) return;
+        const chain = sermonEditor.chain().focus();
+        switch(btn.dataset.cmd){
+          case 'h1': chain.toggleHeading({level:1}).run(); break;
+          case 'h2': chain.toggleHeading({level:2}).run(); break;
+          case 'bold': chain.toggleBold().run(); break;
+          case 'bulletList': chain.toggleBulletList().run(); break;
+          case 'orderedList': chain.toggleOrderedList().run(); break;
+          case 'indent': chain.sinkListItem('listItem').run(); break;
+          case 'outdent': chain.liftListItem('listItem').run(); break;
+        }
+        updateEditorToolbarState();
+      });
+    });
+    sermonEditor.on('selectionUpdate', updateEditorToolbarState);
+    sermonEditor.on('transaction', updateEditorToolbarState);
+  }
+
+  function updateEditorToolbarState(){
+    if(!sermonEditor || !els.editorToolbar) return;
+    const map = {
+      h1: sermonEditor.isActive('heading',{level:1}),
+      h2: sermonEditor.isActive('heading',{level:2}),
+      bold: sermonEditor.isActive('bold'),
+      bulletList: sermonEditor.isActive('bulletList'),
+      orderedList: sermonEditor.isActive('orderedList')
+    };
+    els.editorToolbar.querySelectorAll('[data-cmd]').forEach(btn=>{
+      const cmd=btn.dataset.cmd;
+      if(cmd in map) btn.classList.toggle('is-active', map[cmd]);
+    });
+  }
+
+  // ── Panel lateral "Biblia" del modo sermón (con historial de referencias) ──
+
+  function initSermonBibleState(){
+    if(sermonBible) return;
+    sermonBible = { book:currentBook, chapter:currentChapter, version:currentVersion, chapterCount:null, data:null, history:[], future:[] };
+  }
+
+  async function sermonRefreshChapterCount(){
+    const info = await VerboModules.getBookInfo(sermonBible.book);
+    sermonBible.chapterCount = info.chapterCount;
+    if(sermonBible.chapter > info.chapterCount) sermonBible.chapter = info.chapterCount;
+  }
+
+  async function loadSermonBibleData(){
+    sermonBible.data = await VerboModules.buildChapterData({bookId: sermonBible.book, chapter: sermonBible.chapter});
+    if(!sermonBible.data.versions[sermonBible.version]){
+      const selected = bibleCatalog().find(v=>v.id===sermonBible.version);
+      if(selected?.remote){
+        try{
+          const loaded = await VerboModules.loadRemoteBible(sermonBible.version, sermonBible.book, sermonBible.chapter);
+          sermonBible.data.versions[sermonBible.version] = { label:loaded.manifest.abbreviation, full:loaded.manifest.name, hasStrongs:false, remote:true, copyright:loaded.copyright, fumsToken:loaded.fumsToken };
+          sermonBible.data.verses.forEach(v=>{ v.text[sermonBible.version] = loaded.verses[String(v.n)] || ''; });
+        }catch(error){ console.warn(error); sermonBible.version = sermonBible.data.meta.version; }
+      } else {
+        sermonBible.version = sermonBible.data.meta.version;
+      }
+    }
+  }
+
+  function sermonBibleToolbarHtml(){
+    const books = catalog.books.map(b=>`<option value="${b.id}" ${b.id===sermonBible.book?'selected':''}>${escapeHTML(b.name)}</option>`).join('');
+    const chapters = Array.from({length: sermonBible.chapterCount||1}, (_,i)=>`<option value="${i+1}" ${i+1===sermonBible.chapter?'selected':''}>${i+1}</option>`).join('');
+    const versions = bibleCatalog().map(v=>`<option value="${v.id}" ${v.id===sermonBible.version?'selected':''}>${escapeHTML(v.label)}</option>`).join('');
+    return `<div class="sermon-bible-toolbar">
+      <select class="sermon-bible-toolbar__select" id="sermonBookSelect" aria-label="Libro">${books}</select>
+      <select class="sermon-bible-toolbar__select" id="sermonChapterSelect" aria-label="Capítulo">${chapters}</select>
+      <select class="sermon-bible-toolbar__select" id="sermonVersionSelect" aria-label="Versión">${versions}</select>
+      <div class="sermon-bible-toolbar__nav">
+        <button type="button" class="sermon-bible-toolbar__navbtn" id="sermonBibleBack" title="Atrás" ${sermonBible.history.length?'':'disabled'}>‹</button>
+        <button type="button" class="sermon-bible-toolbar__navbtn" id="sermonBibleForward" title="Adelante" ${sermonBible.future.length?'':'disabled'}>›</button>
+      </div>
+    </div>`;
+  }
+
+  function wireSermonBibleToolbar(){
+    document.getElementById('sermonBookSelect')?.addEventListener('change', async e=>{
+      sermonBible.book=e.target.value; sermonBible.chapter=1; sermonBible.chapterCount=null;
+      await renderSermonBiblePanel();
+    });
+    document.getElementById('sermonChapterSelect')?.addEventListener('change', async e=>{
+      sermonBible.chapter=Number(e.target.value);
+      await renderSermonBiblePanel();
+    });
+    document.getElementById('sermonVersionSelect')?.addEventListener('change', async e=>{
+      sermonBible.version=e.target.value;
+      await loadSermonBibleData();
+      els.panelToolbar.innerHTML=sermonBibleToolbarHtml();
+      wireSermonBibleToolbar();
+      renderSermonBibleVerses();
+    });
+    document.getElementById('sermonBibleBack')?.addEventListener('click', sermonGoBack);
+    document.getElementById('sermonBibleForward')?.addEventListener('click', sermonGoForward);
+  }
+
+  async function renderSermonBiblePanel(focusVerse=null){
+    els.panelTitle.textContent='Biblia';
+    initSermonBibleState();
+    const needsLoad = !sermonBible.data || sermonBible.data.meta.bookId!==sermonBible.book || sermonBible.data.meta.chapter!==sermonBible.chapter;
+    if(needsLoad){
+      if(sermonBible.chapterCount==null || sermonBible.data?.meta?.bookId!==sermonBible.book) await sermonRefreshChapterCount();
+      els.panelToolbar.innerHTML=sermonBibleToolbarHtml();
+      wireSermonBibleToolbar();
+      els.panelBody.innerHTML=emptyState('⌛','Cargando pasaje…');
+      await loadSermonBibleData();
+    }
+    els.panelToolbar.innerHTML=sermonBibleToolbarHtml();
+    wireSermonBibleToolbar();
+    renderSermonBibleVerses(focusVerse);
+  }
+
+  function renderSermonBibleVerses(focusVerse=null){
+    const version = sermonBible.version;
+    const container = document.createElement('div');
+    container.className = 'sermon-bible-verses';
+    sermonBible.data.verses.forEach(v=>{
+      const row=document.createElement('div'); row.className='verse'; row.dataset.verseN=v.n;
+      if(v.n===focusVerse) row.classList.add('verse--active');
+      const num=document.createElement('span'); num.className='verse__num'; num.textContent=v.n;
+      const text=document.createElement('span'); text.className='verse__text'; text.tabIndex=0;
+      const segments=v.segments?.[version];
+      if(segments?.length){
+        segments.forEach((seg,index)=>{
+          const word=document.createElement('span'); word.className='word-segment'; word.textContent=(index?' ':'')+(seg.text||'');
+          text.appendChild(word);
+          const codes=[...(seg.strong?[seg.strong]:[]),...(Array.isArray(seg.strongs)?seg.strongs:[])].filter((c,p,all)=>c&&all.indexOf(c)===p);
+          codes.forEach(code=>{ const tag=document.createElement('button'); tag.type='button'; tag.className='strongs-tag'; tag.textContent=code; tag.dataset.strongCode=code; text.appendChild(tag); });
+        });
+      } else text.textContent = v.text[version] || Object.values(v.text)[0] || '';
+      row.append(num,text);
+      container.appendChild(row);
+      wireSermonDrag(row, 'verse', ()=>({
+        type:'verse',
+        text: String(v.text[version] || Object.values(v.text)[0] || '').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
+        ref: `${bookAbbr[sermonBible.book]||sermonBible.book} ${sermonBible.chapter}:${v.n}, ${bibleCatalog().find(x=>x.id===version)?.label||version}`
+      }));
+      text.querySelectorAll('.strongs-tag').forEach(tag=>tag.addEventListener('click',e=>{ e.stopPropagation(); openDictionary(tag.dataset.strongCode); }));
+      if((v.crossrefs||[]).length){
+        const xrefRow=document.createElement('div'); xrefRow.className='verse__xrefs';
+        v.crossrefs.slice(0,10).forEach(ref=>{
+          const chip=document.createElement('button');
+          chip.type='button'; chip.className='verse__xref-chip'; chip.textContent=ref.label;
+          chip.title=`Ver referencia cruzada: ${ref.label}`;
+          chip.addEventListener('click',(e)=>{ e.stopPropagation(); sermonNavigateToXref(ref); });
+          xrefRow.appendChild(chip);
+        });
+        container.appendChild(xrefRow);
+      }
+      text.addEventListener('click',()=>{
+        document.querySelectorAll('.sermon-bible-verses .verse--active').forEach(x=>x.classList.remove('verse--active'));
+        row.classList.add('verse--active');
+      });
+    });
+    els.panelBody.innerHTML='';
+    els.panelBody.appendChild(container);
+    if(focusVerse) container.querySelector(`[data-verse-n="${focusVerse}"]`)?.scrollIntoView({block:'center'});
+  }
+
+  function sermonPushHistory(){
+    sermonBible.history.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version});
+    if(sermonBible.history.length>10) sermonBible.history.shift();
+    sermonBible.future=[];
+  }
+
+  async function sermonNavigateToXref(ref){
+    sermonPushHistory();
+    sermonBible.book=ref.book; sermonBible.chapter=ref.chapter; sermonBible.chapterCount=null;
+    await renderSermonBiblePanel(ref.verseStart);
+  }
+
+  async function sermonGoBack(){
+    if(!sermonBible.history.length) return;
+    sermonBible.future.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version});
+    if(sermonBible.future.length>10) sermonBible.future.shift();
+    Object.assign(sermonBible, sermonBible.history.pop());
+    sermonBible.chapterCount=null;
+    await renderSermonBiblePanel();
+  }
+
+  async function sermonGoForward(){
+    if(!sermonBible.future.length) return;
+    sermonBible.history.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version});
+    if(sermonBible.history.length>10) sermonBible.history.shift();
+    Object.assign(sermonBible, sermonBible.future.pop());
+    sermonBible.chapterCount=null;
+    await renderSermonBiblePanel();
+  }
+
+  // ── Arrastrar contenido (versículo/comentario) hacia el editor ─────────────
+
+  function wireSermonDrag(el, kind, payloadFn){
+    if(!sermonMode) return;
+    el.draggable = true;
+    el.addEventListener('dragstart', e=>{
+      const payload = payloadFn();
+      e.dataTransfer.setData('text/plain', `${payload.text} (${payload.ref})`);
+      e.dataTransfer.setData('application/x-verbo-drag', JSON.stringify(payload));
+      e.dataTransfer.effectAllowed='copy';
+      el.classList.add(kind==='verse' ? 'verse--dragging' : 'note-card--dragging');
+    });
+    el.addEventListener('dragend', ()=> el.classList.remove(kind==='verse' ? 'verse--dragging' : 'note-card--dragging'));
+    wireSermonTouchDraggable(el, payloadFn);
+  }
+
+  const LONGPRESS_MS = 300, MOVE_CANCEL_PX = 10;
+  function wireSermonTouchDraggable(el, payloadFn){
+    let timer=null, startX=0, startY=0, pending=false;
+    const cancel=()=>{ pending=false; clearTimeout(timer); };
+    el.addEventListener('pointerdown', e=>{
+      if(!sermonMode || e.pointerType==='mouse') return;
+      startX=e.clientX; startY=e.clientY; pending=true;
+      timer=setTimeout(()=>{
+        if(!pending) return;
+        pending=false;
+        startSermonTouchDrag(payloadFn(), e.clientX, e.clientY);
+      }, LONGPRESS_MS);
+    });
+    el.addEventListener('pointermove', e=>{
+      if(pending && (Math.abs(e.clientX-startX)>MOVE_CANCEL_PX || Math.abs(e.clientY-startY)>MOVE_CANCEL_PX)) cancel();
+    });
+    el.addEventListener('pointerup', cancel);
+    el.addEventListener('pointercancel', cancel);
+  }
+
+  function startSermonTouchDrag(payload, x, y){
+    const ghost=document.createElement('div');
+    ghost.className='sermon-drag-ghost';
+    ghost.textContent = payload.text.slice(0,140);
+    document.body.appendChild(ghost);
+    positionGhost(ghost, x, y);
+    sermonTouchDrag = { payload, ghost };
+    // El backdrop del bottom sheet cubre toda la pantalla (para cerrar el panel al tocar fuera);
+    // mientras dura el arrastre hay que "atravesarlo" para que elementFromPoint vea el editor debajo.
+    if(els.backdrop) els.backdrop.style.pointerEvents='none';
+    document.addEventListener('pointermove', onSermonTouchMove);
+    document.addEventListener('pointerup', onSermonTouchEnd);
+    document.addEventListener('pointercancel', onSermonTouchEnd);
+  }
+  function positionGhost(ghost,x,y){ ghost.style.left=(x+14)+'px'; ghost.style.top=(y+14)+'px'; }
+  function onSermonTouchMove(e){
+    if(!sermonTouchDrag) return;
+    positionGhost(sermonTouchDrag.ghost, e.clientX, e.clientY);
+    const target=document.elementFromPoint(e.clientX,e.clientY);
+    const overEditor = !!target?.closest('.editor-pane__surface');
+    els.editorSurface?.classList.toggle('is-drag-over', overEditor);
+    if(overEditor) showEditorDropline(); else hideEditorDropline();
+  }
+  function onSermonTouchEnd(e){
+    if(!sermonTouchDrag) return;
+    const target=document.elementFromPoint(e.clientX,e.clientY);
+    const overEditor = !!target?.closest('.editor-pane__surface');
+    if(overEditor) insertDraggedContentIntoEditor(sermonTouchDrag.payload);
+    sermonTouchDrag.ghost.remove();
+    els.editorSurface?.classList.remove('is-drag-over');
+    hideEditorDropline();
+    if(els.backdrop) els.backdrop.style.pointerEvents='';
+    sermonTouchDrag=null;
+    document.removeEventListener('pointermove', onSermonTouchMove);
+    document.removeEventListener('pointerup', onSermonTouchEnd);
+    document.removeEventListener('pointercancel', onSermonTouchEnd);
+  }
+
+  function wireEditorDropZone(){
+    const zone = els.editorSurface;
+    if(!zone || zone._dropWired) return;
+    zone._dropWired = true;
+    zone.addEventListener('dragover', e=>{
+      if(!sermonMode) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect='copy';
+      zone.classList.add('is-drag-over');
+      showEditorDropline();
+    });
+    zone.addEventListener('dragleave', e=>{
+      if(e.target===zone){ zone.classList.remove('is-drag-over'); hideEditorDropline(); }
+    });
+    zone.addEventListener('drop', e=>{
+      if(!sermonMode) return;
+      e.preventDefault();
+      zone.classList.remove('is-drag-over');
+      hideEditorDropline();
+      const raw = e.dataTransfer.getData('application/x-verbo-drag');
+      if(!raw) return;
+      try{ insertDraggedContentIntoEditor(JSON.parse(raw)); }catch(error){ console.error(error); }
+    });
+  }
+
+  function showEditorDropline(){
+    if(!els.editorDropline || !els.editorSurface) return;
+    const editorEl = els.editorSurface.querySelector('.ProseMirror') || els.editorSurface;
+    const containerRect = els.editorSurface.closest('.editor-pane__inner')?.getBoundingClientRect();
+    if(!containerRect) return;
+    const lastChild = editorEl.lastElementChild;
+    const rect = lastChild ? lastChild.getBoundingClientRect() : editorEl.getBoundingClientRect();
+    els.editorDropline.style.top = (rect.bottom - containerRect.top + 4) + 'px';
+    els.editorDropline.hidden = false;
+  }
+  function hideEditorDropline(){ if(els.editorDropline) els.editorDropline.hidden = true; }
+
+  function insertDraggedContentIntoEditor(payload){
+    if(!sermonEditor || !payload) return;
+    const text = `${payload.text} — ${payload.ref}`;
+    const endPos = sermonEditor.state.doc.content.size;
+    sermonEditor.chain().focus().insertContentAt(endPos, { type:'paragraph', content: text ? [{type:'text', text}] : [] }).run();
   }
 
   async function openSearchResult(r, versionId){
