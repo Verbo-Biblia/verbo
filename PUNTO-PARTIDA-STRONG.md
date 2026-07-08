@@ -42,17 +42,19 @@ o rechazarse; no debe publicarse como verificada.
   provisionales y cero omisiones pendientes.
 - Génesis 3 está cerrado: asociaciones existentes y omisiones revisadas,
   reasignaciones aplicadas y cero errores de auditoría.
+- Génesis 4 está cerrado: asociaciones existentes y omisiones revisadas,
+  reasignaciones aplicadas y cero errores de auditoría.
 
-Última auditoría completa aprobada, después de cerrar Génesis 3:
+Última auditoría completa aprobada, después de cerrar Génesis 4:
 
-- 342.976 asociaciones totales.
-- 1.211 `editorial-reviewed`.
-- 274.206 provisionales.
-- 59.309 `verified-open`.
-- 8.250 `cross-verified-open`.
+- 342.983 asociaciones totales.
+- 1.345 `editorial-reviewed`.
+- 274.096 provisionales.
+- 59.294 `verified-open`.
+- 8.248 `cross-verified-open`.
 - Cero errores de auditoría.
 
-## Punto exacto de pausa: Génesis 4:16-20
+## Punto exacto de pausa: Génesis 5:1
 
 En Génesis 3:16-24 se revisaron 117 asociaciones existentes. Se rechazaron y
 reasignaron cuatro enlaces desplazados: H859 a `vuelvas` (3:19), H1931 a `ella`
@@ -75,9 +77,20 @@ Génesis 4:11-15 quedó cerrado. H859 se reasignó de `seas` a `tú` en 4:11. Se
 añadieron ocho asociaciones explícitas, incluidos los pronombres de H853 con
 sufijo en 4:14 y 4:15; tres H853 sin equivalente léxico se marcaron `skip`.
 
+Génesis 4:16-20 quedó cerrado. Se aprobaron 54 asociaciones existentes y se
+marcaron ocho omisiones como `skip`: siete marcadores H853 sin equivalente
+léxico independiente y H1961 en 4:17 como auxiliar/aspecto incluido en
+`edificó`.
+
+Génesis 4:21-26 quedó cerrado. H1931 se retiró del posesivo `su` en 4:21 y se
+reasignó a `cual` en la cláusula `el cual fue padre`. Se añadieron siete
+asociaciones explícitas (`acicalador`, `obra`, dos componentes compuestos de
+`Tubal-Caín`, `oigan`, `escuchen`, `llamarse`) y cinco omisiones se marcaron
+como `skip`.
+
 ## Reanudación exacta
 
-Revisar editorialmente Génesis 4:16-20. Para regenerar los archivos de trabajo
+Revisar editorialmente Génesis 5:1 en adelante. Para regenerar los archivos de trabajo
 sin perder decisiones anteriores:
 
 ```bash
@@ -87,8 +100,8 @@ python3 tools/export_strong_additions.py GEN --output /tmp/GEN-additions-next.cs
   --preserve-decisions-from review/strong/GEN-additions.csv
 ```
 
-No hay un lote parcialmente aplicado. Génesis 4:1-5 debe iniciarse desde una
-exportación nueva y revisarse antes de importar decisiones.
+No hay un lote parcialmente aplicado. Génesis 1-4 están cerrados en el módulo y
+en los CSV de revisión.
 
 ## Archivos con cambios propios de esta revisión
 
