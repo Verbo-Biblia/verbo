@@ -45,16 +45,16 @@ o rechazarse; no debe publicarse como verificada.
 - Génesis 4 está cerrado: asociaciones existentes y omisiones revisadas,
   reasignaciones aplicadas y cero errores de auditoría.
 
-Última auditoría completa aprobada, después de cerrar Génesis 5:1-5:
+Última auditoría completa aprobada, después de cerrar Génesis 5:6-11:
 
-- 342.989 asociaciones totales.
-- 1.402 `editorial-reviewed`.
-- 274.050 provisionales.
-- 59.289 `verified-open`.
+- 342.995 asociaciones totales.
+- 1.464 `editorial-reviewed`.
+- 274.005 provisionales.
+- 59.278 `verified-open`.
 - 8.248 `cross-verified-open`.
 - Cero errores de auditoría.
 
-## Punto exacto de pausa: Génesis 5:6
+## Punto exacto de pausa: Génesis 5:12
 
 En Génesis 3:16-24 se revisaron 117 asociaciones existentes. Se rechazaron y
 reasignaron cuatro enlaces desplazados: H859 a `vuelvas` (3:19), H1931 a `ella`
@@ -94,9 +94,14 @@ H1254 a `creó` (5:1), H853 con sufijo a `lo` (5:1), H853 con sufijo a `los`
 (5:2), H2421 a `vivió` (5:5) y un segundo H8141 a `años` (5:5). Tres H853 sin
 equivalente léxico independiente se marcaron `skip`.
 
+Génesis 5:6-11 quedó cerrado. Se aprobaron 56 asociaciones existentes. Se
+añadieron segundos H8141 a los segmentos `años` donde el hebreo repite
+`year(s)`, H6240 a `quince` en 5:10, y cuatro H853 sin equivalente léxico
+independiente se marcaron `skip`.
+
 ## Reanudación exacta
 
-Revisar editorialmente Génesis 5:6 en adelante. Para regenerar los archivos de trabajo
+Revisar editorialmente Génesis 5:12 en adelante. Para regenerar los archivos de trabajo
 sin perder decisiones anteriores:
 
 ```bash
@@ -106,8 +111,8 @@ python3 tools/export_strong_additions.py GEN --output /tmp/GEN-additions-next.cs
   --preserve-decisions-from review/strong/GEN-additions.csv
 ```
 
-No hay un lote parcialmente aplicado. Génesis 1-4 y Génesis 5:1-5 están cerrados
-en el módulo y en los CSV de revisión.
+No hay un lote parcialmente aplicado. Génesis 1-4 y Génesis 5:1-11 están
+cerrados en el módulo y en los CSV de revisión.
 
 ## Archivos con cambios propios de esta revisión
 
