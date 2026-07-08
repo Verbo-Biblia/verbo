@@ -16,7 +16,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260708-1">
+<link rel="stylesheet" href="assets/style.css?v=20260708-2">
 </head>
 <body>
 
@@ -101,17 +101,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     </main>
 
     <main class="editor-pane" id="editorPane" hidden>
-      <div class="editor-pane__toolbar" id="editorToolbar">
-        <button type="button" class="editor-toolbar__btn" data-cmd="h1" title="Encabezado">H1</button>
-        <button type="button" class="editor-toolbar__btn" data-cmd="h2" title="Subtítulo">H2</button>
-        <span class="editor-toolbar__sep"></span>
-        <button type="button" class="editor-toolbar__btn" data-cmd="bold" title="Negrita"><b>N</b></button>
-        <span class="editor-toolbar__sep"></span>
-        <button type="button" class="editor-toolbar__btn" data-cmd="bulletList" title="Lista con viñetas">• Lista</button>
-        <button type="button" class="editor-toolbar__btn" data-cmd="orderedList" title="Lista numerada">1. Lista</button>
-        <button type="button" class="editor-toolbar__btn" data-cmd="outdent" title="Des-indentar">⇤</button>
-        <button type="button" class="editor-toolbar__btn" data-cmd="indent" title="Indentar">⇥</button>
-      </div>
+      <div class="editor-pane__toolbar" id="editorToolbar"></div>
       <div class="editor-pane__inner">
         <div class="editor-pane__surface" id="editorSurface"></div>
         <div class="editor-pane__dropline" id="editorDropline" hidden></div>
@@ -238,6 +228,6 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
   <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
   <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
   <script src="assets/module-loader.js?v=20260707-1"></script>
-  <script src="assets/app.js?v=20260708-1"></script>
+  <script src="assets/app.js?v=20260708-2"></script>
 </body>
 </html>

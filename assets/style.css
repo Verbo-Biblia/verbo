@@ -1713,6 +1713,12 @@ body[data-theme="rosewood"] {
   flex-direction: column;
 }
 
+/* [hidden] tiene la misma especificidad que .editor-pane{display:flex}; sin esto
+   el atributo hidden pierde el empate y el editor queda visible siempre. */
+.editor-pane[hidden] {
+  display: none;
+}
+
 .editor-pane__toolbar {
   position: sticky;
   top: 0;
@@ -1724,36 +1730,6 @@ body[data-theme="rosewood"] {
   background: var(--chrome, var(--paper-raised));
   border-bottom: 1px solid var(--rule);
   flex-wrap: wrap;
-}
-
-.editor-toolbar__btn {
-  border: 1px solid transparent;
-  background: none;
-  color: var(--sepia);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-.editor-toolbar__btn:hover {
-  background: var(--rule);
-  color: var(--ink);
-}
-
-.editor-toolbar__btn.is-active {
-  background: var(--wine, #7f2d35);
-  color: #fff;
-}
-
-.editor-toolbar__sep {
-  width: 1px;
-  align-self: stretch;
-  background: var(--rule);
-  margin: 4px 6px;
 }
 
 .editor-pane__inner {
@@ -1772,11 +1748,6 @@ body[data-theme="rosewood"] {
   line-height: 1.7;
   color: var(--ink);
   outline: none;
-}
-
-.editor-pane__surface .ProseMirror {
-  outline: none;
-  min-height: 60vh;
 }
 
 .editor-pane__surface h1 { font-family: var(--font-display); font-size: 1.7em; margin: 0.6em 0 0.3em; }

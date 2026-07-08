@@ -813,71 +813,62 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Editor de texto (Tiptap, sin React, cargado vía import dinámico) ───────
 
+  function loadScriptOnce(src){
+    return new Promise((resolve,reject)=>{
+      const existing=document.querySelector(`script[data-src="${src}"]`);
+      if(existing){ existing.addEventListener('load',()=>resolve()); existing.addEventListener('error',()=>reject(new Error('No se pudo cargar '+src))); return; }
+      const script=document.createElement('script');
+      script.src=src; script.async=true; script.dataset.src=src;
+      script.addEventListener('load',()=>resolve());
+      script.addEventListener('error',()=>reject(new Error('No se pudo cargar '+src)));
+      document.head.appendChild(script);
+    });
+  }
+
   async function initSermonEditor(){
     if(sermonEditor) return sermonEditor;
     if(!els.editorSurface) return null;
     try{
-      const [{ Editor }, StarterKitMod] = await Promise.all([
-        import('https://esm.sh/@tiptap/core@2'),
-        import('https://esm.sh/@tiptap/starter-kit@2')
-      ]);
-      const StarterKit = StarterKitMod.default;
-      sermonEditor = new Editor({
-        element: els.editorSurface,
-        extensions: [
-          StarterKit.configure({
-            italic:false, strike:false, code:false, codeBlock:false,
-            blockquote:false, horizontalRule:false, heading:{levels:[1,2]}
-          })
-        ],
-        content: sermonEditorContent || '<p></p>',
-        onUpdate: ({editor})=>{ sermonEditorContent = editor.getJSON(); }
+      if(!window.tinymce) await loadScriptOnce('https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js');
+      await new Promise((resolve,reject)=>{
+        window.tinymce.init({
+          target: els.editorSurface,
+          inline: true,
+          license_key: 'gpl',
+          menubar: false,
+          statusbar: false,
+          branding: false,
+          promotion: false,
+          plugins: 'lists',
+          toolbar: 'h1 h2 | bold | bullist numlist | indent outdent',
+          fixed_toolbar_container_target: els.editorToolbar,
+          toolbar_persist: true,
+          setup: editor=>{
+            editor.ui.registry.addToggleButton('h1', {
+              text:'H1', tooltip:'Encabezado',
+              onAction: ()=>editor.execCommand('mceToggleFormat', false, 'h1'),
+              onSetup: api=>editor.formatter.formatChanged('h1', state=>api.setActive(state)).unbind
+            });
+            editor.ui.registry.addToggleButton('h2', {
+              text:'H2', tooltip:'Subtítulo',
+              onAction: ()=>editor.execCommand('mceToggleFormat', false, 'h2'),
+              onSetup: api=>editor.formatter.formatChanged('h2', state=>api.setActive(state)).unbind
+            });
+          },
+          init_instance_callback: editor=>{
+            sermonEditor=editor;
+            if(sermonEditorContent) editor.setContent(sermonEditorContent);
+            editor.on('input change undo redo', ()=>{ sermonEditorContent=editor.getContent(); });
+            wireEditorDropZone();
+            resolve();
+          }
+        });
       });
-      wireEditorToolbar();
-      wireEditorDropZone();
     }catch(error){
       console.error('No se pudo cargar el editor de texto', error);
       els.editorSurface.innerHTML = emptyState('⚠️','No se pudo cargar el editor de texto. Verifica tu conexión a internet.');
     }
     return sermonEditor;
-  }
-
-  function wireEditorToolbar(){
-    els.editorToolbar?.querySelectorAll('[data-cmd]').forEach(btn=>{
-      // Evita que el botón robe el foco del editor antes del click (perdería la primera tecla escrita después).
-      btn.addEventListener('mousedown', e=>e.preventDefault());
-      btn.addEventListener('click', ()=>{
-        if(!sermonEditor) return;
-        const chain = sermonEditor.chain().focus();
-        switch(btn.dataset.cmd){
-          case 'h1': chain.toggleHeading({level:1}).run(); break;
-          case 'h2': chain.toggleHeading({level:2}).run(); break;
-          case 'bold': chain.toggleBold().run(); break;
-          case 'bulletList': chain.toggleBulletList().run(); break;
-          case 'orderedList': chain.toggleOrderedList().run(); break;
-          case 'indent': chain.sinkListItem('listItem').run(); break;
-          case 'outdent': chain.liftListItem('listItem').run(); break;
-        }
-        updateEditorToolbarState();
-      });
-    });
-    sermonEditor.on('selectionUpdate', updateEditorToolbarState);
-    sermonEditor.on('transaction', updateEditorToolbarState);
-  }
-
-  function updateEditorToolbarState(){
-    if(!sermonEditor || !els.editorToolbar) return;
-    const map = {
-      h1: sermonEditor.isActive('heading',{level:1}),
-      h2: sermonEditor.isActive('heading',{level:2}),
-      bold: sermonEditor.isActive('bold'),
-      bulletList: sermonEditor.isActive('bulletList'),
-      orderedList: sermonEditor.isActive('orderedList')
-    };
-    els.editorToolbar.querySelectorAll('[data-cmd]').forEach(btn=>{
-      const cmd=btn.dataset.cmd;
-      if(cmd in map) btn.classList.toggle('is-active', map[cmd]);
-    });
   }
 
   // ── Panel lateral "Biblia" del modo sermón (con historial de referencias) ──
@@ -1138,11 +1129,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function showEditorDropline(){
     if(!els.editorDropline || !els.editorSurface) return;
-    const editorEl = els.editorSurface.querySelector('.ProseMirror') || els.editorSurface;
     const containerRect = els.editorSurface.closest('.editor-pane__inner')?.getBoundingClientRect();
     if(!containerRect) return;
-    const lastChild = editorEl.lastElementChild;
-    const rect = lastChild ? lastChild.getBoundingClientRect() : editorEl.getBoundingClientRect();
+    const lastChild = els.editorSurface.lastElementChild;
+    const rect = lastChild ? lastChild.getBoundingClientRect() : els.editorSurface.getBoundingClientRect();
     els.editorDropline.style.top = (rect.bottom - containerRect.top + 4) + 'px';
     els.editorDropline.hidden = false;
   }
@@ -1151,8 +1141,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   function insertDraggedContentIntoEditor(payload){
     if(!sermonEditor || !payload) return;
     const text = `${payload.text} — ${payload.ref}`;
-    const endPos = sermonEditor.state.doc.content.size;
-    sermonEditor.chain().focus().insertContentAt(endPos, { type:'paragraph', content: text ? [{type:'text', text}] : [] }).run();
+    sermonEditor.setContent(sermonEditor.getContent() + `<p>${escapeHTML(text)}</p>`);
+    sermonEditorContent = sermonEditor.getContent();
+    sermonEditor.selection.select(sermonEditor.getBody(), true);
+    sermonEditor.selection.collapse(false);
   }
 
   async function openSearchResult(r, versionId){
