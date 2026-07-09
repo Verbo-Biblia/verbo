@@ -32,7 +32,8 @@
     "bibles/asv-1901/manifest.json",
     "bibles/rv-verbo/manifest.json",
     "bibles/rv-verbo-strong-provisional/manifest.json",
-    "bibles/kjv-strong/manifest.json"
+    "bibles/kjv-strong/manifest.json",
+    "bibles/bsb/manifest.json"
   ],
   "commentaries": [
     "commentaries/matthew-henry-en/manifest.json",
@@ -41,7 +42,8 @@
     "commentaries/scofield/manifest.json",
     "commentaries/wesley/manifest.json",
     "commentaries/barnes/manifest.json",
-    "commentaries/clarke/manifest.json"
+    "commentaries/clarke/manifest.json",
+    "commentaries/calvin/manifest.json"
   ],
   "dictionaries": [
     "dictionaries/strong-verbo/manifest.json"
