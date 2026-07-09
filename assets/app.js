@@ -364,19 +364,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function selectedVerseNumbers(){ return [...selectedVerses].sort((a,b)=>a-b); }
 
+  // En modo sermón, "copiar" debe leer de la Biblia de la pestaña Biblia
+  // (sermonBible), no de la Biblia principal, que queda oculta/congelada.
+  function activeBibleContext(){
+    if(sermonMode && sermonBible?.data) return { data: sermonBible.data, book: sermonBible.book, chapter: sermonBible.chapter, version: sermonBible.version };
+    return { data, book: currentBook, chapter: currentChapter, version: currentVersion };
+  }
+
   function copySelectedReferences(){
     const nums=selectedVerseNumbers();
     if(!nums.length) return;
-    copyToClipboard(compactRef(currentBook,currentChapter,nums));
+    const ctx=activeBibleContext();
+    copyToClipboard(compactRef(ctx.book,ctx.chapter,nums));
   }
 
   function copySelectedText(){
     const nums=selectedVerseNumbers();
     if(!nums.length) return;
+    const ctx=activeBibleContext();
     const lines=nums.map(n=>{
-      const verse=data.verses.find(v=>v.n===n);
-      const text=verse?.text?.[currentVersion] || Object.values(verse?.text || {})[0] || '';
-      return `${compactRef(currentBook,currentChapter,[n])} ${String(text).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`;
+      const verse=ctx.data.verses.find(v=>v.n===n);
+      const text=verse?.text?.[ctx.version] || Object.values(verse?.text || {})[0] || '';
+      return `${compactRef(ctx.book,ctx.chapter,[n])} ${String(text).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`;
     });
     copyToClipboard(lines.join('\n'));
   }
@@ -783,6 +792,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function toggleSermonMode(){
     sermonMode = !sermonMode;
+    selectedVerses.clear();
+    document.querySelectorAll('.verse--selected').forEach(x=>x.classList.remove('verse--selected'));
+    updateActionBar();
     els.sermonToggle?.classList.toggle('sermon-mode-toggle--active', sermonMode);
     els.sermonToggle?.setAttribute('aria-pressed', String(sermonMode));
     document.body.classList.toggle('sermon-mode', sermonMode);
@@ -796,7 +808,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   els.sermonToggle?.addEventListener('click', toggleSermonMode);
 
-  // ── Editor de texto (Tiptap, sin React, cargado vía import dinámico) ───────
+  // ── Editor de texto (TinyMCE autoalojado, cargado vía CDN) ─────────────────
 
   function loadScriptOnce(src){
     return new Promise((resolve,reject)=>{
@@ -843,6 +855,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     return sermonEditor;
   }
+
+  // ── Exportar el bosquejo (Word y PDF, sin backend ni librerías nuevas) ─────
+
+  function sermonDocTitle(){
+    const h1 = sermonEditor?.getBody()?.querySelector('h1');
+    return h1?.textContent?.trim() || 'Bosquejo';
+  }
+
+  function sermonFileSlug(title){
+    return title.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/g,'_').replace(/^_+|_+$/g,'') || 'bosquejo';
+  }
+
+  function exportSermonToWord(){
+    if(!sermonEditor) return;
+    const title = sermonDocTitle();
+    const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>${escapeHTML(title)}</title>
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
+<style>body{font-family:Calibri,Arial,sans-serif;font-size:12pt;} h1{font-size:22pt;} h2{font-size:16pt;} table,td,th{border:1px solid #999;border-collapse:collapse;padding:4px;}</style>
+</head><body>${sermonEditor.getContent()}</body></html>`;
+    const blob = new Blob(['﻿', html], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${sermonFileSlug(title)}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  }
+
+  function exportSermonToPDF(){
+    if(!sermonEditor) return;
+    const previousTitle = document.title;
+    document.title = sermonDocTitle();
+    document.body.classList.add('sermon-print-mode');
+    const cleanup = ()=>{
+      document.body.classList.remove('sermon-print-mode');
+      document.title = previousTitle;
+      window.removeEventListener('afterprint', cleanup);
+    };
+    window.addEventListener('afterprint', cleanup);
+    window.print();
+  }
+
+  els.editorPane?.querySelector('#exportWordBtn')?.addEventListener('click', exportSermonToWord);
+  els.editorPane?.querySelector('#exportPdfBtn')?.addEventListener('click', exportSermonToPDF);
 
   // ── Panel lateral "Biblia" del modo sermón (con historial de referencias) ──
 
@@ -920,6 +979,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     initSermonBibleState();
     const needsLoad = !sermonBible.data || sermonBible.data.meta.bookId!==sermonBible.book || sermonBible.data.meta.chapter!==sermonBible.chapter;
     if(needsLoad){
+      selectedVerses.clear();
+      updateActionBar();
       if(sermonBible.chapterCount==null || sermonBible.data?.meta?.bookId!==sermonBible.book) await sermonRefreshChapterCount();
       els.panelToolbar.innerHTML=sermonBibleToolbarHtml();
       wireSermonBibleToolbar();
@@ -968,6 +1029,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('.sermon-bible-verses .verse--active').forEach(x=>x.classList.remove('verse--active'));
         row.classList.add('verse--active');
         sermonBible.activeVerse = v.n;
+        if(selectedVerses.has(v.n)) selectedVerses.delete(v.n); else selectedVerses.add(v.n);
+        row.classList.toggle('verse--selected', selectedVerses.has(v.n));
+        updateActionBar();
       });
     });
     els.panelBody.innerHTML='';
@@ -1663,6 +1727,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   document.querySelectorAll('.verse-swatch').forEach(swatch=>{
     swatch.addEventListener('click', ()=>{
+      if(sermonMode) return; // el resaltado por color no aplica en la Biblia del modo sermón
       const color = swatch.dataset.color;
       selectedVerses.forEach(n=>{
         const key = hlKey(currentBook, currentChapter, n);

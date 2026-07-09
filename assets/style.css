@@ -1732,6 +1732,33 @@ body[data-theme="rosewood"] {
   flex-wrap: wrap;
 }
 
+.editor-pane__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 24px;
+  background: var(--paper-raised);
+  border-bottom: 1px solid var(--rule);
+}
+
+.editor-pane__export-btn {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-raised);
+  color: var(--sepia);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.editor-pane__export-btn:hover {
+  border-color: var(--wine-soft);
+  color: var(--wine);
+}
+
 .editor-pane__inner {
   flex: 1;
   max-width: 760px;
@@ -1811,4 +1838,32 @@ body[data-theme="rosewood"] {
   .editor-pane__toolbar { padding: 8px 16px; }
   .editor-pane__inner { padding: 20px 16px; }
   .sermon-bible-toolbar { padding: 8px 16px; }
+}
+
+/* Exportar a PDF: usa la función nativa "Imprimir → Guardar como PDF" del
+   navegador. Se oculta todo excepto el contenido del editor. */
+@media print {
+  body.sermon-print-mode * {
+    visibility: hidden;
+  }
+  body.sermon-print-mode .editor-pane__surface,
+  body.sermon-print-mode .editor-pane__surface * {
+    visibility: visible;
+  }
+  body.sermon-print-mode .editor-pane__surface {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+
+/* En modo sermón la barra de acciones de versículo (Copiar/Ref.) solo aplica
+   a la Biblia de la pestaña Biblia — el resaltado por color no aplica ahí. */
+body.sermon-mode .verse-action-bar .verse-swatch,
+body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
+  display: none;
 }

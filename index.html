@@ -16,7 +16,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260708-3">
+<link rel="stylesheet" href="assets/style.css?v=20260708-4">
 </head>
 <body>
 
@@ -102,6 +102,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 
     <main class="editor-pane" id="editorPane" hidden>
       <div class="editor-pane__toolbar" id="editorToolbar"></div>
+      <div class="editor-pane__actions">
+        <button type="button" class="editor-pane__export-btn" id="exportWordBtn">Exportar a Word</button>
+        <button type="button" class="editor-pane__export-btn" id="exportPdfBtn">Exportar a PDF</button>
+      </div>
       <div class="editor-pane__inner">
         <div class="editor-pane__surface" id="editorSurface"></div>
       </div>
@@ -227,6 +231,6 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
   <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
   <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
   <script src="assets/module-loader.js?v=20260707-1"></script>
-  <script src="assets/app.js?v=20260708-4"></script>
+  <script src="assets/app.js?v=20260708-5"></script>
 </body>
 </html>
