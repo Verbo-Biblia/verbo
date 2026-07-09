@@ -63,7 +63,8 @@
     "patristic/didache/manifest.json",
     "patristic/bernabe/manifest.json",
     "patristic/mathietes-diogneto/manifest.json",
-    "patristic/hermas-pastor/manifest.json"
+    "patristic/hermas-pastor/manifest.json",
+    "patristic/papias-fragmentos/manifest.json"
   ],
   "patristicByVerse": [
     "commentaries/ireneo-contra-herejias/manifest.json"

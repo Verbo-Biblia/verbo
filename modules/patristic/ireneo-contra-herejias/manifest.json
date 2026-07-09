@@ -7,10 +7,10 @@
   "language": "es",
   "author": "Ireneo de Lyon",
   "year": 180,
-  "description": "Tratado en cinco libros contra las doctrinas gnósticas, especialmente el sistema de Valentín. Esta edición incluye los Libros I y II completos (el Libro III está en revisión — disponible próximamente). Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público).",
+  "description": "Tratado en cinco libros contra las doctrinas gnósticas, especialmente el sistema de Valentín. Esta edición incluye los Libros I, II y III completos. Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público).",
   "license": "UF-NC — Distribución libre no comercial, basada en Creative Commons BY-NC-ND 4.0. Prohibida la venta.",
   "sourceFormat": "DOCX (traducción propia)",
   "sectionsFile": "sections.json",
-  "totalSections": 67,
-  "status": "Libros I-II completos. Libro III en revisión (resumen, no traducción íntegra)."
+  "totalSections": 92,
+  "status": "Libros I-III completos."
 }

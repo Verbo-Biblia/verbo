@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 2,
+  "id": "papias-fragmentos",
+  "type": "patristic",
+  "name": "Fragmentos de Papías de Hierápolis",
+  "abbreviation": "Papías",
+  "language": "es",
+  "author": "Papías de Hierápolis",
+  "year": 120,
+  "description": "Traducción al español (Biblioteca Patrística Unción Fresca) de los fragmentos conservados de la obra de Papías, preservados en citas de Ireneo, Eusebio y otros. Basada en Ante-Nicene Fathers, ed. Alexander Roberts y James Donaldson (dominio público). Fuente: https://www.newadvent.org/fathers/0125.htm",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "sectionsFile": "sections.json",
+  "totalSections": 10
+}
