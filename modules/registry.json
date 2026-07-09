@@ -54,7 +54,16 @@
     "gospel/evangelio-uf/manifest.json"
   ],
   "patristic": [
-    "patristic/ireneo-contra-herejias/manifest.json"
+    "patristic/ireneo-contra-herejias/manifest.json",
+    "patristic/clemente-1/manifest.json",
+    "patristic/clemente-2/manifest.json",
+    "patristic/policarpo-filipenses/manifest.json",
+    "patristic/policarpo-martirio/manifest.json",
+    "patristic/ignacio-martirio/manifest.json",
+    "patristic/didache/manifest.json",
+    "patristic/bernabe/manifest.json",
+    "patristic/mathietes-diogneto/manifest.json",
+    "patristic/hermas-pastor/manifest.json"
   ],
   "patristicByVerse": [
     "commentaries/ireneo-contra-herejias/manifest.json"

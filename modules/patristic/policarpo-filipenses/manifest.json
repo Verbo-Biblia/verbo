@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 2,
+  "id": "policarpo-filipenses",
+  "type": "patristic",
+  "name": "Policarpo de Esmirna — A los Filipenses",
+  "abbreviation": "Policarpo",
+  "language": "es",
+  "author": "Policarpo de Esmirna",
+  "year": 110,
+  "description": "Traducción al español (Biblioteca Patrística Unción Fresca), basada en Ante-Nicene Fathers, ed. Alexander Roberts y James Donaldson (dominio público). Fuente: https://www.newadvent.org/fathers/0136.htm",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "sectionsFile": "sections.json",
+  "totalSections": 14
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 2,
+  "id": "clemente-2",
+  "type": "patristic",
+  "name": "2 Clemente — A los Corintios",
+  "abbreviation": "2 Clemente",
+  "language": "es",
+  "author": "2 Clemente",
+  "year": 140,
+  "description": "Traducción al español (Biblioteca Patrística Unción Fresca), basada en Ante-Nicene Fathers, ed. Alexander Roberts y James Donaldson (dominio público). Fuente: https://www.newadvent.org/fathers/1010.htm",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "sectionsFile": "sections.json",
+  "totalSections": 20
+}
