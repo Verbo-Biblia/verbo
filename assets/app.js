@@ -81,7 +81,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const escapeHTML = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[ch]));
   const bibleCatalog = () => catalog.bibles.map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, lang:item.manifest.language || 'es', remote:Boolean(item.remote || item.manifest.remote), manifest:item.manifest }));
   // Idioma de Strong/comentarios sigue a la Biblia activa: sin selector propio.
-  const contentLang = () => bibleCatalog().find(v => v.id === currentVersion)?.lang || 'es';
+  // En modo sermón la Biblia "activa" es la de la pestaña Biblia (sermonBible), no la
+  // principal (que queda oculta/congelada mientras se escribe).
+  const contentLang = () => bibleCatalog().find(v => v.id === (sermonMode && sermonBible ? sermonBible.version : currentVersion))?.lang || 'es';
   const commentaryCatalog = () => (catalog.commentaries || []).map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, manifest:item.manifest }));
   // Léxico Strong: módulos numéricos (G1234 / H1234) consultados al tocar una etiqueta Strong en el texto.
   const isStrongLexicon = item => Boolean(item.manifest.strong);
@@ -1802,7 +1804,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Teclado en desktop ───────────────────────────────────────────────────────
   document.addEventListener('keydown', e => {
-    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT') return;
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT'||e.target.isContentEditable) return;
     if(e.altKey||e.ctrlKey||e.metaKey) return;
     if(e.key==='ArrowLeft') { e.preventDefault(); moveChapter(-1); }
     else if(e.key==='ArrowRight') { e.preventDefault(); moveChapter(1); }
