@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     innerNext: document.getElementById('innerNext'),
     ttsPlay: document.getElementById('ttsPlayBtn'),
     ttsStop: document.getElementById('ttsStopBtn'),
+    ttsFloat: document.getElementById('ttsFloat'),
+    ttsVoiceSelect: document.getElementById('ttsVoiceSelect'),
     versionInput: document.getElementById('mainVersionInput'),
     versionDropdown: document.getElementById('versionDropdown'),
     nativeVersionSelect: document.getElementById('nativeVersionSelect'),
@@ -44,6 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let sermonBible = null;
   const ttsSupported = 'speechSynthesis' in window;
   let ttsQueue = [], ttsIndex = -1, ttsPaused = false, ttsVoicesPromise = null, ttsSession = 0;
+  let ttsAllVoices = [];
   let selectedVerses = new Set();
   let highlights = JSON.parse(localStorage.getItem('verbo:highlights') || '{}');
   let suppressCommentSync = false;
@@ -347,6 +350,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       window.fums('trackView', version.fumsToken);
       version.fumsReported = true;
     }
+    renderTTSVoiceSelect();
   }
 
   function selectVerse(row, verse) {
@@ -419,11 +423,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     return ttsVoicesPromise;
   }
 
-  async function pickTTSVoice(langCode){
-    const voices = await loadTTSVoices();
+  function voicesForLang(langCode){
     const prefix = langCode.slice(0,2);
-    const matches = voices.filter(v=>v.lang?.toLowerCase().startsWith(prefix));
-    return matches.find(v=>v.localService) || matches[0] || null;
+    return ttsAllVoices.filter(v=>v.lang?.toLowerCase().startsWith(prefix));
+  }
+
+  function storedVoiceURI(langCode){ return localStorage.getItem('verbo:ttsVoice:'+langCode); }
+
+  async function pickTTSVoice(langCode){
+    const voices = ttsAllVoices.length ? ttsAllVoices : await loadTTSVoices();
+    const matches = voices.filter(v=>v.lang?.toLowerCase().startsWith(langCode.slice(0,2)));
+    const savedURI = storedVoiceURI(langCode);
+    const saved = savedURI && matches.find(v=>v.voiceURI===savedURI);
+    return saved || matches.find(v=>v.localService) || matches[0] || null;
+  }
+
+  // El <select> de voz se repuebla cada vez que llega voiceschanged (no solo
+  // una vez): en Chrome getVoices() suele devolver [] en la primera llamada,
+  // así que si el usuario ya tenía el panel abierto, esto lo completa solo
+  // en cuanto el navegador termine de cargar las voces del sistema.
+  function renderTTSVoiceSelect(){
+    if(!els.ttsVoiceSelect) return;
+    const langCode = ttsLangCode();
+    const matches = voicesForLang(langCode);
+    if(matches.length < 2){ els.ttsVoiceSelect.hidden = true; els.ttsVoiceSelect.innerHTML=''; return; }
+    const savedURI = storedVoiceURI(langCode);
+    els.ttsVoiceSelect.innerHTML = matches.map(v=>
+      `<option value="${escapeHTML(v.voiceURI)}" ${v.voiceURI===savedURI?'selected':''}>${escapeHTML(v.name)}</option>`
+    ).join('');
+    els.ttsVoiceSelect.hidden = !ttsSupported || els.ttsPlay?.hidden !== false;
+  }
+
+  if(ttsSupported){
+    ttsAllVoices = speechSynthesis.getVoices();
+    speechSynthesis.addEventListener('voiceschanged', ()=>{
+      ttsAllVoices = speechSynthesis.getVoices();
+      renderTTSVoiceSelect();
+    });
   }
 
   function clearTTSHighlight(){
@@ -493,6 +529,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     els.ttsPlay.hidden=false;
     els.ttsPlay.addEventListener('click', toggleTTS);
     els.ttsStop?.addEventListener('click', stopTTS);
+    els.ttsVoiceSelect?.addEventListener('change', e=>{
+      localStorage.setItem('verbo:ttsVoice:'+ttsLangCode(), e.target.value);
+    });
+    renderTTSVoiceSelect();
+  } else if(els.ttsFloat){
+    els.ttsFloat.hidden = true;
   }
 
   const SHEET_TABS = ['comentario','comparar','diccionario'];

@@ -1909,3 +1909,51 @@ body.sermon-mode .verse-action-bar .verse-swatch,
 body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
   display: none;
 }
+
+/* ---------- Control flotante de lectura en voz alta ---------- */
+/* position:sticky (no fixed) anclado dentro de .reading-pane, que ya es el
+   contenedor con scroll propio: así el control queda siempre dentro del
+   ancho de la columna de Biblia (nunca se monta sobre el panel lateral en
+   PC) sin tener que calcular su posición por JS. El wrapper con height:0
+   no ocupa espacio en el flujo — solo "asoma" el control flotando. */
+.tts-float {
+  position: sticky;
+  bottom: 22px;
+  height: 0;
+  overflow: visible;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 24px;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.tts-float__inner {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255,253,248,.94);
+  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  border: 1px solid rgba(127,45,53,.14);
+  box-shadow: 0 8px 32px rgba(42,31,23,.22), 0 1px 3px rgba(42,31,23,.1);
+}
+
+.tts-voice-select {
+  max-width: 160px;
+  border: none;
+  background: transparent;
+  color: var(--sepia);
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 2px;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .tts-float { padding: 0 16px; bottom: 16px; }
+  .tts-voice-select { max-width: 110px; }
+}

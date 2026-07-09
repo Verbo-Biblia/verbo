@@ -16,7 +16,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260708-5">
+<link rel="stylesheet" href="assets/style.css?v=20260708-6">
 </head>
 <body>
 
@@ -93,12 +93,17 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
         <div class="chapter-title-row">
           <button class="chapter-nav-btn" id="innerPrev" type="button" aria-label="Capítulo anterior">‹</button>
           <h1 class="chapter-title"></h1>
-          <button class="tts-btn" id="ttsPlayBtn" type="button" aria-label="Leer capítulo en voz alta" title="Leer capítulo en voz alta" hidden>▶</button>
-          <button class="tts-btn tts-btn--stop" id="ttsStopBtn" type="button" aria-label="Detener lectura" title="Detener lectura" hidden>⏹</button>
           <button class="chapter-nav-btn chapter-nav-btn--next" id="innerNext" type="button" aria-label="Capítulo siguiente">›</button>
         </div>
         <div id="verseList"></div>
         <div class="bible-attribution" id="bibleAttribution" hidden></div>
+      </div>
+      <div class="tts-float" id="ttsFloat">
+        <div class="tts-float__inner">
+          <select class="tts-voice-select" id="ttsVoiceSelect" aria-label="Voz de lectura" hidden></select>
+          <button class="tts-btn" id="ttsPlayBtn" type="button" aria-label="Leer capítulo en voz alta" title="Leer capítulo en voz alta" hidden>▶</button>
+          <button class="tts-btn tts-btn--stop" id="ttsStopBtn" type="button" aria-label="Detener lectura" title="Detener lectura" hidden>⏹</button>
+        </div>
       </div>
     </main>
 
@@ -233,6 +238,6 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
   <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
   <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
   <script src="assets/module-loader.js?v=20260707-1"></script>
-  <script src="assets/app.js?v=20260708-7"></script>
+  <script src="assets/app.js?v=20260708-8"></script>
 </body>
 </html>
