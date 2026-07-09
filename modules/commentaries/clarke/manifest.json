@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 2,
+  "id": "clarke",
+  "type": "commentary",
+  "name": "Adam Clarke's Commentary on the Bible",
+  "abbreviation": "Clarke",
+  "language": "en",
+  "author": "Adam Clarke (1760–1832)",
+  "description": "Exhaustive Methodist commentary on the entire Bible, first published 1810–1826.",
+  "license": "Public Domain",
+  "books": [
+    {
+      "id": "GEN",
+      "name": "Genesis",
+      "file": "books/GEN.json"
+    },
+    {
+      "id": "EXO",
+      "name": "Exodus",
+      "file": "books/EXO.json"
+    },
+    {
+      "id": "LEV",
+      "name": "Leviticus",
+      "file": "books/LEV.json"
+    },
+    {
+      "id": "NUM",
+      "name": "Numbers",
+      "file": "books/NUM.json"
+    },
+    {
+      "id": "DEU",
+      "name": "Deuteronomy",
+      "file": "books/DEU.json"
+    },
+    {
+      "id": "JOS",
+      "name": "Joshua",
+      "file": "books/JOS.json"
+    },
+    {
+      "id": "JDG",
+      "name": "Judges",
+      "file": "books/JDG.json"
+    },
+    {
+      "id": "RUT",
+      "name": "Ruth",
+      "file": "books/RUT.json"
+    },
+    {
+      "id": "1SA",
+      "name": "1 Samuel",
+      "file": "books/1SA.json"
+    },
+    {
+      "id": "2SA",
+      "name": "2 Samuel",
+      "file": "books/2SA.json"
+    },
+    {
+      "id": "1KI",
+      "name": "1 Kings",
+      "file": "books/1KI.json"
+    },
+    {
+      "id": "2KI",
+      "name": "2 Kings",
+      "file": "books/2KI.json"
+    },
+    {
+      "id": "1CH",
+      "name": "1 Chronicles",
+      "file": "books/1CH.json"
+    },
+    {
+      "id": "2CH",
+      "name": "2 Chronicles",
+      "file": "books/2CH.json"
+    },
+    {
+      "id": "EZR",
+      "name": "Ezra",
+      "file": "books/EZR.json"
+    },
+    {
+      "id": "NEH",
+      "name": "Nehemiah",
+      "file": "books/NEH.json"
+    },
+    {
+      "id": "EST",
+      "name": "Esther",
+      "file": "books/EST.json"
+    },
+    {
+      "id": "JOB",
+      "name": "Job",
+      "file": "books/JOB.json"
+    },
+    {
+      "id": "PSA",
+      "name": "Psalms",
+      "file": "books/PSA.json"
+    },
+    {
+      "id": "PRO",
+      "name": "Proverbs",
+      "file": "books/PRO.json"
+    },
+    {
+      "id": "ECC",
+      "name": "Ecclesiastes",
+      "file": "books/ECC.json"
+    },
+    {
+      "id": "SNG",
+      "name": "Song of Solomon",
+      "file": "books/SNG.json"
+    },
+    {
+      "id": "ISA",
+      "name": "Isaiah",
+      "file": "books/ISA.json"
+    },
+    {
+      "id": "JER",
+      "name": "Jeremiah",
+      "file": "books/JER.json"
+    },
+    {
+      "id": "LAM",
+      "name": "Lamentations",
+      "file": "books/LAM.json"
+    },
+    {
+      "id": "EZK",
+      "name": "Ezekiel",
+      "file": "books/EZK.json"
+    },
+    {
+      "id": "DAN",
+      "name": "Daniel",
+      "file": "books/DAN.json"
+    },
+    {
+      "id": "HOS",
+      "name": "Hosea",
+      "file": "books/HOS.json"
+    },
+    {
+      "id": "JOL",
+      "name": "Joel",
+      "file": "books/JOL.json"
+    },
+    {
+      "id": "AMO",
+      "name": "Amos",
+      "file": "books/AMO.json"
+    },
+    {
+      "id": "OBA",
+      "name": "Obadiah",
+      "file": "books/OBA.json"
+    },
+    {
+      "id": "JON",
+      "name": "Jonah",
+      "file": "books/JON.json"
+    },
+    {
+      "id": "MIC",
+      "name": "Micah",
+      "file": "books/MIC.json"
+    },
+    {
+      "id": "NAH",
+      "name": "Nahum",
+      "file": "books/NAH.json"
+    },
+    {
+      "id": "HAB",
+      "name": "Habakkuk",
+      "file": "books/HAB.json"
+    },
+    {
+      "id": "ZEP",
+      "name": "Zephaniah",
+      "file": "books/ZEP.json"
+    },
+    {
+      "id": "HAG",
+      "name": "Haggai",
+      "file": "books/HAG.json"
+    },
+    {
+      "id": "ZEC",
+      "name": "Zechariah",
+      "file": "books/ZEC.json"
+    },
+    {
+      "id": "MAL",
+      "name": "Malachi",
+      "file": "books/MAL.json"
+    },
+    {
+      "id": "MAT",
+      "name": "Matthew",
+      "file": "books/MAT.json"
+    },
+    {
+      "id": "MRK",
+      "name": "Mark",
+      "file": "books/MRK.json"
+    },
+    {
+      "id": "LUK",
+      "name": "Luke",
+      "file": "books/LUK.json"
+    },
+    {
+      "id": "JHN",
+      "name": "John",
+      "file": "books/JHN.json"
+    },
+    {
+      "id": "ACT",
+      "name": "Acts",
+      "file": "books/ACT.json"
+    },
+    {
+      "id": "ROM",
+      "name": "Romans",
+      "file": "books/ROM.json"
+    },
+    {
+      "id": "1CO",
+      "name": "1 Corinthians",
+      "file": "books/1CO.json"
+    },
+    {
+      "id": "2CO",
+      "name": "2 Corinthians",
+      "file": "books/2CO.json"
+    },
+    {
+      "id": "GAL",
+      "name": "Galatians",
+      "file": "books/GAL.json"
+    },
+    {
+      "id": "EPH",
+      "name": "Ephesians",
+      "file": "books/EPH.json"
+    },
+    {
+      "id": "PHP",
+      "name": "Philippians",
+      "file": "books/PHP.json"
+    },
+    {
+      "id": "COL",
+      "name": "Colossians",
+      "file": "books/COL.json"
+    },
+    {
+      "id": "1TH",
+      "name": "1 Thessalonians",
+      "file": "books/1TH.json"
+    },
+    {
+      "id": "2TH",
+      "name": "2 Thessalonians",
+      "file": "books/2TH.json"
+    },
+    {
+      "id": "1TI",
+      "name": "1 Timothy",
+      "file": "books/1TI.json"
+    },
+    {
+      "id": "2TI",
+      "name": "2 Timothy",
+      "file": "books/2TI.json"
+    },
+    {
+      "id": "TIT",
+      "name": "Titus",
+      "file": "books/TIT.json"
+    },
+    {
+      "id": "PHM",
+      "name": "Philemon",
+      "file": "books/PHM.json"
+    },
+    {
+      "id": "HEB",
+      "name": "Hebrews",
+      "file": "books/HEB.json"
+    },
+    {
+      "id": "JAS",
+      "name": "James",
+      "file": "books/JAS.json"
+    },
+    {
+      "id": "1PE",
+      "name": "1 Peter",
+      "file": "books/1PE.json"
+    },
+    {
+      "id": "2PE",
+      "name": "2 Peter",
+      "file": "books/2PE.json"
+    },
+    {
+      "id": "1JN",
+      "name": "1 John",
+      "file": "books/1JN.json"
+    },
+    {
+      "id": "2JN",
+      "name": "2 John",
+      "file": "books/2JN.json"
+    },
+    {
+      "id": "3JN",
+      "name": "3 John",
+      "file": "books/3JN.json"
+    },
+    {
+      "id": "JUD",
+      "name": "Jude",
+      "file": "books/JUD.json"
+    },
+    {
+      "id": "REV",
+      "name": "Revelation",
+      "file": "books/REV.json"
+    }
+  ]
+}

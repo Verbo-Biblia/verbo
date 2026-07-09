@@ -39,7 +39,9 @@
     "commentaries/jfb/manifest.json",
     "commentaries/kd/manifest.json",
     "commentaries/scofield/manifest.json",
-    "commentaries/wesley/manifest.json"
+    "commentaries/wesley/manifest.json",
+    "commentaries/barnes/manifest.json",
+    "commentaries/clarke/manifest.json"
   ],
   "dictionaries": [
     "dictionaries/strong-verbo/manifest.json"
