@@ -457,9 +457,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(tab==='comentario'){
       // Si el usuario seleccionó un versículo con el panel cerrado, al abrir Comentario
       // usamos ese versículo activo para ubicar el comentario correspondiente.
+      // En modo sermón, "activo" es el versículo elegido en la pestaña Biblia (sermonBible),
+      // no el de la Biblia principal, que queda oculta/congelada mientras se escribe.
+      const commentCtx = commentaryContext();
       if(!focus && !verseCommentaries){
-        const selectedVerseNumber = activeVerse();
-        const selectedVerse = data?.verses?.find(v => v.n === selectedVerseNumber);
+        const selectedVerseNumber = commentCtx.activeVerseN;
+        const selectedVerse = commentCtx.data?.verses?.find(v => v.n === selectedVerseNumber);
         const moduleInfo=selectedVerse?.commentaries?.find(c=>c.commentaryId===currentCommentary);
         focus = moduleInfo?.noteIds?.[0] || null;
       }
@@ -473,8 +476,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('commentarySelect')?.addEventListener('change', e=>{
           currentCommentary=e.target.value;
           localStorage.setItem('verbo:lastCommentary', currentCommentary);
-          const selectedVerseNumber=activeVerse();
-          const selectedVerse=data?.verses?.find(v=>v.n===selectedVerseNumber);
+          const freshCtx = commentaryContext();
+          const selectedVerse=freshCtx.data?.verses?.find(v=>v.n===freshCtx.activeVerseN);
           const moduleInfo=selectedVerse?.commentaries?.find(c=>c.commentaryId===currentCommentary);
           renderPanel('comentario', moduleInfo?.noteIds?.[0] || null);
         });
@@ -483,17 +486,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const curNote=verseCommentaries.find(c=>c.commentaryId===currentCommentary);
         focus=curNote?.noteIds?.[0]||null;
       }
-      const entries=Object.entries(data.notes).filter(([,note])=>note.commentaryId===currentCommentary);
+      const entries=Object.entries(commentCtx.data.notes).filter(([,note])=>note.commentaryId===currentCommentary);
       els.panelBody.innerHTML=entries.length?entries.map(([id,n])=>{
         const bodyHtml=isEnglishCommentary&&contentLang()==='es'
           ? (tcacheGet(translationCacheKey(id,n.body))||`<p class="note-card__translating">Traduciendo…</p>${n.body}`)
           : n.body;
-        return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${data.meta.book} ${data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">Copiar comentario</button><div class="note-card__body">${bodyHtml}</div></div>`;
+        return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${commentCtx.data.meta.book} ${commentCtx.data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">Copiar comentario</button><div class="note-card__body">${bodyHtml}</div></div>`;
       }).join(''):emptyState('📖','Este capítulo todavía no tiene comentarios cargados.');
-      els.panelBody.querySelectorAll('[data-copy-note]').forEach(btn=>btn.addEventListener('click',()=>{ const note=data.notes[btn.dataset.copyNote]; if(note) copyToClipboard(`${note.title}\n${String(note.body).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`); }));
+      els.panelBody.querySelectorAll('[data-copy-note]').forEach(btn=>btn.addEventListener('click',()=>{ const note=commentCtx.data.notes[btn.dataset.copyNote]; if(note) copyToClipboard(`${note.title}\n${String(note.body).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`); }));
       els.panelBody.querySelectorAll('.note-card[data-note-id]').forEach(card=>{
         wireSermonDrag(card, 'note', ()=>{
-          const note=data.notes[card.dataset.noteId];
+          const note=commentCtx.data.notes[card.dataset.noteId];
           const bodyHtml=card.querySelector('.note-card__body')?.innerHTML || note?.body || '';
           return {
             type:'commentary',
@@ -829,7 +832,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(sermonEditor) return sermonEditor;
     if(!els.editorSurface) return null;
     try{
-      if(!window.tinymce) await loadScriptOnce('https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js');
+      if(!window.tinymce) await loadScriptOnce('https://cdn.jsdelivr.net/npm/tinymce@7.9.3/tinymce.min.js');
       await new Promise((resolve,reject)=>{
         window.tinymce.init({
           target: els.editorSurface,
@@ -839,22 +842,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           statusbar: false,
           branding: false,
           promotion: false,
-          plugins: 'lists',
-          toolbar: 'h1 h2 | bold | bullist numlist | indent outdent',
+          plugins: 'lists link table',
+          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | align | bullist numlist outdent indent | link table removeformat',
+          toolbar_mode: 'wrap',
           fixed_toolbar_container_target: els.editorToolbar,
           toolbar_persist: true,
-          setup: editor=>{
-            editor.ui.registry.addToggleButton('h1', {
-              text:'H1', tooltip:'Encabezado',
-              onAction: ()=>editor.execCommand('mceToggleFormat', false, 'h1'),
-              onSetup: api=>editor.formatter.formatChanged('h1', state=>api.setActive(state)).unbind
-            });
-            editor.ui.registry.addToggleButton('h2', {
-              text:'H2', tooltip:'Subtítulo',
-              onAction: ()=>editor.execCommand('mceToggleFormat', false, 'h2'),
-              onSetup: api=>editor.formatter.formatChanged('h2', state=>api.setActive(state)).unbind
-            });
-          },
           init_instance_callback: editor=>{
             sermonEditor=editor;
             if(sermonEditorContent) editor.setContent(sermonEditorContent);
@@ -875,7 +867,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function initSermonBibleState(){
     if(sermonBible) return;
-    sermonBible = { book:currentBook, chapter:currentChapter, version:currentVersion, chapterCount:null, data:null, history:[], future:[] };
+    sermonBible = { book:currentBook, chapter:currentChapter, version:currentVersion, chapterCount:null, data:null, history:[], future:[], activeVerse:null };
+  }
+
+  // En modo sermón, Comentario debe seguir el libro/capítulo/versículo de la pestaña
+  // Biblia (sermonBible), no el de la Biblia principal (que queda oculta/congelada).
+  function commentaryContext(){
+    if(sermonMode && sermonBible?.data) return { data: sermonBible.data, activeVerseN: sermonBible.activeVerse };
+    return { data, activeVerseN: activeVerse() };
   }
 
   async function sermonRefreshChapterCount(){
@@ -917,11 +916,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function wireSermonBibleToolbar(){
     document.getElementById('sermonBookSelect')?.addEventListener('change', async e=>{
-      sermonBible.book=e.target.value; sermonBible.chapter=1; sermonBible.chapterCount=null;
+      sermonBible.book=e.target.value; sermonBible.chapter=1; sermonBible.chapterCount=null; sermonBible.activeVerse=null;
       await renderSermonBiblePanel();
     });
     document.getElementById('sermonChapterSelect')?.addEventListener('change', async e=>{
-      sermonBible.chapter=Number(e.target.value);
+      sermonBible.chapter=Number(e.target.value); sermonBible.activeVerse=null;
       await renderSermonBiblePanel();
     });
     document.getElementById('sermonVersionSelect')?.addEventListener('change', async e=>{
@@ -953,6 +952,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function renderSermonBibleVerses(focusVerse=null){
     const version = sermonBible.version;
+    if(focusVerse) sermonBible.activeVerse = focusVerse;
     const container = document.createElement('div');
     container.className = 'sermon-bible-verses';
     sermonBible.data.verses.forEach(v=>{
@@ -991,6 +991,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       text.addEventListener('click',()=>{
         document.querySelectorAll('.sermon-bible-verses .verse--active').forEach(x=>x.classList.remove('verse--active'));
         row.classList.add('verse--active');
+        sermonBible.activeVerse = v.n;
       });
     });
     els.panelBody.innerHTML='';
@@ -1015,7 +1016,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     sermonBible.future.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version});
     if(sermonBible.future.length>10) sermonBible.future.shift();
     Object.assign(sermonBible, sermonBible.history.pop());
-    sermonBible.chapterCount=null;
+    sermonBible.chapterCount=null; sermonBible.activeVerse=null;
     await renderSermonBiblePanel();
   }
 
@@ -1024,7 +1025,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     sermonBible.history.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version});
     if(sermonBible.history.length>10) sermonBible.history.shift();
     Object.assign(sermonBible, sermonBible.future.pop());
-    sermonBible.chapterCount=null;
+    sermonBible.chapterCount=null; sermonBible.activeVerse=null;
     await renderSermonBiblePanel();
   }
 
