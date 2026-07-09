@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     next: document.getElementById('nextChapter'),
     innerPrev: document.getElementById('innerPrev'),
     innerNext: document.getElementById('innerNext'),
+    ttsPlay: document.getElementById('ttsPlayBtn'),
+    ttsStop: document.getElementById('ttsStopBtn'),
     versionInput: document.getElementById('mainVersionInput'),
     versionDropdown: document.getElementById('versionDropdown'),
     nativeVersionSelect: document.getElementById('nativeVersionSelect'),
@@ -40,6 +42,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   let sermonEditor = null;
   let sermonEditorContent = null;
   let sermonBible = null;
+  const ttsSupported = 'speechSynthesis' in window;
+  let ttsQueue = [], ttsIndex = -1, ttsPaused = false, ttsVoicesPromise = null, ttsSession = 0;
   let selectedVerses = new Set();
   let highlights = JSON.parse(localStorage.getItem('verbo:highlights') || '{}');
   let suppressCommentSync = false;
@@ -136,6 +140,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadPassage({preserveVersion=true}={}) {
     setLoading(true);
     resetXrefMode();
+    stopTTS();
     try {
       const previous = preserveVersion ? currentVersion : null;
       data = await VerboModules.buildChapterData({bookId: currentBook, chapter: currentChapter, commentaryId: currentCommentary});
@@ -234,6 +239,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function selectBibleVersion(id) {
     const v = activeVerse();
     closeVersionDropdown();
+    stopTTS();
     // Si la versión seleccionada no tiene el libro actual, navegar a su primer libro
     const bibleEntry = catalog.bibles.find(b => b.manifest.id === id);
     if (bibleEntry?.manifest.books?.length) {
@@ -388,6 +394,105 @@ document.addEventListener('DOMContentLoaded', async () => {
       return `${compactRef(ctx.book,ctx.chapter,[n])} ${String(text).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`;
     });
     copyToClipboard(lines.join('\n'));
+  }
+
+  // ── Lectura en voz alta del capítulo (Web Speech API, solo modo lectura) ────
+  // Se encadena una utterance por versículo vía onend en vez de una sola
+  // utterance larga: onboundary es poco confiable entre navegadores para
+  // ubicar versículos, y las utterances muy largas tienen un bug conocido en
+  // Chrome que las corta a los pocos segundos. Con una por versículo el
+  // resaltado es exacto (onstart) y se evita ese bug de paso.
+  function ttsLangCode(){ return contentLang()==='en' ? 'en-US' : 'es-ES'; }
+
+  function loadTTSVoices(){
+    if(ttsVoicesPromise) return ttsVoicesPromise;
+    ttsVoicesPromise = new Promise(resolve=>{
+      const existing = speechSynthesis.getVoices();
+      if(existing.length) return resolve(existing);
+      const onChange = ()=>{
+        const voices = speechSynthesis.getVoices();
+        if(voices.length){ speechSynthesis.removeEventListener('voiceschanged', onChange); resolve(voices); }
+      };
+      speechSynthesis.addEventListener('voiceschanged', onChange);
+      setTimeout(()=>{ speechSynthesis.removeEventListener('voiceschanged', onChange); resolve(speechSynthesis.getVoices()); }, 1200);
+    });
+    return ttsVoicesPromise;
+  }
+
+  async function pickTTSVoice(langCode){
+    const voices = await loadTTSVoices();
+    const prefix = langCode.slice(0,2);
+    const matches = voices.filter(v=>v.lang?.toLowerCase().startsWith(prefix));
+    return matches.find(v=>v.localService) || matches[0] || null;
+  }
+
+  function clearTTSHighlight(){
+    document.querySelectorAll('.verse--tts-active').forEach(x=>x.classList.remove('verse--tts-active'));
+  }
+
+  function updateTTSButtons(){
+    if(!els.ttsPlay) return;
+    const speaking = ttsIndex>=0;
+    els.ttsPlay.textContent = speaking && !ttsPaused ? '⏸' : '▶';
+    els.ttsPlay.classList.toggle('tts-btn--active', speaking && !ttsPaused);
+    els.ttsPlay.title = speaking && !ttsPaused ? 'Pausar lectura' : (speaking ? 'Reanudar lectura' : 'Leer capítulo en voz alta');
+    if(els.ttsStop) els.ttsStop.hidden = !speaking;
+  }
+
+  function stopTTS(){
+    if(!ttsSupported) return;
+    ttsSession++;
+    if(ttsIndex>=0 || speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+    ttsQueue=[]; ttsIndex=-1; ttsPaused=false;
+    clearTTSHighlight();
+    updateTTSButtons();
+  }
+
+  async function speakVerseAt(i, session){
+    if(session!==ttsSession) return; // se detuvo/reinició mientras se resolvía la voz async
+    if(i>=ttsQueue.length){ stopTTS(); return; }
+    ttsIndex=i;
+    const {n, text} = ttsQueue[i];
+    clearTTSHighlight();
+    const row=els.list.querySelector(`[data-verse-n="${n}"]`);
+    row?.classList.add('verse--tts-active');
+    if(row) row.scrollIntoView({block:'center', behavior:'smooth'});
+    updateTTSButtons();
+    const utterance=new SpeechSynthesisUtterance(text);
+    const langCode=ttsLangCode();
+    utterance.lang=langCode;
+    const voice=await pickTTSVoice(langCode);
+    if(session!==ttsSession) return;
+    if(voice) utterance.voice=voice;
+    utterance.onend=()=>{ if(session===ttsSession) speakVerseAt(i+1, session); };
+    utterance.onerror=()=>{ if(session===ttsSession) speakVerseAt(i+1, session); };
+    speechSynthesis.speak(utterance);
+    updateTTSButtons();
+  }
+
+  function startTTS(){
+    if(!ttsSupported || !data?.verses?.length) return;
+    ttsSession++;
+    speechSynthesis.cancel();
+    ttsQueue=data.verses.map(v=>({
+      n: v.n,
+      text: String(v.text[currentVersion] || Object.values(v.text)[0] || '').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()
+    })).filter(item=>item.text);
+    ttsPaused=false;
+    speakVerseAt(0, ttsSession);
+  }
+
+  function toggleTTS(){
+    if(!ttsSupported) return;
+    if(ttsIndex<0){ startTTS(); return; }
+    if(ttsPaused){ speechSynthesis.resume(); ttsPaused=false; } else { speechSynthesis.pause(); ttsPaused=true; }
+    updateTTSButtons();
+  }
+
+  if(ttsSupported && els.ttsPlay){
+    els.ttsPlay.hidden=false;
+    els.ttsPlay.addEventListener('click', toggleTTS);
+    els.ttsStop?.addEventListener('click', stopTTS);
   }
 
   const SHEET_TABS = ['comentario','comparar','diccionario'];
@@ -791,6 +896,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function toggleSermonMode(){
+    stopTTS();
     sermonMode = !sermonMode;
     selectedVerses.clear();
     document.querySelectorAll('.verse--selected').forEach(x=>x.classList.remove('verse--selected'));
