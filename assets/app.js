@@ -30,8 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     readingPane: document.getElementById('readingPane'),
     editorPane: document.getElementById('editorPane'),
     editorSurface: document.getElementById('editorSurface'),
-    editorToolbar: document.getElementById('editorToolbar'),
-    editorDropline: document.getElementById('editorDropline')
+    editorToolbar: document.getElementById('editorToolbar')
   };
 
   let catalog, data, activeTab = null, currentVersion = localStorage.getItem('verbo:lastVersion') || null, compareVersion = null;
@@ -41,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   let sermonEditor = null;
   let sermonEditorContent = null;
   let sermonBible = null;
-  let sermonTouchDrag = null;
   let selectedVerses = new Set();
   let highlights = JSON.parse(localStorage.getItem('verbo:highlights') || '{}');
   let suppressCommentSync = false;
@@ -306,11 +304,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         row.appendChild(indicator);
       }
       row.appendChild(margin); els.list.appendChild(row);
-      wireSermonDrag(row, 'verse', ()=>({
-        type:'verse',
-        text: String(v.text[currentVersion] || Object.values(v.text)[0] || '').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
-        ref: `${bookAbbr[currentBook]||currentBook} ${currentChapter}:${v.n}, ${bibleCatalog().find(x=>x.id===currentVersion)?.label||currentVersion}`
-      }));
       if((v.crossrefs||[]).length){
         const XREF_LIMIT=window.innerWidth<=760?5:10;
         const xrefRow=document.createElement('div'); xrefRow.className='verse__xrefs';
@@ -494,17 +487,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${commentCtx.data.meta.book} ${commentCtx.data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">Copiar comentario</button><div class="note-card__body">${bodyHtml}</div></div>`;
       }).join(''):emptyState('📖','Este capítulo todavía no tiene comentarios cargados.');
       els.panelBody.querySelectorAll('[data-copy-note]').forEach(btn=>btn.addEventListener('click',()=>{ const note=commentCtx.data.notes[btn.dataset.copyNote]; if(note) copyToClipboard(`${note.title}\n${String(note.body).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`); }));
-      els.panelBody.querySelectorAll('.note-card[data-note-id]').forEach(card=>{
-        wireSermonDrag(card, 'note', ()=>{
-          const note=commentCtx.data.notes[card.dataset.noteId];
-          const bodyHtml=card.querySelector('.note-card__body')?.innerHTML || note?.body || '';
-          return {
-            type:'commentary',
-            text: String(bodyHtml).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
-            ref: `${note?.title||card.querySelector('.note-card__title')?.textContent.trim()||''} — ${note?.author||card.querySelector('.note-card__author')?.textContent.trim()||''}`
-          };
-        });
-      });
       if(focus){ if(delayScroll) setTimeout(()=>scrollCommentToNote(focus),320); else scrollCommentToNote(focus); }
       if(isEnglishCommentary && contentLang()==='es') setTimeout(()=>applyCommentaryTranslation(focus), 150);
     }
@@ -851,7 +833,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             sermonEditor=editor;
             if(sermonEditorContent) editor.setContent(sermonEditorContent);
             editor.on('input change undo redo', ()=>{ sermonEditorContent=editor.getContent(); });
-            wireEditorDropZone();
             resolve();
           }
         });
@@ -971,11 +952,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else text.textContent = v.text[version] || Object.values(v.text)[0] || '';
       row.append(num,text);
       container.appendChild(row);
-      wireSermonDrag(row, 'verse', ()=>({
-        type:'verse',
-        text: String(v.text[version] || Object.values(v.text)[0] || '').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(),
-        ref: `${bookAbbr[sermonBible.book]||sermonBible.book} ${sermonBible.chapter}:${v.n}, ${bibleCatalog().find(x=>x.id===version)?.label||version}`
-      }));
       text.querySelectorAll('.strongs-tag').forEach(tag=>tag.addEventListener('click',e=>{ e.stopPropagation(); openDictionary(tag.dataset.strongCode); }));
       if((v.crossrefs||[]).length){
         const xrefRow=document.createElement('div'); xrefRow.className='verse__xrefs';
@@ -1027,125 +1003,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     Object.assign(sermonBible, sermonBible.future.pop());
     sermonBible.chapterCount=null; sermonBible.activeVerse=null;
     await renderSermonBiblePanel();
-  }
-
-  // ── Arrastrar contenido (versículo/comentario) hacia el editor ─────────────
-
-  function wireSermonDrag(el, kind, payloadFn){
-    if(!sermonMode) return;
-    el.draggable = true;
-    el.addEventListener('dragstart', e=>{
-      const payload = payloadFn();
-      e.dataTransfer.setData('text/plain', `${payload.text} (${payload.ref})`);
-      e.dataTransfer.setData('application/x-verbo-drag', JSON.stringify(payload));
-      e.dataTransfer.effectAllowed='copy';
-      el.classList.add(kind==='verse' ? 'verse--dragging' : 'note-card--dragging');
-    });
-    el.addEventListener('dragend', ()=> el.classList.remove(kind==='verse' ? 'verse--dragging' : 'note-card--dragging'));
-    wireSermonTouchDraggable(el, payloadFn);
-  }
-
-  const LONGPRESS_MS = 300, MOVE_CANCEL_PX = 10;
-  function wireSermonTouchDraggable(el, payloadFn){
-    let timer=null, startX=0, startY=0, pending=false;
-    const cancel=()=>{ pending=false; clearTimeout(timer); };
-    el.addEventListener('pointerdown', e=>{
-      if(!sermonMode || e.pointerType==='mouse') return;
-      startX=e.clientX; startY=e.clientY; pending=true;
-      timer=setTimeout(()=>{
-        if(!pending) return;
-        pending=false;
-        startSermonTouchDrag(payloadFn(), e.clientX, e.clientY);
-      }, LONGPRESS_MS);
-    });
-    el.addEventListener('pointermove', e=>{
-      if(pending && (Math.abs(e.clientX-startX)>MOVE_CANCEL_PX || Math.abs(e.clientY-startY)>MOVE_CANCEL_PX)) cancel();
-    });
-    el.addEventListener('pointerup', cancel);
-    el.addEventListener('pointercancel', cancel);
-  }
-
-  function startSermonTouchDrag(payload, x, y){
-    const ghost=document.createElement('div');
-    ghost.className='sermon-drag-ghost';
-    ghost.textContent = payload.text.slice(0,140);
-    document.body.appendChild(ghost);
-    positionGhost(ghost, x, y);
-    sermonTouchDrag = { payload, ghost };
-    // El backdrop del bottom sheet cubre toda la pantalla (para cerrar el panel al tocar fuera);
-    // mientras dura el arrastre hay que "atravesarlo" para que elementFromPoint vea el editor debajo.
-    if(els.backdrop) els.backdrop.style.pointerEvents='none';
-    document.addEventListener('pointermove', onSermonTouchMove);
-    document.addEventListener('pointerup', onSermonTouchEnd);
-    document.addEventListener('pointercancel', onSermonTouchEnd);
-  }
-  function positionGhost(ghost,x,y){ ghost.style.left=(x+14)+'px'; ghost.style.top=(y+14)+'px'; }
-  function onSermonTouchMove(e){
-    if(!sermonTouchDrag) return;
-    positionGhost(sermonTouchDrag.ghost, e.clientX, e.clientY);
-    const target=document.elementFromPoint(e.clientX,e.clientY);
-    const overEditor = !!target?.closest('.editor-pane__surface');
-    els.editorSurface?.classList.toggle('is-drag-over', overEditor);
-    if(overEditor) showEditorDropline(); else hideEditorDropline();
-  }
-  function onSermonTouchEnd(e){
-    if(!sermonTouchDrag) return;
-    const target=document.elementFromPoint(e.clientX,e.clientY);
-    const overEditor = !!target?.closest('.editor-pane__surface');
-    if(overEditor) insertDraggedContentIntoEditor(sermonTouchDrag.payload);
-    sermonTouchDrag.ghost.remove();
-    els.editorSurface?.classList.remove('is-drag-over');
-    hideEditorDropline();
-    if(els.backdrop) els.backdrop.style.pointerEvents='';
-    sermonTouchDrag=null;
-    document.removeEventListener('pointermove', onSermonTouchMove);
-    document.removeEventListener('pointerup', onSermonTouchEnd);
-    document.removeEventListener('pointercancel', onSermonTouchEnd);
-  }
-
-  function wireEditorDropZone(){
-    const zone = els.editorSurface;
-    if(!zone || zone._dropWired) return;
-    zone._dropWired = true;
-    zone.addEventListener('dragover', e=>{
-      if(!sermonMode) return;
-      e.preventDefault();
-      e.dataTransfer.dropEffect='copy';
-      zone.classList.add('is-drag-over');
-      showEditorDropline();
-    });
-    zone.addEventListener('dragleave', e=>{
-      if(e.target===zone){ zone.classList.remove('is-drag-over'); hideEditorDropline(); }
-    });
-    zone.addEventListener('drop', e=>{
-      if(!sermonMode) return;
-      e.preventDefault();
-      zone.classList.remove('is-drag-over');
-      hideEditorDropline();
-      const raw = e.dataTransfer.getData('application/x-verbo-drag');
-      if(!raw) return;
-      try{ insertDraggedContentIntoEditor(JSON.parse(raw)); }catch(error){ console.error(error); }
-    });
-  }
-
-  function showEditorDropline(){
-    if(!els.editorDropline || !els.editorSurface) return;
-    const containerRect = els.editorSurface.closest('.editor-pane__inner')?.getBoundingClientRect();
-    if(!containerRect) return;
-    const lastChild = els.editorSurface.lastElementChild;
-    const rect = lastChild ? lastChild.getBoundingClientRect() : els.editorSurface.getBoundingClientRect();
-    els.editorDropline.style.top = (rect.bottom - containerRect.top + 4) + 'px';
-    els.editorDropline.hidden = false;
-  }
-  function hideEditorDropline(){ if(els.editorDropline) els.editorDropline.hidden = true; }
-
-  function insertDraggedContentIntoEditor(payload){
-    if(!sermonEditor || !payload) return;
-    const text = `${payload.text} — ${payload.ref}`;
-    sermonEditor.setContent(sermonEditor.getContent() + `<p>${escapeHTML(text)}</p>`);
-    sermonEditorContent = sermonEditor.getContent();
-    sermonEditor.selection.select(sermonEditor.getBody(), true);
-    sermonEditor.selection.collapse(false);
   }
 
   async function openSearchResult(r, versionId){
