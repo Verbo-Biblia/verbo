@@ -841,6 +841,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           toolbar_mode: 'wrap',
           fixed_toolbar_container_target: els.editorToolbar,
           toolbar_persist: true,
+          // Menú propio de clic derecho desactivado: sin esto, TinyMCE lo reemplaza
+          // por uno reducido (solo "Link..." del plugin de enlaces) sin Cortar/Copiar/
+          // Pegar. Con contextmenu:false se usa el menú nativo del navegador.
+          contextmenu: false,
           init_instance_callback: editor=>{
             sermonEditor=editor;
             if(sermonEditorContent) editor.setContent(sermonEditorContent);
