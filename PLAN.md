@@ -188,6 +188,49 @@ Todos son **comentarios completos en inglés** de alta calidad histórica, domin
 
 ---
 
+### FASE 8 — Service Worker / PWA instalable, camino a app de escritorio (planificada 2026-07-08)
+
+**Qué:** Verbo ya tiene `manifest.webmanifest` (nombre, íconos 192/512, `display:standalone`, colores) pero **no tiene ningún service worker registrado** — se verificó explícitamente que no existe `sw.js` ni ninguna llamada a `navigator.serviceWorker.register` en el repo. Sin eso no hay caché offline real: el manifest por sí solo puede bastar para que algunos navegadores ofrezcan "Instalar", pero la app instalada no sobrevive sin conexión.
+
+**Motivación (contexto de la conversación con Juan, 2026-07-08):** el objetivo a futuro es una versión de escritorio real de Verbo — sobre todo para **Linux**, donde no existe software de estudio bíblico serio nativo (la oferta existente es Windows/Mac, o corre mal bajo Wine). Camino de menor costo, aprovechando que el sitio ya es 100% estático:
+1. **Ahora:** agregar el service worker → sitio genuinamente instalable (ícono propio, ventana sin barra de navegador, funciona offline con el contenido ya visitado) en cualquier navegador basado en Chromium, que es la inmensa mayoría de usuarios Linux.
+2. **Más adelante:** empaquetar con **Tauri** (no Electron — instaladores de ~15-20MB usando el motor nativo del sistema operativo, en vez de ~150-200MB empaquetando Chromium completo) para producir `.AppImage`/`.deb`/`.rpm` en Linux y un instalador equivalente en Windows, sin reescribir nada del código existente. El service worker es prerrequisito de este paso también: sin caché offline, la app empaquetada tampoco tendría contenido disponible sin internet.
+
+**Diseño previsto (a confirmar en detalle al implementar):**
+- Cachear el shell estático (HTML/CSS/JS) y los módulos JSON de Biblias/comentarios/diccionario ya consultados, para que lo visitado una vez quede disponible sin conexión.
+- Las 3 Biblias remotas de API.Bible (LBLA, NTV, NASB 2020) siguen requiriendo conexión — no se cachean (contenido de terceros bajo licencia, servido bajo demanda vía proxy).
+- Estrategia tipo "cache-first para el shell, stale-while-revalidate para los módulos de contenido", para que actualizaciones futuras (ej. nuevas revisiones de RV-Verbo) no queden atrapadas indefinidamente en una caché vieja.
+- Coordinar la invalidación del service worker con el mecanismo de cache-busting `?v=` que ya existe en `index.html`, para evitar el mismo tipo de bug de caché que ya se dio antes con `app.js`/`style.css` sin este mecanismo.
+
+**Estado:** planificada, no iniciada. No bloquea el lanzamiento de prueba con familiares/pastores — se retoma después.
+
+---
+
+### FASE 9 — Padres Apostólicos como panel funcional independiente (en curso, iniciada 2026-07-08)
+
+**Qué:** Separar conceptualmente a los Padres Apostólicos (siglo IV para atrás, foco en los dos primeros siglos) de los comentaristas modernos/de la Reforma. Hoy Ireneo de Lyon aparece dentro del panel "Comentario" junto a Matthew Henry, JFB, K&D, Scofield y Wesley — eso mezcla dos pesos doctrinales distintos, y no coincide con la línea de coherencia doctrinal ya definida en `CLAUDE.md` (comprensión judeocristiana del AT + fe cristiana pre-siglo III).
+
+**Diseño confirmado con Juan:**
+1. Ireneo sale del panel "Comentario" — deja de listarse ahí, pero su texto no se borra de ningún lado.
+2. "Padres Apostólicos" se convierte en un panel funcional vinculado a versículo — igual mecanismo que "Comentario" (detecta el versículo activo, muestra automáticamente el fragmento patrístico correspondiente si existe) — **además** de conservar la navegación actual por documento completo (índice de secciones), no en vez de ella.
+3. Biblioteca y Evangelio cronológico no se tocan en este cambio.
+
+**Paso 1 — completado y verificado:**
+- `modules/registry.json` → se quitó `commentaries/ireneo-contra-herejias/manifest.json` del array `commentaries`.
+- Verificado en navegador: el selector de "Comentario" ya no ofrece Ireneo (solo Matthew Henry/JFB/K&D/Scofield/Wesley); "Padres Apostólicos" sigue funcionando exactamente igual que antes (índice de documento → secciones). Cero errores de consola. Nada comiteado a git todavía en este momento de la sesión (ver nota abajo).
+
+**Paso 2 — hallazgo de datos (completado, panel aún sin construir):**
+- Ya existen **dos estructuras de datos distintas** para el mismo texto de Ireneo — no hace falta preparar ni re-etiquetar nada:
+  - `modules/patristic/ireneo-contra-herejias/sections.json` — estructura propia de la obra (Libro/Capítulo de *Contra las Herejías*), sin vínculo a versículo. Alimenta la navegación por documento que ya existe.
+  - `modules/commentaries/ireneo-contra-herejias/books/*.json` — **21 fragmentos ya anclados a referencia bíblica exacta** (`reference.book/chapterStart/verseStart/chapterEnd/verseEnd`, mismo formato que usa el mecanismo de Comentario hoy), cubriendo 10 libros (GEN, ISA, MAT, LUK, JHN, ACT, ROM, 1CO, HEB, REV). La propia descripción de ese manifest ya anticipaba esta separación: *"Selección de pasajes... anclados a las referencias bíblicas... Para leer la obra completa, usa el ícono de Padres Apostólicos."*
+- Se agregó una nueva clave `patristicByVerse` en `registry.json` apuntando a ese mismo manifest ya existente (`commentaries/ireneo-contra-herejias/manifest.json`) — sin duplicar ni mover archivos, solo repuntando de qué "estantería" del registro viene esa fuente. **Nota:** `getCatalog()` en `assets/module-loader.js` todavía NO lee esta clave nueva (lista explícitamente cada array del registro una por una) — falta agregar esa línea cuando se construya el panel.
+
+**Paso 3 — pendiente, no iniciado:** construir el panel con los dos modos (fragmento automático por versículo activo + acceso a "leer documento completo", preservando el `renderPadresPanel`/`renderPatristicIndex`/`renderPatristicSection` ya existentes). Debe seguir la misma traducción automática en runtime que ya aplica a comentarios en inglés, para cuando se agreguen padres apostólicos en otros idiomas.
+
+**Estado:** en curso — pasos 1 y 2 completados y verificados en este momento de la sesión, paso 3 (construcción del panel) pendiente de retomar. Cambios de `modules/registry.json` sin comitear a git todavía al cerrar esta sesión (ver instrucción explícita de Juan: "por ahora guarda avances y plan y cierra").
+
+---
+
 ## Notas Técnicas
 
 ### Formato SWORD zcom (para referencia del parser)

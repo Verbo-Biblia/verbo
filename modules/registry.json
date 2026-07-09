@@ -35,7 +35,6 @@
     "bibles/kjv-strong/manifest.json"
   ],
   "commentaries": [
-    "commentaries/ireneo-contra-herejias/manifest.json",
     "commentaries/matthew-henry-en/manifest.json",
     "commentaries/jfb/manifest.json",
     "commentaries/kd/manifest.json",
@@ -52,6 +51,9 @@
   ],
   "patristic": [
     "patristic/ireneo-contra-herejias/manifest.json"
+  ],
+  "patristicByVerse": [
+    "commentaries/ireneo-contra-herejias/manifest.json"
   ],
   "crossrefs": [
     "crossrefs/tsk/manifest.json"
