@@ -620,7 +620,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       els.panelTitle.textContent='Comentario';
       const installed=commentaryCatalog();
       const currentManifest=catalog?.commentaries?.find(c=>c.manifest.id===currentCommentary)?.manifest;
-      const isEnglishCommentary=currentManifest?.language==='en';
+      const commentarySourceLang=currentManifest?.language||null;
+      const needsCommentaryTranslation=Boolean(commentarySourceLang) && commentarySourceLang!==contentLang();
       if(installed.length){
         const options=installed.map(c=>`<option value="${c.id}" ${c.id===currentCommentary?'selected':''}>${escapeHTML(c.label)}</option>`).join('');
         els.panelToolbar.innerHTML=`<div class="compare-toolbar"><select class="compare-toolbar__select" id="commentarySelect">${options}</select></div>`;
@@ -639,14 +640,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       const entries=Object.entries(commentCtx.data.notes).filter(([,note])=>note.commentaryId===currentCommentary);
       els.panelBody.innerHTML=entries.length?entries.map(([id,n])=>{
-        const bodyHtml=isEnglishCommentary&&contentLang()==='es'
-          ? (tcacheGet(translationCacheKey(id,n.body))||`<p class="note-card__translating">Traduciendo…</p>${n.body}`)
+        const bodyHtml=needsCommentaryTranslation
+          ? (tcacheGet(translationCacheKey(id,n.body,contentLang()))||`<p class="note-card__translating">Traduciendo…</p>${n.body}`)
           : n.body;
         return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${commentCtx.data.meta.book} ${commentCtx.data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">Copiar comentario</button><div class="note-card__body">${bodyHtml}</div></div>`;
       }).join(''):emptyState('📖','Este capítulo todavía no tiene comentarios cargados.');
       els.panelBody.querySelectorAll('[data-copy-note]').forEach(btn=>btn.addEventListener('click',()=>{ const note=commentCtx.data.notes[btn.dataset.copyNote]; if(note) copyToClipboard(`${note.title}\n${String(note.body).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`); }));
       if(focus){ if(delayScroll) setTimeout(()=>scrollCommentToNote(focus),320); else scrollCommentToNote(focus); }
-      if(isEnglishCommentary && contentLang()==='es') setTimeout(()=>applyCommentaryTranslation(focus), 150);
+      if(needsCommentaryTranslation) setTimeout(()=>applyCommentaryTranslation(focus, commentarySourceLang), 150);
     }
     if(tab==='comparar'){
       if(sermonMode){ renderSermonBiblePanel(focus||activeVerse()); }
@@ -716,14 +717,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   const T_PREFIX = 'verbo:t:';
   function tcacheGet(key){ try{ return JSON.parse(localStorage.getItem(T_PREFIX+key)); }catch{ return null; } }
   function tcacheSet(key,val){ try{ localStorage.setItem(T_PREFIX+key, JSON.stringify(val)); }catch{} }
-  function translationCacheKey(noteId, htmlContent){
+  // v3: la clave incluye el idioma destino — antes de agregar traduccion ES->EN
+  // (Biblioteca Patristica + comentarios en espanol como Ireneo) solo existia una
+  // direccion (EN->ES) y el destino era implicito. Las entradas v2 quedan huerfanas
+  // (se regeneran solas), no rompe nada.
+  function translationCacheKey(noteId, htmlContent, targetLang='es'){
     let hash=2166136261;
     const value=String(htmlContent||'');
     for(let i=0;i<value.length;i++){
       hash^=value.charCodeAt(i);
       hash=Math.imul(hash,16777619);
     }
-    return `v2:${noteId}:${(hash>>>0).toString(16)}`;
+    return `v3:${targetLang}:${noteId}:${(hash>>>0).toString(16)}`;
   }
   function htmlToPlainText(html){ return html.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim(); }
 
@@ -740,10 +745,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     return chunks;
   }
 
-  async function googleTranslate(text){
+  async function googleTranslate(text, sourceLang='en', targetLang='es'){
     async function fetchTranslate(chunk){
       try{
-        const url=`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=es&dt=t&q=${encodeURIComponent(chunk)}`;
+        const url=`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(chunk)}`;
         const resp=await fetch(url);
         if(!resp.ok) return null;
         const json=await resp.json();
@@ -763,13 +768,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     return parts.join(' ');
   }
 
-  async function translateEntry(noteId, htmlContent){
-    const cacheKey=translationCacheKey(noteId,htmlContent);
+  async function translateEntry(noteId, htmlContent, sourceLang='en', targetLang='es'){
+    const cacheKey=translationCacheKey(noteId,htmlContent,targetLang);
     const cached=tcacheGet(cacheKey); if(cached) return cached;
     const text=htmlToPlainText(htmlContent);
     if(!text || text.length<10) return htmlContent;
     try{
-      const translated=await googleTranslate(text);
+      const translated=await googleTranslate(text, sourceLang, targetLang);
       if(!translated) return htmlContent;
       // Rebuild as paragraphs — split on sentences ending with period + space
       const sentences=translated.split(/(?<=\.)\s+/);
@@ -786,10 +791,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }catch{ return htmlContent; }
   }
 
-  async function applyCommentaryTranslation(focusNoteId=null){
-    if(contentLang()==='en') return;
+  async function applyCommentaryTranslation(focusNoteId=null, sourceLang=null){
     const manifest=catalog?.commentaries?.find(c=>c.manifest.id===currentCommentary)?.manifest;
-    if(manifest?.language!=='en') return;
+    const source=sourceLang||manifest?.language;
+    const target=contentLang();
+    if(!source || source===target) return;
     const cards=[...els.panelBody.querySelectorAll('.note-card[data-note-id]')];
     // Translate focused card first for immediate feedback
     const sorted = focusNoteId
@@ -798,15 +804,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     for(const card of sorted){
       const noteId=card.dataset.noteId;
       const bodyEl=card.querySelector('.note-card__body');
-      if(!bodyEl||bodyEl.dataset.translated==='1') continue;
+      if(!bodyEl||bodyEl.dataset.translated===target) continue;
       const note=data.notes[noteId];
       if(!note) continue;
       bodyEl.dataset.translated='pending';
-      const translated=await translateEntry(noteId, note.body);
+      const translated=await translateEntry(noteId, note.body, source, target);
       if(bodyEl.dataset.translated==='pending'){
         const prevTop = noteId===focusNoteId ? card.getBoundingClientRect().top : null;
         bodyEl.innerHTML=translated;
-        bodyEl.dataset.translated='1';
+        bodyEl.dataset.translated=target;
         // Re-anchor scroll to keep focused card in place
         if(prevTop!==null){
           const newTop=card.getBoundingClientRect().top;
@@ -1694,11 +1700,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(!section){ els.panelBody.innerHTML=emptyState('⚠️','No se encontró esta sección.'); return; }
     els.panelToolbar.innerHTML=`<button class="note-card__copy" id="backToPatristicIndex" type="button">← Índice del documento</button>`;
     document.getElementById('backToPatristicIndex')?.addEventListener('click',()=>{ patristicOpenSection=null; renderPadresPanel(); els.panelBody.scrollTop=0; });
+    const source=patristicDocData.manifest.language||'es';
+    const target=contentLang();
+    const needsTranslation=source!==target;
+    const contentHtml=nl2p(section.content);
+    const bodyHtml=needsTranslation
+      ? (tcacheGet(translationCacheKey(`patristic:${patristicOpenDoc}:${section.n}`,section.content,target))||`<p class="note-card__translating">Traduciendo…</p>${contentHtml}`)
+      : contentHtml;
     els.panelBody.innerHTML=`<article class="dict-entry">
       <div class="dict-entry__term">${escapeHTML(section.title)}</div>
       <div class="dict-entry__source">${escapeHTML(patristicDocData.manifest.name)}</div>
-      <div class="dict-entry__def">${nl2p(section.content)}</div>
+      <div class="dict-entry__def" data-patristic-body="1">${bodyHtml}</div>
     </article>`;
+    if(needsTranslation) setTimeout(()=>applyPatristicTranslation(section,source,target), 150);
+  }
+
+  async function applyPatristicTranslation(section, sourceLang, targetLang){
+    const bodyEl=els.panelBody.querySelector('[data-patristic-body]');
+    if(!bodyEl || bodyEl.dataset.translated===targetLang) return;
+    bodyEl.dataset.translated='pending';
+    const translated=await translateEntry(`patristic:${patristicOpenDoc}:${section.n}`, section.content, sourceLang, targetLang);
+    // El usuario pudo haber navegado a otra sección mientras se traducía.
+    const stillSameBody=els.panelBody.querySelector('[data-patristic-body]');
+    if(stillSameBody===bodyEl && bodyEl.dataset.translated==='pending'){
+      bodyEl.innerHTML=translated;
+      bodyEl.dataset.translated=targetLang;
+    }
   }
 
   async function renderExegesis(focus=null){
