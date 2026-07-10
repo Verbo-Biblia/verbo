@@ -142,10 +142,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateNavButtons();
   }
 
-  async function loadPassage({preserveVersion=true}={}) {
+  async function loadPassage({preserveVersion=true, skipStopTTS=false}={}) {
     setLoading(true);
     resetXrefMode();
-    stopTTS();
+    if(!skipStopTTS) stopTTS();
     try {
       const previous = preserveVersion ? currentVersion : null;
       data = await VerboModules.buildChapterData({bookId: currentBook, chapter: currentChapter, commentaryId: currentCommentary});
@@ -473,7 +473,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const speaking = ttsIndex>=0;
     els.ttsPlay.textContent = speaking && !ttsPaused ? '⏸' : '▶';
     els.ttsPlay.classList.toggle('tts-btn--active', speaking && !ttsPaused);
-    els.ttsPlay.title = speaking && !ttsPaused ? 'Pausar lectura' : (speaking ? 'Reanudar lectura' : 'Leer capítulo en voz alta');
+    els.ttsPlay.title = speaking && !ttsPaused ? 'Pausar lectura' : (speaking ? 'Reanudar lectura' : 'Lectura continua en voz alta');
     if(els.ttsStop) els.ttsStop.hidden = !speaking;
   }
 
@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function speakVerseAt(i, session){
     if(session!==ttsSession) return; // se detuvo/reinició mientras se resolvía la voz async
-    if(i>=ttsQueue.length){ stopTTS(); return; }
+    if(i>=ttsQueue.length){ await advanceChapterForTTS(session); return; }
     ttsIndex=i;
     const {n, text} = ttsQueue[i];
     clearTTSHighlight();
@@ -518,6 +518,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     })).filter(item=>item.text);
     ttsPaused=false;
     speakVerseAt(0, ttsSession);
+  }
+
+  // Al terminar el último versículo del capítulo, pasa solo al siguiente y se
+  // sigue leyendo, hasta que el usuario pulse Detener o ya no haya más capítulos.
+  // moveChapter() normalmente dispara loadPassage() -> stopTTS(), lo que cortaría
+  // la lectura; por eso aquí se le pide a loadPassage que se salte ese stopTTS
+  // (nada está sonando en este instante, ya se terminó el último versículo) y se
+  // usa el "session" capturado antes de cargar para detectar si el usuario pulsó
+  // Detener (u otra acción que sí llama a stopTTS de verdad) mientras se cargaba.
+  async function advanceChapterForTTS(session){
+    if(session!==ttsSession || els.next.disabled){ stopTTS(); return; }
+    clearTTSHighlight();
+    await moveChapter(1, {skipStopTTS:true});
+    if(session!==ttsSession) return; // se detuvo mientras cargaba el siguiente capítulo
+    startTTS();
   }
 
   function toggleTTS(){
@@ -1278,7 +1293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       </select>
       <button class="search-panel-button" type="submit">Buscar</button>
     </form>`;
-    els.panelBody.innerHTML=emptyState('⌕','Escribe al menos dos caracteres. Los resultados aparecerán en orden bíblico, 100 por página.');
+    els.panelBody.innerHTML=emptyState('⌕','Escribe al menos dos caracteres. Puedes buscar frases aunque estén en otro orden o sin tildes; los resultados aparecerán primero los que coinciden exacto, luego el resto, en orden bíblico, 100 por página.');
 
     const form=document.getElementById('searchForm');
     const input=document.getElementById('searchInput');
@@ -1794,13 +1809,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }catch(error){console.error(error);els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir esta entrada del diccionario.');}
   }
   function updateNavButtons(){ const idx=catalog.books.findIndex(b=>b.id===currentBook); const atStart=idx===0&&currentChapter===1; const atEnd=idx===catalog.books.length-1&&currentChapter===els.chapter.options.length; els.prev.disabled=atStart; els.next.disabled=atEnd; if(els.innerPrev) els.innerPrev.disabled=atStart; if(els.innerNext) els.innerNext.disabled=atEnd; }
-  async function moveChapter(delta){
+  async function moveChapter(delta, {skipStopTTS=false}={}){
     const idx=catalog.books.findIndex(b=>b.id===currentBook), count=els.chapter.options.length;
     if(delta<0&&currentChapter>1) currentChapter--; else if(delta>0&&currentChapter<count) currentChapter++; else {
       const nextIdx=idx+delta; if(nextIdx<0||nextIdx>=catalog.books.length)return;
       currentBook=catalog.books[nextIdx].id; els.book.value=currentBook; currentChapter=delta>0?1:(await VerboModules.getBookInfo(currentBook)).chapterCount; await refreshChapters();
     }
-    els.chapter.value=String(currentChapter); updateNavButtons(); await loadPassage();
+    els.chapter.value=String(currentChapter); updateNavButtons(); await loadPassage({skipStopTTS});
   }
   function setLoading(on){ els.body.classList.toggle('app-loading',on); }
   function showFatal(error){ els.list.innerHTML=emptyState('⚠️',`No se pudieron cargar los módulos JSON. Ejecuta la app desde un servidor local. ${error.message}`); }

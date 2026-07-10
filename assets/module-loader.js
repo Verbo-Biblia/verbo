@@ -276,10 +276,32 @@ const VerboModules = (() => {
     return { manifest, entries };
   }
 
+  // Quita tildes/diacríticos y normaliza espacios/puntuación, para que la
+  // búsqueda no falle por variantes de acentuación entre versiones (ej.
+  // "así"/"asi") ni por puntuación pegada a la palabra.
+  function normalizeSearchText(value) {
+    return String(value || '')
+      .toLocaleLowerCase('es')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // 2 = coincide la frase completa y en orden (mejor rango); 1 = están todas
+  // las palabras buscadas en el versículo pero en cualquier orden/posición
+  // (cubre el caso de una frase redactada distinto entre versiones); 0 = no coincide.
+  function searchMatchScore(plainNormalized, phraseNormalized, words) {
+    if (!words.length) return 0;
+    if (words.length > 1 && plainNormalized.includes(phraseNormalized)) return 2;
+    return words.every(w => plainNormalized.includes(w)) ? 1 : 0;
+  }
+
   async function searchBible(manifestPath, query, { testament='all', onProgress=null }={}) {
     const manifest = await getJSON(manifestPath);
-    const needle = String(query || '').trim().toLocaleLowerCase('es');
-    if (needle.length < 2) return [];
+    const phraseNormalized = normalizeSearchText(query);
+    const words = phraseNormalized.split(' ').filter(Boolean);
+    if (phraseNormalized.length < 2 || !words.length) return [];
 
     const matthewIndex = manifest.books.findIndex(book => book.id === 'MAT');
     const books = manifest.books.filter((book, index) => {
@@ -298,13 +320,18 @@ const VerboModules = (() => {
         for (const [verse, raw] of orderedVerses) {
           const text = typeof raw === 'string' ? raw : (raw.text || '');
           const plain = String(text).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-          if (plain.toLocaleLowerCase('es').includes(needle)) {
-            results.push({ bookId:bookInfo.id, book:bookInfo.name, chapter:Number(chapter), verse:Number(verse), text:plain });
+          const score = searchMatchScore(normalizeSearchText(plain), phraseNormalized, words);
+          if (score > 0) {
+            results.push({ bookId:bookInfo.id, book:bookInfo.name, chapter:Number(chapter), verse:Number(verse), text:plain, score });
           }
         }
       }
       if (onProgress) onProgress({ current:i+1, total:books.length, book:bookInfo.name });
     }
+    // Orden estable: primero coincidencias de frase exacta, luego por-todas-las-palabras;
+    // dentro de cada grupo se conserva el orden bíblico en que se recorrió el texto.
+    results.sort((a, b) => b.score - a.score);
+    results.forEach(r => delete r.score);
     return results;
   }
   async function buildChapterData({ bookId='ROM', chapter=7, commentaryId=null }={}) {
