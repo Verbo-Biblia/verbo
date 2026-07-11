@@ -1,0 +1,14 @@
+{
+  "name": "verbo-semantic-search-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:gospels": "node build-index.mjs",
+    "eval": "node evaluate.mjs",
+    "eval:preset": "node evaluate.mjs --preset"
+  },
+  "dependencies": {
+    "@xenova/transformers": "^2.17.2"
+  }
+}
