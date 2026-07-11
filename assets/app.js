@@ -1254,8 +1254,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function renderSavedSearchResults(){
     if(!searchState?.results?.length) return;
-    const {results, versionId, scopeLabel}=searchState;
-    const pageSize=100;
+    const {results, versionId, scopeLabel, semantic}=searchState;
+    const pageSize=semantic ? 30 : 100;
     let page=searchState.page || 0;
     const totalPages=Math.ceil(results.length/pageSize);
     const start=page*pageSize;
@@ -1267,7 +1267,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <span>${escapeHTML(scopeLabel)} · mostrando ${start+1}–${end}</span>
       </div>
       <div class="search-results-list">
-        ${visible.map((r,i)=>`<button class="search-result" type="button" data-result="${start+i}"><span class="search-result__ref">${escapeHTML(r.book)} ${r.chapter}:${r.verse}</span><span class="search-result__text">${escapeHTML(r.text)}</span></button>`).join('')}
+        ${visible.map((r,i)=>`<button class="search-result" type="button" data-result="${start+i}"><span class="search-result__ref">${escapeHTML(r.book)} ${r.chapter}:${r.verse}${r.verseEnd && r.verseEnd!==r.verse ? `-${r.verseEnd}` : ''}${semantic ? ` · ${(r.score*100).toFixed(1)}%` : ''}</span><span class="search-result__text">${escapeHTML(r.text)}</span></button>`).join('')}
       </div>
       <nav class="search-pagination" aria-label="Páginas de resultados">
         <button class="search-page-button" id="searchPrevPage" type="button" ${page===0?'disabled':''}>‹ Anterior</button>
@@ -1281,38 +1281,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function renderSearch(){
     els.panelTitle.textContent='Buscar en la Biblia';
-    const saved = searchState || { query:'', versionId:currentVersion, testament:'nt', results:[], page:0, scopeLabel:'NT' };
-    const options=bibleCatalog().map(v=>`<option value="${v.id}" ${v.id===saved.versionId?'selected':''}>${escapeHTML(v.label)}</option>`).join('');
+    const saved = searchState || { query:'', versionId:'rva-1909', indexType:'verses', results:[], page:0, scopeLabel:'Semántica · Evangelios RVA 1909', semantic:true };
     els.panelToolbar.innerHTML=`<form class="search-panel-form" id="searchForm">
-      <input id="searchInput" class="search-panel-input" type="search" minlength="2" placeholder="Palabra o frase…" autocomplete="off" value="${escapeHTML(saved.query)}">
-      <select id="searchVersion" class="search-panel-select" aria-label="Versión bíblica">${options}</select>
-      <select id="searchScope" class="search-panel-scope" aria-label="Ámbito de búsqueda">
-        <option value="nt" ${saved.testament==='nt'?'selected':''}>NT</option>
-        <option value="ot" ${saved.testament==='ot'?'selected':''}>AT</option>
-        <option value="all" ${saved.testament==='all'?'selected':''}>Biblia</option>
+      <input id="searchInput" class="search-panel-input" type="search" minlength="2" placeholder="Pregunta o tema…" autocomplete="off" value="${escapeHTML(saved.query)}">
+      <select id="searchIndexType" class="search-panel-select" aria-label="Tipo de índice semántico">
+        <option value="verses" ${saved.indexType!=='pericopes'?'selected':''}>Versículos</option>
+        <option value="pericopes" ${saved.indexType==='pericopes'?'selected':''}>Perícopas</option>
       </select>
       <button class="search-panel-button" type="submit">Buscar</button>
     </form>`;
-    els.panelBody.innerHTML=emptyState('⌕','Escribe al menos dos caracteres. Puedes buscar frases aunque estén en otro orden o sin tildes; los resultados aparecerán primero los que coinciden exacto, luego el resto, en orden bíblico, 100 por página.');
+    els.panelBody.innerHTML=emptyState('⌕','Busca en lenguaje natural en los cuatro Evangelios de la RVA 1909. Los resultados se ordenan por cercanía semántica.');
 
     const form=document.getElementById('searchForm');
     const input=document.getElementById('searchInput');
-    const versionSelect=document.getElementById('searchVersion');
-    const scopeSelect=document.getElementById('searchScope');
+    const indexTypeSelect=document.getElementById('searchIndexType');
 
     const clearWhenChanged=()=>{
       const q=input.value.trim();
-      const v=versionSelect.value;
-      const t=scopeSelect.value;
-      if(searchState && (q!==searchState.query || v!==searchState.versionId || t!==searchState.testament)){
+      const indexType=indexTypeSelect.value;
+      if(searchState && (q!==searchState.query || indexType!==searchState.indexType)){
         searchState=null;
         els.panelBody.innerHTML=q.length?emptyState('⌕','Pulsa Buscar para ver nuevos resultados.'):emptyState('⌕','Escribe al menos dos caracteres.');
       }
     };
 
     input?.addEventListener('input', clearWhenChanged);
-    versionSelect?.addEventListener('change', clearWhenChanged);
-    scopeSelect?.addEventListener('change', clearWhenChanged);
+    indexTypeSelect?.addEventListener('change', clearWhenChanged);
 
     if(searchState?.results?.length) renderSavedSearchResults();
     setTimeout(()=>input?.focus(),0);
@@ -1320,20 +1314,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     form?.addEventListener('submit',async e=>{
       e.preventDefault();
       const query=input.value.trim();
-      const versionId=versionSelect.value;
-      const testament=scopeSelect.value;
+      const versionId='rva-1909';
+      const indexType=indexTypeSelect.value === 'pericopes' ? 'pericopes' : 'verses';
       if(query.length<2){ searchState=null; els.panelBody.innerHTML=emptyState('⌕','Escribe al menos dos caracteres.'); return; }
-      const selected=bibleCatalog().find(v=>v.id===versionId);
-      els.panelBody.innerHTML=emptyState('⌛','Buscando…');
+      els.panelBody.innerHTML=emptyState('⌛','Preparando búsqueda semántica…');
       try{
-        const results=selected.remote
-          ? await VerboModules.searchRemoteBible(selected.id,query,{testament})
-          : await VerboModules.searchBible(selected.path,query,{
-            testament,
-            onProgress:p=>{els.panelBody.innerHTML=emptyState('⌛',`Buscando en ${escapeHTML(p.book)} · ${p.current}/${p.total}`);}
-          });
-        const scopeLabel={nt:'NT',ot:'AT',all:'Biblia'}[testament];
-        searchState={query, versionId, testament, results, page:0, scopeLabel};
+        const stageText={index:'Cargando índice local…',model:'Cargando modelo de IA…',embedding:'Leyendo la pregunta…',ranking:'Ordenando resultados…'};
+        const results=await VerboModules.searchSemanticGospels(query,{
+          indexType,
+          limit:90,
+          onProgress:p=>{els.panelBody.innerHTML=emptyState('⌛',stageText[p.stage] || 'Buscando…');}
+        });
+        const scopeLabel=`Semántica · Evangelios RVA 1909 · ${indexType==='pericopes'?'perícopas':'versículos'}`;
+        searchState={query, versionId, indexType, results, page:0, scopeLabel, semantic:true};
         if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',`No se encontraron resultados para “${escapeHTML(query)}”.`); return; }
         renderSavedSearchResults();
       }catch(error){ console.error(error); els.panelBody.innerHTML=emptyState('⚠️','No se pudo completar la búsqueda.'); }

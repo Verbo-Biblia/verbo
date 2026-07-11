@@ -1042,10 +1042,10 @@ button:focus-visible,
 
 /* Ajuste v7: filtros y paginación completa de búsqueda */
 .search-panel-form {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas:
-    "input input input"
-    "version scope button";
+    "input input"
+    "version button";
 }
 .search-panel-scope {
   grid-area: scope;
@@ -1094,7 +1094,7 @@ button:focus-visible,
 @media (max-width:760px) {
   .search-panel-form {
     grid-template-columns: 1fr;
-    grid-template-areas: "input" "version" "scope" "button";
+    grid-template-areas: "input" "version" "button";
   }
   .search-pagination { grid-template-columns: 1fr 1fr; }
   .search-page-status { grid-column: 1 / -1; grid-row: 1; text-align: center; }

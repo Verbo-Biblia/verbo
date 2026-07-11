@@ -1,11 +1,24 @@
 /* Cargador de módulos JSON de Verbo — esquema v2 */
 const VerboModules = (() => {
   const cache = new Map();
+  const semanticSearch = {
+    basePath: 'modules/semantic-search/gospels-rva-1909',
+    model: 'Xenova/paraphrase-multilingual-MiniLM-L12-v2',
+    transformerUrl: 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/+esm',
+    indexes: new Map(),
+    extractorPromise: null
+  };
   async function getJSON(url) {
     if (cache.has(url)) return cache.get(url);
     const response = await fetch(url, { cache:'no-cache' });
     if (!response.ok) throw new Error(`No se pudo cargar ${url} (${response.status})`);
     const json = await response.json(); cache.set(url, json); return json;
+  }
+  async function getArrayBuffer(url) {
+    if (cache.has(url)) return cache.get(url);
+    const response = await fetch(url, { cache:'no-cache' });
+    if (!response.ok) throw new Error(`No se pudo cargar ${url} (${response.status})`);
+    const buffer = await response.arrayBuffer(); cache.set(url, buffer); return buffer;
   }
   function resolveFromManifest(manifestPath, relativePath) {
     return manifestPath.slice(0, manifestPath.lastIndexOf('/') + 1) + relativePath;
@@ -334,6 +347,73 @@ const VerboModules = (() => {
     results.forEach(r => delete r.score);
     return results;
   }
+
+  async function loadSemanticIndex(indexType='verses') {
+    const type = indexType === 'pericopes' ? 'pericopes' : 'verses';
+    if (semanticSearch.indexes.has(type)) return semanticSearch.indexes.get(type);
+    const meta = await getJSON(`${semanticSearch.basePath}/${type}.meta.json`);
+    const buffer = await getArrayBuffer(`${semanticSearch.basePath}/${meta.vectorFile}`);
+    const index = { meta, vectors:new Int8Array(buffer) };
+    semanticSearch.indexes.set(type, index);
+    return index;
+  }
+
+  async function getSemanticExtractor() {
+    if (!semanticSearch.extractorPromise) {
+      semanticSearch.extractorPromise = import(semanticSearch.transformerUrl).then(async ({ env, pipeline }) => {
+        env.allowLocalModels = false;
+        env.useBrowserCache = true;
+        return pipeline('feature-extraction', semanticSearch.model);
+      });
+    }
+    return semanticSearch.extractorPromise;
+  }
+
+  function semanticTensorVector(tensor) {
+    return tensor.data || tensor;
+  }
+
+  function semanticResultFromRecord(record, score, indexType) {
+    return {
+      bookId: record.book,
+      book: record.bookName,
+      chapter: Number(record.chapterStart),
+      verse: Number(record.verseStart),
+      chapterEnd: Number(record.chapterEnd),
+      verseEnd: Number(record.verseEnd),
+      text: record.text,
+      score,
+      semantic: true,
+      indexType
+    };
+  }
+
+  async function searchSemanticGospels(query, { indexType='verses', limit=50, onProgress=null }={}) {
+    const clean = String(query || '').trim();
+    if (clean.length < 2) return [];
+    onProgress?.({ stage:'index' });
+    const index = await loadSemanticIndex(indexType);
+    onProgress?.({ stage:'model' });
+    const extractor = await getSemanticExtractor();
+    onProgress?.({ stage:'embedding' });
+    const output = await extractor(clean, { pooling:'mean', normalize:true });
+    const queryVector = semanticTensorVector(output);
+    const dimensions = Number(index.meta.dimensions);
+    const records = index.meta.records || [];
+    const results = [];
+    onProgress?.({ stage:'ranking' });
+    for (let recordIndex=0; recordIndex<records.length; recordIndex++) {
+      const offset = recordIndex * dimensions;
+      let score = 0;
+      for (let dim=0; dim<dimensions; dim++) {
+        score += queryVector[dim] * (index.vectors[offset + dim] / 127);
+      }
+      results.push(semanticResultFromRecord(records[recordIndex], score, indexType));
+    }
+    results.sort((a,b)=>b.score-a.score);
+    return results.slice(0, limit);
+  }
+
   async function buildChapterData({ bookId='ROM', chapter=7, commentaryId=null }={}) {
     const registry = await getJSON('modules/registry.json');
     const bibleResults=(await Promise.all((registry.bibles || []).map(async path=>{
@@ -450,5 +530,5 @@ const VerboModules = (() => {
     return null;
   }
 
-  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadLinkedEntries,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible };
+  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadLinkedEntries,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticGospels };
 })();
