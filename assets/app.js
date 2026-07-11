@@ -1713,7 +1713,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderPatristicSection(){
     const section=patristicDocData.sections.find(s=>s.n===patristicOpenSection);
     if(!section){ els.panelBody.innerHTML=emptyState('⚠️','No se encontró esta sección.'); return; }
-    els.panelToolbar.innerHTML=`<button class="note-card__copy" id="backToPatristicIndex" type="button">← Índice del documento</button>`;
+    els.panelToolbar.innerHTML=`
+      <button class="note-card__copy" id="backToPatristicIndex" type="button">← Índice del documento</button>
+      <button class="note-card__copy" id="copyPatristicSection" type="button">Copiar sección</button>`;
     document.getElementById('backToPatristicIndex')?.addEventListener('click',()=>{ patristicOpenSection=null; renderPadresPanel(); els.panelBody.scrollTop=0; });
     const source=patristicDocData.manifest.language||'es';
     const target=contentLang();
@@ -1722,11 +1724,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const bodyHtml=needsTranslation
       ? (tcacheGet(translationCacheKey(`patristic:${patristicOpenDoc}:${section.n}`,section.content,target))||`<p class="note-card__translating">Traduciendo…</p>${contentHtml}`)
       : contentHtml;
+    const translationNote=needsTranslation
+      ? `<p class="note-card__translation-note">Traducción automática ${source.toUpperCase()}→${target.toUpperCase()} según la Biblia activa.</p>`
+      : '';
     els.panelBody.innerHTML=`<article class="dict-entry">
       <div class="dict-entry__term">${escapeHTML(section.title)}</div>
       <div class="dict-entry__source">${escapeHTML(patristicDocData.manifest.name)}</div>
+      ${translationNote}
       <div class="dict-entry__def" data-patristic-body="1">${bodyHtml}</div>
     </article>`;
+    document.getElementById('copyPatristicSection')?.addEventListener('click',()=>{
+      const visible=els.panelBody.querySelector('[data-patristic-body]')?.innerText || section.content;
+      copyToClipboard(`${section.title}\n${patristicDocData.manifest.name}\n\n${visible.trim()}`);
+    });
     if(needsTranslation) setTimeout(()=>applyPatristicTranslation(section,source,target), 150);
   }
 
