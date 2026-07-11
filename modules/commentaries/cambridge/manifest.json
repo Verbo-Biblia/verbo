@@ -13,6 +13,11 @@
       "id": "ROM",
       "name": "Romans",
       "file": "books/ROM.json"
+    },
+    {
+      "id": "PHP",
+      "name": "Philippians",
+      "file": "books/PHP.json"
     }
   ]
 }

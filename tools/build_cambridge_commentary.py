@@ -49,6 +49,26 @@ ROMANS_SECTIONS = [
     ("XXXII", "A Commendation: Greetings: A Warning: A Doxology", 16, 1, 16, 27),
 ]
 
+PHILIPPIANS_SECTIONS = [
+    (r"Ch\. L\.? 1.*2\. Greeting", "Greeting", 1, 1, 1, 2),
+    (r"8--U\. Thanksgiving and Prayer", "Thanksgiving and Prayer for the Philippian Saints", 1, 3, 1, 11),
+    (r"12[\u2014-]20\. Acco", "Account of St Paul's Present Circumstances and Experience", 1, 12, 1, 20),
+    (r"21[\u2014-]26\. The same subject", "The Alternative of Life or Death", 1, 21, 1, 26),
+    (r"27\s*[\u2014-]\s*30\. Entreaties", "Entreaties to Cherish Consistency and Unity", 1, 27, 1, 30),
+    (r"Ch\.il 1[\u2014-]4", "Appeal for Self-forgetful Unity", 2, 1, 2, 4),
+    (r"6\s*[\u2014-]\s*11\. The appeal enforced", "The Example of Christ's Incarnation, Obedience, and Exaltation", 2, 5, 2, 11),
+    (r"12\s*[\u2014-].*18\. Inferences", "The Call to a Reverent, Fruitful, Joyful Life", 2, 12, 2, 18),
+    (r"19\s*[\u2014-]\s*30\. He pRorosEs", "Timotheus and Epaphroditus", 2, 19, 2, 30),
+    (r"Ch\. III\. 1[\u2014-]3", "Joy in the Lord and Warning against False Confidence", 3, 1, 3, 3),
+    (r"4[\u2014-]11\. His own experience", "Paul's Former Confidence and Present Gain in Christ", 3, 4, 3, 11),
+    (r"12[\u2014-]16\. On the other hand", "Pressing toward the Goal", 3, 12, 3, 16),
+    (r"17[\u2014-]21\. Application", "Warning and Heavenly Citizenship", 3, 17, 3, 21),
+    (r"Ch, IV\. 1[\u2014-]7", "Steadfastness, Unity, Joy, and Peace", 4, 1, 4, 7),
+    (r"8[\u2014-]9\. As A LAST", "A Last Spiritual Entreaty", 4, 8, 4, 9),
+    (r"10[\u2014-]20\. He renders", "Thanks for the Philippians' Gift", 4, 10, 4, 20),
+    (r"21[\u2014-]28\. Salutations", "Salutations and Farewell", 4, 21, 4, 23),
+]
+
 
 def compact_spaces(text: str) -> str:
     text = text.replace("\u00a0", " ")
@@ -104,6 +124,73 @@ def roman_heading_positions(lines: list[str]) -> dict[str, int]:
     return positions
 
 
+def anchored_positions(
+    lines: list[str], sections: list[tuple[str, str, int, int, int, int]], min_line: int
+) -> list[int]:
+    positions: list[int] = []
+    cursor = min_line
+    for pattern, *_ in sections:
+        compiled = re.compile(pattern)
+        for index in range(cursor, len(lines)):
+            if compiled.search(lines[index]):
+                positions.append(index)
+                cursor = index + 1
+                break
+        else:
+            raise RuntimeError(f"Missing section anchor: {pattern}")
+    return positions
+
+
+def build_book_from_anchors(
+    source_name: str,
+    book_id: str,
+    book_name: str,
+    author: str,
+    sections: list[tuple[str, str, int, int, int, int]],
+    min_line: int,
+    end_pattern: str | None = None,
+) -> None:
+    source = SOURCE_DIR / source_name
+    lines = source.read_text(encoding="utf-8", errors="replace").splitlines()
+    positions = anchored_positions(lines, sections, min_line)
+
+    entries = []
+    for idx, ((_, title, cs, vs, ce, ve), start) in enumerate(zip(sections, positions)):
+        if idx + 1 < len(positions):
+            end = positions[idx + 1]
+        elif end_pattern:
+            compiled_end = re.compile(end_pattern)
+            end = next(
+                (index for index in range(start + 1, len(lines)) if compiled_end.search(lines[index])),
+                len(lines),
+            )
+        else:
+            end = len(lines)
+        section_lines = lines[start:end]
+        content = lines_to_html(section_lines)
+        entries.append(
+            {
+                "id": f"cambridge-{book_id.lower()}-{cs}-{vs}-{ce}-{ve}",
+                "title": f"{book_name} {cs}:{vs}-{ce}:{ve} - {title}",
+                "author": author,
+                "reference": {
+                    "book": book_id,
+                    "chapterStart": cs,
+                    "verseStart": vs,
+                    "chapterEnd": ce,
+                    "verseEnd": ve,
+                },
+                "content": content,
+            }
+        )
+
+    (OUT_DIR / "books").mkdir(parents=True, exist_ok=True)
+    (OUT_DIR / "books" / f"{book_id}.json").write_text(
+        json.dumps({"entries": entries}, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
+
+
 def build_romans() -> None:
     source = SOURCE_DIR / "epistletoromans00moul_djvu.txt"
     lines = source.read_text(encoding="utf-8", errors="replace").splitlines()
@@ -122,7 +209,7 @@ def build_romans() -> None:
         entries.append(
             {
                 "id": f"cambridge-rom-{cs}-{vs}-{ce}-{ve}",
-                "title": f"Romans {cs}:{vs}-{ce}:{ve} — {title}" if cs else f"Romans — {title}",
+                "title": f"Romans {cs}:{vs}-{ce}:{ve} - {title}" if cs else f"Romans - {title}",
                 "author": "Handley C. G. Moule (1841-1920)",
                 "reference": {
                     "book": "ROM",
@@ -158,6 +245,11 @@ def build_manifest() -> None:
                 "id": "ROM",
                 "name": "Romans",
                 "file": "books/ROM.json",
+            },
+            {
+                "id": "PHP",
+                "name": "Philippians",
+                "file": "books/PHP.json",
             }
         ],
     }
@@ -171,6 +263,15 @@ def build_manifest() -> None:
 def main() -> None:
     build_manifest()
     build_romans()
+    build_book_from_anchors(
+        "epistletophilip00moulgoog_djvu.txt",
+        "PHP",
+        "Philippians",
+        "Handley C. G. Moule (1841-1920)",
+        PHILIPPIANS_SECTIONS,
+        min_line=1700,
+        end_pattern=r"^(The Subscription\.|APPENDICES\.)",
+    )
 
 
 if __name__ == "__main__":
