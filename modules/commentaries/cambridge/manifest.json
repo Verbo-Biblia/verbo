@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 2,
+  "id": "cambridge",
+  "type": "commentary",
+  "name": "Cambridge Bible for Schools and Colleges",
+  "abbreviation": "Cambridge",
+  "language": "en",
+  "author": "Various Cambridge scholars",
+  "description": "Formal public-domain commentary series published by Cambridge University Press, 1878-1918. Provisional OCR-based integration; currently includes Romans.",
+  "license": "Public Domain",
+  "books": [
+    {
+      "id": "ROM",
+      "name": "Romans",
+      "file": "books/ROM.json"
+    }
+  ]
+}
