@@ -69,6 +69,41 @@ PHILIPPIANS_SECTIONS = [
     (r"21[\u2014-]28\. Salutations", "Salutations and Farewell", 4, 21, 4, 23),
 ]
 
+EPHESIANS_SECTIONS = [
+    (r"Ch\.\s+I\.\s+1\s*[\u2013\u2014-]\s*2\.\s+Greeting", "Greeting", 1, 1, 1, 2),
+    (r"3\s*[\u2013\u2014-]\s*14\.\s+Ascription\s+of\s+Praise", "Ascription of Praise", 1, 3, 1, 14),
+    (r"16\s*[\u2013\u2014-]\s*23\.\s+Prayer", "Prayer", 1, 15, 1, 23),
+    (r"1\s*[\u2013\u2014-]\s*10\.\s+Regeneration", "Regeneration", 2, 1, 2, 10),
+    (
+        r"11\s*[\u2013\u2014-]\s*22\.\s+Regeneration\s+of\s+the\s+Ephesians",
+        "Jew and Gentile Reconciled",
+        2,
+        11,
+        2,
+        22,
+    ),
+    (r"Ch\.\s+h?i+\.?\s+1\s*[\u2013\u2014-]\s*13\.\s+He\s+would", "Paul's Ministry of the Mystery", 3, 1, 3, 13),
+    (r"14\s*[\u2013\u2014-]\s*19\.\s+The\s+main\s+theme\s+resumed", "Prayer", 3, 14, 3, 19),
+    (r"20,\s*21\.\s+Ascription\s+of\s+praise", "Doxology", 3, 20, 3, 21),
+    (r"Ch\.\s+IV\.\s+1\s*[\u2013\u2014-]\s*16\.\s+Practical\s+results", "Unity and Gifts", 4, 1, 4, 16),
+    (r"17\s*[\u2013\u2014-]\s*24\.\s+Practical\s+Results", "Old Man and New Man", 4, 17, 4, 24),
+    (r"25\s*[\u2013\u2014-]\s*32\.\s+The\s+subject\s+pursued", "Practical Results", 4, 25, 4, 32),
+    (r"Ch\.\s+V\.\s+1\s*[\u2013\u2014-]\s*14\.\s+The\s+subject\s+pursued", "Walk in Love and Light", 5, 1, 5, 14),
+    (r"15\s*[\u2013\u2014-]\s*21\.\s+The\s+subject\s+pursued", "Walk Wisely", 5, 15, 5, 21),
+    (
+        r"22\s*[\u2013\u2014-]\s*32\.\s+Special\s+Exhortations",
+        "Christian Home: Wife and Husband",
+        5,
+        22,
+        5,
+        32,
+    ),
+    (r"Ch\.\s+VI\.\s+1\s*[\u2013\u2014-]\s*4\.\s+The\s+Christian\s+Home", "Children and Parents", 6, 1, 6, 4),
+    (r"5\s*[\u2013\u2014-]\s*9\.\s+The\s+Christian\s+Home", "Servants and Masters", 6, 5, 6, 9),
+    (r"21\s*[\u2013\u2014-]\s*22\.\s+The\s+mission\s+of\s+Tychicus", "Tychicus", 6, 21, 6, 22),
+    (r"23\s*[\u2013\u2014-]\s*24\.\s+Benediction", "Benediction", 6, 23, 6, 24),
+]
+
 
 def compact_spaces(text: str) -> str:
     text = text.replace("\u00a0", " ")
@@ -149,10 +184,12 @@ def build_book_from_anchors(
     sections: list[tuple[str, str, int, int, int, int]],
     min_line: int,
     end_pattern: str | None = None,
+    section_end_patterns: dict[str, str] | None = None,
 ) -> None:
     source = SOURCE_DIR / source_name
     lines = source.read_text(encoding="utf-8", errors="replace").splitlines()
     positions = anchored_positions(lines, sections, min_line)
+    section_end_patterns = section_end_patterns or {}
 
     entries = []
     for idx, ((_, title, cs, vs, ce, ve), start) in enumerate(zip(sections, positions)):
@@ -166,6 +203,12 @@ def build_book_from_anchors(
             )
         else:
             end = len(lines)
+        if title in section_end_patterns:
+            compiled_section_end = re.compile(section_end_patterns[title])
+            end = next(
+                (index for index in range(start + 1, end) if compiled_section_end.search(lines[index])),
+                end,
+            )
         section_lines = lines[start:end]
         content = lines_to_html(section_lines)
         entries.append(
@@ -238,7 +281,7 @@ def build_manifest() -> None:
         "abbreviation": "Cambridge",
         "language": "en",
         "author": "Various Cambridge scholars",
-        "description": "Formal public-domain commentary series published by Cambridge University Press, 1878-1918. Provisional OCR-based integration; currently includes Romans.",
+        "description": "Formal public-domain commentary series published by Cambridge University Press, 1878-1918. Provisional OCR-based integration; currently includes Romans, Philippians, and Ephesians. Ephesians 6:10-20 is omitted because the OCR source is missing those pages.",
         "license": "Public Domain",
         "books": [
             {
@@ -250,6 +293,11 @@ def build_manifest() -> None:
                 "id": "PHP",
                 "name": "Philippians",
                 "file": "books/PHP.json",
+            },
+            {
+                "id": "EPH",
+                "name": "Ephesians",
+                "file": "books/EPH.json",
             }
         ],
     }
@@ -271,6 +319,18 @@ def main() -> None:
         PHILIPPIANS_SECTIONS,
         min_line=1700,
         end_pattern=r"^(The Subscription\.|APPENDICES\.)",
+    )
+    build_book_from_anchors(
+        "cambridgebiblefo65pero_djvu.txt",
+        "EPH",
+        "Ephesians",
+        "Handley C. G. Moule (1841-1920)",
+        EPHESIANS_SECTIONS,
+        min_line=1700,
+        end_pattern=r"^(The Subscription\.|APPENDICES\.)",
+        section_end_patterns={
+            "Servants and Masters": r"V\.\s+21\.\]\s+EPHESIANS",
+        },
     )
 
 
