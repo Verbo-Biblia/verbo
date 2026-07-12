@@ -1290,7 +1290,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       </select>
       <button class="search-panel-button" type="submit">Buscar</button>
     </form>`;
-    els.panelBody.innerHTML=emptyState('⌕','Busca en lenguaje natural en los cuatro Evangelios de la RVA 1909. Los resultados se ordenan por cercanía semántica.');
+    els.panelBody.innerHTML=emptyState('⌕','Busca en lenguaje natural en los cuatro Evangelios de la RVA 1909. Los resultados se ordenan con un índice semántico local.');
 
     const form=document.getElementById('searchForm');
     const input=document.getElementById('searchInput');
@@ -1319,7 +1319,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if(query.length<2){ searchState=null; els.panelBody.innerHTML=emptyState('⌕','Escribe al menos dos caracteres.'); return; }
       els.panelBody.innerHTML=emptyState('⌛','Preparando búsqueda semántica…');
       try{
-        const stageText={index:'Cargando índice local…',model:'Cargando modelo de IA…',embedding:'Leyendo la pregunta…',ranking:'Ordenando resultados…'};
+        const stageText={index:'Cargando índice local…',model:'Cargando modelo semántico local…',embedding:'Leyendo la pregunta…',ranking:'Ordenando resultados…'};
         const results=await VerboModules.searchSemanticGospels(query,{
           indexType,
           limit:90,

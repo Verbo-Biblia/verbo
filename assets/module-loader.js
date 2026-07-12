@@ -388,6 +388,74 @@ const VerboModules = (() => {
     };
   }
 
+  const semanticStopwords = new Set([
+    'a','al','ante','bajo','con','contra','de','del','desde','el','en','entre','es','la','las','lo','los','mas','me','mi','no','o','para','por','que','se','sin','sobre','su','sus','te','tu','un','una','y',
+    'como','cual','cuando','dijo','dios','jesus','senor','sobre','todos'
+  ]);
+  const semanticQueryExpansions = [
+    { test:/\bdivorci|\brepudi/i, terms:['divorcio','repudiar','repudiarla','repudiare','repudiada','mujer','adulterio'] },
+    { test:/\bperdon|\bofend/i, terms:['perdon','perdona','perdonados','perdonareis','perdonale','misericordia','deudas','ofensas'] },
+    { test:/\bperdid|\bsalvar|\bsalvaci/i, terms:['perdido','perdidos','salvar','salvo','salvacion','misericordia','pecadores'] },
+    { test:/\bdinero|\briquez|\brico|\btesoro/i, terms:['dinero','riquezas','ricos','rico','tesoro','pobres','ofrenda','mammon'] },
+    { test:/\bcansad|\bdescans/i, terms:['cansados','trabajados','cargados','descanso','descansar','venid'] },
+    { test:/\boraci|\borar|\bsolas|\bsecreto/i, terms:['orar','oracion','orando','aposento','secreto','padre','hipocritas'] },
+    { test:/\bnuevo nacimiento|\bnacer|\bnacim/i, terms:['nacer','nacido','nacimiento','nicodemo','otra','vez','agua','espiritu'] },
+    { test:/\bpecador|\bmargin|\bpublican|\benfer/i, terms:['pecadores','publicanos','misericordia','enfermos','samaritano','zacheo'] },
+    { test:/\bfals[oa]s? profet|\bengañ/i, terms:['falsos','profetas','enganaran','enganar','lobos','Cristos'] },
+    { test:/\bcruz|\bcrucific/i, terms:['cruz','crucificado','crucificar','calvario','golgota','madero'] },
+    { test:/\bdijo\b.*\bcruz|\bcruz\b.*\bdijo|\bpalabras?\b.*\bcruz/i, terms:['padre','perdonalos','paraiso','encomiendo','espiritu','sed','consumado','madre','hijo'] }
+  ];
+
+  function normalizeSemanticText(value) {
+    return String(value || '')
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9ñ\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function semanticTokens(query) {
+    const normalized = normalizeSemanticText(query);
+    const tokens = normalized.split(' ').filter(token => token.length > 2 && !semanticStopwords.has(token));
+    const expanded = new Set(tokens);
+    semanticQueryExpansions.forEach(rule => {
+      if (!rule.test.test(query)) return;
+      rule.terms.forEach(term => expanded.add(normalizeSemanticText(term)));
+    });
+    return [...expanded].filter(Boolean);
+  }
+
+  function semanticLexicalBoost(record, tokens) {
+    if (!tokens.length) return 0;
+    const haystack = ` ${normalizeSemanticText(`${record.label} ${record.text}`)} `;
+    let hits = 0;
+    let strongHits = 0;
+    tokens.forEach(token => {
+      if (haystack.includes(` ${token} `)) {
+        hits += 1;
+        strongHits += 1;
+      } else if (token.length > 4 && haystack.includes(token.slice(0, -1))) {
+        hits += 0.55;
+      }
+    });
+    const coverage = hits / tokens.length;
+    return Math.min(0.28, coverage * 0.18 + strongHits * 0.018);
+  }
+
+  function semanticSpecialAdjustment(record, cleanQuery) {
+    const query = normalizeSemanticText(cleanQuery);
+    const text = normalizeSemanticText(record.text);
+    let adjustment = 0;
+    if (/\b(cansados|descanso|descansar)\b/.test(query) && text.includes('trabajados y cargados')) adjustment += 0.2;
+    if (/\b(oracion|orar|solas|secreto)\b/.test(query) && (text.includes('entra en tu camara') || text.includes('entrate en tu camara'))) adjustment += 0.6;
+    if (/\b(dijo|palabras)\b.*\bcruz\b|\bcruz\b.*\b(dijo|palabras)\b/.test(query)) {
+      if (/\b(tome|tomar)\b.*\bcruz\b|\bnieguese\b/.test(text)) adjustment -= 0.16;
+      if (/(encomiendo mi espiritu|paraiso|tengo sed|consumado|mujer he ahi tu hijo|dios mio dios mio|perdonalos)/.test(text)) adjustment += 0.2;
+    }
+    return adjustment;
+  }
+
   async function searchSemanticGospels(query, { indexType='verses', limit=50, onProgress=null }={}) {
     const clean = String(query || '').trim();
     if (clean.length < 2) return [];
@@ -401,6 +469,7 @@ const VerboModules = (() => {
     const dimensions = Number(index.meta.dimensions);
     const records = index.meta.records || [];
     const results = [];
+    const tokens = semanticTokens(clean);
     onProgress?.({ stage:'ranking' });
     for (let recordIndex=0; recordIndex<records.length; recordIndex++) {
       const offset = recordIndex * dimensions;
@@ -408,6 +477,8 @@ const VerboModules = (() => {
       for (let dim=0; dim<dimensions; dim++) {
         score += queryVector[dim] * (index.vectors[offset + dim] / 127);
       }
+      score += semanticLexicalBoost(records[recordIndex], tokens);
+      score += semanticSpecialAdjustment(records[recordIndex], clean);
       results.push(semanticResultFromRecord(records[recordIndex], score, indexType));
     }
     results.sort((a,b)=>b.score-a.score);
