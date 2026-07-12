@@ -655,8 +655,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       const entries=Object.entries(commentCtx.data.notes).filter(([,note])=>note.commentaryId===currentCommentary);
       els.panelBody.innerHTML=entries.length?entries.map(([id,n])=>{
+        const cachedTranslation=needsCommentaryTranslation ? tcacheGet(translationCacheKey(id,n.body,contentLang())) : null;
         const bodyHtml=needsCommentaryTranslation
-          ? (tcacheGet(translationCacheKey(id,n.body,contentLang()))||`<p class="note-card__translating">Traduciendo…</p>${n.body}`)
+          ? `${autoTranslationNoticeHtml()}${cachedTranslation||`<p class="note-card__translating">Traduciendo…</p>`}${originalSourceDetailsHtml(n.body,commentarySourceLang)}`
           : n.body;
         return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${commentCtx.data.meta.book} ${commentCtx.data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">Copiar comentario</button><div class="note-card__body">${bodyHtml}</div></div>`;
       }).join(''):emptyState('📖','Este capítulo todavía no tiene comentarios cargados.');
@@ -732,6 +733,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const T_PREFIX = 'verbo:t:';
   function tcacheGet(key){ try{ return JSON.parse(localStorage.getItem(T_PREFIX+key)); }catch{ return null; } }
   function tcacheSet(key,val){ try{ localStorage.setItem(T_PREFIX+key, JSON.stringify(val)); }catch{} }
+  // v4: la clave incluye el idioma destino y fuerza regenerar traducciones
+  // con preservacion basica de bloques + acceso al original.
   // v3: la clave incluye el idioma destino — antes de agregar traduccion ES->EN
   // (Biblioteca Patristica + comentarios en espanol como Ireneo) solo existia una
   // direccion (EN->ES) y el destino era implicito. Las entradas v2 quedan huerfanas
@@ -743,9 +746,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       hash^=value.charCodeAt(i);
       hash=Math.imul(hash,16777619);
     }
-    return `v3:${targetLang}:${noteId}:${(hash>>>0).toString(16)}`;
+    return `v4:${targetLang}:${noteId}:${(hash>>>0).toString(16)}`;
   }
   function htmlToPlainText(html){ return html.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim(); }
+  function htmlToTranslationBlocks(html){
+    const box=document.createElement('div');
+    box.innerHTML=html;
+    const nodes=[...box.querySelectorAll('p,li,blockquote,h1,h2,h3,h4,h5,h6')].filter(node=>node.textContent.trim());
+    const blocks=nodes.length ? nodes.map(node=>htmlToPlainText(node.innerHTML)) : [htmlToPlainText(html)];
+    return blocks.map(block=>block.trim()).filter(block=>block.length>=2);
+  }
+  function translatedBlocksToHtml(blocks){
+    return blocks.map(block=>`<p>${escapeHTML(block)}</p>`).join('');
+  }
+  function originalSourceDetailsHtml(htmlContent, sourceLang='en'){
+    const label=sourceLang==='en'?'Original en inglés':'Texto original';
+    return `<details class="note-card__original"><summary>${label}</summary><div class="note-card__original-body">${htmlContent}</div></details>`;
+  }
+  function autoTranslationNoticeHtml(){
+    return `<p class="note-card__translation-note">Traducción automática provisional. Si el inglés fuente viene de OCR o está escrito de forma antigua, compara con el original.</p>`;
+  }
 
   function splitTextIntoChunks(text, maxLen=4500){
     const chunks=[];
@@ -786,21 +806,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function translateEntry(noteId, htmlContent, sourceLang='en', targetLang='es'){
     const cacheKey=translationCacheKey(noteId,htmlContent,targetLang);
     const cached=tcacheGet(cacheKey); if(cached) return cached;
-    const text=htmlToPlainText(htmlContent);
+    const blocks=htmlToTranslationBlocks(htmlContent);
+    const text=blocks.join('\n\n');
     if(!text || text.length<10) return htmlContent;
     try{
-      const translated=await googleTranslate(text, sourceLang, targetLang);
-      if(!translated) return htmlContent;
-      // Rebuild as paragraphs — split on sentences ending with period + space
-      const sentences=translated.split(/(?<=\.)\s+/);
-      const paras=[];
-      let para='';
-      for(const s of sentences){
-        para+=(para?' ':'')+s;
-        if(para.length>300){ paras.push(para); para=''; }
+      const translatedBlocks=[];
+      for(const block of blocks){
+        const translated=await googleTranslate(block, sourceLang, targetLang);
+        if(!translated) return htmlContent;
+        translatedBlocks.push(translated);
       }
-      if(para) paras.push(para);
-      const result=paras.map(p=>`<p>${p}</p>`).join('');
+      const result=translatedBlocksToHtml(translatedBlocks);
       tcacheSet(cacheKey, result);
       return result;
     }catch{ return htmlContent; }
@@ -826,7 +842,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const translated=await translateEntry(noteId, note.body, source, target);
       if(bodyEl.dataset.translated==='pending'){
         const prevTop = noteId===focusNoteId ? card.getBoundingClientRect().top : null;
-        bodyEl.innerHTML=translated;
+        bodyEl.innerHTML=`${autoTranslationNoticeHtml()}${translated}${originalSourceDetailsHtml(note.body,source)}`;
         bodyEl.dataset.translated=target;
         // Re-anchor scroll to keep focused card in place
         if(prevTop!==null){

@@ -769,6 +769,23 @@ body {
   font-size: 12px;
   font-style: italic;
 }
+.note-card__original {
+  margin-top: 12px;
+  border-top: 1px solid var(--rule);
+  padding-top: 8px;
+}
+.note-card__original summary {
+  cursor: pointer;
+  color: var(--wine-soft);
+  font-size: 12px;
+  font-weight: 700;
+}
+.note-card__original-body {
+  margin-top: 8px;
+  color: var(--sepia);
+  font-size: 13px;
+  line-height: 1.55;
+}
 
 .compare-verse-list {
   padding-top: 12px;
