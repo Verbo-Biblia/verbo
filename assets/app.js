@@ -571,7 +571,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     els.ttsFloat.hidden = true;
   }
 
-  const SHEET_TABS = ['comentario','comparar','diccionario'];
+  // Antes solo Comentario/Comparar/Diccionario usaban la hoja parcial (72vh);
+  // Biblioteca ya usaba el panel completo y a Juan le pareció que se veía mejor,
+  // así que en mobile los tres pasan a comportarse igual que Biblioteca (2026-07-24).
+  const SHEET_TABS = [];
   function isMobileSheet(){ return window.innerWidth<=760 && SHEET_TABS.includes(activeTab); }
 
   function openPanel(tab, focus=null, verseCommentaries=null) {
