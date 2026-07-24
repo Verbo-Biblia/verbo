@@ -314,6 +314,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         row.appendChild(indicator);
       }
+      if(v.libraryCount>0){
+        const libIndicator=document.createElement('button');
+        libIndicator.type='button';
+        libIndicator.className='verse__comment-indicator verse__comment-indicator--library';
+        libIndicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">📚</span><span class="verse__comment-indicator__count">${v.libraryCount}</span>`;
+        const libPlural=v.libraryCount===1?'artículo disponible':'artículos disponibles';
+        libIndicator.title=`${v.libraryCount} ${libPlural} en Biblioteca para este versículo`;
+        libIndicator.setAttribute('aria-label',`Ver ${v.libraryCount} ${libPlural} de Biblioteca en ${data.meta.book} ${data.meta.chapter}:${v.n}`);
+        libIndicator.addEventListener('click',(e)=>{
+          e.stopPropagation();
+          document.querySelectorAll('.verse--active').forEach(x=>x.classList.remove('verse--active'));
+          row.classList.add('verse--active');
+          openPanel('biblioteca', v.n);
+        });
+        row.appendChild(libIndicator);
+      }
       row.appendChild(margin); els.list.appendChild(row);
       if((v.crossrefs||[]).length){
         const XREF_LIMIT=window.innerWidth<=760?5:10;
@@ -367,6 +383,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (activeTab === 'comparar') renderCompare(verse.n);
     if (activeTab === 'diccionario') renderPanel('diccionario', verse.n);
     if (activeTab === 'exegesis') renderPanel('exegesis', verse.n);
+    if (activeTab === 'biblioteca') renderPanel('biblioteca', verse.n);
   }
 
   function updateActionBar(){
@@ -1391,26 +1408,54 @@ document.addEventListener('DOMContentLoaded', async () => {
     return verseNumber >= start && verseNumber <= end;
   }
 
-  function renderLinkedResourceEntries(resource, entries, focus, emptyIcon='📚', emptyText='Este capítulo todavía no tiene entradas cargadas.'){
+  function renderLinkedResourceEntries(resource, entries, focus, emptyIcon='📚', emptyText='Este capítulo todavía no tiene entradas cargadas.', manifestPath=null){
     if(!entries.length){ els.panelBody.innerHTML=emptyState(emptyIcon, emptyText); return; }
     els.panelBody.innerHTML=entries.map((entry,index)=>{
       const id=entry.id || `${resource.manifest.id}-${currentBook}-${currentChapter}-${index}`;
       const title=entry.title || `${resource.manifest.name}: ${entry.reference?.verseStart || currentChapter}`;
-      const body=entry.content || entry.html || entry.definition || entry.data || '';
+      const body=entry.content || entry.excerpt || entry.html || entry.definition || entry.data || '';
       const active = referenceCoversVerse(entry, focus) ? ' note-card--active' : '';
+      // Entradas de "biblioteca" tipo articulo (ver modules/library/biblioteca-verbo) traen
+      // un excerpt corto + articleId en vez del contenido completo, para no duplicar articulos
+      // largos en cada verso que citan. El boton carga el articulo completo bajo demanda.
+      const readFullBtn = (entry.articleId && manifestPath)
+        ? `<button class="note-card__copy" type="button" data-read-full="${index}">Leer artículo completo</button>`
+        : '';
       return `<div class="note-card${active}" data-linked-id="${escapeHTML(id)}" data-linked-index="${index}">
         <div class="note-card__ref">${escapeHTML(data.meta.book)} ${data.meta.chapter}${entry.reference?.verseStart ? ':'+escapeHTML(entry.reference.verseStart) : ''}</div>
         <div class="note-card__title">${escapeHTML(title)}</div>
         <div class="note-card__author">${escapeHTML(entry.author || resource.manifest.name)}</div>
         <button class="note-card__copy" type="button" data-copy-linked="${index}">Copiar</button>
-        <div class="note-card__body">${body}</div>
+        ${readFullBtn}
+        <div class="note-card__body" data-linked-body="${index}">${body}</div>
       </div>`;
     }).join('');
     els.panelBody.querySelectorAll('[data-copy-linked]').forEach(btn=>btn.addEventListener('click',()=>{
       const entry=entries[Number(btn.dataset.copyLinked)];
       if(!entry) return;
-      const body=entry.content || entry.html || entry.definition || entry.data || '';
+      const body=entry.content || entry.excerpt || entry.html || entry.definition || entry.data || '';
       copyToClipboard(`${entry.title || resource.manifest.name}\n${String(body).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`);
+    }));
+    els.panelBody.querySelectorAll('[data-read-full]').forEach(btn=>btn.addEventListener('click', async ()=>{
+      const entry=entries[Number(btn.dataset.readFull)];
+      const bodyEl=els.panelBody.querySelector(`[data-linked-body="${btn.dataset.readFull}"]`);
+      if(!entry || !bodyEl) return;
+      if(btn.dataset.expanded==='1'){
+        bodyEl.innerHTML=entry.excerpt || entry.content || '';
+        btn.textContent='Leer artículo completo';
+        btn.dataset.expanded='0';
+        return;
+      }
+      btn.textContent='Cargando…'; btn.disabled=true;
+      try{
+        const article=await VerboModules.loadLinkedArticle(manifestPath, entry.articleId);
+        bodyEl.innerHTML=article?.content || entry.excerpt || '';
+        btn.textContent='Ver solo extracto';
+        btn.dataset.expanded='1';
+      }catch(error){
+        console.error(error);
+        btn.textContent='No se pudo cargar el artículo';
+      }finally{ btn.disabled=false; }
     }));
     if(focus){
       const target=[...els.panelBody.querySelectorAll('[data-linked-index]')].find(card=>referenceCoversVerse(entries[Number(card.dataset.linkedIndex)], focus));
@@ -1546,7 +1591,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       els.panelBody.innerHTML=emptyState('⌛','Cargando recurso del pasaje…');
       try{
         const resource=await VerboModules.loadLinkedEntries(selected.path,currentBook,currentChapter);
-        renderLinkedResourceEntries(resource, resource.entries, focus, '📚', 'Este capítulo no tiene entradas en este recurso.');
+        renderLinkedResourceEntries(resource, resource.entries, focus, '📚', 'Este capítulo no tiene entradas en este recurso.', selected.path);
       }catch(error){ console.error(error); els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir este recurso.'); }
       return;
     }

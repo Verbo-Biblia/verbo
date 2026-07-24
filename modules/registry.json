@@ -51,7 +51,9 @@
     "dictionaries/strong-verbo/manifest.json"
   ],
   "exegesis": [],
-  "library": [],
+  "library": [
+    "library/biblioteca-verbo/manifest.json"
+  ],
   "gospel": [
     "gospel/evangelio-uf/manifest.json"
   ],
