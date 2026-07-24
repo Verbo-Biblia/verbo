@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 2,
+  "id": "kjv",
+  "type": "bible",
+  "name": "King James Version (1769)",
+  "abbreviation": "KJV",
+  "language": "en",
+  "year": 1769,
+  "description": "King James Version sin etiquetas Strong visibles.",
+  "license": "GPL; CrossWire grants a general public license to use this text for any purpose.",
+  "source": "CrossWire Bible Society KJV 3.1",
+  "hasStrongs": false,
+  "dataManifest": "../kjv-strong/manifest.json"
+}

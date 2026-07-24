@@ -32,6 +32,7 @@
     "bibles/asv-1901/manifest.json",
     "bibles/rv-verbo/manifest.json",
     "bibles/rv-verbo-strong-provisional/manifest.json",
+    "bibles/kjv/manifest.json",
     "bibles/kjv-strong/manifest.json",
     "bibles/bsb/manifest.json"
   ],
