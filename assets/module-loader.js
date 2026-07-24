@@ -295,6 +295,17 @@ const VerboModules = (() => {
     return { manifest, entries };
   }
 
+  // Carga el texto completo de un articulo referenciado por una entrada de
+  // "biblioteca" (ver modules/library/biblioteca-verbo/articles/*.json). Las
+  // entries del libro solo traen un excerpt corto + articleId para no duplicar
+  // articulos largos en cada verso que citan; esto trae el contenido completo
+  // bajo demanda, cuando el usuario pulsa "Leer articulo completo".
+  async function loadLinkedArticle(manifestPath, articleId) {
+    if (!articleId) return null;
+    const articlePath = resolveFromManifest(manifestPath, `articles/${articleId}.json`);
+    return await getJSON(articlePath);
+  }
+
   // Quita tildes/diacríticos y normaliza espacios/puntuación, para que la
   // búsqueda no falle por variantes de acentuación entre versiones (ej.
   // "así"/"asi") ni por puntuación pegada a la palabra.
@@ -510,6 +521,15 @@ const VerboModules = (() => {
       ? await (async()=>{ try { return await loadCrossrefs(`modules/${registry.crossrefs[0]}`,bookId,chapter); } catch (error) { console.warn('Referencias cruzadas omitidas', error); return {}; } })()
       : {};
 
+    // Recursos de "biblioteca" (ej. modules/library/biblioteca-verbo) que mencionan
+    // este capitulo. Es un campo aparte de "commentaries" para no tocar esa logica:
+    // solo indica cuantos articulos distintos hay por verso, el panel Biblioteca ya
+    // sabe cargar el detalle via loadLinkedEntries cuando el usuario lo abre.
+    const libraryResults=(await Promise.all((registry.library || []).map(async path=>{
+      try { return await loadLinkedEntries(`modules/${path}`,bookId,chapter); }
+      catch (error) { console.warn(`Biblioteca omitida: modules/${path}`, error); return null; }
+    }))).filter(Boolean);
+
     const versions={};
     bibleResults.forEach(({manifest:m})=>versions[m.id]={label:m.abbreviation,full:m.name,year:m.year,hasStrongs:Boolean(m.hasStrongs)});
     const allVerseNumbers=[...new Set(bibleResults.flatMap(b=>Object.keys(b.verses).map(Number)))].sort((a,b)=>a-b);
@@ -551,6 +571,28 @@ const VerboModules = (() => {
       }
     }));
 
+    const libraryByVerse=new Map();
+    libraryResults.forEach(lib=>lib.entries.forEach(entry=>{
+      const ref=entry.reference || {};
+      const chStart=Number(ref.chapterStart ?? chapter);
+      const chEnd=Number(ref.chapterEnd ?? chStart);
+      if((chapter < chStart || chapter > chEnd) && !(chapter === 1 && chStart === 0)) return;
+
+      let start=Number(ref.verseStart);
+      let end=Number(ref.verseEnd ?? ref.verseStart);
+      if(!Number.isInteger(start) || start <= 0) start = firstVerse;
+      if(!Number.isInteger(end) || end <= 0) end = start;
+      if(chapter > chStart) start = firstVerse;
+      if(chapter < chEnd) end = lastVerse;
+      start=Math.max(firstVerse, Math.min(start,lastVerse));
+      end=Math.max(start, Math.min(end,lastVerse));
+
+      for(let v=start;v<=end;v++){
+        if(!libraryByVerse.has(v)) libraryByVerse.set(v, new Set());
+        libraryByVerse.get(v).add(entry.articleId || entry.id);
+      }
+    }));
+
     const verses=allVerseNumbers.map(n=>{
       const text={}, segments={};
       bibleResults.forEach(b=>{ const v=b.verses[String(n)]; if(!v)return; text[b.manifest.id]=typeof v==='string'?v:v.text; if(b.manifest.hasStrongs && v.segments) segments[b.manifest.id]=v.segments; });
@@ -561,7 +603,8 @@ const VerboModules = (() => {
       });
       const noteIds=commentaries.flatMap(item=>item.noteIds);
       const crossrefs=crossrefsByVerse[String(n)] || [];
-      return {n,text,segments,hasNote:noteIds.length>0,noteIds,commentaries,crossrefs};
+      const libraryCount=(libraryByVerse.get(n) || new Set()).size;
+      return {n,text,segments,hasNote:noteIds.length>0,noteIds,commentaries,crossrefs,libraryCount};
     });
     const first=bibleResults.find(b=>b.manifest.id===registry.defaultBible)||bibleResults[0];
     return {meta:{book:first.bookInfo.name,bookId,chapter,version:first.manifest.id,versionFull:first.manifest.name},versions,verses,notes};
@@ -607,5 +650,5 @@ const VerboModules = (() => {
     return null;
   }
 
-  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadLinkedEntries,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticGospels };
+  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadLinkedEntries,loadLinkedArticle,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticGospels };
 })();

@@ -1604,6 +1604,13 @@ body[data-theme="rosewood"] {
   line-height: 1;
 }
 
+/* Si el verso tiene comentario Y artículo de Biblioteca, ambos indicadores son
+   position:absolute con el mismo punto de anclaje: se apilan verticalmente para
+   no superponerse. */
+.verse__comment-indicator + .verse__comment-indicator--library {
+  top: 28px;
+}
+
 @media (max-width: 760px) {
   .verse { flex-wrap: nowrap; }
   .verse__comment-indicator {
@@ -1611,6 +1618,9 @@ body[data-theme="rosewood"] {
     right: -2px;
     top: 4px;
     padding: 2px 6px;
+  }
+  .verse__comment-indicator + .verse__comment-indicator--library {
+    top: 28px;
   }
   .verse__comment-indicator__icon { font-size: 10px; }
   .verse__comment-indicator__count { font-size: 10px; }

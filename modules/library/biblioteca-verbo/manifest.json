@@ -1,0 +1,198 @@
+{
+ "schemaVersion": 2,
+ "id": "biblioteca-verbo",
+ "type": "library",
+ "name": "Biblioteca Verbo",
+ "abbreviation": "Biblioteca Verbo",
+ "description": "Artículos de apologética y teología pastoral (Centro Bíblico UF), indexados por referencia bíblica.",
+ "language": "es",
+ "author": "Biblioteca Verbo",
+ "license": "Cortesía de Centro Bíblico UF — uso interno Verbo, verificar licencia de redistribución antes de un lanzamiento comercial.",
+ "books": [
+  {
+   "id": "GEN",
+   "name": "Génesis",
+   "file": "books/GEN.json"
+  },
+  {
+   "id": "EXO",
+   "name": "Éxodo",
+   "file": "books/EXO.json"
+  },
+  {
+   "id": "NUM",
+   "name": "Números",
+   "file": "books/NUM.json"
+  },
+  {
+   "id": "DEU",
+   "name": "Deuteronomio",
+   "file": "books/DEU.json"
+  },
+  {
+   "id": "JOS",
+   "name": "Josué",
+   "file": "books/JOS.json"
+  },
+  {
+   "id": "JDG",
+   "name": "Jueces",
+   "file": "books/JDG.json"
+  },
+  {
+   "id": "JOB",
+   "name": "Job",
+   "file": "books/JOB.json"
+  },
+  {
+   "id": "PSA",
+   "name": "Salmos",
+   "file": "books/PSA.json"
+  },
+  {
+   "id": "ISA",
+   "name": "Isaías",
+   "file": "books/ISA.json"
+  },
+  {
+   "id": "JER",
+   "name": "Jeremías",
+   "file": "books/JER.json"
+  },
+  {
+   "id": "EZK",
+   "name": "Ezequiel",
+   "file": "books/EZK.json"
+  },
+  {
+   "id": "HOS",
+   "name": "Oseas",
+   "file": "books/HOS.json"
+  },
+  {
+   "id": "AMO",
+   "name": "Amós",
+   "file": "books/AMO.json"
+  },
+  {
+   "id": "JON",
+   "name": "Jonás",
+   "file": "books/JON.json"
+  },
+  {
+   "id": "MAL",
+   "name": "Malaquías",
+   "file": "books/MAL.json"
+  },
+  {
+   "id": "MAT",
+   "name": "Mateo",
+   "file": "books/MAT.json"
+  },
+  {
+   "id": "MRK",
+   "name": "Marcos",
+   "file": "books/MRK.json"
+  },
+  {
+   "id": "LUK",
+   "name": "Lucas",
+   "file": "books/LUK.json"
+  },
+  {
+   "id": "JHN",
+   "name": "Juan",
+   "file": "books/JHN.json"
+  },
+  {
+   "id": "ACT",
+   "name": "Hechos",
+   "file": "books/ACT.json"
+  },
+  {
+   "id": "ROM",
+   "name": "Romanos",
+   "file": "books/ROM.json"
+  },
+  {
+   "id": "1CO",
+   "name": "1 Corintios",
+   "file": "books/1CO.json"
+  },
+  {
+   "id": "2CO",
+   "name": "2 Corintios",
+   "file": "books/2CO.json"
+  },
+  {
+   "id": "GAL",
+   "name": "Gálatas",
+   "file": "books/GAL.json"
+  },
+  {
+   "id": "EPH",
+   "name": "Efesios",
+   "file": "books/EPH.json"
+  },
+  {
+   "id": "PHP",
+   "name": "Filipenses",
+   "file": "books/PHP.json"
+  },
+  {
+   "id": "COL",
+   "name": "Colosenses",
+   "file": "books/COL.json"
+  },
+  {
+   "id": "1TI",
+   "name": "1 Timoteo",
+   "file": "books/1TI.json"
+  },
+  {
+   "id": "2TI",
+   "name": "2 Timoteo",
+   "file": "books/2TI.json"
+  },
+  {
+   "id": "TIT",
+   "name": "Tito",
+   "file": "books/TIT.json"
+  },
+  {
+   "id": "HEB",
+   "name": "Hebreos",
+   "file": "books/HEB.json"
+  },
+  {
+   "id": "JAS",
+   "name": "Santiago",
+   "file": "books/JAS.json"
+  },
+  {
+   "id": "1PE",
+   "name": "1 Pedro",
+   "file": "books/1PE.json"
+  },
+  {
+   "id": "2PE",
+   "name": "2 Pedro",
+   "file": "books/2PE.json"
+  },
+  {
+   "id": "1JN",
+   "name": "1 Juan",
+   "file": "books/1JN.json"
+  },
+  {
+   "id": "JUD",
+   "name": "Judas",
+   "file": "books/JUD.json"
+  },
+  {
+   "id": "REV",
+   "name": "Apocalipsis",
+   "file": "books/REV.json"
+  }
+ ]
+}
