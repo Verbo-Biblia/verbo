@@ -155,9 +155,15 @@ const VerboModules = (() => {
   }
   async function loadBible(manifestPath, bookId, chapter) {
     const manifest = await getJSON(manifestPath);
-    const bookInfo = manifest.books.find(book => book.id === bookId);
+    const dataManifestPath = manifest.dataManifest
+      ? resolveFromManifest(manifestPath, manifest.dataManifest)
+      : manifestPath;
+    const dataManifest = dataManifestPath === manifestPath
+      ? manifest
+      : await getJSON(dataManifestPath);
+    const bookInfo = dataManifest.books.find(book => book.id === bookId);
     if (!bookInfo) return null;
-    const bookData = await getJSON(resolveFromManifest(manifestPath, bookInfo.file));
+    const bookData = await getJSON(resolveFromManifest(dataManifestPath, bookInfo.file));
     const verses = bookData.chapters[String(chapter)];
     return verses ? { manifest, bookInfo, verses } : null;
   }
@@ -547,7 +553,7 @@ const VerboModules = (() => {
 
     const verses=allVerseNumbers.map(n=>{
       const text={}, segments={};
-      bibleResults.forEach(b=>{ const v=b.verses[String(n)]; if(!v)return; text[b.manifest.id]=typeof v==='string'?v:v.text; if(v.segments) segments[b.manifest.id]=v.segments; });
+      bibleResults.forEach(b=>{ const v=b.verses[String(n)]; if(!v)return; text[b.manifest.id]=typeof v==='string'?v:v.text; if(b.manifest.hasStrongs && v.segments) segments[b.manifest.id]=v.segments; });
       const byModule=notesByVerse.get(n) || new Map();
       const commentaries=[...byModule.entries()].map(([commentaryId,noteIds])=>{
         const note=notes[noteIds[0]];
