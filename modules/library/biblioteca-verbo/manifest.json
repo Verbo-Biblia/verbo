@@ -7,7 +7,7 @@
  "description": "Artículos de apologética y teología pastoral (Centro Bíblico UF), indexados por referencia bíblica.",
  "language": "es",
  "author": "Biblioteca Verbo",
- "license": "Propiedad de Juan Venegas / Centro Bíblico UF — mismo autor que Verbo, uso comercial autorizado.",
+ "license": "Cortesía de Centro Bíblico UF — uso interno Verbo, verificar licencia de redistribución antes de un lanzamiento comercial.",
  "books": [
   {
    "id": "GEN",
@@ -18,11 +18,6 @@
    "id": "EXO",
    "name": "Éxodo",
    "file": "books/EXO.json"
-  },
-  {
-   "id": "NUM",
-   "name": "Números",
-   "file": "books/NUM.json"
   },
   {
    "id": "DEU",
@@ -68,16 +63,6 @@
    "id": "HOS",
    "name": "Oseas",
    "file": "books/HOS.json"
-  },
-  {
-   "id": "AMO",
-   "name": "Amós",
-   "file": "books/AMO.json"
-  },
-  {
-   "id": "JON",
-   "name": "Jonás",
-   "file": "books/JON.json"
   },
   {
    "id": "MAL",
@@ -153,11 +138,6 @@
    "id": "2TI",
    "name": "2 Timoteo",
    "file": "books/2TI.json"
-  },
-  {
-   "id": "TIT",
-   "name": "Tito",
-   "file": "books/TIT.json"
   },
   {
    "id": "HEB",
