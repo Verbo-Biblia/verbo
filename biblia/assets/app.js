@@ -222,6 +222,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     return true;
   }
 
+  // buildChapterData() solo trae el texto completo (con HTML) del comentario
+  // activo al momento de construir el capítulo; el resto quedan como índice
+  // liviano (notes[id] con title/author/body vacíos). Al cambiar de comentario
+  // en el panel hay que traer su contenido completo bajo demanda — mismo
+  // patrón que ensureVersionLoaded para Biblias.
+  async function ensureCommentaryLoaded(commentaryId, {targetData=null, bookId=currentBook, chapter=currentChapter}={}) {
+    const target = targetData || data;
+    target.loadedCommentaries = target.loadedCommentaries || new Set();
+    if (!commentaryId || target.loadedCommentaries.has(commentaryId)) return true;
+    const entry = commentaryCatalog().find(c => c.id === commentaryId);
+    if (!entry) return false;
+    const { entries } = await VerboModules.loadCommentary(entry.path, bookId, chapter);
+    entries.forEach(e => {
+      if (!e.id) return;
+      const id = `${commentaryId}::${e.id}`;
+      target.notes[id] = { ...(target.notes[id]||{}), title:e.title||'', author:e.author||'', body:e.content||'', commentaryId };
+    });
+    target.loadedCommentaries.add(commentaryId);
+    return true;
+  }
+
   function populateVersions() {
     const all = bibleCatalog();
     const cur = all.find(v => v.id === currentVersion);
@@ -722,10 +743,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       if(installed.length){
         const options=installed.map(c=>`<option value="${c.id}" ${c.id===currentCommentary?'selected':''}>${escapeHTML(c.label)}</option>`).join('');
         els.panelToolbar.innerHTML=`<div class="compare-toolbar"><select class="compare-toolbar__select" id="commentarySelect">${options}</select></div>`;
-        document.getElementById('commentarySelect')?.addEventListener('change', e=>{
+        document.getElementById('commentarySelect')?.addEventListener('change', async e=>{
           currentCommentary=e.target.value;
           localStorage.setItem('verbo:lastCommentary', currentCommentary);
           const freshCtx = commentaryContext();
+          try {
+            await ensureCommentaryLoaded(currentCommentary, {
+              targetData: freshCtx.data,
+              bookId: sermonMode ? sermonBible.book : currentBook,
+              chapter: sermonMode ? sermonBible.chapter : currentChapter
+            });
+          } catch (error) { console.warn(error); }
           const selectedVerse=freshCtx.data?.verses?.find(v=>v.n===freshCtx.activeVerseN);
           const moduleInfo=selectedVerse?.commentaries?.find(c=>c.commentaryId===currentCommentary);
           renderPanel('comentario', moduleInfo?.noteIds?.[0] || null);
@@ -1197,7 +1225,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function loadSermonBibleData(){
-    sermonBible.data = await VerboModules.buildChapterData({bookId: sermonBible.book, chapter: sermonBible.chapter, bibleId: sermonBible.version});
+    sermonBible.data = await VerboModules.buildChapterData({bookId: sermonBible.book, chapter: sermonBible.chapter, bibleId: sermonBible.version, commentaryId: currentCommentary});
     if(!sermonBible.data.versions[sermonBible.version]){
       try{ await ensureVersionLoaded(sermonBible.version, {targetData: sermonBible.data, bookId: sermonBible.book, chapter: sermonBible.chapter}); }
       catch(error){ console.warn(error); sermonBible.version = sermonBible.data.meta.version; }

@@ -197,6 +197,22 @@ const VerboModules = (() => {
       return (chapter >= start && chapter <= end) || (chapter === 1 && start === 0);
     }) };
   }
+  // Versión liviana de loadCommentary: usa bookInfo.indexFile (solo id+reference,
+  // sin title/author/content — generado por tools/build_commentary_index.py) si
+  // existe, para calcular qué versículos tienen nota sin bajar el HTML completo.
+  // Si el comentario todavía no tiene índice generado, o es chapterSplit (ya
+  // viene chico por capítulo), cae de vuelta a loadCommentary completo.
+  async function loadCommentaryIndex(manifestPath, bookId, chapter) {
+    const manifest = await getJSON(manifestPath);
+    const bookInfo = manifest.books.find(book => book.id === bookId);
+    if (!bookInfo) return { manifest, entries:[] };
+    if (manifest.chapterSplit || !bookInfo.indexFile) return loadCommentary(manifestPath, bookId, chapter);
+    const indexData = await getJSON(resolveFromManifest(manifestPath, bookInfo.indexFile));
+    return { manifest, entries:(indexData.entries || []).filter(entry => {
+      const start=entry.reference.chapterStart, end=entry.reference.chapterEnd ?? start;
+      return (chapter >= start && chapter <= end) || (chapter === 1 && start === 0);
+    }) };
+  }
   async function loadCrossrefs(manifestPath, bookId, chapter) {
     const manifest = await getJSON(manifestPath);
     const bookInfo = manifest.books.find(book => book.id === bookId);
@@ -551,12 +567,30 @@ const VerboModules = (() => {
     const bibleResults = eagerResult ? [eagerResult] : [];
     if (!bibleResults.length) throw new Error(`No hay Biblias disponibles para ${bookId} ${chapter}`);
 
-    // Se cargan TODOS los comentarios que contienen este capítulo. Esto permite
-    // indicar en cada versículo qué módulos tienen contenido, aunque no estén activos.
-    const commentaryResults=(await Promise.all((registry.commentaries || []).map(async path=>{
-      try { return await loadCommentary(`modules/${path}`,bookId,chapter); }
-      catch (error) { console.warn(`Comentario omitido: modules/${path}`, error); return null; }
-    }))).filter(Boolean);
+    // Se cargan los ÍNDICES livianos (id+reference, sin texto) de todos los
+    // comentarios MENOS el activo, para poder indicar en cada versículo qué
+    // módulos tienen contenido aunque no estén activos, sin bajar el HTML
+    // completo de los 9. El comentario activo (commentaryId) se carga
+    // directamente completo, con el texto — no hace falta pedirlo dos veces.
+    const catalogCommentaries = registry.catalog?.commentaries || [];
+    const activePath = commentaryId ? catalogCommentaries.find(c => c.manifest?.id === commentaryId)?.path : null;
+    const commentaryResults=(await Promise.all((registry.commentaries || [])
+      .map(path => `modules/${path}`)
+      .filter(path => path !== activePath)
+      .map(async path=>{
+        try { return await loadCommentaryIndex(path,bookId,chapter); }
+        catch (error) { console.warn(`Comentario omitido: ${path}`, error); return null; }
+      }))).filter(Boolean);
+    const loadedCommentaries = new Set();
+    if (commentaryId) {
+      if (activePath) {
+        try {
+          const full = await loadCommentary(activePath, bookId, chapter);
+          commentaryResults.push(full);
+          loadedCommentaries.add(commentaryId);
+        } catch (error) { console.warn(`Comentario activo omitido: ${activePath}`, error); }
+      }
+    }
 
     const crossrefsByVerse=(registry.crossrefs || []).length
       ? await (async()=>{ try { return await loadCrossrefs(`modules/${registry.crossrefs[0]}`,bookId,chapter); } catch (error) { console.warn('Referencias cruzadas omitidas', error); return {}; } })()
@@ -688,7 +722,7 @@ const VerboModules = (() => {
       return {n,text,segments,hasNote:noteIds.length>0,noteIds,commentaries,crossrefs,libraryCount,patristicCount,patristicSources};
     });
     const first=bibleResults.find(b=>b.manifest.id===registry.defaultBible)||bibleResults[0];
-    return {meta:{book:first.bookInfo.name,bookId,chapter,version:first.manifest.id,versionFull:first.manifest.name},versions,verses,notes};
+    return {meta:{book:first.bookInfo.name,bookId,chapter,version:first.manifest.id,versionFull:first.manifest.name},versions,verses,notes,loadedCommentaries};
   }
   // Carga el módulo de Evangelio armonizado (capítulos temáticos propios,
   // no ligados 1:1 a capítulo bíblico, sino a una o más referencias).
@@ -731,5 +765,5 @@ const VerboModules = (() => {
     return null;
   }
 
-  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadLinkedEntries,loadLinkedArticle,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible };
+  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadCommentaryIndex,loadLinkedEntries,loadLinkedArticle,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible };
 })();

@@ -12,137 +12,164 @@
     {
       "id": "MAT",
       "name": "Matthew",
-      "file": "books/MAT.json"
+      "file": "books/MAT.json",
+      "indexFile": "books/MAT.index.json"
     },
     {
       "id": "MRK",
       "name": "Mark",
-      "file": "books/MRK.json"
+      "file": "books/MRK.json",
+      "indexFile": "books/MRK.index.json"
     },
     {
       "id": "LUK",
       "name": "Luke",
-      "file": "books/LUK.json"
+      "file": "books/LUK.json",
+      "indexFile": "books/LUK.index.json"
     },
     {
       "id": "JHN",
       "name": "John",
-      "file": "books/JHN.json"
+      "file": "books/JHN.json",
+      "indexFile": "books/JHN.index.json"
     },
     {
       "id": "ACT",
       "name": "Acts",
-      "file": "books/ACT.json"
+      "file": "books/ACT.json",
+      "indexFile": "books/ACT.index.json"
     },
     {
       "id": "ROM",
       "name": "Romans",
-      "file": "books/ROM.json"
+      "file": "books/ROM.json",
+      "indexFile": "books/ROM.index.json"
     },
     {
       "id": "1CO",
       "name": "1 Corinthians",
-      "file": "books/1CO.json"
+      "file": "books/1CO.json",
+      "indexFile": "books/1CO.index.json"
     },
     {
       "id": "2CO",
       "name": "2 Corinthians",
-      "file": "books/2CO.json"
+      "file": "books/2CO.json",
+      "indexFile": "books/2CO.index.json"
     },
     {
       "id": "GAL",
       "name": "Galatians",
-      "file": "books/GAL.json"
+      "file": "books/GAL.json",
+      "indexFile": "books/GAL.index.json"
     },
     {
       "id": "EPH",
       "name": "Ephesians",
-      "file": "books/EPH.json"
+      "file": "books/EPH.json",
+      "indexFile": "books/EPH.index.json"
     },
     {
       "id": "PHP",
       "name": "Philippians",
-      "file": "books/PHP.json"
+      "file": "books/PHP.json",
+      "indexFile": "books/PHP.index.json"
     },
     {
       "id": "COL",
       "name": "Colossians",
-      "file": "books/COL.json"
+      "file": "books/COL.json",
+      "indexFile": "books/COL.index.json"
     },
     {
       "id": "1TH",
       "name": "1 Thessalonians",
-      "file": "books/1TH.json"
+      "file": "books/1TH.json",
+      "indexFile": "books/1TH.index.json"
     },
     {
       "id": "2TH",
       "name": "2 Thessalonians",
-      "file": "books/2TH.json"
+      "file": "books/2TH.json",
+      "indexFile": "books/2TH.index.json"
     },
     {
       "id": "1TI",
       "name": "1 Timothy",
-      "file": "books/1TI.json"
+      "file": "books/1TI.json",
+      "indexFile": "books/1TI.index.json"
     },
     {
       "id": "2TI",
       "name": "2 Timothy",
-      "file": "books/2TI.json"
+      "file": "books/2TI.json",
+      "indexFile": "books/2TI.index.json"
     },
     {
       "id": "TIT",
       "name": "Titus",
-      "file": "books/TIT.json"
+      "file": "books/TIT.json",
+      "indexFile": "books/TIT.index.json"
     },
     {
       "id": "PHM",
       "name": "Philemon",
-      "file": "books/PHM.json"
+      "file": "books/PHM.json",
+      "indexFile": "books/PHM.index.json"
     },
     {
       "id": "HEB",
       "name": "Hebrews",
-      "file": "books/HEB.json"
+      "file": "books/HEB.json",
+      "indexFile": "books/HEB.index.json"
     },
     {
       "id": "JAS",
       "name": "James",
-      "file": "books/JAS.json"
+      "file": "books/JAS.json",
+      "indexFile": "books/JAS.index.json"
     },
     {
       "id": "1PE",
       "name": "1 Peter",
-      "file": "books/1PE.json"
+      "file": "books/1PE.json",
+      "indexFile": "books/1PE.index.json"
     },
     {
       "id": "2PE",
       "name": "2 Peter",
-      "file": "books/2PE.json"
+      "file": "books/2PE.json",
+      "indexFile": "books/2PE.index.json"
     },
     {
       "id": "1JN",
       "name": "1 John",
-      "file": "books/1JN.json"
+      "file": "books/1JN.json",
+      "indexFile": "books/1JN.index.json"
     },
     {
       "id": "2JN",
       "name": "2 John",
-      "file": "books/2JN.json"
+      "file": "books/2JN.json",
+      "indexFile": "books/2JN.index.json"
     },
     {
       "id": "3JN",
       "name": "3 John",
-      "file": "books/3JN.json"
+      "file": "books/3JN.json",
+      "indexFile": "books/3JN.index.json"
     },
     {
       "id": "JUD",
       "name": "Jude",
-      "file": "books/JUD.json"
+      "file": "books/JUD.json",
+      "indexFile": "books/JUD.index.json"
     },
     {
       "id": "REV",
       "name": "Revelation",
-      "file": "books/REV.json"
+      "file": "books/REV.json",
+      "indexFile": "books/REV.index.json"
     }
   ]
 }

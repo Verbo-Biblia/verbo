@@ -12,37 +12,44 @@
     {
       "id": "ROM",
       "name": "Romans",
-      "file": "books/ROM.json"
+      "file": "books/ROM.json",
+      "indexFile": "books/ROM.index.json"
     },
     {
       "id": "PHP",
       "name": "Philippians",
-      "file": "books/PHP.json"
+      "file": "books/PHP.json",
+      "indexFile": "books/PHP.index.json"
     },
     {
       "id": "EPH",
       "name": "Ephesians",
-      "file": "books/EPH.json"
+      "file": "books/EPH.json",
+      "indexFile": "books/EPH.index.json"
     },
     {
       "id": "COL",
       "name": "Colossians",
-      "file": "books/COL.json"
+      "file": "books/COL.json",
+      "indexFile": "books/COL.index.json"
     },
     {
       "id": "1TH",
       "name": "1 Thessalonians",
-      "file": "books/1TH.json"
+      "file": "books/1TH.json",
+      "indexFile": "books/1TH.index.json"
     },
     {
       "id": "2TH",
       "name": "2 Thessalonians",
-      "file": "books/2TH.json"
+      "file": "books/2TH.json",
+      "indexFile": "books/2TH.index.json"
     },
     {
       "id": "PHM",
       "name": "Philemon",
-      "file": "books/PHM.json"
+      "file": "books/PHM.json",
+      "indexFile": "books/PHM.index.json"
     }
   ]
 }
