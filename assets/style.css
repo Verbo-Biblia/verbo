@@ -2070,7 +2070,7 @@ body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
 }
 
 /* ---------- Páginas estáticas (Sobre el fundador, Misión) ---------- */
-.library-rail__btn[href] { text-decoration: none; }
+.library-rail__btn[href], .mobile-tool-btn[href] { text-decoration: none; }
 
 body.static-page {
   overflow-y: auto;
