@@ -1,0 +1,56 @@
+{
+ "entries": [
+  {
+   "id": "clemente-1-sec17c-job-1-1",
+   "title": "Capítulo 17 — Los santos como ejemplos de humildad",
+   "author": "1 Clemente de Roma",
+   "reference": {
+    "book": "JOB",
+    "chapterStart": 1,
+    "verseStart": 1,
+    "chapterEnd": 1,
+    "verseEnd": 1
+   },
+   "content": "<p>Así está escrito de Job: «Job era un hombre justo, íntegro, sincero, temeroso de Dios y que se apartaba de todo mal».</p>"
+  },
+  {
+   "id": "clemente-1-sec17d-job-14-4",
+   "title": "Capítulo 17 — Los santos como ejemplos de humildad",
+   "author": "1 Clemente de Roma",
+   "reference": {
+    "book": "JOB",
+    "chapterStart": 14,
+    "verseStart": 4,
+    "chapterEnd": 14,
+    "verseEnd": 5
+   },
+   "content": "<p>Pero, acusándose a sí mismo, dijo: «Ningún hombre está libre de contaminación, aunque su vida sea solo de un día».</p>"
+  },
+  {
+   "id": "clemente-1-sec26-job-19-25",
+   "title": "Capítulo 26 — Resucitaremos, entonces, como también lo atestigua la Escritura",
+   "author": "1 Clemente de Roma",
+   "reference": {
+    "book": "JOB",
+    "chapterStart": 19,
+    "verseStart": 25,
+    "chapterEnd": 19,
+    "verseEnd": 26
+   },
+   "content": "<p>Job dice: «Tú levantarás esta mi carne, que ha sufrido todas estas cosas».</p>"
+  },
+  {
+   "id": "clemente-1-sec56-job-5-17",
+   "title": "Capítulo 56 — Amonestémonos y corrijámonos unos a otros",
+   "author": "1 Clemente de Roma",
+   "reference": {
+    "book": "JOB",
+    "chapterStart": 5,
+    "verseStart": 17,
+    "chapterEnd": 5,
+    "verseEnd": 26
+   },
+   "content": "<p>El Señor me ha castigado severamente, pero no me ha entregado a la muerte. Porque el Señor castiga a quien ama, y azota a todo hijo que recibe.</p>"
+  }
+ ]
+}

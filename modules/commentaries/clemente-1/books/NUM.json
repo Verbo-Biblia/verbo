@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "clemente-1-sec4b-num-12-14",
+   "title": "Capítulo 4 — Muchos males han fluido ya de esta fuente",
+   "author": "1 Clemente de Roma",
+   "reference": {
+    "book": "NUM",
+    "chapterStart": 12,
+    "verseStart": 14,
+    "chapterEnd": 12,
+    "verseEnd": 15
+   },
+   "content": "<p>Por causa de la envidia, Aarón y Miriam tuvieron que establecerse fuera del campamento.</p>"
+  },
+  {
+   "id": "clemente-1-sec4c-num-16-33",
+   "title": "Capítulo 4 — Muchos males han fluido ya de esta fuente",
+   "author": "1 Clemente de Roma",
+   "reference": {
+    "book": "NUM",
+    "chapterStart": 16,
+    "verseStart": 33,
+    "chapterEnd": 16,
+    "verseEnd": 33
+   },
+   "content": "<p>La envidia llevó a Datán y Abiram vivos al Hades, a causa de la sedición que provocaron contra Moisés, siervo de Dios.</p>"
+  }
+ ]
+}

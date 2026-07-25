@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 2,
+  "id": "clemente-1",
+  "type": "commentary",
+  "name": "1 Clemente de Roma — A los Corintios",
+  "abbreviation": "1 Clemente",
+  "language": "es",
+  "author": "1 Clemente de Roma",
+  "year": 96,
+  "description": "Pasajes de 1 Clemente anclados a las referencias bíblicas que el propio texto cita. Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público). Para leer la epístola completa, usa el ícono de Padres Apostólicos.",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "books": [
+    {
+      "id": "ACT",
+      "name": "Hechos",
+      "number": 44,
+      "file": "books/ACT.json"
+    },
+    {
+      "id": "1PE",
+      "name": "1 Pedro",
+      "number": 60,
+      "file": "books/1PE.json"
+    },
+    {
+      "id": "TIT",
+      "name": "Tito",
+      "number": 56,
+      "file": "books/TIT.json"
+    },
+    {
+      "id": "PRO",
+      "name": "Proverbios",
+      "number": 20,
+      "file": "books/PRO.json"
+    },
+    {
+      "id": "DEU",
+      "name": "Deuteronomio",
+      "number": 5,
+      "file": "books/DEU.json"
+    },
+    {
+      "id": "EXO",
+      "name": "Éxodo",
+      "number": 2,
+      "file": "books/EXO.json"
+    },
+    {
+      "id": "NUM",
+      "name": "Números",
+      "number": 4,
+      "file": "books/NUM.json"
+    },
+    {
+      "id": "GEN",
+      "name": "Génesis",
+      "number": 1,
+      "file": "books/GEN.json"
+    },
+    {
+      "id": "EZK",
+      "name": "Ezequiel",
+      "number": 26,
+      "file": "books/EZK.json"
+    },
+    {
+      "id": "ISA",
+      "name": "Isaías",
+      "number": 23,
+      "file": "books/ISA.json"
+    },
+    {
+      "id": "2PE",
+      "name": "2 Pedro",
+      "number": 61,
+      "file": "books/2PE.json"
+    },
+    {
+      "id": "HEB",
+      "name": "Hebreos",
+      "number": 58,
+      "file": "books/HEB.json"
+    },
+    {
+      "id": "JOB",
+      "name": "Job",
+      "number": 18,
+      "file": "books/JOB.json"
+    },
+    {
+      "id": "MAL",
+      "name": "Malaquías",
+      "number": 39,
+      "file": "books/MAL.json"
+    },
+    {
+      "id": "LUK",
+      "name": "Lucas",
+      "number": 42,
+      "file": "books/LUK.json"
+    },
+    {
+      "id": "MAT",
+      "name": "Mateo",
+      "number": 40,
+      "file": "books/MAT.json"
+    },
+    {
+      "id": "PSA",
+      "name": "Salmos",
+      "number": 19,
+      "file": "books/PSA.json"
+    },
+    {
+      "id": "ROM",
+      "name": "Romanos",
+      "number": 45,
+      "file": "books/ROM.json"
+    },
+    {
+      "id": "DAN",
+      "name": "Daniel",
+      "number": 27,
+      "file": "books/DAN.json"
+    },
+    {
+      "id": "1CO",
+      "name": "1 Corintios",
+      "number": 46,
+      "file": "books/1CO.json"
+    },
+    {
+      "id": "EPH",
+      "name": "Efesios",
+      "number": 49,
+      "file": "books/EPH.json"
+    },
+    {
+      "id": "1SA",
+      "name": "1 Samuel",
+      "number": 9,
+      "file": "books/1SA.json"
+    }
+  ]
+}

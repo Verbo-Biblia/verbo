@@ -1,0 +1,43 @@
+{
+ "entries": [
+  {
+   "id": "clemente-1-sec32-rom-9-5",
+   "title": "Capítulo 32 — No somos justificados por nuestras propias obras, sino por la fe",
+   "author": "1 Clemente de Roma",
+   "reference": {
+    "book": "ROM",
+    "chapterStart": 9,
+    "verseStart": 5,
+    "chapterEnd": 9,
+    "verseEnd": 5
+   },
+   "content": "<p>De él también [descendió] nuestro Señor Jesucristo según la carne.</p>"
+  },
+  {
+   "id": "clemente-1-sec35-rom-1-32",
+   "title": "Capítulo 35 — Inmensa es esta recompensa. ¿Cómo la obtendremos?",
+   "author": "1 Clemente de Roma",
+   "reference": {
+    "book": "ROM",
+    "chapterStart": 1,
+    "verseStart": 32,
+    "chapterEnd": 1,
+    "verseEnd": 32
+   },
+   "content": "<p>Porque los que hacen tales cosas son aborrecibles a Dios; y no solo los que las hacen, sino también los que se complacen en los que las hacen.</p>"
+  },
+  {
+   "id": "clemente-1-sec46b-rom-12-5",
+   "title": "Capítulo 46 — Aferrémonos a los justos: vuestra lucha es perniciosa",
+   "author": "1 Clemente de Roma",
+   "reference": {
+    "book": "ROM",
+    "chapterStart": 12,
+    "verseStart": 5,
+    "chapterEnd": 12,
+    "verseEnd": 5
+   },
+   "content": "<p>¿Por qué dividimos y desgarramos a los miembros de Cristo, y levantamos contiendas contra nuestro propio cuerpo, y hemos llegado a tal grado de locura que olvidamos que somos miembros los unos de los otros?</p>"
+  }
+ ]
+}
