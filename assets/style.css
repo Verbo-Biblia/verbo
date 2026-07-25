@@ -1984,3 +1984,86 @@ body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
   .tts-float { padding: 0 16px; bottom: 16px; }
   .tts-voice-select { max-width: 110px; }
 }
+
+/* ---------- Respaldo local (sistema de guardado unificado) ---------- */
+.backup-menu { position: relative; }
+.backup-menu__trigger { padding: 6px 10px; font-size: 16px; line-height: 1; }
+.backup-menu__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(42,31,23,.18);
+}
+.backup-menu__status {
+  font-size: 11.5px;
+  color: var(--sepia);
+  padding: 2px 6px 6px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 4px;
+}
+.backup-menu__item {
+  text-align: left;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.backup-menu__item:hover { background: rgba(200,159,88,.16); color: var(--wine); }
+
+.backup-consent {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 200;
+  max-width: 380px;
+  width: calc(100% - 32px);
+  padding: 16px 18px;
+  background: var(--paper-raised);
+  border: 1px solid var(--wine-soft);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(42,31,23,.28);
+  text-align: center;
+}
+.backup-consent__text {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.4;
+}
+.backup-consent__actions { display: flex; gap: 10px; justify-content: center; }
+.backup-consent__btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--sepia);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.backup-consent__btn--primary {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: #fff;
+}
+.backup-consent__btn:hover { border-color: var(--wine-soft); color: var(--wine); }
+.backup-consent__btn--primary:hover { background: var(--wine-soft); color: #fff; }
+
+@media (max-width: 760px) {
+  .backup-menu__panel { right: -8px; min-width: 200px; }
+}

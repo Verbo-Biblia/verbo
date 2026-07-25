@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     editorToolbar: document.getElementById('editorToolbar')
   };
 
+  const backupData = await VerboBackup.init();
   let catalog, data, activeTab = null, currentVersion = localStorage.getItem('verbo:lastVersion') || null, compareVersion = null;
   let xrefTarget = null, xrefData = null;
   function resetXrefMode(){ xrefTarget = null; xrefData = null; }
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let ttsQueue = [], ttsIndex = -1, ttsPaused = false, ttsVoicesPromise = null, ttsSession = 0;
   let ttsAllVoices = [];
   let selectedVerses = new Set();
-  let highlights = JSON.parse(localStorage.getItem('verbo:highlights') || '{}');
+  let highlights = VerboBackup.getResaltadosMap();
   let suppressCommentSync = false;
   let commentSyncTimer = null;
   let searchState = null;
@@ -63,8 +64,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   let patristicMode=localStorage.getItem('verbo:patristicMode') || 'docs';
   let patristicByVerseCatalog=null;
   let currentPatristicByVerse=null;
-  let currentBook = localStorage.getItem('verbo:lastBook') || 'ROM';
-  let currentChapter = Number(localStorage.getItem('verbo:lastChapter')) || 7;
+  const posicionBiblia = VerboBackup.getPosicionBiblia();
+  let currentBook = posicionBiblia?.libro || 'ROM';
+  let currentChapter = Number(posicionBiblia?.capitulo) || 7;
   const themes = [
     { id:'paper', label:'Papel cálido', sample:'#F1E3C8' },
     { id:'cream', label:'Crema dorada', sample:'#F5E7C8' },
@@ -79,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const emptyState = (icon, text) => `<div class="panel-empty"><div class="panel-empty__icon">${icon}</div><div class="panel-empty__text">${text}</div></div>`;
   const activeVerse = () => Number(document.querySelector('.verse--active')?.dataset.verseN) || null;
   const hlKey = (book, chapter, n) => `${book}:${chapter}:${n}`;
-  const saveHighlights = () => localStorage.setItem('verbo:highlights', JSON.stringify(highlights));
+  const saveHighlights = () => VerboBackup.setAllResaltados(highlights);
   const HL_COLORS = ['hl-yellow','hl-green','hl-blue','hl-pink','hl-coral','hl-violet'];
   const escapeHTML = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[ch]));
   const bibleCatalog = () => catalog.bibles.map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, lang:item.manifest.language || 'es', remote:Boolean(item.remote || item.manifest.remote), manifest:item.manifest }));
@@ -166,8 +168,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       selectedVerses.clear();
       renderChapter();
       updateActionBar();
-      localStorage.setItem('verbo:lastBook', currentBook);
-      localStorage.setItem('verbo:lastChapter', String(currentChapter));
+      VerboBackup.setPosicionBiblia(currentBook, currentChapter);
       gospelOpenChapter=null;
       if (activeTab) renderPanel(activeTab);
       window.scrollTo({top:0, behavior:'smooth'});
@@ -1924,10 +1925,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function renderNotes(){
     els.panelTitle.textContent='Mis notas';
-    const key=`nota:${data.meta.bookId}-${data.meta.chapter}`, saved=localStorage.getItem(key)||'';
+    const key=`${data.meta.bookId}-${data.meta.chapter}`, saved=VerboBackup.getNota(key);
     els.panelBody.innerHTML=`<label class="personal-note-form__label">Nota sobre ${data.meta.book} ${data.meta.chapter}</label><textarea id="personalNoteArea" class="personal-note-form__area" placeholder="Escribe aquí tu observación...">${saved}</textarea><div class="personal-note-form__status" id="noteSaveStatus">${saved?'Guardado':''}</div>`;
     const area=document.getElementById('personalNoteArea'), status=document.getElementById('noteSaveStatus'); let timer;
-    area.addEventListener('input',()=>{status.textContent='Escribiendo…';clearTimeout(timer);timer=setTimeout(()=>{localStorage.setItem(key,area.value);status.textContent='Guardado';},400);});
+    area.addEventListener('input',()=>{status.textContent='Escribiendo…';clearTimeout(timer);timer=setTimeout(()=>{VerboBackup.setNota(key,area.value);status.textContent='Guardado';},400);});
   }
 
   async function openDictionary(code){
@@ -2093,4 +2094,64 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
   window.addEventListener('scroll',()=>{ clearTimeout(commentSyncTimer); commentSyncTimer=setTimeout(syncCommentToReading,120); }, {passive:true});
+
+  // ---- Respaldo local: menú de guardado + aviso de consentimiento ----
+  (function initBackupUI(){
+    const trigger=document.getElementById('backupMenuTrigger');
+    const panel=document.getElementById('backupMenuPanel');
+    const status=document.getElementById('backupMenuStatus');
+    const saveBtn=document.getElementById('backupSaveBtn');
+    const exportBtn=document.getElementById('backupExportBtn');
+    const importBtn=document.getElementById('backupImportBtn');
+    const importInput=document.getElementById('backupImportInput');
+    const consent=document.getElementById('backupConsent');
+    const consentAccept=document.getElementById('backupConsentAccept');
+    const consentDecline=document.getElementById('backupConsentDecline');
+    if(!trigger || !panel) return;
+
+    function refreshStatus(){
+      if(!status) return;
+      if(VerboBackup.hasFolderPermission()) status.textContent='Se guarda en tu carpeta y en este navegador.';
+      else if(VerboBackup.supportsFSA()) status.textContent='Guardado solo en este navegador.';
+      else status.textContent='Guardado en este navegador. Exporta tus datos para respaldarlos.';
+    }
+    function closePanel(){ panel.hidden=true; trigger.setAttribute('aria-expanded','false'); }
+    function togglePanel(){
+      const willOpen=panel.hidden;
+      panel.hidden=!willOpen; trigger.setAttribute('aria-expanded',String(willOpen));
+      if(willOpen) refreshStatus();
+    }
+    trigger.addEventListener('click',(e)=>{ e.stopPropagation(); togglePanel(); });
+    document.addEventListener('click',(e)=>{ if(!panel.hidden && !panel.contains(e.target) && e.target!==trigger) closePanel(); });
+
+    function showConsent(){ if(consent) consent.hidden=false; }
+    function hideConsent(){ if(consent) consent.hidden=true; }
+
+    saveBtn?.addEventListener('click', async ()=>{
+      if(!VerboBackup.hasFolderPermission() && VerboBackup.supportsFSA()){ showConsent(); return; }
+      await VerboBackup.saveNow();
+      toast('Progreso guardado');
+      refreshStatus();
+    });
+    exportBtn?.addEventListener('click', ()=>{ VerboBackup.exportDownload(); toast('Descargando verbo-datos.json'); });
+    importBtn?.addEventListener('click', ()=> importInput?.click());
+    importInput?.addEventListener('change', async ()=>{
+      const file=importInput.files?.[0];
+      if(!file) return;
+      try{ await VerboBackup.importFromFile(file); toast('Datos importados, recargando…'); setTimeout(()=>location.reload(), 900); }
+      catch(error){ console.error(error); toast('No se pudo importar el archivo'); }
+      importInput.value='';
+    });
+    consentAccept?.addEventListener('click', async ()=>{
+      hideConsent();
+      const ok=await VerboBackup.requestFolderAccess();
+      toast(ok?'Carpeta conectada':'No se pudo conectar la carpeta');
+      refreshStatus();
+    });
+    consentDecline?.addEventListener('click', ()=>{ hideConsent(); VerboBackup.recordConsentDeclined(); });
+
+    // Oferta proactiva, sin ser insistente: tras un minuto de uso activo,
+    // y solo si no se ha concedido permiso ni rechazado recientemente.
+    setTimeout(()=>{ if(VerboBackup.shouldOfferConsent()) showConsent(); }, 60000);
+  })();
 });

@@ -17,7 +17,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260724-biblioteca-verbo-1">
+<link rel="stylesheet" href="assets/style.css?v=20260725-respaldo-local-1">
 </head>
 <body>
 
@@ -50,6 +50,18 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
         <span>✎</span>
         <span>Preparación de Bosquejo/Estudio</span>
       </button>
+      <div class="backup-menu">
+        <button class="search-trigger backup-menu__trigger" id="backupMenuTrigger" type="button" aria-label="Guardar mi progreso" aria-haspopup="true" aria-expanded="false">
+          <span>💾</span>
+        </button>
+        <div class="backup-menu__panel" id="backupMenuPanel" hidden>
+          <div class="backup-menu__status" id="backupMenuStatus"></div>
+          <button type="button" class="backup-menu__item" id="backupSaveBtn">Guardar mi progreso</button>
+          <button type="button" class="backup-menu__item" id="backupExportBtn">Exportar mis datos</button>
+          <button type="button" class="backup-menu__item" id="backupImportBtn">Importar mis datos</button>
+          <input type="file" id="backupImportInput" accept="application/json" hidden>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -236,9 +248,18 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     <button class="verse-action-bar__close" id="closeVerseAction" type="button" aria-label="Cerrar">✕</button>
   </div>
 
+  <div class="backup-consent" id="backupConsent" hidden>
+    <p class="backup-consent__text">¿Guardamos tu progreso en tu computadora antes de continuar? Que Dios te acompañe.</p>
+    <div class="backup-consent__actions">
+      <button type="button" class="backup-consent__btn backup-consent__btn--primary" id="backupConsentAccept">Sí, guardar</button>
+      <button type="button" class="backup-consent__btn" id="backupConsentDecline">Ahora no</button>
+    </div>
+  </div>
+
   <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
   <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
-  <script src="assets/module-loader.js?v=20260725-merge-padres-mobile-1"></script>
-  <script src="assets/app.js?v=20260725-merge-padres-mobile-1"></script>
+  <script src="assets/backup.js?v=20260725-respaldo-local-1"></script>
+  <script src="assets/module-loader.js?v=20260725-respaldo-local-1"></script>
+  <script src="assets/app.js?v=20260725-respaldo-local-1"></script>
 </body>
 </html>
