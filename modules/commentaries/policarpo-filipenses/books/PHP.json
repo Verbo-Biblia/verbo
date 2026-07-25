@@ -1,0 +1,43 @@
+{
+ "entries": [
+  {
+   "id": "policarpo-filipenses-sec1a-php-1-5",
+   "title": "Capítulo 1 — Alabanza a los filipenses",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "PHP",
+    "chapterStart": 1,
+    "verseStart": 5,
+    "chapterEnd": 1,
+    "verseEnd": 5
+   },
+   "content": "<p>La fuerte raíz de vuestra fe, de la que se habló en días pasados, perdura hasta ahora y da fruto a nuestro Señor Jesucristo, quien por nuestros pecados sufrió hasta la muerte, a quien Dios resucitó de entre los muertos.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec2e-php-2-10",
+   "title": "Capítulo 2 — Exhortación a la virtud",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "PHP",
+    "chapterStart": 2,
+    "verseStart": 10,
+    "chapterEnd": 2,
+    "verseEnd": 10
+   },
+   "content": "<p>A Él todas las cosas en el cielo y en la tierra están sujetas. Todos los espíritus le sirven.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec9a-php-2-16",
+   "title": "Capítulo 9 — La paciencia inculcada",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "PHP",
+    "chapterStart": 2,
+    "verseStart": 16,
+    "chapterEnd": 2,
+    "verseEnd": 16
+   },
+   "content": "<p>Hacedlo con la certeza de que todos ellos no han corrido en vano, sino con fe y justicia.</p>"
+  }
+ ]
+}

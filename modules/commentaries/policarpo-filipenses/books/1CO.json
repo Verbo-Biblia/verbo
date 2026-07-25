@@ -1,0 +1,43 @@
+{
+ "entries": [
+  {
+   "id": "policarpo-filipenses-sec5f-1co-6-9",
+   "title": "Capítulo 5 — Los deberes de los diáconos, los jóvenes y las vírgenes",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "1CO",
+    "chapterStart": 6,
+    "verseStart": 9,
+    "chapterEnd": 6,
+    "verseEnd": 10
+   },
+   "content": "<p>Ni los fornicarios, ni los afeminados, ni los abusadores de sí mismos con la humanidad heredarán el reino de Dios.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec11b-1co-6-2",
+   "title": "Capítulo 11 — Expresión de dolor por Valens",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "1CO",
+    "chapterStart": 6,
+    "verseStart": 2,
+    "chapterEnd": 6,
+    "verseEnd": 2
+   },
+   "content": "<p>¿No sabemos que los santos juzgarán al mundo?</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec11d-1co-12-26",
+   "title": "Capítulo 11 — Expresión de dolor por Valens",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "1CO",
+    "chapterStart": 12,
+    "verseStart": 26,
+    "chapterEnd": 12,
+    "verseEnd": 26
+   },
+   "content": "<p>Para que podáis salvar todo vuestro cuerpo. Porque al actuar así, os edificaréis a vosotros mismos.</p>"
+  }
+ ]
+}

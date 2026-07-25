@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "policarpo-filipenses-sec7a-1jn-4-3",
+   "title": "Capítulo 7 — Evitad a los docetas y perseverad en el ayuno y la oración",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "1JN",
+    "chapterStart": 4,
+    "verseStart": 3,
+    "chapterEnd": 4,
+    "verseEnd": 3
+   },
+   "content": "<p>Todo aquel que no confiesa que Jesucristo ha venido en carne, es anticristo.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec8c-1jn-4-9",
+   "title": "Capítulo 8 — Perseverad en la esperanza y la paciencia",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "1JN",
+    "chapterStart": 4,
+    "verseStart": 9,
+    "chapterEnd": 4,
+    "verseEnd": 9
+   },
+   "content": "<p>Sino que padeció todo por nosotros, para que nosotros viviésemos en él.</p>"
+  }
+ ]
+}

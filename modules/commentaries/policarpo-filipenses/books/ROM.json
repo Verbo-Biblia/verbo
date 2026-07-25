@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "policarpo-filipenses-sec6a-rom-12-17",
+   "title": "Capítulo 6 — Los deberes de los presbíteros y otros",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "ROM",
+    "chapterStart": 12,
+    "verseStart": 17,
+    "chapterEnd": 12,
+    "verseEnd": 17
+   },
+   "content": "<p>Procurando siempre lo que es conveniente a los ojos de Dios y de los hombres.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec6d-rom-14-10",
+   "title": "Capítulo 6 — Los deberes de los presbíteros y otros",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "ROM",
+    "chapterStart": 14,
+    "verseStart": 10,
+    "chapterEnd": 14,
+    "verseEnd": 12
+   },
+   "content": "<p>Todos debemos comparecer ante el tribunal de Cristo, y cada uno debe dar cuenta de sí mismo.</p>"
+  }
+ ]
+}

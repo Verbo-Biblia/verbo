@@ -79,7 +79,8 @@
     "commentaries/hermas-pastor/manifest.json",
     "commentaries/clemente-2/manifest.json",
     "commentaries/didache/manifest.json",
-    "commentaries/clemente-1/manifest.json"
+    "commentaries/clemente-1/manifest.json",
+    "commentaries/policarpo-filipenses/manifest.json"
   ],
   "crossrefs": [
     "crossrefs/tsk/manifest.json"

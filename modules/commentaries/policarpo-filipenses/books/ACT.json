@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "policarpo-filipenses-sec2f-act-17-31",
+   "title": "Capítulo 2 — Exhortación a la virtud",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "ACT",
+    "chapterStart": 17,
+    "verseStart": 31,
+    "chapterEnd": 17,
+    "verseEnd": 31
+   },
+   "content": "<p>Él viene como Juez de los vivos y de los muertos. Dios exigirá su sangre a aquellos que no creen en Él.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec8d-act-5-41",
+   "title": "Capítulo 8 — Perseverad en la esperanza y la paciencia",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "ACT",
+    "chapterStart": 5,
+    "verseStart": 41,
+    "chapterEnd": 5,
+    "verseEnd": 41
+   },
+   "content": "<p>Seamos, pues, imitadores de su paciencia; y si sufrimos por su nombre, glorifiquémosle.</p>"
+  }
+ ]
+}

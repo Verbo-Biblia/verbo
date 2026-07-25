@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "policarpo-filipenses-sec4d-1th-5-17",
+   "title": "Capítulo 4 — Varias exhortaciones",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "1TH",
+    "chapterStart": 5,
+    "verseStart": 17,
+    "chapterEnd": 5,
+    "verseEnd": 17
+   },
+   "content": "<p>Enseñad a las viudas a ser discretas en lo que respecta a la fe del Señor, orando continuamente por todos.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec11a-1th-5-22",
+   "title": "Capítulo 11 — Expresión de dolor por Valens",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "1TH",
+    "chapterStart": 5,
+    "verseStart": 22,
+    "chapterEnd": 5,
+    "verseEnd": 22
+   },
+   "content": "<p>Os exhorto, por tanto, a que os abstengáis de la codicia y seáis castos y veraces. Absteneos de toda forma de maldad.</p>"
+  }
+ ]
+}

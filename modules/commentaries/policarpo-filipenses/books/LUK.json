@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "policarpo-filipenses-sec2i-luk-6-36",
+   "title": "Capítulo 2 — Exhortación a la virtud",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "LUK",
+    "chapterStart": 6,
+    "verseStart": 36,
+    "chapterEnd": 6,
+    "verseEnd": 36
+   },
+   "content": "<p>Perdonad, y seréis perdonados; sed misericordiosos, para que seáis misericordiosos.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec2k-luk-6-38",
+   "title": "Capítulo 2 — Exhortación a la virtud",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "LUK",
+    "chapterStart": 6,
+    "verseStart": 38,
+    "chapterEnd": 6,
+    "verseEnd": 38
+   },
+   "content": "<p>Con la medida con que midáis, se os medirá a vosotros.</p>"
+  }
+ ]
+}

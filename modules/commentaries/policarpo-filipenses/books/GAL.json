@@ -1,0 +1,56 @@
+{
+ "entries": [
+  {
+   "id": "policarpo-filipenses-sec3b-gal-4-26",
+   "title": "Capítulo 3 — Expresiones de indignidad personal",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "GAL",
+    "chapterStart": 4,
+    "verseStart": 26,
+    "chapterEnd": 4,
+    "verseEnd": 26
+   },
+   "content": "<p>Os escribió una carta que, si la estudiáis con atención, veréis que es el medio para edificaros en la fe que se os ha dado.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec5a-gal-6-7",
+   "title": "Capítulo 5 — Los deberes de los diáconos, los jóvenes y las vírgenes",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "GAL",
+    "chapterStart": 6,
+    "verseStart": 7,
+    "chapterEnd": 6,
+    "verseEnd": 7
+   },
+   "content": "<p>Sabiendo, pues, que Dios no puede ser burlado, debemos andar dignamente conforme a su mandamiento y gloria.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec9b-gal-2-2",
+   "title": "Capítulo 9 — La paciencia inculcada",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "GAL",
+    "chapterStart": 2,
+    "verseStart": 2,
+    "chapterEnd": 2,
+    "verseEnd": 2
+   },
+   "content": "<p>Hacedlo con la certeza de que todos ellos no han corrido en vano, sino con fe y justicia.</p>"
+  },
+  {
+   "id": "policarpo-filipenses-sec12b-gal-1-1",
+   "title": "Capítulo 12 — Exhortación a diversas gracias",
+   "author": "Policarpo de Esmirna",
+   "reference": {
+    "book": "GAL",
+    "chapterStart": 1,
+    "verseStart": 1,
+    "chapterEnd": 1,
+    "verseEnd": 1
+   },
+   "content": "<p>Que os conceda una parte entre sus santos, y a nosotros con vosotros, y a todos los que están bajo el cielo, que creen en nuestro Señor Jesucristo y en su Padre, que le resucitó de entre los muertos.</p>"
+  }
+ ]
+}
