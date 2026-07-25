@@ -1,0 +1,43 @@
+{
+ "entries": [
+  {
+   "id": "didache-sec4a-eph-6-4",
+   "title": "Capítulo 4 — Varios preceptos",
+   "author": "La Didaché",
+   "reference": {
+    "book": "EPH",
+    "chapterStart": 6,
+    "verseStart": 4,
+    "chapterEnd": 6,
+    "verseEnd": 4
+   },
+   "content": "<p>No apartarás tu mano de tu hijo ni de tu hija, sino que desde su juventud les enseñarás el temor de Dios.</p>"
+  },
+  {
+   "id": "didache-sec4b-eph-6-9",
+   "title": "Capítulo 4 — Varios preceptos",
+   "author": "La Didaché",
+   "reference": {
+    "book": "EPH",
+    "chapterStart": 6,
+    "verseStart": 9,
+    "chapterEnd": 6,
+    "verseEnd": 9
+   },
+   "content": "<p>No impondrás nada con amargura a tu siervo o sierva, que esperan en el mismo Dios, no sea que dejen de temer a Dios, que está sobre ambos.</p>"
+  },
+  {
+   "id": "didache-sec4d-eph-6-5",
+   "title": "Capítulo 4 — Varios preceptos",
+   "author": "La Didaché",
+   "reference": {
+    "book": "EPH",
+    "chapterStart": 6,
+    "verseStart": 5,
+    "chapterEnd": 6,
+    "verseEnd": 5
+   },
+   "content": "<p>Y vosotros, siervos, estad sujetos a vuestros amos como a Dios, con modestia y temor.</p>"
+  }
+ ]
+}

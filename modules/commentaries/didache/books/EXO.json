@@ -1,0 +1,56 @@
+{
+ "entries": [
+  {
+   "id": "didache-sec2a-exo-20-13",
+   "title": "Capítulo 2 — El segundo mandamiento: prohibición del pecado grave",
+   "author": "La Didaché",
+   "reference": {
+    "book": "EXO",
+    "chapterStart": 20,
+    "verseStart": 13,
+    "chapterEnd": 20,
+    "verseEnd": 14
+   },
+   "content": "<p>Y el segundo mandamiento de la Enseñanza: No matarás, no cometerás adulterio, no cometerás pederastia, no cometerás fornicación, no robarás.</p>"
+  },
+  {
+   "id": "didache-sec2b-exo-20-15",
+   "title": "Capítulo 2 — El segundo mandamiento: prohibición del pecado grave",
+   "author": "La Didaché",
+   "reference": {
+    "book": "EXO",
+    "chapterStart": 20,
+    "verseStart": 15,
+    "chapterEnd": 20,
+    "verseEnd": 15
+   },
+   "content": "<p>No robarás, no practicarás magia, no practicarás brujería, no matarás a un niño mediante el aborto ni matarás al que ha sido engendrado.</p>"
+  },
+  {
+   "id": "didache-sec2c-exo-20-17",
+   "title": "Capítulo 2 — El segundo mandamiento: prohibición del pecado grave",
+   "author": "La Didaché",
+   "reference": {
+    "book": "EXO",
+    "chapterStart": 20,
+    "verseStart": 17,
+    "chapterEnd": 20,
+    "verseEnd": 17
+   },
+   "content": "<p>No codiciarás las cosas de tu prójimo; no jurarás en falso; no darás falso testimonio; no hablarás mal, no guardarás rencor.</p>"
+  },
+  {
+   "id": "didache-sec2e-exo-20-16",
+   "title": "Capítulo 2 — El segundo mandamiento: prohibición del pecado grave",
+   "author": "La Didaché",
+   "reference": {
+    "book": "EXO",
+    "chapterStart": 20,
+    "verseStart": 16,
+    "chapterEnd": 20,
+    "verseEnd": 16
+   },
+   "content": "<p>No jurarás en falso; no darás falso testimonio; no hablarás mal, no guardarás rencor. No serás doble de corazón ni doble de lengua, porque ser doble de lengua es una trampa mortal.</p>"
+  }
+ ]
+}

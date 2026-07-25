@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 2,
+  "id": "didache",
+  "type": "commentary",
+  "name": "La Didaché — Enseñanza de los Doce Apóstoles",
+  "abbreviation": "Didaché",
+  "language": "es",
+  "author": "La Didaché",
+  "year": 90,
+  "description": "Pasajes de la Didaché anclados a las referencias bíblicas que el propio texto cita. Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público). Para leer la obra completa, usa el ícono de Padres Apostólicos.",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "books": [
+    {
+      "id": "MAT",
+      "name": "Mateo",
+      "number": 40,
+      "file": "books/MAT.json"
+    },
+    {
+      "id": "EXO",
+      "name": "Éxodo",
+      "number": 2,
+      "file": "books/EXO.json"
+    },
+    {
+      "id": "LUK",
+      "name": "Lucas",
+      "number": 42,
+      "file": "books/LUK.json"
+    },
+    {
+      "id": "EPH",
+      "name": "Efesios",
+      "number": 49,
+      "file": "books/EPH.json"
+    },
+    {
+      "id": "COL",
+      "name": "Colosenses",
+      "number": 51,
+      "file": "books/COL.json"
+    },
+    {
+      "id": "DEU",
+      "name": "Deuteronomio",
+      "number": 5,
+      "file": "books/DEU.json"
+    },
+    {
+      "id": "2TH",
+      "name": "2 Tesalonicenses",
+      "number": 53,
+      "file": "books/2TH.json"
+    },
+    {
+      "id": "1TI",
+      "name": "1 Timoteo",
+      "number": 54,
+      "file": "books/1TI.json"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "didache-sec3b-luk-18-14",
+   "title": "Capítulo 3 — Otros pecados prohibidos",
+   "author": "La Didaché",
+   "reference": {
+    "book": "LUK",
+    "chapterStart": 18,
+    "verseStart": 14,
+    "chapterEnd": 18,
+    "verseEnd": 14
+   },
+   "content": "<p>No te exaltarás a ti mismo, ni darás un exceso de confianza a tu alma. Tu alma no se unirá con los altivos, sino que tendrá su relación con los justos y humildes.</p>"
+  },
+  {
+   "id": "didache-sec13b-luk-10-7",
+   "title": "Capítulo 13 — El sustento de los profetas",
+   "author": "La Didaché",
+   "reference": {
+    "book": "LUK",
+    "chapterStart": 10,
+    "verseStart": 7,
+    "chapterEnd": 10,
+    "verseEnd": 7
+   },
+   "content": "<p>Pero todo profeta verdadero que quiera permanecer entre vosotros es digno de su sustento. Así también, un maestro verdadero es digno, como trabajador, de su sustento.</p>"
+  }
+ ]
+}
