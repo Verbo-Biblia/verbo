@@ -2048,6 +2048,12 @@ body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
   font-size: 15px;
   line-height: 1.4;
 }
+.backup-consent__hint {
+  margin: 0 0 14px;
+  color: var(--sepia);
+  font-size: 12px;
+  line-height: 1.4;
+}
 .backup-consent__actions { display: flex; gap: 10px; justify-content: center; }
 .backup-consent__btn {
   padding: 8px 16px;

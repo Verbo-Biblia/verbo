@@ -17,7 +17,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260724-backup-menu-order-fix">
+<link rel="stylesheet" href="assets/style.css?v=20260724-backup-folder-hint">
 </head>
 <body>
 
@@ -269,6 +269,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 
   <div class="backup-consent" id="backupConsent" hidden>
     <p class="backup-consent__text">¿Guardamos tu progreso en tu computadora antes de continuar? Que Dios te acompañe.</p>
+    <p class="backup-consent__hint">Al elegir la carpeta, selecciona "Documentos" u otra carpeta normal — el navegador no permite usar la carpeta de inicio ni carpetas del sistema.</p>
     <div class="backup-consent__actions">
       <button type="button" class="backup-consent__btn backup-consent__btn--primary" id="backupConsentAccept">Sí, guardar</button>
       <button type="button" class="backup-consent__btn" id="backupConsentDecline">Ahora no</button>
@@ -279,6 +280,6 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
   <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
   <script src="assets/backup.js?v=20260725-respaldo-local-1"></script>
   <script src="assets/module-loader.js?v=20260724-perf-cache-parallel"></script>
-  <script src="assets/app.js?v=20260724-backup-menu-mobile-fix"></script>
+  <script src="assets/app.js?v=20260724-backup-folder-hint"></script>
 </body>
 </html>

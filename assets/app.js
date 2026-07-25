@@ -110,11 +110,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     try { await navigator.clipboard.writeText(text); toast('Copiado'); }
     catch { const area=document.createElement('textarea'); area.value=text; document.body.appendChild(area); area.select(); document.execCommand('copy'); area.remove(); toast('Copiado'); }
   };
-  const toast = (message) => {
+  const toast = (message, duration=1400) => {
     let el=document.querySelector('.verbo-toast');
     if(!el){ el=document.createElement('div'); el.className='verbo-toast'; document.body.appendChild(el); }
     el.textContent=message; el.classList.add('verbo-toast--show');
-    clearTimeout(el._timer); el._timer=setTimeout(()=>el.classList.remove('verbo-toast--show'),1400);
+    clearTimeout(el._timer); el._timer=setTimeout(()=>el.classList.remove('verbo-toast--show'),duration);
   };
 
   applyTheme(localStorage.getItem('verbo:theme') || 'paper');
@@ -2164,7 +2164,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     consentAccept?.addEventListener('click', async ()=>{
       hideConsent();
       const ok=await VerboBackup.requestFolderAccess();
-      toast(ok?'Carpeta conectada':'No se pudo conectar la carpeta');
+      if(ok) toast('Carpeta conectada');
+      else toast('El navegador bloqueó esa carpeta por seguridad (inicio o sistema). Elige "Documentos" u otra carpeta normal.', 4200);
       refreshStatus();
     });
     consentDecline?.addEventListener('click', ()=>{ hideConsent(); VerboBackup.recordConsentDeclined(); });
