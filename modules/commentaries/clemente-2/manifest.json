@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "id": "clemente-2",
+  "type": "commentary",
+  "name": "2 Clemente — A los Corintios",
+  "abbreviation": "2 Clemente",
+  "language": "es",
+  "author": "2 Clemente",
+  "year": 140,
+  "description": "Pasajes de 2 Clemente anclados a las referencias bíblicas que el propio texto cita. Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público). Para leer la epístola completa, usa el ícono de Padres Apostólicos.",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "books": [
+    {
+      "id": "MAT",
+      "name": "Mateo",
+      "number": 40,
+      "file": "books/MAT.json"
+    },
+    {
+      "id": "ISA",
+      "name": "Isaías",
+      "number": 23,
+      "file": "books/ISA.json"
+    },
+    {
+      "id": "LUK",
+      "name": "Lucas",
+      "number": 42,
+      "file": "books/LUK.json"
+    },
+    {
+      "id": "1CO",
+      "name": "1 Corintios",
+      "number": 46,
+      "file": "books/1CO.json"
+    },
+    {
+      "id": "JER",
+      "name": "Jeremías",
+      "number": 24,
+      "file": "books/JER.json"
+    },
+    {
+      "id": "GEN",
+      "name": "Génesis",
+      "number": 1,
+      "file": "books/GEN.json"
+    },
+    {
+      "id": "EPH",
+      "name": "Efesios",
+      "number": 49,
+      "file": "books/EPH.json"
+    },
+    {
+      "id": "1PE",
+      "name": "1 Pedro",
+      "number": 60,
+      "file": "books/1PE.json"
+    },
+    {
+      "id": "1TI",
+      "name": "1 Timoteo",
+      "number": 54,
+      "file": "books/1TI.json"
+    },
+    {
+      "id": "JAS",
+      "name": "Santiago",
+      "number": 59,
+      "file": "books/JAS.json"
+    }
+  ]
+}

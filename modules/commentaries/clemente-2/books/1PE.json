@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "clemente-2-sec14d-1pe-1-20",
+   "title": "Capítulo 14 — La Iglesia espiritual",
+   "author": "2 Clemente",
+   "reference": {
+    "book": "1PE",
+    "chapterStart": 1,
+    "verseStart": 20,
+    "chapterEnd": 1,
+    "verseEnd": 20
+   },
+   "content": "<p>Los Libros y los Apóstoles enseñan que la iglesia no es del presente, sino desde el principio. Porque era espiritual, como también lo era nuestro Jesús, y se manifestó al final de los días para salvaros.</p>"
+  },
+  {
+   "id": "clemente-2-sec16-1pe-4-4",
+   "title": "Capítulo 16 — Preparación para el día del juicio",
+   "author": "2 Clemente",
+   "reference": {
+    "book": "1PE",
+    "chapterStart": 4,
+    "verseStart": 4,
+    "chapterEnd": 4,
+    "verseEnd": 4
+   },
+   "content": "<p>Buena es, pues, la limosna como arrepentimiento del pecado; mejor es el ayuno que la oración, y la limosna que ambos; la caridad cubre multitud de pecados, y la oración con buena conciencia libra de la muerte.</p>"
+  }
+ ]
+}
