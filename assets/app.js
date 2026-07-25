@@ -64,6 +64,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   let patristicMode=localStorage.getItem('verbo:patristicMode') || 'docs';
   let patristicByVerseCatalog=null;
   let currentPatristicByVerse=null;
+  // Fuente(s) que sí tienen fragmento para el versículo que el usuario acaba de
+  // clickear (ver indicador 📜 por versículo) — se consume una sola vez al
+  // abrir el panel, para saltar directo al documento correcto en vez de dejar
+  // al usuario adivinar en el selector "Fuente".
+  let pendingPatristicSources=null;
   const posicionBiblia = VerboBackup.getPosicionBiblia();
   let currentBook = posicionBiblia?.libro || 'ROM';
   let currentChapter = Number(posicionBiblia?.capitulo) || 7;
@@ -302,14 +307,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       const margin=document.createElement('span'); margin.className='marginalia';
       row.append(num,text);
       let indicatorTop=4;
-      const nextIndicatorTop=()=>{ const top=indicatorTop; indicatorTop+=24; return top; };
+      const nextIndicatorTop=()=>{ const top=indicatorTop; indicatorTop+=26; return top; };
       if(v.hasNote && (v.commentaries||[]).length){
         const indicator=document.createElement('button');
         indicator.type='button';
         indicator.className='verse__comment-indicator';
         indicator.style.top=nextIndicatorTop()+'px';
         const count=v.commentaries.length;
-        indicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">◆</span><span class="verse__comment-indicator__count">${count}</span>`;
+        indicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">💬</span><span class="verse__comment-indicator__count">${count}</span>`;
         const plural=count===1?'comentario disponible':'comentarios disponibles';
         indicator.title=`${count} ${plural} para este versículo`;
         indicator.setAttribute('aria-label',`Ver ${count} ${plural} en ${data.meta.book} ${data.meta.chapter}:${v.n}`);
@@ -353,6 +358,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           row.classList.add('verse--active');
           patristicMode='verse';
           localStorage.setItem('verbo:patristicMode','verse');
+          pendingPatristicSources=(v.patristicSources && v.patristicSources.length) ? v.patristicSources : null;
           openPanel('padres', v.n);
         });
         row.appendChild(patristicIndicator);
@@ -1758,7 +1764,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    if(!currentPatristicByVerse || !patristicByVerseCatalog.some(x=>x.id===currentPatristicByVerse)){
+    if(pendingPatristicSources && pendingPatristicSources.length){
+      // Preferir, en orden del catálogo, la primera fuente que sí tiene un
+      // fragmento anclado a este versículo — así se abre directo (una sola
+      // fuente => esa; varias => la primera) sin pasar por el selector.
+      const preferred=patristicByVerseCatalog.find(x=>pendingPatristicSources.includes(x.id));
+      if(preferred){
+        currentPatristicByVerse=preferred.id;
+        localStorage.setItem('verbo:lastPatristicByVerse', preferred.id);
+      }
+      pendingPatristicSources=null;
+    } else if(!currentPatristicByVerse || !patristicByVerseCatalog.some(x=>x.id===currentPatristicByVerse)){
       const saved=localStorage.getItem('verbo:lastPatristicByVerse');
       currentPatristicByVerse=patristicByVerseCatalog.some(x=>x.id===saved) ? saved : patristicByVerseCatalog[0].id;
     }

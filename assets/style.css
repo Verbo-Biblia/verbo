@@ -420,13 +420,14 @@ body {
 .verse__xref-chip {
   font-family: var(--font-mono);
   font-size: 10.5px;
-  color: var(--wine-soft);
-  background: rgba(122, 46, 46, 0.06);
-  border: 1px solid rgba(122, 46, 46, 0.15);
+  font-weight: 600;
+  color: var(--wine);
+  background: rgba(122, 46, 46, 0.1);
+  border: 1px solid rgba(122, 46, 46, 0.3);
   border-radius: 10px;
   padding: 2px 8px;
   cursor: pointer;
-  transition: background .15s, color .15s;
+  transition: background .15s, color .15s, border-color .15s;
 }
 .verse__xref-chip:hover {
   background: var(--wine-soft);
@@ -1579,30 +1580,32 @@ body[data-theme="rosewood"] {
   z-index: 4;
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  padding: 2px 7px;
-  border: 0;
+  gap: 4px;
+  padding: 3px 8px;
+  border: 1px solid rgba(122, 46, 46, 0.22);
   border-radius: 999px;
-  background: rgba(122, 46, 46, 0.08);
-  color: var(--wine-soft);
+  background: rgba(122, 46, 46, 0.14);
+  color: var(--wine);
   cursor: pointer;
   white-space: nowrap;
   line-height: 1;
+  box-shadow: 0 1px 2px rgba(122, 46, 46, 0.08);
 }
 .verse__comment-indicator:hover,
 .verse__comment-indicator:focus-visible {
-  background: rgba(122, 46, 46, 0.16);
+  background: rgba(122, 46, 46, 0.24);
+  border-color: var(--wine-soft);
   color: var(--wine);
   outline: none;
 }
 .verse__comment-indicator__icon {
-  font-size: 11px;
+  font-size: 12.5px;
   line-height: 1;
 }
 .verse__comment-indicator__count {
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 700;
   line-height: 1;
 }
 
@@ -1610,7 +1613,7 @@ body[data-theme="rosewood"] {
    position:absolute con el mismo punto de anclaje: se apilan verticalmente para
    no superponerse. */
 .verse__comment-indicator + .verse__comment-indicator--library {
-  top: 28px;
+  top: 30px;
 }
 
 @media (max-width: 760px) {
@@ -1619,13 +1622,13 @@ body[data-theme="rosewood"] {
     left: auto;
     right: -2px;
     top: 4px;
-    padding: 2px 6px;
+    padding: 3px 7px;
   }
   .verse__comment-indicator + .verse__comment-indicator--library {
-    top: 28px;
+    top: 30px;
   }
-  .verse__comment-indicator__icon { font-size: 10px; }
-  .verse__comment-indicator__count { font-size: 10px; }
+  .verse__comment-indicator__icon { font-size: 11px; }
+  .verse__comment-indicator__count { font-size: 11px; }
 }
 
 /* Lista de módulos disponibles en el versículo, mostrada al abrir el panel desde el indicador */

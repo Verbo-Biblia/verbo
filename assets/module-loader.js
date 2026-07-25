@@ -606,6 +606,11 @@ const VerboModules = (() => {
     }));
 
     const patristicByVerse=new Map();
+    // Además de contar fragmentos, se recuerda de qué documento (manifest.id)
+    // viene cada uno — así el panel "Padres Apostólicos" puede abrir directo
+    // en el documento correcto al hacer click en el indicador de un versículo,
+    // en vez de obligar al usuario a probar la fuente uno por uno en el selector.
+    const patristicSourcesByVerse=new Map();
     patristicByVerseResults.forEach(res=>res.entries.forEach(entry=>{
       const ref=entry.reference || {};
       const chStart=Number(ref.chapterStart ?? chapter);
@@ -624,6 +629,8 @@ const VerboModules = (() => {
       for(let v=start;v<=end;v++){
         if(!patristicByVerse.has(v)) patristicByVerse.set(v, new Set());
         patristicByVerse.get(v).add(entry.id);
+        if(!patristicSourcesByVerse.has(v)) patristicSourcesByVerse.set(v, new Set());
+        patristicSourcesByVerse.get(v).add(res.manifest.id);
       }
     }));
 
@@ -639,7 +646,8 @@ const VerboModules = (() => {
       const crossrefs=crossrefsByVerse[String(n)] || [];
       const libraryCount=(libraryByVerse.get(n) || new Set()).size;
       const patristicCount=(patristicByVerse.get(n) || new Set()).size;
-      return {n,text,segments,hasNote:noteIds.length>0,noteIds,commentaries,crossrefs,libraryCount,patristicCount};
+      const patristicSources=[...(patristicSourcesByVerse.get(n) || [])];
+      return {n,text,segments,hasNote:noteIds.length>0,noteIds,commentaries,crossrefs,libraryCount,patristicCount,patristicSources};
     });
     const first=bibleResults.find(b=>b.manifest.id===registry.defaultBible)||bibleResults[0];
     return {meta:{book:first.bookInfo.name,bookId,chapter,version:first.manifest.id,versionFull:first.manifest.name},versions,verses,notes};
