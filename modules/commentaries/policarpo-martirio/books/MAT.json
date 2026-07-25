@@ -1,0 +1,43 @@
+{
+ "entries": [
+  {
+   "id": "policarpo-martirio-mat-10-23",
+   "title": "Capítulo 4 — Quinto, el apóstata",
+   "author": "El Martirio de Policarpo",
+   "reference": {
+    "book": "MAT",
+    "chapterStart": 10,
+    "verseStart": 23,
+    "chapterEnd": 10,
+    "verseEnd": 23
+   },
+   "content": "<p>El procónsul, tras muchas súplicas, lo persuadió para que jurara y ofreciera sacrificios. Por lo tanto, hermanos, no alabamos a los que se entregan [al sufrimiento], ya que el Evangelio no enseña a hacerlo.</p>"
+  },
+  {
+   "id": "policarpo-martirio-mat-26-55",
+   "title": "Capítulo 7 — Policarpo es encontrado por sus perseguidores",
+   "author": "El Martirio de Policarpo",
+   "reference": {
+    "book": "MAT",
+    "chapterStart": 26,
+    "verseStart": 55,
+    "chapterEnd": 26,
+    "verseEnd": 55
+   },
+   "content": "<p>Sus perseguidores, junto con jinetes, y llevando consigo al joven, salieron a la hora de la cena del día de la preparación con sus armas habituales, como si fueran a enfrentarse a un ladrón.</p>"
+  },
+  {
+   "id": "policarpo-martirio-mat-6-10",
+   "title": "Capítulo 7 — Policarpo es encontrado por sus perseguidores",
+   "author": "El Martirio de Policarpo",
+   "reference": {
+    "book": "MAT",
+    "chapterStart": 6,
+    "verseStart": 10,
+    "chapterEnd": 6,
+    "verseEnd": 10
+   },
+   "content": "<p>Al llegar la noche [al lugar donde se encontraba], lo encontraron acostado en la habitación superior de una pequeña casa, desde donde podría haber escapado a otro lugar; pero él se negó, diciendo: «Que se haga la voluntad de Dios».</p>"
+  }
+ ]
+}
