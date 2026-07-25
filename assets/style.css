@@ -1656,7 +1656,7 @@ body[data-theme="rosewood"] {
 
 /* Fuentes y licencias */
 .library-rail { position: relative; }
-.library-rail__btn--licenses { margin-top: auto; }
+.library-rail__btn--bottom-group { margin-top: auto; }
 .license-page { padding: 4px 2px 24px; }
 .license-page__intro { display:flex; gap:14px; align-items:flex-start; padding:4px 0 18px; border-bottom:1px solid rgba(112,83,53,.18); margin-bottom:14px; }
 .license-page__intro h2 { margin:0 0 7px; font-family:Georgia,serif; font-size:1.18rem; color:var(--ink); }
@@ -2067,3 +2067,41 @@ body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
 @media (max-width: 760px) {
   .backup-menu__panel { right: -8px; min-width: 200px; }
 }
+
+/* ---------- Páginas estáticas (Sobre el fundador, Misión) ---------- */
+.library-rail__btn[href] { text-decoration: none; }
+
+body.static-page {
+  overflow: auto;
+  height: auto;
+  min-height: 100%;
+}
+.static-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.static-page__brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--wine);
+  font-size: 20px;
+  text-decoration: none;
+}
+.static-page__back { font-size: 13px; color: var(--sepia); text-decoration: none; }
+.static-page__back:hover { color: var(--wine); }
+.static-page__main { max-width: 640px; margin: 0 auto; padding: 40px 32px 80px; }
+@media (min-width: 1024px) { .static-page__main { max-width: 720px; } }
+.static-page__main article h1 {
+  font-family: var(--font-display); color: var(--wine);
+  font-size: 30px; line-height: 1.25; margin: 0 0 22px;
+}
+.static-page__main article h2 {
+  font-family: var(--font-display); color: var(--ink);
+  font-size: 20px; margin: 34px 0 14px;
+}
+.static-page__main article p { line-height: 1.75; margin: 0 0 16px; }
+.static-page__main article hr { border: none; border-top: 1px solid var(--rule); margin: 38px 0; }
