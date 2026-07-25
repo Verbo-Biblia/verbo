@@ -2115,11 +2115,30 @@ document.addEventListener('DOMContentLoaded', async () => {
       else if(VerboBackup.supportsFSA()) status.textContent='Guardado solo en este navegador.';
       else status.textContent='Guardado en este navegador. Exporta tus datos para respaldarlos.';
     }
-    function closePanel(){ panel.hidden=true; trigger.setAttribute('aria-expanded','false'); }
+    function closePanel(){
+      panel.hidden=true; trigger.setAttribute('aria-expanded','false');
+      panel.style.cssText='';
+    }
     function togglePanel(){
       const willOpen=panel.hidden;
       panel.hidden=!willOpen; trigger.setAttribute('aria-expanded',String(willOpen));
-      if(willOpen) refreshStatus();
+      if(willOpen){
+        refreshStatus();
+        // En móvil el header tiene overflow:hidden — posicionar con fixed via JS para no ser recortado ni quedar inclicable
+        if(window.innerWidth<=720){
+          const rect=trigger.getBoundingClientRect();
+          Object.assign(panel.style,{
+            position:'fixed',
+            top:(rect.bottom+8)+'px',
+            right:(window.innerWidth-rect.right)+'px',
+            left:'',
+            minWidth:'200px',
+            zIndex:'2100'
+          });
+        } else {
+          panel.style.cssText='';
+        }
+      }
     }
     trigger.addEventListener('click',(e)=>{ e.stopPropagation(); togglePanel(); });
     document.addEventListener('click',(e)=>{ if(!panel.hidden && !panel.contains(e.target) && e.target!==trigger) closePanel(); });
