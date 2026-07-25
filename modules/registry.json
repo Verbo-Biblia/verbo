@@ -75,7 +75,8 @@
     "commentaries/ignacio-martirio/manifest.json",
     "commentaries/papias-fragmentos/manifest.json",
     "commentaries/policarpo-martirio/manifest.json",
-    "commentaries/mathietes-diogneto/manifest.json"
+    "commentaries/mathietes-diogneto/manifest.json",
+    "commentaries/hermas-pastor/manifest.json"
   ],
   "crossrefs": [
     "crossrefs/tsk/manifest.json"

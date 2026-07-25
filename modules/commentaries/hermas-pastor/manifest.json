@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 2,
+  "id": "hermas-pastor",
+  "type": "commentary",
+  "name": "El Pastor de Hermas",
+  "abbreviation": "Hermas",
+  "language": "es",
+  "author": "Hermas de Roma",
+  "year": 150,
+  "description": "Pasajes de El Pastor de Hermas anclados a las referencias bíblicas que el propio texto cita. Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público). Para leer la obra completa, usa el ícono de Padres Apostólicos.",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "books": [
+    {
+      "id": "MAT",
+      "name": "Mateo",
+      "number": 40,
+      "file": "books/MAT.json"
+    },
+    {
+      "id": "ECC",
+      "name": "Eclesiastés",
+      "number": 21,
+      "file": "books/ECC.json"
+    },
+    {
+      "id": "ISA",
+      "name": "Isaías",
+      "number": 23,
+      "file": "books/ISA.json"
+    },
+    {
+      "id": "JHN",
+      "name": "Juan",
+      "number": 43,
+      "file": "books/JHN.json"
+    },
+    {
+      "id": "2CO",
+      "name": "2 Corintios",
+      "number": 47,
+      "file": "books/2CO.json"
+    },
+    {
+      "id": "LUK",
+      "name": "Lucas",
+      "number": 42,
+      "file": "books/LUK.json"
+    }
+  ]
+}
