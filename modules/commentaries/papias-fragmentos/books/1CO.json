@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "papias-fragmentos-1co-15-25-26",
+   "title": "Fragmento V",
+   "author": "Papías de Hierápolis",
+   "reference": {
+    "book": "1CO",
+    "chapterStart": 15,
+    "verseStart": 25,
+    "chapterEnd": 15,
+    "verseEnd": 26
+   },
+   "content": "<p>Y que, a su debido tiempo, el Hijo entregará su obra al Padre, tal como dice el apóstol: «Porque es necesario que él reine hasta que haya puesto a todos sus enemigos debajo de sus pies». El último enemigo que será destruido es la muerte.</p>"
+  },
+  {
+   "id": "papias-fragmentos-1co-15-27-28",
+   "title": "Fragmento V",
+   "author": "Papías de Hierápolis",
+   "reference": {
+    "book": "1CO",
+    "chapterStart": 15,
+    "verseStart": 27,
+    "chapterEnd": 15,
+    "verseEnd": 28
+   },
+   "content": "<p>Porque en los tiempos del reino, el justo que está en la tierra se olvidará de morir. Pero cuando dice que todas las cosas le son sometidas, es evidente que se excluye al que le sometió todas las cosas. Y cuando todas las cosas le sean sometidas, entonces también el Hijo mismo se someterá al que le sometió todas las cosas, para que Dios sea todo en todos.</p>"
+  }
+ ]
+}

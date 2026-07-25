@@ -300,10 +300,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else text.textContent=v.text[currentVersion] || Object.values(v.text)[0] || '';
       const margin=document.createElement('span'); margin.className='marginalia';
       row.append(num,text);
+      let indicatorTop=4;
+      const nextIndicatorTop=()=>{ const top=indicatorTop; indicatorTop+=24; return top; };
       if(v.hasNote && (v.commentaries||[]).length){
         const indicator=document.createElement('button');
         indicator.type='button';
         indicator.className='verse__comment-indicator';
+        indicator.style.top=nextIndicatorTop()+'px';
         const count=v.commentaries.length;
         indicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">◆</span><span class="verse__comment-indicator__count">${count}</span>`;
         const plural=count===1?'comentario disponible':'comentarios disponibles';
@@ -321,6 +324,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const libIndicator=document.createElement('button');
         libIndicator.type='button';
         libIndicator.className='verse__comment-indicator verse__comment-indicator--library';
+        libIndicator.style.top=nextIndicatorTop()+'px';
         libIndicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">📚</span><span class="verse__comment-indicator__count">${v.libraryCount}</span>`;
         const libPlural=v.libraryCount===1?'artículo disponible':'artículos disponibles';
         libIndicator.title=`${v.libraryCount} ${libPlural} en Biblioteca para este versículo`;
@@ -332,6 +336,25 @@ document.addEventListener('DOMContentLoaded', async () => {
           openPanel('biblioteca', v.n);
         });
         row.appendChild(libIndicator);
+      }
+      if(v.patristicCount>0){
+        const patristicIndicator=document.createElement('button');
+        patristicIndicator.type='button';
+        patristicIndicator.className='verse__comment-indicator verse__comment-indicator--patristic';
+        patristicIndicator.style.top=nextIndicatorTop()+'px';
+        patristicIndicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">📜</span><span class="verse__comment-indicator__count">${v.patristicCount}</span>`;
+        const patristicPlural=v.patristicCount===1?'fragmento patrístico disponible':'fragmentos patrísticos disponibles';
+        patristicIndicator.title=`${v.patristicCount} ${patristicPlural} para este versículo`;
+        patristicIndicator.setAttribute('aria-label',`Ver ${v.patristicCount} ${patristicPlural} en ${data.meta.book} ${data.meta.chapter}:${v.n}`);
+        patristicIndicator.addEventListener('click',(e)=>{
+          e.stopPropagation();
+          document.querySelectorAll('.verse--active').forEach(x=>x.classList.remove('verse--active'));
+          row.classList.add('verse--active');
+          patristicMode='verse';
+          localStorage.setItem('verbo:patristicMode','verse');
+          openPanel('padres', v.n);
+        });
+        row.appendChild(patristicIndicator);
       }
       row.appendChild(margin); els.list.appendChild(row);
       if((v.crossrefs||[]).length){

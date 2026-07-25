@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 2,
+  "id": "papias-fragmentos",
+  "type": "commentary",
+  "name": "Fragmentos de Papías de Hierápolis",
+  "abbreviation": "Papías",
+  "language": "es",
+  "author": "Papías de Hierápolis",
+  "year": 120,
+  "description": "Fragmentos de Papías anclados a las referencias bíblicas que el propio texto cita. Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público). Para leer los fragmentos completos, usa el ícono de Padres Apostólicos.",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "books": [
+    {
+      "id": "ISA",
+      "name": "Isaías",
+      "number": 23,
+      "file": "books/ISA.json"
+    },
+    {
+      "id": "JHN",
+      "name": "Juan",
+      "number": 43,
+      "file": "books/JHN.json"
+    },
+    {
+      "id": "MAT",
+      "name": "Mateo",
+      "number": 40,
+      "file": "books/MAT.json"
+    },
+    {
+      "id": "1CO",
+      "name": "1 Corintios",
+      "number": 46,
+      "file": "books/1CO.json"
+    }
+  ]
+}

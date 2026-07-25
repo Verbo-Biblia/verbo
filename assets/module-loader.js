@@ -531,6 +531,15 @@ const VerboModules = (() => {
       catch (error) { console.warn(`Biblioteca omitida: modules/${path}`, error); return null; }
     }))).filter(Boolean);
 
+    // Fragmentos patrísticos anclados a versículo (ver FASE 9 en PLAN.md):
+    // mismo patrón que "biblioteca", solo indica cuántos fragmentos distintos
+    // hay por verso — el panel Padres Apostólicos (modo "Por versículo") carga
+    // el detalle vía loadLinkedEntries cuando el usuario lo abre.
+    const patristicByVerseResults=(await Promise.all((registry.patristicByVerse || []).map(async path=>{
+      try { return await loadLinkedEntries(`modules/${path}`,bookId,chapter); }
+      catch (error) { console.warn(`Padre apostólico omitido: modules/${path}`, error); return null; }
+    }))).filter(Boolean);
+
     const versions={};
     bibleResults.forEach(({manifest:m})=>versions[m.id]={label:m.abbreviation,full:m.name,year:m.year,hasStrongs:Boolean(m.hasStrongs)});
     const allVerseNumbers=[...new Set(bibleResults.flatMap(b=>Object.keys(b.verses).map(Number)))].sort((a,b)=>a-b);
@@ -594,6 +603,28 @@ const VerboModules = (() => {
       }
     }));
 
+    const patristicByVerse=new Map();
+    patristicByVerseResults.forEach(res=>res.entries.forEach(entry=>{
+      const ref=entry.reference || {};
+      const chStart=Number(ref.chapterStart ?? chapter);
+      const chEnd=Number(ref.chapterEnd ?? chStart);
+      if((chapter < chStart || chapter > chEnd) && !(chapter === 1 && chStart === 0)) return;
+
+      let start=Number(ref.verseStart);
+      let end=Number(ref.verseEnd ?? ref.verseStart);
+      if(!Number.isInteger(start) || start <= 0) start = firstVerse;
+      if(!Number.isInteger(end) || end <= 0) end = start;
+      if(chapter > chStart) start = firstVerse;
+      if(chapter < chEnd) end = lastVerse;
+      start=Math.max(firstVerse, Math.min(start,lastVerse));
+      end=Math.max(start, Math.min(end,lastVerse));
+
+      for(let v=start;v<=end;v++){
+        if(!patristicByVerse.has(v)) patristicByVerse.set(v, new Set());
+        patristicByVerse.get(v).add(entry.id);
+      }
+    }));
+
     const verses=allVerseNumbers.map(n=>{
       const text={}, segments={};
       bibleResults.forEach(b=>{ const v=b.verses[String(n)]; if(!v)return; text[b.manifest.id]=typeof v==='string'?v:v.text; if(b.manifest.hasStrongs && v.segments) segments[b.manifest.id]=v.segments; });
@@ -605,7 +636,8 @@ const VerboModules = (() => {
       const noteIds=commentaries.flatMap(item=>item.noteIds);
       const crossrefs=crossrefsByVerse[String(n)] || [];
       const libraryCount=(libraryByVerse.get(n) || new Set()).size;
-      return {n,text,segments,hasNote:noteIds.length>0,noteIds,commentaries,crossrefs,libraryCount};
+      const patristicCount=(patristicByVerse.get(n) || new Set()).size;
+      return {n,text,segments,hasNote:noteIds.length>0,noteIds,commentaries,crossrefs,libraryCount,patristicCount};
     });
     const first=bibleResults.find(b=>b.manifest.id===registry.defaultBible)||bibleResults[0];
     return {meta:{book:first.bookInfo.name,bookId,chapter,version:first.manifest.id,versionFull:first.manifest.name},versions,verses,notes};
