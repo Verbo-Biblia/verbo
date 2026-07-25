@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta name="google-site-verification" content="71xY79FKGlgA3Z8wYUxv5ke-m0vX1NLaDicEGAFsF1Q" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location.hostname)) {
+  location.replace(`https://${location.host}${location.pathname}${location.search}${location.hash}`);
+}
+</script>
+<title>Verbo — Estudio bíblico en español</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<meta name="theme-color" content="#7f2d35">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Verbo">
+<link rel="stylesheet" href="assets/style.css?v=20260725-portal-back-link">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="app-header__brand">
+      <a class="app-header__portal-back" href="../" title="Volver al portal Verbo" aria-label="Volver al portal Verbo">←</a>
+      <span class="app-header__mark">Verbo</span>
+      <span class="app-header__sub">Estudio bíblico en español</span>
+    </div>
+    <div class="app-header__nav">
+      <div class="version-picker">
+        <div class="version-picker__combo" id="versionCombo">
+          <div class="version-picker__field">
+            <input type="text" id="mainVersionInput" class="version-picker__input" autocomplete="off" spellcheck="false" aria-label="Versión de la Biblia" readonly>
+            <ul class="version-picker__dropdown" id="versionDropdown" hidden></ul>
+          </div>
+        </div>
+        <select id="nativeVersionSelect" class="version-picker__native-select passage-picker__select" aria-label="Versión de la Biblia"></select>
+      </div>
+      <div class="passage-picker" aria-label="Seleccionar pasaje">
+        <select id="bookSelect" class="passage-picker__select passage-picker__select--book" aria-label="Libro"></select>
+        <select id="chapterSelect" class="passage-picker__select passage-picker__select--chapter" aria-label="Capítulo"></select>
+        <button id="prevChapter" class="passage-picker__button" type="button" aria-label="Capítulo anterior">‹</button>
+        <button id="nextChapter" class="passage-picker__button" type="button" aria-label="Capítulo siguiente">›</button>
+      </div>
+      <button class="search-trigger" id="searchTrigger" type="button" aria-label="Buscar en la Biblia">
+        <span>⌕</span>
+        <span>Buscar</span>
+      </button>
+      <button class="search-trigger sermon-mode-toggle" id="sermonModeToggle" type="button" aria-pressed="false" aria-label="Preparación de Bosquejo/Estudio">
+        <span>✎</span>
+        <span>Preparación de Bosquejo/Estudio</span>
+      </button>
+      <div class="backup-menu">
+        <button class="search-trigger backup-menu__trigger" id="backupMenuTrigger" type="button" aria-label="Guardar mi progreso" aria-haspopup="true" aria-expanded="false">
+          <span>💾</span>
+        </button>
+        <div class="backup-menu__panel" id="backupMenuPanel" hidden>
+          <div class="backup-menu__status" id="backupMenuStatus"></div>
+          <button type="button" class="backup-menu__item" id="backupSaveBtn">Guardar mi progreso</button>
+          <button type="button" class="backup-menu__item" id="backupExportBtn">Exportar mis datos</button>
+          <button type="button" class="backup-menu__item" id="backupImportBtn">Importar mis datos</button>
+          <input type="file" id="backupImportInput" accept="application/json" hidden>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-body">
+
+    <nav class="library-rail" aria-label="Biblioteca">
+      <button class="library-rail__btn" data-tab="biblioteca" title="Biblioteca" aria-label="Biblioteca">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <path d="M9 6h7"/>
+          <path d="M9 10h7"/>
+        </svg>
+      </button>
+      <button class="library-rail__btn" data-tab="padres" title="Padres Apostólicos" aria-label="Padres Apostólicos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M3 21h18"/>
+          <path d="M5 21V8l7-5 7 5v13"/>
+          <path d="M9 21v-6h6v6"/>
+        </svg>
+      </button>
+      <button class="library-rail__btn" data-tab="evangelio" title="Evangelio cronológico de Jesús" aria-label="Evangelio cronológico de Jesús">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 21V7"/>
+          <path d="M12 7c0-2.5-2-4.5-5-4.5S3 4 3 6.5C3 13 12 13 12 21"/>
+          <path d="M12 7c0-2.5 2-4.5 5-4.5S21 4 21 6.5C21 13 12 13 12 21"/>
+        </svg>
+      </button>
+      <a class="library-rail__btn library-rail__btn--bottom-group" href="../sobre-el-fundador/" title="Sobre el fundador" aria-label="Sobre el fundador">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+        </svg>
+      </a>
+      <a class="library-rail__btn" href="../mision/" title="Nuestra misión" aria-label="Nuestra misión">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 21s-7-4.35-9.5-9C.9 8.4 2.7 4.5 6.5 4c2-.26 3.6.9 5.5 3 1.9-2.1 3.5-3.26 5.5-3 3.8.5 5.6 4.4 4 8-2.5 4.65-9.5 9-9.5 9z"/>
+        </svg>
+      </a>
+      <button class="library-rail__btn" data-tab="licencias" title="Fuentes y licencias" aria-label="Fuentes y licencias">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 10v6"/>
+          <circle cx="12" cy="7" r=".7" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+    </nav>
+
+    <main class="reading-pane" id="readingPane">
+      <div class="reading-pane__inner">
+        <div class="reading-pane__app-mark" aria-hidden="true">Verbo</div>
+        <div class="chapter-eyebrow"></div>
+        <div class="chapter-title-row">
+          <button class="chapter-nav-btn" id="innerPrev" type="button" aria-label="Capítulo anterior">‹</button>
+          <h1 class="chapter-title"></h1>
+          <button class="chapter-nav-btn chapter-nav-btn--next" id="innerNext" type="button" aria-label="Capítulo siguiente">›</button>
+        </div>
+        <div id="verseList"></div>
+        <div class="bible-attribution" id="bibleAttribution" hidden></div>
+      </div>
+      <div class="tts-float" id="ttsFloat">
+        <div class="tts-float__inner">
+          <select class="tts-voice-select" id="ttsVoiceSelect" aria-label="Voz de lectura" hidden></select>
+          <button class="tts-btn" id="ttsPlayBtn" type="button" aria-label="Lectura continua en voz alta" title="Lectura continua en voz alta" hidden>▶</button>
+          <button class="tts-btn tts-btn--stop" id="ttsStopBtn" type="button" aria-label="Detener lectura" title="Detener lectura" hidden>⏹</button>
+        </div>
+      </div>
+    </main>
+
+    <main class="editor-pane" id="editorPane" hidden>
+      <div class="editor-pane__toolbar" id="editorToolbar"></div>
+      <div class="editor-pane__actions">
+        <button type="button" class="editor-pane__export-btn" id="exportWordBtn">Exportar a Word</button>
+        <button type="button" class="editor-pane__export-btn" id="exportPdfBtn">Exportar a PDF</button>
+      </div>
+      <div class="editor-pane__inner">
+        <div class="editor-pane__surface" id="editorSurface"></div>
+      </div>
+    </main>
+
+    <div class="sheet-backdrop" id="sheetBackdrop"></div>
+    <aside class="side-panel" id="sidePanel">
+      <div class="side-panel__inner">
+        <div class="sheet-handle" aria-hidden="true"></div>
+        <div class="side-panel__header">
+          <span class="side-panel__title" id="panelTitle">Panel</span>
+          <button class="side-panel__close" id="panelClose" aria-label="Cerrar panel">✕</button>
+        </div>
+        <div class="side-panel__toolbar" id="panelToolbar"></div>
+        <div class="side-panel__body" id="panelBody"></div>
+      </div>
+    </aside>
+
+    <nav class="tab-rail">
+      <button class="tab-rail__btn" data-tab="comentario" title="Comentario" aria-label="Comentario">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span class="tab-rail__dot"></span>
+      </button>
+      <button class="tab-rail__btn" data-tab="comparar" title="Comparar versiones" aria-label="Comparar versiones">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="3" y="4" width="7" height="16" rx="1"/>
+          <rect x="14" y="4" width="7" height="16" rx="1"/>
+        </svg>
+      </button>
+      <button class="tab-rail__btn" data-tab="diccionario" title="Diccionario" aria-label="Diccionario">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+      </button>
+      <button class="tab-rail__btn" data-tab="notas" title="Mis notas" aria-label="Mis notas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 20h9"/>
+          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>
+        </svg>
+      </button>
+      <button class="tab-rail__btn" data-tab="exegesis" title="Exégesis" aria-label="Exégesis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/>
+          <path d="M8 7h8"/>
+          <path d="M8 11h6"/>
+          <path d="M7 17h10"/>
+        </svg>
+      </button>
+      <button class="tab-rail__btn" data-tab="tema" title="Tema" aria-label="Tema">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/>
+          <circle cx="7.5" cy="10.5" r=".8"/>
+          <circle cx="10" cy="6.8" r=".8"/>
+          <circle cx="14.3" cy="6.8" r=".8"/>
+          <circle cx="17" cy="10.5" r=".8"/>
+        </svg>
+      </button>
+    </nav>
+
+  </div>
+
+    <nav class="mobile-tool-dock" aria-label="Herramientas de estudio">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="comentario" type="button" aria-label="Comentarios">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="mobile-tool-label">Comentarios</span>
+      </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="comparar" type="button" aria-label="Comparar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="7" height="16" rx="1"/><rect x="14" y="4" width="7" height="16" rx="1"/></svg>
+        <span class="mobile-tool-label">Comparar</span>
+      </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="diccionario" type="button" aria-label="Diccionario">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span class="mobile-tool-label">Diccionario</span>
+      </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="notas" type="button" aria-label="Mis notas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+        <span class="mobile-tool-label">Mis notas</span>
+      </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="exegesis" type="button" aria-label="Exégesis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M8 7h8"/><path d="M8 11h6"/><path d="M7 17h10"/></svg>
+        <span class="mobile-tool-label">Exégesis</span>
+      </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="tema" type="button" aria-label="Tema">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/><circle cx="7.5" cy="10.5" r=".8"/><circle cx="10" cy="6.8" r=".8"/><circle cx="14.3" cy="6.8" r=".8"/><circle cx="17" cy="10.5" r=".8"/></svg>
+        <span class="mobile-tool-label">Tema</span>
+      </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="biblioteca" type="button" aria-label="Biblioteca">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 6h7"/><path d="M9 10h7"/></svg>
+        <span class="mobile-tool-label">Biblioteca</span>
+      </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="padres" type="button" aria-label="Padres Apostólicos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>
+        <span class="mobile-tool-label">Padres Apostólicos</span>
+      </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="evangelio" type="button" aria-label="Evangelio cronológico de Jesucristo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21V7"/><path d="M12 7c0-2.5-2-4.5-5-4.5S3 4 3 6.5C3 13 12 13 12 21"/><path d="M12 7c0-2.5 2-4.5 5-4.5S21 4 21 6.5C21 13 12 13 12 21"/></svg>
+        <span class="mobile-tool-label">Evangelio cronológico de Jesucristo</span>
+      </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="licencias" type="button" aria-label="Fuentes y licencias">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 10v6"/><circle cx="12" cy="7" r=".7" fill="currentColor" stroke="none"/></svg>
+        <span class="mobile-tool-label">Fuentes y licencias</span>
+      </button>
+      <a class="mobile-tool-btn tab-rail__btn" href="../sobre-el-fundador/" aria-label="Sobre el fundador">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <span class="mobile-tool-label">Sobre el fundador</span>
+      </a>
+      <a class="mobile-tool-btn tab-rail__btn" href="../mision/" aria-label="Nuestra misión">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.35-9.5-9C.9 8.4 2.7 4.5 6.5 4c2-.26 3.6.9 5.5 3 1.9-2.1 3.5-3.26 5.5-3 3.8.5 5.6 4.4 4 8-2.5 4.65-9.5 9-9.5 9z"/></svg>
+        <span class="mobile-tool-label">Nuestra misión</span>
+      </a>
+    </nav>
+
+  <div class="verse-action-bar" id="verseActionBar" hidden>
+    <button class="verse-swatch" data-color="hl-yellow" aria-label="Amarillo" title="Resaltar amarillo"></button>
+    <button class="verse-swatch" data-color="hl-green"  aria-label="Verde"    title="Resaltar verde"></button>
+    <button class="verse-swatch" data-color="hl-blue"   aria-label="Azul"     title="Resaltar azul"></button>
+    <button class="verse-swatch" data-color="hl-pink"   aria-label="Rosa"     title="Resaltar rosa"></button>
+    <button class="verse-swatch" data-color="hl-coral"  aria-label="Coral"    title="Resaltar coral"></button>
+    <button class="verse-swatch" data-color="hl-violet" aria-label="Violeta"  title="Resaltar violeta"></button>
+    <button class="verse-swatch verse-swatch--erase" data-color="" aria-label="Quitar resaltado" title="Quitar resaltado">✕</button>
+    <div class="verse-action-bar__sep"></div>
+    <button class="verse-action-btn" id="copyVerseText" type="button">Copiar</button>
+    <button class="verse-action-btn verse-action-btn--secondary" id="copyVerseRef" type="button">Ref.</button>
+    <div class="verse-action-bar__sep"></div>
+    <button class="verse-action-bar__close" id="closeVerseAction" type="button" aria-label="Cerrar">✕</button>
+  </div>
+
+  <div class="backup-consent" id="backupConsent" hidden>
+    <p class="backup-consent__text">¿Guardamos tu progreso en tu computadora antes de continuar? Que Dios te acompañe.</p>
+    <p class="backup-consent__hint">Al elegir la carpeta, selecciona "Documentos" u otra carpeta normal — el navegador no permite usar la carpeta de inicio ni carpetas del sistema.</p>
+    <div class="backup-consent__actions">
+      <button type="button" class="backup-consent__btn backup-consent__btn--primary" id="backupConsentAccept">Sí, guardar</button>
+      <button type="button" class="backup-consent__btn" id="backupConsentDecline">Ahora no</button>
+    </div>
+  </div>
+
+  <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
+  <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
+  <script src="assets/backup.js?v=20260725-respaldo-local-1"></script>
+  <script src="assets/module-loader.js?v=20260725-rv-verbo-default"></script>
+  <script src="assets/app.js?v=20260725-iconos-en-fila-xrefs"></script>
+</body>
+</html>

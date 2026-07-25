@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 2,
+  "id": "rv-verbo-strong-nt-open",
+  "type": "bible",
+  "name": "Biblia Verbo RV2026 con Strong (beta)",
+  "abbreviation": "RV2026+ β",
+  "language": "es",
+  "year": 2026,
+  "description": "RV2026 con una capa beta de códigos Strong derivada de STEPBible Data CC BY 4.0.",
+  "license": "Edición Verbo sobre RV1909 de dominio público; datos Strong © STEP Bible, CC BY 4.0",
+  "hasStrongs": true,
+  "books": [
+    {
+      "id": "MAT",
+      "name": "Mateo",
+      "number": 40,
+      "file": "books/MAT.json"
+    },
+    {
+      "id": "MRK",
+      "name": "Marcos",
+      "number": 41,
+      "file": "books/MRK.json"
+    },
+    {
+      "id": "LUK",
+      "name": "Lucas",
+      "number": 42,
+      "file": "books/LUK.json"
+    },
+    {
+      "id": "JHN",
+      "name": "Juan",
+      "number": 43,
+      "file": "books/JHN.json"
+    },
+    {
+      "id": "ACT",
+      "name": "Hechos",
+      "number": 44,
+      "file": "books/ACT.json"
+    },
+    {
+      "id": "ROM",
+      "name": "Romanos",
+      "number": 45,
+      "file": "books/ROM.json"
+    },
+    {
+      "id": "1CO",
+      "name": "1 Corintios",
+      "number": 46,
+      "file": "books/1CO.json"
+    },
+    {
+      "id": "2CO",
+      "name": "2 Corintios",
+      "number": 47,
+      "file": "books/2CO.json"
+    },
+    {
+      "id": "GAL",
+      "name": "Gálatas",
+      "number": 48,
+      "file": "books/GAL.json"
+    },
+    {
+      "id": "EPH",
+      "name": "Efesios",
+      "number": 49,
+      "file": "books/EPH.json"
+    },
+    {
+      "id": "PHP",
+      "name": "Filipenses",
+      "number": 50,
+      "file": "books/PHP.json"
+    },
+    {
+      "id": "COL",
+      "name": "Colosenses",
+      "number": 51,
+      "file": "books/COL.json"
+    },
+    {
+      "id": "1TH",
+      "name": "1 Tesalonicenses",
+      "number": 52,
+      "file": "books/1TH.json"
+    },
+    {
+      "id": "2TH",
+      "name": "2 Tesalonicenses",
+      "number": 53,
+      "file": "books/2TH.json"
+    },
+    {
+      "id": "1TI",
+      "name": "1 Timoteo",
+      "number": 54,
+      "file": "books/1TI.json"
+    },
+    {
+      "id": "2TI",
+      "name": "2 Timoteo",
+      "number": 55,
+      "file": "books/2TI.json"
+    },
+    {
+      "id": "TIT",
+      "name": "Tito",
+      "number": 56,
+      "file": "books/TIT.json"
+    },
+    {
+      "id": "PHM",
+      "name": "Filemón",
+      "number": 57,
+      "file": "books/PHM.json"
+    },
+    {
+      "id": "HEB",
+      "name": "Hebreos",
+      "number": 58,
+      "file": "books/HEB.json"
+    },
+    {
+      "id": "JAS",
+      "name": "Santiago",
+      "number": 59,
+      "file": "books/JAS.json"
+    },
+    {
+      "id": "1PE",
+      "name": "1 Pedro",
+      "number": 60,
+      "file": "books/1PE.json"
+    },
+    {
+      "id": "2PE",
+      "name": "2 Pedro",
+      "number": 61,
+      "file": "books/2PE.json"
+    },
+    {
+      "id": "1JN",
+      "name": "1 Juan",
+      "number": 62,
+      "file": "books/1JN.json"
+    },
+    {
+      "id": "2JN",
+      "name": "2 Juan",
+      "number": 63,
+      "file": "books/2JN.json"
+    },
+    {
+      "id": "3JN",
+      "name": "3 Juan",
+      "number": 64,
+      "file": "books/3JN.json"
+    },
+    {
+      "id": "JUD",
+      "name": "Judas",
+      "number": 65,
+      "file": "books/JUD.json"
+    },
+    {
+      "id": "REV",
+      "name": "Apocalipsis",
+      "number": 66,
+      "file": "books/REV.json"
+    }
+  ],
+  "status": "beta",
+  "strongSource": "STEPBible Data (CC BY 4.0)",
+  "alignmentMethod": "NT: glosas españolas exactas y únicas. AT: equivalencias corpus-wide con precisión condicional >=90/75 % y unicidad por versículo."
+}

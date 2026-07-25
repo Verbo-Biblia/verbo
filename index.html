@@ -9,277 +9,427 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
   location.replace(`https://${location.host}${location.pathname}${location.search}${location.hash}`);
 }
 </script>
-<title>Verbo — Estudio bíblico en español</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
-<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
-<meta name="theme-color" content="#7f2d35">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260725-iconos-en-fila-xrefs">
+<title>Verbo — Compendio de recursos cristianos</title>
+<meta name="description" content="Verbo: Biblia, comentarios, formación teológica y recursos pastorales gratuitos en español, para quienes predican, enseñan y forman.">
+<link rel="canonical" href="https://verbobiblia.com/">
+<link rel="icon" type="image/png" sizes="192x192" href="biblia/assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="biblia/assets/icons/icon-192.png">
+<meta name="theme-color" content="#10192B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #10192B;
+    --ink-deep: #0A101C;
+    --parchment: #F4EEDF;
+    --parchment-dim: #E7DFC9;
+    --gold: #C9A227;
+    --gold-dim: #A98A22;
+    --wine: #7A2E2E;
+    --text-on-ink: #EDE6D6;
+    --text-muted: #9FA9BD;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--text-on-ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3 { font-family: 'Fraunces', serif; font-weight: 500; letter-spacing: -0.01em; }
+
+  a { color: inherit; text-decoration: none; }
+
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem clamp(1.5rem, 5vw, 4rem);
+    background: rgba(16, 25, 43, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(201, 162, 39, 0.15);
+  }
+
+  .wordmark {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .wordmark span {
+    color: var(--gold);
+    font-weight: 400;
+    font-size: 0.95rem;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-left: 0.6rem;
+    letter-spacing: 0;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 78vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem clamp(1.5rem, 5vw, 4rem);
+    overflow: hidden;
+    background-image: url('assets/fondo.png');
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* Scrim so headline text stays legible over the illustration's upper-left area */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(100deg, rgba(10,16,28,0.88) 0%, rgba(10,16,28,0.6) 38%, rgba(10,16,28,0.15) 62%, rgba(10,16,28,0.05) 100%),
+      linear-gradient(0deg, rgba(10,16,28,0.55) 0%, transparent 30%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    max-width: 640px;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+    line-height: 1.08;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 46ch;
+    margin-bottom: 2.25rem;
+  }
+
+  .hero-rule {
+    width: 3rem;
+    height: 2px;
+    background: var(--gold);
+    margin-bottom: 1.75rem;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--gold);
+    color: var(--ink-deep);
+    font-weight: 600;
+    padding: 0.85rem 1.6rem;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    transition: background 0.15s ease;
+  }
+
+  .btn-primary:hover { background: #DDB53A; }
+
+  /* ---------- SECTIONS GRID ---------- */
+  .sections {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) 5rem;
+  }
+
+  .sections-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.15);
+    padding-bottom: 1.25rem;
+  }
+
+  .sections-head h2 {
+    font-size: 1.6rem;
+    color: var(--text-on-ink);
+  }
+
+  .sections-head span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 720px) {
+    .card-grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    position: relative;
+    background: linear-gradient(155deg, #16223A 0%, #0F1A2E 100%);
+    border: 1px solid rgba(201, 162, 39, 0.12);
+    border-radius: 6px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(201, 162, 39, 0.4);
+    background: linear-gradient(155deg, #1A2740 0%, #101B30 100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover { transform: none; }
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .card-numeral {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .card-icon {
+    width: 34px;
+    height: 34px;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .card h3 {
+    font-size: 1.35rem;
+    color: var(--parchment);
+  }
+
+  .card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    flex-grow: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+  }
+
+  /* Signature element: cross-reference-style pill, borrowed from the actual Bible app */
+  .ref-pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid;
+    letter-spacing: 0.02em;
+  }
+
+  .ref-pill.live {
+    color: #8FBF8F;
+    border-color: rgba(143, 191, 143, 0.4);
+    background: rgba(143, 191, 143, 0.08);
+  }
+
+  .ref-pill.soon {
+    color: #C9A227;
+    border-color: rgba(201, 162, 39, 0.35);
+    background: rgba(201, 162, 39, 0.07);
+  }
+
+  .card-arrow {
+    color: var(--text-muted);
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  .card:hover .card-arrow {
+    color: var(--gold);
+    transform: translateX(3px);
+  }
+
+  /* ---------- QUOTE STRIP ---------- */
+  .quote-strip {
+    padding: 4rem clamp(1.5rem, 5vw, 4rem);
+    background: var(--ink-deep);
+    border-top: 1px solid rgba(201, 162, 39, 0.1);
+    border-bottom: 1px solid rgba(201, 162, 39, 0.1);
+    text-align: center;
+  }
+
+  .quote-strip blockquote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+    color: var(--parchment-dim);
+    max-width: 42ch;
+    margin: 0 auto 0.75rem;
+    line-height: 1.4;
+  }
+
+  .quote-strip cite {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--gold-dim);
+    font-style: normal;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  footer a:hover { color: var(--gold); }
+</style>
 </head>
 <body>
 
-  <header class="app-header">
-    <div class="app-header__brand">
-      <span class="app-header__mark">Verbo</span>
-      <span class="app-header__sub">Estudio bíblico en español</span>
-    </div>
-    <div class="app-header__nav">
-      <div class="version-picker">
-        <div class="version-picker__combo" id="versionCombo">
-          <div class="version-picker__field">
-            <input type="text" id="mainVersionInput" class="version-picker__input" autocomplete="off" spellcheck="false" aria-label="Versión de la Biblia" readonly>
-            <ul class="version-picker__dropdown" id="versionDropdown" hidden></ul>
-          </div>
-        </div>
-        <select id="nativeVersionSelect" class="version-picker__native-select passage-picker__select" aria-label="Versión de la Biblia"></select>
-      </div>
-      <div class="passage-picker" aria-label="Seleccionar pasaje">
-        <select id="bookSelect" class="passage-picker__select passage-picker__select--book" aria-label="Libro"></select>
-        <select id="chapterSelect" class="passage-picker__select passage-picker__select--chapter" aria-label="Capítulo"></select>
-        <button id="prevChapter" class="passage-picker__button" type="button" aria-label="Capítulo anterior">‹</button>
-        <button id="nextChapter" class="passage-picker__button" type="button" aria-label="Capítulo siguiente">›</button>
-      </div>
-      <button class="search-trigger" id="searchTrigger" type="button" aria-label="Buscar en la Biblia">
-        <span>⌕</span>
-        <span>Buscar</span>
-      </button>
-      <button class="search-trigger sermon-mode-toggle" id="sermonModeToggle" type="button" aria-pressed="false" aria-label="Preparación de Bosquejo/Estudio">
-        <span>✎</span>
-        <span>Preparación de Bosquejo/Estudio</span>
-      </button>
-      <div class="backup-menu">
-        <button class="search-trigger backup-menu__trigger" id="backupMenuTrigger" type="button" aria-label="Guardar mi progreso" aria-haspopup="true" aria-expanded="false">
-          <span>💾</span>
-        </button>
-        <div class="backup-menu__panel" id="backupMenuPanel" hidden>
-          <div class="backup-menu__status" id="backupMenuStatus"></div>
-          <button type="button" class="backup-menu__item" id="backupSaveBtn">Guardar mi progreso</button>
-          <button type="button" class="backup-menu__item" id="backupExportBtn">Exportar mis datos</button>
-          <button type="button" class="backup-menu__item" id="backupImportBtn">Importar mis datos</button>
-          <input type="file" id="backupImportInput" accept="application/json" hidden>
-        </div>
-      </div>
-    </div>
-  </header>
+<header>
+  <div class="wordmark">Verbo<span>compendio bíblico</span></div>
+</header>
 
-  <div class="app-body">
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Estudio · Formación · Lectura</span>
+    <h1>Todo lo que necesitas, <em>en un solo lugar.</em></h1>
+    <div class="hero-rule"></div>
+    <p>Un compendio gratuito de herramientas bíblicas, formación teológica y recursos pastorales, hecho para quienes predican, enseñan y forman — no para quienes investigan desde un escritorio.</p>
+    <a class="btn-primary" href="#secciones">Explorar Verbo →</a>
+  </div>
+</section>
 
-    <nav class="library-rail" aria-label="Biblioteca">
-      <button class="library-rail__btn" data-tab="biblioteca" title="Biblioteca" aria-label="Biblioteca">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-          <path d="M9 6h7"/>
-          <path d="M9 10h7"/>
-        </svg>
-      </button>
-      <button class="library-rail__btn" data-tab="padres" title="Padres Apostólicos" aria-label="Padres Apostólicos">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M3 21h18"/>
-          <path d="M5 21V8l7-5 7 5v13"/>
-          <path d="M9 21v-6h6v6"/>
-        </svg>
-      </button>
-      <button class="library-rail__btn" data-tab="evangelio" title="Evangelio cronológico de Jesús" aria-label="Evangelio cronológico de Jesús">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M12 21V7"/>
-          <path d="M12 7c0-2.5-2-4.5-5-4.5S3 4 3 6.5C3 13 12 13 12 21"/>
-          <path d="M12 7c0-2.5 2-4.5 5-4.5S21 4 21 6.5C21 13 12 13 12 21"/>
-        </svg>
-      </button>
-      <a class="library-rail__btn library-rail__btn--bottom-group" href="sobre-el-fundador/" title="Sobre el fundador" aria-label="Sobre el fundador">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <circle cx="12" cy="8" r="4"/>
-          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-        </svg>
-      </a>
-      <a class="library-rail__btn" href="mision/" title="Nuestra misión" aria-label="Nuestra misión">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M12 21s-7-4.35-9.5-9C.9 8.4 2.7 4.5 6.5 4c2-.26 3.6.9 5.5 3 1.9-2.1 3.5-3.26 5.5-3 3.8.5 5.6 4.4 4 8-2.5 4.65-9.5 9-9.5 9z"/>
-        </svg>
-      </a>
-      <button class="library-rail__btn" data-tab="licencias" title="Fuentes y licencias" aria-label="Fuentes y licencias">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 10v6"/>
-          <circle cx="12" cy="7" r=".7" fill="currentColor" stroke="none"/>
-        </svg>
-      </button>
-    </nav>
-
-    <main class="reading-pane" id="readingPane">
-      <div class="reading-pane__inner">
-        <div class="reading-pane__app-mark" aria-hidden="true">Verbo</div>
-        <div class="chapter-eyebrow"></div>
-        <div class="chapter-title-row">
-          <button class="chapter-nav-btn" id="innerPrev" type="button" aria-label="Capítulo anterior">‹</button>
-          <h1 class="chapter-title"></h1>
-          <button class="chapter-nav-btn chapter-nav-btn--next" id="innerNext" type="button" aria-label="Capítulo siguiente">›</button>
-        </div>
-        <div id="verseList"></div>
-        <div class="bible-attribution" id="bibleAttribution" hidden></div>
-      </div>
-      <div class="tts-float" id="ttsFloat">
-        <div class="tts-float__inner">
-          <select class="tts-voice-select" id="ttsVoiceSelect" aria-label="Voz de lectura" hidden></select>
-          <button class="tts-btn" id="ttsPlayBtn" type="button" aria-label="Lectura continua en voz alta" title="Lectura continua en voz alta" hidden>▶</button>
-          <button class="tts-btn tts-btn--stop" id="ttsStopBtn" type="button" aria-label="Detener lectura" title="Detener lectura" hidden>⏹</button>
-        </div>
-      </div>
-    </main>
-
-    <main class="editor-pane" id="editorPane" hidden>
-      <div class="editor-pane__toolbar" id="editorToolbar"></div>
-      <div class="editor-pane__actions">
-        <button type="button" class="editor-pane__export-btn" id="exportWordBtn">Exportar a Word</button>
-        <button type="button" class="editor-pane__export-btn" id="exportPdfBtn">Exportar a PDF</button>
-      </div>
-      <div class="editor-pane__inner">
-        <div class="editor-pane__surface" id="editorSurface"></div>
-      </div>
-    </main>
-
-    <div class="sheet-backdrop" id="sheetBackdrop"></div>
-    <aside class="side-panel" id="sidePanel">
-      <div class="side-panel__inner">
-        <div class="sheet-handle" aria-hidden="true"></div>
-        <div class="side-panel__header">
-          <span class="side-panel__title" id="panelTitle">Panel</span>
-          <button class="side-panel__close" id="panelClose" aria-label="Cerrar panel">✕</button>
-        </div>
-        <div class="side-panel__toolbar" id="panelToolbar"></div>
-        <div class="side-panel__body" id="panelBody"></div>
-      </div>
-    </aside>
-
-    <nav class="tab-rail">
-      <button class="tab-rail__btn" data-tab="comentario" title="Comentario" aria-label="Comentario">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        <span class="tab-rail__dot"></span>
-      </button>
-      <button class="tab-rail__btn" data-tab="comparar" title="Comparar versiones" aria-label="Comparar versiones">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <rect x="3" y="4" width="7" height="16" rx="1"/>
-          <rect x="14" y="4" width="7" height="16" rx="1"/>
-        </svg>
-      </button>
-      <button class="tab-rail__btn" data-tab="diccionario" title="Diccionario" aria-label="Diccionario">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-        </svg>
-      </button>
-      <button class="tab-rail__btn" data-tab="notas" title="Mis notas" aria-label="Mis notas">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M12 20h9"/>
-          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>
-        </svg>
-      </button>
-      <button class="tab-rail__btn" data-tab="exegesis" title="Exégesis" aria-label="Exégesis">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/>
-          <path d="M8 7h8"/>
-          <path d="M8 11h6"/>
-          <path d="M7 17h10"/>
-        </svg>
-      </button>
-      <button class="tab-rail__btn" data-tab="tema" title="Tema" aria-label="Tema">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/>
-          <circle cx="7.5" cy="10.5" r=".8"/>
-          <circle cx="10" cy="6.8" r=".8"/>
-          <circle cx="14.3" cy="6.8" r=".8"/>
-          <circle cx="17" cy="10.5" r=".8"/>
-        </svg>
-      </button>
-    </nav>
-
+<section class="sections" id="secciones">
+  <div class="sections-head">
+    <h2>Cuatro espacios, un mismo propósito</h2>
+    <span>100% gratuito</span>
   </div>
 
-    <nav class="mobile-tool-dock" aria-label="Herramientas de estudio">
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="comentario" type="button" aria-label="Comentarios">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span class="mobile-tool-label">Comentarios</span>
-      </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="comparar" type="button" aria-label="Comparar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="7" height="16" rx="1"/><rect x="14" y="4" width="7" height="16" rx="1"/></svg>
-        <span class="mobile-tool-label">Comparar</span>
-      </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="diccionario" type="button" aria-label="Diccionario">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        <span class="mobile-tool-label">Diccionario</span>
-      </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="notas" type="button" aria-label="Mis notas">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
-        <span class="mobile-tool-label">Mis notas</span>
-      </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="exegesis" type="button" aria-label="Exégesis">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M8 7h8"/><path d="M8 11h6"/><path d="M7 17h10"/></svg>
-        <span class="mobile-tool-label">Exégesis</span>
-      </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="tema" type="button" aria-label="Tema">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/><circle cx="7.5" cy="10.5" r=".8"/><circle cx="10" cy="6.8" r=".8"/><circle cx="14.3" cy="6.8" r=".8"/><circle cx="17" cy="10.5" r=".8"/></svg>
-        <span class="mobile-tool-label">Tema</span>
-      </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="biblioteca" type="button" aria-label="Biblioteca">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 6h7"/><path d="M9 10h7"/></svg>
-        <span class="mobile-tool-label">Biblioteca</span>
-      </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="padres" type="button" aria-label="Padres Apostólicos">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>
-        <span class="mobile-tool-label">Padres Apostólicos</span>
-      </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="evangelio" type="button" aria-label="Evangelio cronológico de Jesucristo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21V7"/><path d="M12 7c0-2.5-2-4.5-5-4.5S3 4 3 6.5C3 13 12 13 12 21"/><path d="M12 7c0-2.5 2-4.5 5-4.5S21 4 21 6.5C21 13 12 13 12 21"/></svg>
-        <span class="mobile-tool-label">Evangelio cronológico de Jesucristo</span>
-      </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="licencias" type="button" aria-label="Fuentes y licencias">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 10v6"/><circle cx="12" cy="7" r=".7" fill="currentColor" stroke="none"/></svg>
-        <span class="mobile-tool-label">Fuentes y licencias</span>
-      </button>
-      <a class="mobile-tool-btn tab-rail__btn" href="sobre-el-fundador/" aria-label="Sobre el fundador">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-        <span class="mobile-tool-label">Sobre el fundador</span>
-      </a>
-      <a class="mobile-tool-btn tab-rail__btn" href="mision/" aria-label="Nuestra misión">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.35-9.5-9C.9 8.4 2.7 4.5 6.5 4c2-.26 3.6.9 5.5 3 1.9-2.1 3.5-3.26 5.5-3 3.8.5 5.6 4.4 4 8-2.5 4.65-9.5 9-9.5 9z"/></svg>
-        <span class="mobile-tool-label">Nuestra misión</span>
-      </a>
-    </nav>
+  <div class="card-grid">
 
-  <div class="verse-action-bar" id="verseActionBar" hidden>
-    <button class="verse-swatch" data-color="hl-yellow" aria-label="Amarillo" title="Resaltar amarillo"></button>
-    <button class="verse-swatch" data-color="hl-green"  aria-label="Verde"    title="Resaltar verde"></button>
-    <button class="verse-swatch" data-color="hl-blue"   aria-label="Azul"     title="Resaltar azul"></button>
-    <button class="verse-swatch" data-color="hl-pink"   aria-label="Rosa"     title="Resaltar rosa"></button>
-    <button class="verse-swatch" data-color="hl-coral"  aria-label="Coral"    title="Resaltar coral"></button>
-    <button class="verse-swatch" data-color="hl-violet" aria-label="Violeta"  title="Resaltar violeta"></button>
-    <button class="verse-swatch verse-swatch--erase" data-color="" aria-label="Quitar resaltado" title="Quitar resaltado">✕</button>
-    <div class="verse-action-bar__sep"></div>
-    <button class="verse-action-btn" id="copyVerseText" type="button">Copiar</button>
-    <button class="verse-action-btn verse-action-btn--secondary" id="copyVerseRef" type="button">Ref.</button>
-    <div class="verse-action-bar__sep"></div>
-    <button class="verse-action-bar__close" id="closeVerseAction" type="button" aria-label="Cerrar">✕</button>
+    <!-- Biblia -->
+    <a class="card" href="/biblia/">
+      <div class="card-top">
+        <span class="card-numeral">I.</span>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M12 5C10 3.5 6.5 3 4 3.5v15c2.5-.5 6 0 8 1.5m0-15c2-1.5 5.5-2 8-1.5v15c-2.5-.5-6 0-8 1.5m0-15v15"/>
+        </svg>
+      </div>
+      <h3>Biblia</h3>
+      <p>Estudio bíblico completo: comentarios, Strong, referencias cruzadas y preparación de sermones.</p>
+      <div class="card-footer">
+        <span class="ref-pill live">Disponible</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Seminario -->
+    <a class="card" href="/seminario/">
+      <div class="card-top">
+        <span class="card-numeral">II.</span>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M3 8.5L12 4l9 4.5-9 4.5-9-4.5Z"/>
+          <path d="M7 10.8V16c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-5.2"/>
+        </svg>
+      </div>
+      <h3>Seminario</h3>
+      <p>Teología bíblica, exégesis y hermenéutica, e historia del cristianismo — enfocado en conocer a Dios, no en memorizar terminología.</p>
+      <div class="card-footer">
+        <span class="ref-pill soon">Próximamente</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Librería -->
+    <a class="card" href="/libreria/">
+      <div class="card-top">
+        <span class="card-numeral">III.</span>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M4 4h3v16H4zM9 4h3v16H9zM14 5l3-.5 2 15.5-3 .5z"/>
+        </svg>
+      </div>
+      <h3>Librería</h3>
+      <p>Lectura de libros clásicos y patrísticos completos, con marcadores, resaltado y texto a voz.</p>
+      <div class="card-footer">
+        <span class="ref-pill soon">Próximamente</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Recursos -->
+    <a class="card" href="/recursos/">
+      <div class="card-top">
+        <span class="card-numeral">IV.</span>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M4 4h16v4H4zM4 10h16v10H4z"/>
+          <path d="M9 14h6"/>
+        </svg>
+      </div>
+      <h3>Recursos</h3>
+      <p>Lecciones listas para maestros de niños y preadolescentes, descargables para impartir directamente.</p>
+      <div class="card-footer">
+        <span class="ref-pill soon">Próximamente</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
   </div>
+</section>
 
-  <div class="backup-consent" id="backupConsent" hidden>
-    <p class="backup-consent__text">¿Guardamos tu progreso en tu computadora antes de continuar? Que Dios te acompañe.</p>
-    <p class="backup-consent__hint">Al elegir la carpeta, selecciona "Documentos" u otra carpeta normal — el navegador no permite usar la carpeta de inicio ni carpetas del sistema.</p>
-    <div class="backup-consent__actions">
-      <button type="button" class="backup-consent__btn backup-consent__btn--primary" id="backupConsentAccept">Sí, guardar</button>
-      <button type="button" class="backup-consent__btn" id="backupConsentDecline">Ahora no</button>
-    </div>
-  </div>
+<section class="quote-strip">
+  <blockquote>"Vosotros sois la luz del mundo. Una ciudad asentada sobre un monte no se puede esconder."</blockquote>
+  <cite>Mateo 5:14</cite>
+</section>
 
-  <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
-  <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
-  <script src="assets/backup.js?v=20260725-respaldo-local-1"></script>
-  <script src="assets/module-loader.js?v=20260725-rv-verbo-default"></script>
-  <script src="assets/app.js?v=20260725-iconos-en-fila-xrefs"></script>
+<footer>
+  <span>Verbo — hecho para quienes predican, enseñan y forman.</span>
+  <span><a href="#">verbobiblia.com</a></span>
+</footer>
+
 </body>
 </html>
