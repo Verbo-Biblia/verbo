@@ -59,8 +59,9 @@ const VerboModules = (() => {
     const library = await loadModuleList(registry.library || []);
     const gospel = await loadModuleList(registry.gospel || []);
     const patristic = await loadModuleList(registry.patristic || []);
+    const patristicByVerse = await loadModuleList(registry.patristicByVerse || []);
     const crossrefs = await loadModuleList(registry.crossrefs || []);
-    return { registry, bibles, commentaries, dictionaries, exegesis, library, gospel, patristic, crossrefs, primary, books: primary.manifest.books };
+    return { registry, bibles, commentaries, dictionaries, exegesis, library, gospel, patristic, patristicByVerse, crossrefs, primary, books: primary.manifest.books };
   }
 
   function apiBibleProxy(registry) {

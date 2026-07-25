@@ -60,6 +60,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   let patristicCatalog=null;
   let patristicOpenDoc=null;
   let patristicOpenSection=null;
+  let patristicMode=localStorage.getItem('verbo:patristicMode') || 'docs';
+  let patristicByVerseCatalog=null;
+  let currentPatristicByVerse=null;
   let currentBook = localStorage.getItem('verbo:lastBook') || 'ROM';
   let currentChapter = Number(localStorage.getItem('verbo:lastChapter')) || 7;
   const themes = [
@@ -384,6 +387,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (activeTab === 'diccionario') renderPanel('diccionario', verse.n);
     if (activeTab === 'exegesis') renderPanel('exegesis', verse.n);
     if (activeTab === 'biblioteca') renderPanel('biblioteca', verse.n);
+    if (activeTab === 'padres') renderPanel('padres', verse.n);
   }
 
   function updateActionBar(){
@@ -692,7 +696,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(tab==='diccionario') renderDictionaryPanel(focus || activeVerse());
     if(tab==='biblioteca') renderLibraryPanel(focus || activeVerse());
     if(tab==='evangelio') renderGospelPanel();
-    if(tab==='padres') renderPadresPanel();
+    if(tab==='padres') renderPadresPanel(focus || activeVerse());
     if(tab==='notas') renderNotes();
     if(tab==='exegesis') renderExegesis(focus || activeVerse());
     if(tab==='tema') renderTheme();
@@ -1699,8 +1703,67 @@ document.addEventListener('DOMContentLoaded', async () => {
     return text.split(/\n\s*\n/).map(p=>`<p>${escapeHTML(p.trim()).replace(/\n/g,'<br>')}</p>`).join('');
   }
 
-  async function renderPadresPanel(){
+  function patristicModeToggleHtml(){
+    return `<button type="button" class="note-card__copy${patristicMode==='docs'?' sermon-mode-toggle--active':''}" data-patristic-mode="docs">📖 Explorar documentos</button>
+      <button type="button" class="note-card__copy${patristicMode==='verse'?' sermon-mode-toggle--active':''}" data-patristic-mode="verse">🔗 Por versículo</button>`;
+  }
+  function wirePatristicModeToggle(){
+    document.querySelectorAll('[data-patristic-mode]').forEach(btn=>btn.addEventListener('click',()=>{
+      const mode=btn.dataset.patristicMode;
+      if(mode===patristicMode) return;
+      patristicMode=mode;
+      localStorage.setItem('verbo:patristicMode',mode);
+      renderPadresPanel(activeVerse());
+    }));
+  }
+
+  async function renderPatristicByVerse(focus=null){
+    if(!patristicByVerseCatalog){
+      els.panelToolbar.innerHTML=`<div class="compare-toolbar">${patristicModeToggleHtml()}</div>`;
+      wirePatristicModeToggle();
+      els.panelBody.innerHTML=emptyState('⌛','Cargando fuentes ancladas a versículo…');
+      try{
+        const registry=await VerboModules.getCatalog();
+        patristicByVerseCatalog=(registry.patristicByVerse||[]).map(item=>({id:item.manifest.id,label:item.manifest.abbreviation||item.manifest.name,full:item.manifest.name,path:item.path,manifest:item.manifest}));
+      }catch(error){console.error(error);}
+    }
+    if(!patristicByVerseCatalog || !patristicByVerseCatalog.length){
+      els.panelToolbar.innerHTML=`<div class="compare-toolbar">${patristicModeToggleHtml()}</div>`;
+      wirePatristicModeToggle();
+      els.panelBody.innerHTML=emptyState('🔗','Todavía no hay padres apostólicos anclados a versículo.');
+      return;
+    }
+
+    if(!currentPatristicByVerse || !patristicByVerseCatalog.some(x=>x.id===currentPatristicByVerse)){
+      const saved=localStorage.getItem('verbo:lastPatristicByVerse');
+      currentPatristicByVerse=patristicByVerseCatalog.some(x=>x.id===saved) ? saved : patristicByVerseCatalog[0].id;
+    }
+    const selected=patristicByVerseCatalog.find(x=>x.id===currentPatristicByVerse) || patristicByVerseCatalog[0];
+
+    const sourceOptions=patristicByVerseCatalog.map(x=>`<option value="${x.id}" ${x.id===currentPatristicByVerse?'selected':''}>${escapeHTML(x.label)}</option>`).join('');
+    els.panelToolbar.innerHTML=`<div class="compare-toolbar">${patristicModeToggleHtml()}</div><div class="compare-toolbar"><span class="compare-toolbar__label">Fuente</span><select class="compare-toolbar__select" id="patristicByVerseSelect">${sourceOptions}</select></div>`;
+    wirePatristicModeToggle();
+    document.getElementById('patristicByVerseSelect')?.addEventListener('change', e=>{
+      localStorage.setItem('verbo:lastPatristicByVerse', e.target.value);
+      currentPatristicByVerse=e.target.value;
+      renderPatristicByVerse(activeVerse());
+    });
+
+    els.panelBody.innerHTML=emptyState('⌛','Cargando fragmento del pasaje…');
+    try{
+      const resource=await VerboModules.loadLinkedEntries(selected.path,currentBook,currentChapter);
+      renderLinkedResourceEntries(resource, resource.entries, focus, '🔗', 'Este capítulo no tiene fragmentos patrísticos anclados todavía.', selected.path);
+    }catch(error){ console.error(error); els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir este recurso.'); }
+  }
+
+  async function renderPadresPanel(focus=null){
     els.panelTitle.textContent='Padres Apostólicos';
+
+    if(patristicMode==='verse'){
+      await renderPatristicByVerse(focus);
+      return;
+    }
+
     els.panelToolbar.innerHTML='';
 
     if(!patristicCatalog){
@@ -1728,6 +1791,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Nivel 1: lista de documentos disponibles en la colección
+    els.panelToolbar.innerHTML=`<div class="compare-toolbar">${patristicModeToggleHtml()}</div>`;
+    wirePatristicModeToggle();
     els.panelBody.innerHTML=`<div class="dictionary-library">${patristicCatalog.map(d=>`
       <button type="button" class="dictionary-library__item" data-patristic-doc="${d.id}">
         <span>${escapeHTML(d.full)}</span>

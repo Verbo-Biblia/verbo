@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 2,
+  "id": "ignacio-martirio",
+  "type": "commentary",
+  "name": "El Martirio de Ignacio de Antioquía",
+  "abbreviation": "Martirio de Ignacio",
+  "language": "es",
+  "author": "El Martirio de Ignacio de Antioquía",
+  "year": 108,
+  "description": "Pasajes del relato del martirio de Ignacio anclados a las referencias bíblicas que el propio texto cita. Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público). Para leer el relato completo, usa el ícono de Padres Apostólicos.",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "books": [
+    {
+      "id": "2CO",
+      "name": "2 Corintios",
+      "number": 47,
+      "file": "books/2CO.json"
+    },
+    {
+      "id": "ACT",
+      "name": "Hechos",
+      "number": 44,
+      "file": "books/ACT.json"
+    },
+    {
+      "id": "PRO",
+      "name": "Proverbios",
+      "number": 20,
+      "file": "books/PRO.json"
+    }
+  ]
+}

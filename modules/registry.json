@@ -71,7 +71,8 @@
     "patristic/papias-fragmentos/manifest.json"
   ],
   "patristicByVerse": [
-    "commentaries/ireneo-contra-herejias/manifest.json"
+    "commentaries/ireneo-contra-herejias/manifest.json",
+    "commentaries/ignacio-martirio/manifest.json"
   ],
   "crossrefs": [
     "crossrefs/tsk/manifest.json"
