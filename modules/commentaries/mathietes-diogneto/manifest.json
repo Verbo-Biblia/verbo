@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 2,
+  "id": "mathietes-diogneto",
+  "type": "commentary",
+  "name": "Epístola a Diogneto (Mathietes)",
+  "abbreviation": "A Diogneto",
+  "language": "es",
+  "author": "Epístola a Diogneto (Mathietes)",
+  "year": 150,
+  "description": "Pasajes de la Epístola a Diogneto anclados a las referencias bíblicas que el propio texto cita. Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público). Para leer la epístola completa, usa el ícono de Padres Apostólicos.",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "books": [
+    {
+      "id": "GAL",
+      "name": "Gálatas",
+      "number": 48,
+      "file": "books/GAL.json"
+    },
+    {
+      "id": "2CO",
+      "name": "2 Corintios",
+      "number": 47,
+      "file": "books/2CO.json"
+    },
+    {
+      "id": "PHP",
+      "name": "Filipenses",
+      "number": 50,
+      "file": "books/PHP.json"
+    },
+    {
+      "id": "1PE",
+      "name": "1 Pedro",
+      "number": 60,
+      "file": "books/1PE.json"
+    },
+    {
+      "id": "MAL",
+      "name": "Malaquías",
+      "number": 39,
+      "file": "books/MAL.json"
+    },
+    {
+      "id": "MAT",
+      "name": "Mateo",
+      "number": 40,
+      "file": "books/MAT.json"
+    }
+  ]
+}

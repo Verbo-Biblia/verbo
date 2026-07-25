@@ -1,0 +1,56 @@
+{
+ "entries": [
+  {
+   "id": "mathietes-diogneto-2co-10-3",
+   "title": "Capítulo 5 — Los modales de los cristianos",
+   "author": "Epístola a Diogneto (Mathietes)",
+   "reference": {
+    "book": "2CO",
+    "chapterStart": 10,
+    "verseStart": 3,
+    "chapterEnd": 10,
+    "verseEnd": 3
+   },
+   "content": "<p>Tienen una mesa común, pero no una cama común. Están en la carne, pero no viven según la carne. Pasan sus días en la tierra, pero son ciudadanos del cielo.</p>"
+  },
+  {
+   "id": "mathietes-diogneto-2co-6-9",
+   "title": "Capítulo 5 — Los modales de los cristianos",
+   "author": "Epístola a Diogneto (Mathietes)",
+   "reference": {
+    "book": "2CO",
+    "chapterStart": 6,
+    "verseStart": 9,
+    "chapterEnd": 6,
+    "verseEnd": 9
+   },
+   "content": "<p>Aman a todos los hombres y son perseguidos por todos. Son desconocidos y condenados; son condenados a muerte y devueltos a la vida. Son pobres, pero enriquecen a muchos.</p>"
+  },
+  {
+   "id": "mathietes-diogneto-2co-6-10",
+   "title": "Capítulo 5 — Los modales de los cristianos",
+   "author": "Epístola a Diogneto (Mathietes)",
+   "reference": {
+    "book": "2CO",
+    "chapterStart": 6,
+    "verseStart": 10,
+    "chapterEnd": 6,
+    "verseEnd": 10
+   },
+   "content": "<p>Son pobres, pero enriquecen a muchos; carecen de todo, pero abundan en todo; son deshonrados, pero en su misma deshonra son glorificados.</p>"
+  },
+  {
+   "id": "mathietes-diogneto-2co-4-12",
+   "title": "Capítulo 5 — Los modales de los cristianos",
+   "author": "Epístola a Diogneto (Mathietes)",
+   "reference": {
+    "book": "2CO",
+    "chapterStart": 4,
+    "verseStart": 12,
+    "chapterEnd": 4,
+    "verseEnd": 12
+   },
+   "content": "<p>Son calumniados, y sin embargo son justificados; son injuriados, y bendicen; son insultados, y devuelven el insulto con honor; hacen el bien, y sin embargo son castigados como malhechores.</p>"
+  }
+ ]
+}
