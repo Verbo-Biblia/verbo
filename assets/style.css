@@ -2003,6 +2003,7 @@ body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(42,31,23,.18);
 }
+.backup-menu__panel[hidden] { display: none; }
 .backup-menu__status {
   font-size: 11.5px;
   color: var(--sepia);
