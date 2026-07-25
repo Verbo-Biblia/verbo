@@ -390,6 +390,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       if((v.crossrefs||[]).length || indicatorButtons.length){
         const XREF_LIMIT=5;
         const xrefRow=document.createElement('div'); xrefRow.className='verse__xrefs';
+        // Los íconos de comentario/biblioteca/padres van primero, en posición fija:
+        // si se agregan DESPUÉS de las referencias, el botón "+N más" los deja
+        // atravesados en medio de la fila al expandir (las nuevas chips se agregan
+        // al final, detrás de los íconos que ya estaban ahí).
+        indicatorButtons.forEach(btn=>xrefRow.appendChild(btn));
         const addChip=ref=>{
           const chip=document.createElement('button');
           chip.type='button'; chip.className='verse__xref-chip'; chip.textContent=ref.label;
@@ -409,7 +414,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           });
           xrefRow.appendChild(more);
         }
-        indicatorButtons.forEach(btn=>xrefRow.appendChild(btn));
         els.list.appendChild(xrefRow);
       }
       text.addEventListener('click',()=>{ selectVerse(row,v); });
