@@ -117,7 +117,22 @@ el código en sí.
 
 ## Estado actual (2026-07-25)
 
-- ✅ Fase 1 (Biblias perezosas + registry.json enriquecido) — hecha, commiteada
-  (`5e6e5f1`), sin push todavía (pendiente de que Juan revise el diff).
-- ⬜ Fase 2 (este documento) — sin empezar. Retomar cuando Juan tenga tiempo,
-  idealmente ANTES de subir la tanda grande de comentarios traducidos.
+- ✅ Fase 1 (Biblias perezosas + registry.json enriquecido) — hecha, commit `5e6e5f1`.
+- ✅ Fase 2 (este documento) — hecha, commit `033abf1`. `tools/build_commentary_index.py`
+  generó el índice liviano de los 8 comentarios sin chapterSplit (Wesley se dejó
+  igual, ya viene chico por capítulo). Reducción real verificada: Matthew Henry
+  45MB → 553KB, JFB 13.6MB → 2MB, K&D 25MB → 1MB, Barnes 16MB → 929KB, Clarke
+  23.6MB → 2.6MB, Calvin 35MB → 1.4MB, Scofield 1.4MB → 407KB, Cambridge 2MB → 14KB.
+  Probado en navegador: badge "💬 N" idéntico antes/después, cambio de comentario
+  a mitad de sesión, cambio de comentario dentro de modo sermón (el punto de
+  riesgo más delicado) — sin errores de consola.
+- ⬜ Pendiente, menor prioridad, no se tocó hoy: el mismo patrón aplicado a
+  `library`/`patristicByVerse` — se evaluó y se descartó por ahora porque su peso
+  total es insignificante (560KB en total, contra 160MB de los comentarios) — no
+  vale la pena la complejidad/riesgo adicional todavía. Reconsiderar solo si esos
+  catálogos crecen mucho en el futuro.
+- ⬜ **Importante para el futuro:** cuando se agregue/traduzca un comentario nuevo
+  a `registry.json → commentaries`, correr `tools/build_commentary_index.py`
+  seguido de `tools/build_registry_catalog.py` para que su índice liviano quede
+  generado y declarado — si no, ese comentario nuevo cae de vuelta al camino
+  "carga completo siempre" (funciona igual, pero sin el ahorro).
