@@ -979,6 +979,8 @@ button:focus-visible,
     order: 3;
     display: flex;
   }
+
+  .backup-menu { order: 4; }
 }
 
 /* Strong y diccionario */
