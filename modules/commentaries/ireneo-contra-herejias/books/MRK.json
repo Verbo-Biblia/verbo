@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "ireneo-doctrina-sec52-mrk-14-21",
+   "title": "Libro II, Capítulo 20",
+   "author": "Ireneo de Lyon",
+   "reference": {
+    "book": "MRK",
+    "chapterStart": 14,
+    "verseStart": 21,
+    "chapterEnd": 14,
+    "verseEnd": 21
+   },
+   "content": "<p>Además, el Señor también declaró con respecto a él: «Ay del hombre por quien el Hijo del hombre será traicionado» (Mateo 26:24) y «Mejor le hubiera sido no haber nacido» (Marcos 14:21), y fue llamado por Él «el hijo de la perdición» (Juan 17:12).</p>"
+  },
+  {
+   "id": "ireneo-doctrina-sec64-mrk-9-44",
+   "title": "Libro II, Capítulo 32",
+   "author": "Ireneo de Lyon",
+   "reference": {
+    "book": "MRK",
+    "chapterStart": 9,
+    "verseStart": 44,
+    "chapterEnd": 9,
+    "verseEnd": 44
+   },
+   "content": "<p>Mateo 25:41; Marcos 9:44 2.</p>"
+  }
+ ]
+}

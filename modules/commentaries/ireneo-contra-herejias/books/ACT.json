@@ -1,1 +1,43 @@
-{"entries":[{"id":"ireneo-act-8-9","title":"Libro II, Capítulo 32 — Los dones del Espíritu en la Iglesia, ejercidos sin lucro","author":"Ireneo de Lyon","reference":{"book":"ACT","chapterStart":8,"verseStart":9,"chapterEnd":8,"verseEnd":9},"content":"<p>Algunos tienen presciencia de las cosas futuras: tienen visiones y pronuncian expresiones proféticas. Otros sanan a los enfermos imponiéndoles las manos, y estos quedan curados. Sí, además, incluso los muertos han sido resucitados y han permanecido entre nosotros durante muchos años. No es posible nombrar el número de dones que la Iglesia, dispersa por todo el mundo, ha recibido de Dios, en el nombre de Jesucristo, que fue crucificado bajo Poncio Pilato, y que ejerce día a día en beneficio de los gentiles, sin engañar a nadie ni aceptar recompensa alguna. Porque, así como ha recibido gratuitamente de Dios, también ministra gratuitamente a los demás.</p>"}]}
+{
+ "entries": [
+  {
+   "id": "ireneo-act-8-9",
+   "title": "Libro II, Capítulo 32 — Los dones del Espíritu en la Iglesia, ejercidos sin lucro",
+   "author": "Ireneo de Lyon",
+   "reference": {
+    "book": "ACT",
+    "chapterStart": 8,
+    "verseStart": 9,
+    "chapterEnd": 8,
+    "verseEnd": 9
+   },
+   "content": "<p>Algunos tienen presciencia de las cosas futuras: tienen visiones y pronuncian expresiones proféticas. Otros sanan a los enfermos imponiéndoles las manos, y estos quedan curados. Sí, además, incluso los muertos han sido resucitados y han permanecido entre nosotros durante muchos años. No es posible nombrar el número de dones que la Iglesia, dispersa por todo el mundo, ha recibido de Dios, en el nombre de Jesucristo, que fue crucificado bajo Poncio Pilato, y que ejerce día a día en beneficio de los gentiles, sin engañar a nadie ni aceptar recompensa alguna. Porque, así como ha recibido gratuitamente de Dios, también ministra gratuitamente a los demás.</p>"
+  },
+  {
+   "id": "ireneo-doctrina-sec54-act-3-15",
+   "title": "Libro II, Capítulo 22",
+   "author": "Ireneo de Lyon",
+   "reference": {
+    "book": "ACT",
+    "chapterStart": 3,
+    "verseStart": 15,
+    "chapterEnd": 3,
+    "verseEnd": 15
+   },
+   "content": "<p>Entonces, por fin, llegó a la muerte misma, para ser el primogénito de entre los muertos, para tener la preeminencia en todas las cosas, Colosenses 1:18, el Príncipe de la vida, Hechos 3:15, que existía antes que todos y precedía a todos. 5.</p>"
+  },
+  {
+   "id": "ireneo-doctrina-sec64-act-8-9",
+   "title": "Libro II, Capítulo 32",
+   "author": "Ireneo de Lyon",
+   "reference": {
+    "book": "ACT",
+    "chapterStart": 8,
+    "verseStart": 9,
+    "chapterEnd": 8,
+    "verseEnd": 9
+   },
+   "content": "<p>el número de dones que la Iglesia, [dispersa] por todo el mundo, ha recibido de Dios, en el nombre de Jesucristo, que fue crucificado bajo Poncio Pilato, y que ejerce día a día en beneficio de los gentiles, sin engañar a nadie ni aceptar recompensa alguna Hechos 8:9, 18 [por tales intervenciones milagrosas].</p>"
+  }
+ ]
+}

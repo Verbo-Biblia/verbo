@@ -18,16 +18,40 @@
       "file": "books/GEN.json"
     },
     {
+      "id": "EXO",
+      "name": "Éxodo",
+      "number": 2,
+      "file": "books/EXO.json"
+    },
+    {
+      "id": "JOS",
+      "name": "Josué",
+      "number": 6,
+      "file": "books/JOS.json"
+    },
+    {
       "id": "ISA",
       "name": "Isaías",
       "number": 23,
       "file": "books/ISA.json"
     },
     {
+      "id": "HOS",
+      "name": "Oseas",
+      "number": 28,
+      "file": "books/HOS.json"
+    },
+    {
       "id": "MAT",
       "name": "Mateo",
       "number": 40,
       "file": "books/MAT.json"
+    },
+    {
+      "id": "MRK",
+      "name": "Marcos",
+      "number": 41,
+      "file": "books/MRK.json"
     },
     {
       "id": "LUK",
@@ -60,10 +84,52 @@
       "file": "books/1CO.json"
     },
     {
+      "id": "2CO",
+      "name": "2 Corintios",
+      "number": 47,
+      "file": "books/2CO.json"
+    },
+    {
+      "id": "GAL",
+      "name": "Gálatas",
+      "number": 48,
+      "file": "books/GAL.json"
+    },
+    {
+      "id": "EPH",
+      "name": "Efesios",
+      "number": 49,
+      "file": "books/EPH.json"
+    },
+    {
+      "id": "PHP",
+      "name": "Filipenses",
+      "number": 50,
+      "file": "books/PHP.json"
+    },
+    {
+      "id": "COL",
+      "name": "Colosenses",
+      "number": 51,
+      "file": "books/COL.json"
+    },
+    {
+      "id": "2TI",
+      "name": "2 Timoteo",
+      "number": 55,
+      "file": "books/2TI.json"
+    },
+    {
       "id": "HEB",
       "name": "Hebreos",
       "number": 58,
       "file": "books/HEB.json"
+    },
+    {
+      "id": "1PE",
+      "name": "1 Pedro",
+      "number": 60,
+      "file": "books/1PE.json"
     },
     {
       "id": "REV",

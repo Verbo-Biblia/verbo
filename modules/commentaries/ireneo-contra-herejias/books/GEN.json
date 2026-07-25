@@ -1,1 +1,43 @@
-{"entries":[{"id":"ireneo-gen-1-1","title":"Libro II, Capítulo 2 — Dios creó por Su propia Palabra, sin intermediarios","author":"Ireneo de Lyon","reference":{"book":"GEN","chapterStart":1,"verseStart":1,"chapterEnd":1,"verseEnd":1},"content":"<p>Esta es una peculiaridad de la preeminencia de Dios: no necesitar otros instrumentos para la creación de aquellas cosas que son llamadas a la existencia. Su propia Palabra es adecuada y suficiente para la formación de todas las cosas. ¿A quién, pues, creeremos en cuanto a la creación del mundo: a estos herejes que hablan de manera tan insensata e incoherente sobre el tema, o a los discípulos del Señor y a Moisés, que fue tanto un siervo fiel de Dios como un profeta? Él narró al principio la formación del mundo con estas palabras: «En el principio creó Dios los cielos y la tierra», y todas las demás cosas sucesivamente; pero ni los dioses ni los ángeles participaron en la obra.</p>"}]}
+{
+ "entries": [
+  {
+   "id": "ireneo-gen-1-1",
+   "title": "Libro II, Capítulo 2 — Dios creó por Su propia Palabra, sin intermediarios",
+   "author": "Ireneo de Lyon",
+   "reference": {
+    "book": "GEN",
+    "chapterStart": 1,
+    "verseStart": 1,
+    "chapterEnd": 1,
+    "verseEnd": 1
+   },
+   "content": "<p>Esta es una peculiaridad de la preeminencia de Dios: no necesitar otros instrumentos para la creación de aquellas cosas que son llamadas a la existencia. Su propia Palabra es adecuada y suficiente para la formación de todas las cosas. ¿A quién, pues, creeremos en cuanto a la creación del mundo: a estos herejes que hablan de manera tan insensata e incoherente sobre el tema, o a los discípulos del Señor y a Moisés, que fue tanto un siervo fiel de Dios como un profeta? Él narró al principio la formación del mundo con estas palabras: «En el principio creó Dios los cielos y la tierra», y todas las demás cosas sucesivamente; pero ni los dioses ni los ángeles participaron en la obra.</p>"
+  },
+  {
+   "id": "ireneo-doctrina-sec34-gen-1-1",
+   "title": "Libro II, Capítulo 2",
+   "author": "Ireneo de Lyon",
+   "reference": {
+    "book": "GEN",
+    "chapterStart": 1,
+    "verseStart": 1,
+    "chapterEnd": 1,
+    "verseEnd": 1
+   },
+   "content": "<p>manera tan insensata e incoherente sobre el tema, o a los discípulos del Señor y a Moisés, que fue tanto un siervo fiel de Dios como un profeta? Él narró al principio la formación del mundo con estas palabras: En el principio creó Dios los cielos y la tierra, Génesis 1:1 y todas las demás cosas sucesivamente; pero ni los dioses ni los ángeles [participaron en la obra]. Ahora bien, que este Dios es el Padre de nuestro Señor Jesucristo, también lo ha declarado el apóstol Pablo, [diciendo:] Hay un solo Dios, el Padre, que está</p>"
+  },
+  {
+   "id": "ireneo-doctrina-sec66-gen-2-7",
+   "title": "Libro II, Capítulo 34",
+   "author": "Ireneo de Lyon",
+   "reference": {
+    "book": "GEN",
+    "chapterStart": 2,
+    "verseStart": 7,
+    "chapterEnd": 2,
+    "verseEnd": 7
+   },
+   "content": "<p>Por eso también la palabra profética declara del primer hombre creado: «Se convirtió en un alma viviente» (Génesis 2:7), enseñándonos que, al participar de la vida, el alma cobró vida; de modo que el alma y la vida que posee deben entenderse como existencias separadas.</p>"
+  }
+ ]
+}
