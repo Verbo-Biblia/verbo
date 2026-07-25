@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "bernabe-sec6l-eph-2-21",
+   "title": "Capítulo 6 — Los sufrimientos de Cristo y la nueva alianza",
+   "author": "Epístola de Bernabé",
+   "reference": {
+    "book": "EPH",
+    "chapterStart": 2,
+    "verseStart": 21,
+    "chapterEnd": 2,
+    "verseEnd": 21
+   },
+   "content": "<p>Porque, hermanos míos, la morada de nuestro corazón es un templo santo para el Señor.</p>"
+  },
+  {
+   "id": "bernabe-sec19b-eph-6-9",
+   "title": "Capítulo 19 — El camino de la luz",
+   "author": "Epístola de Bernabé",
+   "reference": {
+    "book": "EPH",
+    "chapterStart": 6,
+    "verseStart": 9,
+    "chapterEnd": 6,
+    "verseEnd": 9
+   },
+   "content": "<p>No darás órdenes con amargura a tu sierva o a tu siervo, que confían en el mismo [Dios], no sea que no reverencies a ese Dios que está por encima de ambos.</p>"
+  }
+ ]
+}

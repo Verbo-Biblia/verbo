@@ -1,0 +1,30 @@
+{
+ "entries": [
+  {
+   "id": "bernabe-sec2b-zec-8-17",
+   "title": "Capítulo 2 — Los sacrificios judíos ahora están abolidos",
+   "author": "Epístola de Bernabé",
+   "reference": {
+    "book": "ZEC",
+    "chapterStart": 8,
+    "verseStart": 17,
+    "chapterEnd": 8,
+    "verseEnd": 17
+   },
+   "content": "<p>Que ninguno de vosotros guarde en su corazón maldad contra su prójimo, y que no ame el juramento falso.</p>"
+  },
+  {
+   "id": "bernabe-sec5c-zec-13-7",
+   "title": "Capítulo 5 — La nueva alianza, fundada en los sufrimientos de Cristo",
+   "author": "Epístola de Bernabé",
+   "reference": {
+    "book": "ZEC",
+    "chapterStart": 13,
+    "verseStart": 7,
+    "chapterEnd": 13,
+    "verseEnd": 7
+   },
+   "content": "<p>El golpe de su carne proviene de ellos; y cuando yo hiera al Pastor, entonces las ovejas del rebaño se dispersarán.</p>"
+  }
+ ]
+}

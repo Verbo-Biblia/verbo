@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 2,
+  "id": "bernabe",
+  "type": "commentary",
+  "name": "Epístola de Bernabé",
+  "abbreviation": "Bernabé",
+  "language": "es",
+  "author": "Epístola de Bernabé",
+  "year": 130,
+  "description": "Pasajes de la Epístola de Bernabé anclados a las referencias bíblicas que el propio texto cita. Traducción: Biblioteca Patrística Unción Fresca (UF), 2025, basada en Ante-Nicene Fathers (dominio público). Para leer la epístola completa, usa el ícono de Padres Apostólicos.",
+  "license": "Traducción propia (Juan Venegas / Verbo) de fuente en dominio público.",
+  "sourceFormat": "DOCX (traducción propia)",
+  "books": [
+    {
+      "id": "JER",
+      "name": "Jeremías",
+      "number": 24,
+      "file": "books/JER.json"
+    },
+    {
+      "id": "ZEC",
+      "name": "Zacarías",
+      "number": 38,
+      "file": "books/ZEC.json"
+    },
+    {
+      "id": "ISA",
+      "name": "Isaías",
+      "number": 23,
+      "file": "books/ISA.json"
+    },
+    {
+      "id": "EXO",
+      "name": "Éxodo",
+      "number": 2,
+      "file": "books/EXO.json"
+    },
+    {
+      "id": "DEU",
+      "name": "Deuteronomio",
+      "number": 5,
+      "file": "books/DEU.json"
+    },
+    {
+      "id": "GEN",
+      "name": "Génesis",
+      "number": 1,
+      "file": "books/GEN.json"
+    },
+    {
+      "id": "LEV",
+      "name": "Levítico",
+      "number": 3,
+      "file": "books/LEV.json"
+    },
+    {
+      "id": "EZK",
+      "name": "Ezequiel",
+      "number": 26,
+      "file": "books/EZK.json"
+    },
+    {
+      "id": "EPH",
+      "name": "Efesios",
+      "number": 49,
+      "file": "books/EPH.json"
+    },
+    {
+      "id": "ACT",
+      "name": "Hechos",
+      "number": 44,
+      "file": "books/ACT.json"
+    },
+    {
+      "id": "ZEP",
+      "name": "Sofonías",
+      "number": 36,
+      "file": "books/ZEP.json"
+    },
+    {
+      "id": "NUM",
+      "name": "Números",
+      "number": 4,
+      "file": "books/NUM.json"
+    },
+    {
+      "id": "JHN",
+      "name": "Juan",
+      "number": 43,
+      "file": "books/JHN.json"
+    },
+    {
+      "id": "COL",
+      "name": "Colosenses",
+      "number": 51,
+      "file": "books/COL.json"
+    },
+    {
+      "id": "1TI",
+      "name": "1 Timoteo",
+      "number": 54,
+      "file": "books/1TI.json"
+    },
+    {
+      "id": "HEB",
+      "name": "Hebreos",
+      "number": 58,
+      "file": "books/HEB.json"
+    },
+    {
+      "id": "DAN",
+      "name": "Daniel",
+      "number": 27,
+      "file": "books/DAN.json"
+    },
+    {
+      "id": "HAG",
+      "name": "Hageo",
+      "number": 37,
+      "file": "books/HAG.json"
+    },
+    {
+      "id": "2CO",
+      "name": "2 Corintios",
+      "number": 47,
+      "file": "books/2CO.json"
+    },
+    {
+      "id": "JAS",
+      "name": "Santiago",
+      "number": 59,
+      "file": "books/JAS.json"
+    },
+    {
+      "id": "ROM",
+      "name": "Romanos",
+      "number": 45,
+      "file": "books/ROM.json"
+    }
+  ]
+}
