@@ -5,17 +5,28 @@ import { env, pipeline } from '@xenova/transformers';
 
 const MODEL = 'Xenova/paraphrase-multilingual-MiniLM-L12-v2';
 const BOOKS = [
-  ['MAT', 'Mateo'],
-  ['MRK', 'Marcos'],
-  ['LUK', 'Lucas'],
-  ['JHN', 'Juan'],
+  ['GEN', 'Génesis'], ['EXO', 'Éxodo'], ['LEV', 'Levítico'], ['NUM', 'Números'], ['DEU', 'Deuteronomio'],
+  ['JOS', 'Josué'], ['JDG', 'Jueces'], ['RUT', 'Rut'], ['1SA', '1 Samuel'], ['2SA', '2 Samuel'],
+  ['1KI', '1 Reyes'], ['2KI', '2 Reyes'], ['1CH', '1 Crónicas'], ['2CH', '2 Crónicas'], ['EZR', 'Esdras'],
+  ['NEH', 'Nehemías'], ['EST', 'Ester'], ['JOB', 'Job'], ['PSA', 'Salmos'], ['PRO', 'Proverbios'],
+  ['ECC', 'Eclesiastés'], ['SNG', 'Cantares'], ['ISA', 'Isaías'], ['JER', 'Jeremías'], ['LAM', 'Lamentaciones'],
+  ['EZK', 'Ezequiel'], ['DAN', 'Daniel'], ['HOS', 'Oseas'], ['JOL', 'Joel'], ['AMO', 'Amós'],
+  ['OBA', 'Abdías'], ['JON', 'Jonás'], ['MIC', 'Miqueas'], ['NAM', 'Nahúm'], ['HAB', 'Habacuc'],
+  ['ZEP', 'Sofonías'], ['HAG', 'Hageo'], ['ZEC', 'Zacarías'], ['MAL', 'Malaquías'],
+  ['MAT', 'Mateo'], ['MRK', 'Marcos'], ['LUK', 'Lucas'], ['JHN', 'Juan'], ['ACT', 'Hechos'],
+  ['ROM', 'Romanos'], ['1CO', '1 Corintios'], ['2CO', '2 Corintios'], ['GAL', 'Gálatas'], ['EPH', 'Efesios'],
+  ['PHP', 'Filipenses'], ['COL', 'Colosenses'], ['1TH', '1 Tesalonicenses'], ['2TH', '2 Tesalonicenses'],
+  ['1TI', '1 Timoteo'], ['2TI', '2 Timoteo'], ['TIT', 'Tito'], ['PHM', 'Filemón'], ['HEB', 'Hebreos'],
+  ['JAS', 'Santiago'], ['1PE', '1 Pedro'], ['2PE', '2 Pedro'], ['1JN', '1 Juan'], ['2JN', '2 Juan'],
+  ['3JN', '3 Juan'], ['JUD', 'Judas'], ['REV', 'Apocalipsis'],
 ];
 const PERICOPE_SIZE = 6;
 const BATCH_SIZE = Number.parseInt(process.env.BATCH_SIZE || '16', 10);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..', '..');
-const bibleDir = path.join(repoRoot, 'modules', 'bibles', 'rva-1909', 'books');
+const BIBLE_ID = process.env.BIBLE_ID || 'rv-verbo';
+const bibleDir = path.join(repoRoot, 'modules', 'bibles', BIBLE_ID, 'books');
 const outDir = path.join(__dirname, 'out');
 
 env.cacheDir = path.join(__dirname, '.cache');
@@ -24,7 +35,7 @@ function normalizeWhitespace(text) {
   return text.replace(/\s+/g, ' ').trim();
 }
 
-async function loadGospelVerses() {
+async function loadBibleVerses() {
   const rows = [];
   for (const [book, bookName] of BOOKS) {
     const file = path.join(bibleDir, `${book}.json`);
@@ -43,7 +54,10 @@ async function loadGospelVerses() {
           chapterEnd: chapter,
           verseEnd: verse,
           label: `${bookName} ${chapter}:${verse}`,
-          text: normalizeWhitespace(verses[String(verse)].text),
+          // Algunas Biblias guardan el verso como string plano (rv-verbo) y otras
+          // como objeto {text, segments} (rva-1909 con Strong) — mismo patrón de
+          // normalización que ya usa buildChapterData() en assets/module-loader.js.
+          text: normalizeWhitespace(typeof verses[String(verse)] === 'string' ? verses[String(verse)] : verses[String(verse)].text),
         });
       }
     }
@@ -127,7 +141,7 @@ async function writeIndex(name, records, vectors) {
   const vectorBytes = new Int8Array(records.length * dimensions);
   const metadata = {
     schemaVersion: 1,
-    source: 'modules/bibles/rva-1909',
+    source: `modules/bibles/${BIBLE_ID}`,
     books: BOOKS.map(([id, name]) => ({ id, name })),
     model: MODEL,
     dimensions,
@@ -173,7 +187,7 @@ async function writeIndex(name, records, vectors) {
 }
 
 async function main() {
-  const verses = await loadGospelVerses();
+  const verses = await loadBibleVerses();
   const pericopes = buildPericopes(verses);
   console.log(`Loaded ${verses.length} verses and ${pericopes.length} fixed pericope chunks`);
 

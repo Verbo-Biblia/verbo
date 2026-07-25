@@ -2,7 +2,7 @@
 const VerboModules = (() => {
   const cache = new Map();
   const semanticSearch = {
-    basePath: 'modules/semantic-search/gospels-rva-1909',
+    basePath: 'modules/semantic-search/bible-rv-verbo',
     model: 'Xenova/paraphrase-multilingual-MiniLM-L12-v2',
     transformerUrl: 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/+esm',
     indexes: new Map(),
@@ -410,7 +410,15 @@ const VerboModules = (() => {
 
   const semanticStopwords = new Set([
     'a','al','ante','bajo','con','contra','de','del','desde','el','en','entre','es','la','las','lo','los','mas','me','mi','no','o','para','por','que','se','sin','sobre','su','sus','te','tu','un','una','y',
-    'como','cual','cuando','dijo','dios','jesus','senor','sobre','todos'
+    'como','cual','cuales','quien','quienes','cuando','donde','porque','dijo','dios','jesus','senor','sobre','todos',
+    // Palabras propias del "envoltorio" de la pregunta ("¿dónde habla la Biblia de X?",
+    // "¿qué dice la Biblia sobre X?") — sin filtrarlas, el boost léxico las trataba como
+    // parte del tema buscado y sacaban arriba versículos que solo comparten esas palabras
+    // comunes (ej. "donde" apareciendo en "el lugar donde...") en vez del tema real.
+    'habla','hablan','hablar','hablo','dice','dicen','decir','biblia','escritura','escrituras',
+    'versiculo','versiculos','capitulo','capitulos','pasaje','pasajes','menciona','mencionan',
+    'trata','tratan','tema','acerca','respecto','hay','existe','existen','ejemplo','ejemplos',
+    'significa','significado','version','opina','opinar'
   ]);
   const semanticQueryExpansions = [
     { test:/\bdivorci|\brepudi/i, terms:['divorcio','repudiar','repudiarla','repudiare','repudiada','mujer','adulterio'] },
@@ -456,11 +464,17 @@ const VerboModules = (() => {
         hits += 1;
         strongHits += 1;
       } else if (token.length > 4 && haystack.includes(token.slice(0, -1))) {
-        hits += 0.55;
+        hits += 0.7;
       }
     });
     const coverage = hits / tokens.length;
-    return Math.min(0.28, coverage * 0.18 + strongHits * 0.018);
+    // El techo y el peso de cobertura se subieron (antes 0.28 / 0.18) porque con
+    // consultas de un solo token de contenido real (ej. "chisme") el boost no
+    // alcanzaba a separar el versículo/perícopa con coincidencia literal del ruido
+    // de similitud alta del modelo — quedaban empatados y el orden final era casi
+    // al azar (ver caso "donde habla del chisme en la biblia": Marcos 1:1-6 vs
+    // Proverbios 18:7-12 quedaban a 0.003 de diferencia).
+    return Math.min(0.4, coverage * 0.3 + strongHits * 0.03);
   }
 
   function semanticSpecialAdjustment(record, cleanQuery) {
@@ -476,7 +490,7 @@ const VerboModules = (() => {
     return adjustment;
   }
 
-  async function searchSemanticGospels(query, { indexType='verses', limit=50, onProgress=null }={}) {
+  async function searchSemanticBible(query, { indexType='verses', limit=50, onProgress=null }={}) {
     const clean = String(query || '').trim();
     if (clean.length < 2) return [];
     onProgress?.({ stage:'index' });
@@ -693,5 +707,5 @@ const VerboModules = (() => {
     return null;
   }
 
-  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadLinkedEntries,loadLinkedArticle,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticGospels };
+  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadLinkedEntries,loadLinkedArticle,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible };
 })();

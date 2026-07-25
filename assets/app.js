@@ -1351,16 +1351,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function renderSearch(){
     els.panelTitle.textContent='Buscar en la Biblia';
-    const saved = searchState || { query:'', versionId:'rva-1909', indexType:'verses', results:[], page:0, scopeLabel:'Semántica · Evangelios RVA 1909', semantic:true };
+    // "Perícopas" (bloques de ~6 versículos) es el modo por defecto porque el
+    // modelo de embeddings da una similitud mucho más confiable a bloques con
+    // contexto que a versículos sueltos muy cortos, que suelen quedar mal
+    // rankeados (ver evaluación con "chisme": el versículo correcto quedaba
+    // en el puesto ~9500/31000, pero la perícopa correcta en el puesto ~400/5700).
+    const saved = searchState || { query:'', versionId:'rv-verbo', indexType:'pericopes', results:[], page:0, scopeLabel:'Semántica · Biblia completa RV-Verbo', semantic:true };
     els.panelToolbar.innerHTML=`<form class="search-panel-form" id="searchForm">
       <input id="searchInput" class="search-panel-input" type="search" minlength="2" placeholder="Pregunta o tema…" autocomplete="off" value="${escapeHTML(saved.query)}">
       <select id="searchIndexType" class="search-panel-select" aria-label="Tipo de índice semántico">
-        <option value="verses" ${saved.indexType!=='pericopes'?'selected':''}>Versículos</option>
-        <option value="pericopes" ${saved.indexType==='pericopes'?'selected':''}>Perícopas</option>
+        <option value="pericopes" ${saved.indexType!=='verses'?'selected':''}>Bloques de versículos (recomendado)</option>
+        <option value="verses" ${saved.indexType==='verses'?'selected':''}>Versículo individual</option>
       </select>
       <button class="search-panel-button" type="submit">Buscar</button>
     </form>`;
-    els.panelBody.innerHTML=emptyState('⌕','Busca en lenguaje natural en los cuatro Evangelios de la RVA 1909. Los resultados se ordenan con un índice semántico local.');
+    els.panelBody.innerHTML=emptyState('⌕','Busca en lenguaje natural en toda la Biblia (RV-Verbo). Los resultados se ordenan con un índice semántico local.');
 
     const form=document.getElementById('searchForm');
     const input=document.getElementById('searchInput');
@@ -1384,18 +1389,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     form?.addEventListener('submit',async e=>{
       e.preventDefault();
       const query=input.value.trim();
-      const versionId='rva-1909';
+      const versionId='rv-verbo';
       const indexType=indexTypeSelect.value === 'pericopes' ? 'pericopes' : 'verses';
       if(query.length<2){ searchState=null; els.panelBody.innerHTML=emptyState('⌕','Escribe al menos dos caracteres.'); return; }
       els.panelBody.innerHTML=emptyState('⌛','Preparando búsqueda semántica…');
       try{
         const stageText={index:'Cargando índice local…',model:'Cargando modelo semántico local…',embedding:'Leyendo la pregunta…',ranking:'Ordenando resultados…'};
-        const results=await VerboModules.searchSemanticGospels(query,{
+        const results=await VerboModules.searchSemanticBible(query,{
           indexType,
           limit:90,
           onProgress:p=>{els.panelBody.innerHTML=emptyState('⌛',stageText[p.stage] || 'Buscando…');}
         });
-        const scopeLabel=`Semántica · Evangelios RVA 1909 · ${indexType==='pericopes'?'perícopas':'versículos'}`;
+        const scopeLabel=`Semántica · Biblia completa RV-Verbo · ${indexType==='pericopes'?'perícopas':'versículos'}`;
         searchState={query, versionId, indexType, results, page:0, scopeLabel, semantic:true};
         if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',`No se encontraron resultados para “${escapeHTML(query)}”.`); return; }
         renderSavedSearchResults();

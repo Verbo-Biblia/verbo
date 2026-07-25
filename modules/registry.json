@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "defaultBible": "rva-1909",
+  "defaultBible": "rv-verbo",
   "apiBible": {
     "proxyUrl": "https://verbo-api-bible.juanjosevenegas78.workers.dev",
     "bibles": [

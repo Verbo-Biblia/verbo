@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:gospels": "node build-index.mjs",
+    "build:bible": "node build-index.mjs",
     "eval": "node evaluate.mjs",
     "eval:preset": "node evaluate.mjs --preset"
   },

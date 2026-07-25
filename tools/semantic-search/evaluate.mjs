@@ -50,7 +50,11 @@ function tensorVector(tensor) {
 
 const STOPWORDS = new Set([
   'a','al','ante','bajo','con','contra','de','del','desde','el','en','entre','es','la','las','lo','los','mas','me','mi','no','o','para','por','que','se','sin','sobre','su','sus','te','tu','un','una','y',
-  'como','cual','cuando','dijo','dios','jesus','senor','sobre','todos'
+  'como','cual','cuales','quien','quienes','cuando','donde','porque','dijo','dios','jesus','senor','sobre','todos',
+  'habla','hablan','hablar','hablo','dice','dicen','decir','biblia','escritura','escrituras',
+  'versiculo','versiculos','capitulo','capitulos','pasaje','pasajes','menciona','mencionan',
+  'trata','tratan','tema','acerca','respecto','hay','existe','existen','ejemplo','ejemplos',
+  'significa','significado','version','opina','opinar'
 ]);
 const QUERY_EXPANSIONS = [
   { test:/\bdivorci|\brepudi/i, terms:['divorcio','repudiar','repudiarla','repudiare','repudiada','mujer','adulterio'] },
@@ -95,11 +99,11 @@ function lexicalBoost(record, tokens) {
       hits += 1;
       strongHits += 1;
     } else if (token.length > 4 && haystack.includes(token.slice(0, -1))) {
-      hits += 0.55;
+      hits += 0.7;
     }
   });
   const coverage = hits / tokens.length;
-  return Math.min(0.28, coverage * 0.18 + strongHits * 0.018);
+  return Math.min(0.4, coverage * 0.3 + strongHits * 0.03);
 }
 
 function specialAdjustment(record, cleanQuery) {
