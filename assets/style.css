@@ -1572,12 +1572,11 @@ body[data-theme="rosewood"] {
   .side-panel--left.side-panel--open .side-panel__inner { width: 100vw; }
 }
 
-/* Indicador único de comentarios disponibles por versículo: ícono + contador */
+/* Indicador de comentario/biblioteca/padres apostólicos disponibles por
+   versículo: ícono + contador. Vive en flujo normal dentro de la fila de
+   referencias cruzadas (.verse__xrefs), después del botón "+N más" — no hay
+   riesgo de traslape con el texto del versículo porque ya no flota encima. */
 .verse__comment-indicator {
-  position: absolute;
-  left: calc(100% + 6px);
-  top: 4px;
-  z-index: 4;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1609,30 +1608,8 @@ body[data-theme="rosewood"] {
   line-height: 1;
 }
 
-/* Si el verso tiene comentario Y artículo de Biblioteca, ambos indicadores son
-   position:absolute con el mismo punto de anclaje: se apilan verticalmente para
-   no superponerse. */
-.verse__comment-indicator + .verse__comment-indicator--library {
-  top: 30px;
-}
-
 @media (max-width: 760px) {
   .verse { flex-wrap: nowrap; }
-  /* En escritorio el indicador vive en el margen derecho, fuera de la columna
-     de texto. En móvil no hay ese margen — al ser position:absolute no reserva
-     espacio propio, así que el texto lo ignora y, si el verso envuelve a 2+
-     líneas, la segunda línea queda debajo del ícono. Se le resta ese ancho al
-     texto para que envuelva antes de llegar ahí. */
-  .verse__text { padding-right: 54px; }
-  .verse__comment-indicator {
-    left: auto;
-    right: 2px;
-    top: 4px;
-    padding: 3px 7px;
-  }
-  .verse__comment-indicator + .verse__comment-indicator--library {
-    top: 30px;
-  }
   .verse__comment-indicator__icon { font-size: 11px; }
   .verse__comment-indicator__count { font-size: 11px; }
 }

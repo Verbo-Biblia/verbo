@@ -306,13 +306,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else text.textContent=v.text[currentVersion] || Object.values(v.text)[0] || '';
       const margin=document.createElement('span'); margin.className='marginalia';
       row.append(num,text);
-      let indicatorTop=4;
-      const nextIndicatorTop=()=>{ const top=indicatorTop; indicatorTop+=26; return top; };
+      row.appendChild(margin); els.list.appendChild(row);
+      // Íconos de comentario/biblioteca/padres apostólicos: en vez de flotar
+      // encimados sobre el texto del versículo (posición absoluta en el margen,
+      // problemática en móvil por traslape con líneas envueltas), viven en la
+      // misma fila que las referencias cruzadas, justo después del botón "+N
+      // más" — fila que ya vive en flujo normal debajo del texto.
+      const indicatorButtons=[];
       if(v.hasNote && (v.commentaries||[]).length){
         const indicator=document.createElement('button');
         indicator.type='button';
         indicator.className='verse__comment-indicator';
-        indicator.style.top=nextIndicatorTop()+'px';
         const count=v.commentaries.length;
         indicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">💬</span><span class="verse__comment-indicator__count">${count}</span>`;
         const plural=count===1?'comentario disponible':'comentarios disponibles';
@@ -324,13 +328,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           row.classList.add('verse--active');
           openPanel('comentario', null, v.commentaries);
         });
-        row.appendChild(indicator);
+        indicatorButtons.push(indicator);
       }
       if(v.libraryCount>0){
         const libIndicator=document.createElement('button');
         libIndicator.type='button';
         libIndicator.className='verse__comment-indicator verse__comment-indicator--library';
-        libIndicator.style.top=nextIndicatorTop()+'px';
         libIndicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">📚</span><span class="verse__comment-indicator__count">${v.libraryCount}</span>`;
         const libPlural=v.libraryCount===1?'artículo disponible':'artículos disponibles';
         libIndicator.title=`${v.libraryCount} ${libPlural} en Biblioteca para este versículo`;
@@ -341,13 +344,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           row.classList.add('verse--active');
           openPanel('biblioteca', v.n);
         });
-        row.appendChild(libIndicator);
+        indicatorButtons.push(libIndicator);
       }
       if(v.patristicCount>0){
         const patristicIndicator=document.createElement('button');
         patristicIndicator.type='button';
         patristicIndicator.className='verse__comment-indicator verse__comment-indicator--patristic';
-        patristicIndicator.style.top=nextIndicatorTop()+'px';
         patristicIndicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">📜</span><span class="verse__comment-indicator__count">${v.patristicCount}</span>`;
         const patristicPlural=v.patristicCount===1?'fragmento patrístico disponible':'fragmentos patrísticos disponibles';
         patristicIndicator.title=`${v.patristicCount} ${patristicPlural} para este versículo`;
@@ -361,11 +363,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           pendingPatristicSources=(v.patristicSources && v.patristicSources.length) ? v.patristicSources : null;
           openPanel('padres', v.n);
         });
-        row.appendChild(patristicIndicator);
+        indicatorButtons.push(patristicIndicator);
       }
-      row.appendChild(margin); els.list.appendChild(row);
-      if((v.crossrefs||[]).length){
-        const XREF_LIMIT=window.innerWidth<=760?5:10;
+      if((v.crossrefs||[]).length || indicatorButtons.length){
+        const XREF_LIMIT=5;
         const xrefRow=document.createElement('div'); xrefRow.className='verse__xrefs';
         const addChip=ref=>{
           const chip=document.createElement('button');
@@ -374,8 +375,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           chip.addEventListener('click',(e)=>{ e.stopPropagation(); openCrossref(ref); });
           xrefRow.appendChild(chip);
         };
-        v.crossrefs.slice(0,XREF_LIMIT).forEach(addChip);
-        if(v.crossrefs.length>XREF_LIMIT){
+        (v.crossrefs||[]).slice(0,XREF_LIMIT).forEach(addChip);
+        if((v.crossrefs||[]).length>XREF_LIMIT){
           const rest=v.crossrefs.slice(XREF_LIMIT);
           const more=document.createElement('button');
           more.type='button'; more.className='verse__xref-more'; more.textContent=`+${rest.length} más`;
@@ -386,6 +387,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           });
           xrefRow.appendChild(more);
         }
+        indicatorButtons.forEach(btn=>xrefRow.appendChild(btn));
         els.list.appendChild(xrefRow);
       }
       text.addEventListener('click',()=>{ selectVerse(row,v); });
