@@ -10,13 +10,13 @@ const VerboModules = (() => {
   };
   async function getJSON(url) {
     if (cache.has(url)) return cache.get(url);
-    const response = await fetch(url, { cache:'no-cache' });
+    const response = await fetch(url);
     if (!response.ok) throw new Error(`No se pudo cargar ${url} (${response.status})`);
     const json = await response.json(); cache.set(url, json); return json;
   }
   async function getArrayBuffer(url) {
     if (cache.has(url)) return cache.get(url);
-    const response = await fetch(url, { cache:'no-cache' });
+    const response = await fetch(url);
     if (!response.ok) throw new Error(`No se pudo cargar ${url} (${response.status})`);
     const buffer = await response.arrayBuffer(); cache.set(url, buffer); return buffer;
   }
@@ -37,7 +37,17 @@ const VerboModules = (() => {
   }
   async function getCatalog() {
     const registry = await getJSON('modules/registry.json');
-    const localBibles = await loadModuleList(registry.bibles || []);
+    const [localBibles, commentaries, dictionaries, exegesis, library, gospel, patristic, patristicByVerse, crossrefs] = await Promise.all([
+      loadModuleList(registry.bibles || []),
+      loadModuleList(registry.commentaries || []),
+      loadModuleList(registry.dictionaries || []),
+      loadModuleList(registry.exegesis || []),
+      loadModuleList(registry.library || []),
+      loadModuleList(registry.gospel || []),
+      loadModuleList(registry.patristic || []),
+      loadModuleList(registry.patristicByVerse || []),
+      loadModuleList(registry.crossrefs || [])
+    ]);
     if (!localBibles.length) throw new Error('No hay Biblias disponibles en modules/registry.json');
     const primary = localBibles.find(x => x.manifest.id === registry.defaultBible) || localBibles[0];
     const remoteBibles = (registry.apiBible?.bibles || []).map(item => ({
@@ -53,14 +63,6 @@ const VerboModules = (() => {
       }
     }));
     const bibles = [...localBibles, ...remoteBibles];
-    const commentaries = await loadModuleList(registry.commentaries || []);
-    const dictionaries = await loadModuleList(registry.dictionaries || []);
-    const exegesis = await loadModuleList(registry.exegesis || []);
-    const library = await loadModuleList(registry.library || []);
-    const gospel = await loadModuleList(registry.gospel || []);
-    const patristic = await loadModuleList(registry.patristic || []);
-    const patristicByVerse = await loadModuleList(registry.patristicByVerse || []);
-    const crossrefs = await loadModuleList(registry.crossrefs || []);
     return { registry, bibles, commentaries, dictionaries, exegesis, library, gospel, patristic, patristicByVerse, crossrefs, primary, books: primary.manifest.books };
   }
 
