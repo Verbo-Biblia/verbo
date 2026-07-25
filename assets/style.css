@@ -1618,9 +1618,15 @@ body[data-theme="rosewood"] {
 
 @media (max-width: 760px) {
   .verse { flex-wrap: nowrap; }
+  /* En escritorio el indicador vive en el margen derecho, fuera de la columna
+     de texto. En móvil no hay ese margen — al ser position:absolute no reserva
+     espacio propio, así que el texto lo ignora y, si el verso envuelve a 2+
+     líneas, la segunda línea queda debajo del ícono. Se le resta ese ancho al
+     texto para que envuelva antes de llegar ahí. */
+  .verse__text { padding-right: 54px; }
   .verse__comment-indicator {
     left: auto;
-    right: -2px;
+    right: 2px;
     top: 4px;
     padding: 3px 7px;
   }
