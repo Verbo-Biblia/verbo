@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(!skipStopTTS) stopTTS();
     try {
       const previous = preserveVersion ? currentVersion : null;
-      data = await VerboModules.buildChapterData({bookId: currentBook, chapter: currentChapter, commentaryId: currentCommentary});
+      data = await VerboModules.buildChapterData({bookId: currentBook, chapter: currentChapter, commentaryId: currentCommentary, bibleId: previous || currentVersion});
       if (previous && bibleCatalog().some(version => version.id === previous)) {
         try { await ensureVersionLoaded(previous); }
         catch (error) { console.warn(`No se pudo restaurar ${previous}; se usará la Biblia local.`, error); }
@@ -183,20 +183,42 @@ document.addEventListener('DOMContentLoaded', async () => {
     } finally { setLoading(false); }
   }
 
-  async function ensureVersionLoaded(versionId) {
-    if (data.versions[versionId]) return true;
+  // targetData/bookId/chapter son parametrizables porque el modo sermón necesita
+  // cargar bajo demanda una versión sobre sermonBible.data (su propio libro/capítulo),
+  // no sobre la Biblia principal — ver loadSermonBibleData.
+  async function ensureVersionLoaded(versionId, {targetData=null, bookId=currentBook, chapter=currentChapter}={}) {
+    const target = targetData || data;
+    if (target.versions[versionId]) return true;
     const selected = bibleCatalog().find(version => version.id === versionId);
-    if (!selected?.remote) return false;
-    const loaded = await VerboModules.loadRemoteBible(versionId, currentBook, currentChapter);
-    data.versions[versionId] = {
+    if (!selected) return false;
+    let loaded, rawVerses=null, hasStrongs=false;
+    if (selected.remote) {
+      loaded = await VerboModules.loadRemoteBible(versionId, bookId, chapter);
+    } else {
+      const raw = await VerboModules.loadBible(selected.path, bookId, chapter);
+      if (!raw) throw new Error(`Esta versión no contiene ${bookId} ${chapter}`);
+      hasStrongs = Boolean(raw.manifest.hasStrongs);
+      rawVerses = raw.verses;
+      loaded = { manifest: raw.manifest, copyright:'', fumsToken:'' };
+    }
+    target.versions[versionId] = {
       label: loaded.manifest.abbreviation,
       full: loaded.manifest.name,
-      hasStrongs: false,
-      remote: true,
+      hasStrongs,
+      remote: Boolean(selected.remote),
       copyright: loaded.copyright,
       fumsToken: loaded.fumsToken
     };
-    data.verses.forEach(verse => { verse.text[versionId] = loaded.verses[String(verse.n)] || ''; });
+    target.verses.forEach(verse => {
+      if (rawVerses) {
+        // Biblia local: puede traer texto plano o {text,segments} (Strong).
+        const raw = rawVerses[String(verse.n)];
+        verse.text[versionId] = raw ? (typeof raw === 'string' ? raw : raw.text) : '';
+        if (hasStrongs && raw?.segments) { verse.segments = verse.segments || {}; verse.segments[versionId] = raw.segments; }
+      } else {
+        verse.text[versionId] = loaded.verses[String(verse.n)] || '';
+      }
+    });
     return true;
   }
 
@@ -1171,18 +1193,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function loadSermonBibleData(){
-    sermonBible.data = await VerboModules.buildChapterData({bookId: sermonBible.book, chapter: sermonBible.chapter});
+    sermonBible.data = await VerboModules.buildChapterData({bookId: sermonBible.book, chapter: sermonBible.chapter, bibleId: sermonBible.version});
     if(!sermonBible.data.versions[sermonBible.version]){
-      const selected = bibleCatalog().find(v=>v.id===sermonBible.version);
-      if(selected?.remote){
-        try{
-          const loaded = await VerboModules.loadRemoteBible(sermonBible.version, sermonBible.book, sermonBible.chapter);
-          sermonBible.data.versions[sermonBible.version] = { label:loaded.manifest.abbreviation, full:loaded.manifest.name, hasStrongs:false, remote:true, copyright:loaded.copyright, fumsToken:loaded.fumsToken };
-          sermonBible.data.verses.forEach(v=>{ v.text[sermonBible.version] = loaded.verses[String(v.n)] || ''; });
-        }catch(error){ console.warn(error); sermonBible.version = sermonBible.data.meta.version; }
-      } else {
-        sermonBible.version = sermonBible.data.meta.version;
-      }
+      try{ await ensureVersionLoaded(sermonBible.version, {targetData: sermonBible.data, bookId: sermonBible.book, chapter: sermonBible.chapter}); }
+      catch(error){ console.warn(error); sermonBible.version = sermonBible.data.meta.version; }
     }
   }
 

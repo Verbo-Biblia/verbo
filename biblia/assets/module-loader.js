@@ -35,18 +35,28 @@ const VerboModules = (() => {
   async function loadModuleList(paths = []) {
     return (await Promise.all(paths.map(tryLoadModule))).filter(Boolean);
   }
+  // Si registry.json trae "catalog" (generado por tools/build_registry_catalog.py),
+  // ya tiene el manifest.json de cada módulo embebido — evita ~30 peticiones
+  // solo para poblar selectores. Si un tipo de módulo no está en catalog
+  // (registry.json desactualizado, o módulo agregado a mano sin regenerar),
+  // cae de vuelta a buscar sus manifests uno por uno, como antes.
+  async function loadCatalogList(registry, key) {
+    const cataloged = registry.catalog?.[key];
+    if (cataloged) return cataloged;
+    return loadModuleList(registry[key] || []);
+  }
   async function getCatalog() {
     const registry = await getJSON('modules/registry.json');
     const [localBibles, commentaries, dictionaries, exegesis, library, gospel, patristic, patristicByVerse, crossrefs] = await Promise.all([
-      loadModuleList(registry.bibles || []),
-      loadModuleList(registry.commentaries || []),
-      loadModuleList(registry.dictionaries || []),
-      loadModuleList(registry.exegesis || []),
-      loadModuleList(registry.library || []),
-      loadModuleList(registry.gospel || []),
-      loadModuleList(registry.patristic || []),
-      loadModuleList(registry.patristicByVerse || []),
-      loadModuleList(registry.crossrefs || [])
+      loadCatalogList(registry, 'bibles'),
+      loadCatalogList(registry, 'commentaries'),
+      loadCatalogList(registry, 'dictionaries'),
+      loadCatalogList(registry, 'exegesis'),
+      loadCatalogList(registry, 'library'),
+      loadCatalogList(registry, 'gospel'),
+      loadCatalogList(registry, 'patristic'),
+      loadCatalogList(registry, 'patristicByVerse'),
+      loadCatalogList(registry, 'crossrefs')
     ]);
     if (!localBibles.length) throw new Error('No hay Biblias disponibles en modules/registry.json');
     const primary = localBibles.find(x => x.manifest.id === registry.defaultBible) || localBibles[0];
@@ -519,12 +529,26 @@ const VerboModules = (() => {
     return results.slice(0, limit);
   }
 
-  async function buildChapterData({ bookId='ROM', chapter=7, commentaryId=null }={}) {
+  // Solo se carga de entrada la Biblia activa (bibleId), no las ~7 registradas:
+  // el resto se cargan bajo demanda cuando el usuario cambia de versión o abre
+  // "Comparar versiones" (ver ensureVersionLoaded en assets/app.js). Si bibleId
+  // no viene o no se encuentra, cae a registry.defaultBible y de ahí a la
+  // primera Biblia registrada.
+  async function buildChapterData({ bookId='ROM', chapter=7, commentaryId=null, bibleId=null }={}) {
     const registry = await getJSON('modules/registry.json');
-    const bibleResults=(await Promise.all((registry.bibles || []).map(async path=>{
-      try { return await loadBible(`modules/${path}`,bookId,chapter); }
-      catch (error) { console.warn(`Biblia omitida: modules/${path}`, error); return null; }
-    }))).filter(Boolean);
+    const catalogBibles = registry.catalog?.bibles || [];
+    const wantedId = bibleId || registry.defaultBible;
+    // catalogBibles[].path ya viene con el prefijo "modules/" (ver
+    // tools/build_registry_catalog.py); el fallback a registry.bibles[0] es
+    // una ruta cruda sin ese prefijo, por eso se agrega solo ahí.
+    const eagerPath = catalogBibles.find(b => b.manifest?.id === wantedId)?.path
+      || ((registry.bibles || [])[0] ? `modules/${registry.bibles[0]}` : null);
+    if (!eagerPath) throw new Error(`No hay Biblias disponibles para ${bookId} ${chapter}`);
+    const eagerResult = await (async () => {
+      try { return await loadBible(eagerPath, bookId, chapter); }
+      catch (error) { console.warn(`Biblia omitida: ${eagerPath}`, error); return null; }
+    })();
+    const bibleResults = eagerResult ? [eagerResult] : [];
     if (!bibleResults.length) throw new Error(`No hay Biblias disponibles para ${bookId} ${chapter}`);
 
     // Se cargan TODOS los comentarios que contienen este capítulo. Esto permite
