@@ -2120,3 +2120,30 @@ body.static-page {
 }
 .static-page__main article p { line-height: 1.75; margin: 0 0 16px; }
 .static-page__main article hr { border: none; border-top: 1px solid var(--rule); margin: 38px 0; }
+.static-page__main article a { color: var(--wine); text-decoration: none; }
+.static-page__main article a:hover { text-decoration: underline; }
+.static-page__main article ul,
+.static-page__main article ol {
+  margin: 0 0 16px; padding-left: 1.4em; line-height: 1.75;
+}
+.static-page__main article li { margin-bottom: 6px; }
+.static-page__main article blockquote {
+  margin: 0 0 16px; padding: 12px 18px;
+  border-left: 3px solid var(--wine-soft);
+  background: var(--paper-raised);
+  font-style: italic;
+}
+.static-page__main article blockquote p { margin: 0; }
+.static-page__main article img {
+  max-width: 100%; height: auto; border-radius: 6px; margin: 4px 0 22px; display: block;
+}
+.static-page__main .lesson-badge {
+  font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--sepia); margin: 0 0 8px;
+}
+.static-page__main .lesson-nav { font-size: 14px; }
+.static-page__main .lesson-nav a { color: var(--wine); }
+.static-page__main .lesson-nav a:hover { text-decoration: underline; }
+@media print {
+  .static-page__header, .lesson-nav { display: none; }
+}
