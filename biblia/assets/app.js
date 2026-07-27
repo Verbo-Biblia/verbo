@@ -811,8 +811,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         </article>
 
         <article class="license-card">
-          <h3>Biblia Verbo RV2026</h3>
-          <p>Edición Verbo basada en la Reina-Valera 1909 de dominio público. Actualmente se publica sin una capa Strong española.</p>
+          <h3>Biblia Verbo BV2026</h3>
+          <p>Edición bíblica propia en español contemporáneo, con procedencia histórica en la Reina-Valera 1909 de dominio público. Actualmente se publica sin una capa Strong española.</p>
         </article>
 
         <article class="license-card">
@@ -1404,7 +1404,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // contexto que a versículos sueltos muy cortos, que suelen quedar mal
     // rankeados (ver evaluación con "chisme": el versículo correcto quedaba
     // en el puesto ~9500/31000, pero la perícopa correcta en el puesto ~400/5700).
-    const saved = searchState || { query:'', versionId:'rv-verbo', indexType:'pericopes', results:[], page:0, scopeLabel:'Semántica · Biblia completa RV-Verbo', semantic:true };
+    const saved = searchState || { query:'', versionId:'rv-verbo', indexType:'pericopes', results:[], page:0, scopeLabel:'Semántica · Biblia completa BV2026', semantic:true };
     els.panelToolbar.innerHTML=`<form class="search-panel-form" id="searchForm">
       <input id="searchInput" class="search-panel-input" type="search" minlength="2" placeholder="Pregunta o tema…" autocomplete="off" value="${escapeHTML(saved.query)}">
       <select id="searchIndexType" class="search-panel-select" aria-label="Tipo de índice semántico">
@@ -1413,7 +1413,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       </select>
       <button class="search-panel-button" type="submit">Buscar</button>
     </form>`;
-    els.panelBody.innerHTML=emptyState('⌕','Busca en lenguaje natural en toda la Biblia (RV-Verbo). Los resultados se ordenan con un índice semántico local.');
+    els.panelBody.innerHTML=emptyState('⌕','Busca en lenguaje natural en toda la Biblia Verbo BV2026. Los resultados se ordenan con un índice semántico local.');
 
     const form=document.getElementById('searchForm');
     const input=document.getElementById('searchInput');
@@ -1448,7 +1448,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           limit:90,
           onProgress:p=>{els.panelBody.innerHTML=emptyState('⌛',stageText[p.stage] || 'Buscando…');}
         });
-        const scopeLabel=`Semántica · Biblia completa RV-Verbo · ${indexType==='pericopes'?'perícopas':'versículos'}`;
+        const scopeLabel=`Semántica · Biblia completa BV2026 · ${indexType==='pericopes'?'perícopas':'versículos'}`;
         searchState={query, versionId, indexType, results, page:0, scopeLabel, semantic:true};
         if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',`No se encontraron resultados para “${escapeHTML(query)}”.`); return; }
         renderSavedSearchResults();
