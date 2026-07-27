@@ -1,0 +1,271 @@
+/* ============================================================
+   Verbo — Librería: lector de libros completos.
+   Reutiliza los tokens --r-* definidos por body.recursos-page
+   en recursos/assets/recursos.css (cargar ese archivo primero).
+   ============================================================ */
+
+body.recursos-page .reader {
+  max-width: 760px;
+  margin: 40px auto 90px;
+  padding: 44px 56px 56px;
+  background: var(--r-paper);
+  border: 1px solid var(--r-rule);
+  border-radius: 6px;
+  box-shadow: 0 30px 60px -34px rgba(var(--r-shadow), .35);
+}
+@media (max-width: 720px) {
+  body.recursos-page .reader { padding: 32px 22px 40px; border-radius: 0; margin: 0 auto 60px; }
+}
+
+body.recursos-page .reader-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--r-gold);
+}
+
+body.recursos-page .reader-head-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+body.recursos-page .reader-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  color: var(--r-ink);
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+  line-height: 1.2;
+  margin: 0 0 18px;
+}
+
+body.recursos-page .reader-bookmark-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .02em;
+  color: var(--r-ink-soft);
+  background: none;
+  border: 1px solid var(--r-rule);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+body.recursos-page .reader-bookmark-btn:hover {
+  border-color: var(--r-gold);
+  color: var(--r-ink);
+}
+body.recursos-page .reader-bookmark-btn.is-active {
+  border-color: var(--r-gold-bright);
+  background: rgba(176, 138, 46, .12);
+  color: var(--r-ink);
+}
+
+body.recursos-page .reader-progress {
+  height: 3px;
+  background: var(--r-rule);
+  border-radius: 999px;
+  margin: 0 0 26px;
+  overflow: hidden;
+}
+body.recursos-page .reader-progress-bar {
+  height: 100%;
+  background: var(--r-gold-bright);
+  border-radius: 999px;
+  transition: width .2s ease;
+}
+
+body.recursos-page .reader-resume-banner[hidden] { display: none; }
+body.recursos-page .reader-resume-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: rgba(176, 138, 46, .08);
+  border: 1px solid var(--r-rule-strong);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 0 0 26px;
+  font-size: .92rem;
+  color: var(--r-ink-soft);
+}
+body.recursos-page .reader-resume-banner a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--r-gold);
+  text-decoration: none;
+  border-bottom: 1px solid var(--r-gold);
+}
+body.recursos-page .reader-resume-banner button {
+  background: none;
+  border: none;
+  color: var(--r-ink-soft);
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+body.recursos-page .reader-chapternav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 0;
+  border-top: 1px solid var(--r-rule);
+  border-bottom: 1px solid var(--r-rule);
+  margin-bottom: 30px;
+}
+body.recursos-page .reader-chapternav button {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--r-ink-soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 4px;
+}
+body.recursos-page .reader-chapternav button:hover:not(:disabled) { color: var(--r-gold); }
+body.recursos-page .reader-chapternav button:disabled { opacity: .3; cursor: default; }
+body.recursos-page .reader-chapter-select {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--r-ink);
+  background: var(--r-sky-top);
+  border: 1px solid var(--r-rule);
+  border-radius: 4px;
+  padding: 6px 10px;
+  max-width: 60%;
+}
+
+body.recursos-page .reader-chapter-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  color: var(--r-ink);
+  font-size: 1.3rem;
+  margin: 0 0 22px;
+}
+
+body.recursos-page .reader-para {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--r-ink);
+  margin: 0 0 20px;
+  padding: 6px 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background .12s ease;
+}
+body.recursos-page .reader-para:hover { background: rgba(176, 138, 46, .06); }
+body.recursos-page .reader-para.is-highlighted { background: rgba(201, 162, 39, .22); }
+body.recursos-page .reader-para.is-highlighted:hover { background: rgba(201, 162, 39, .3); }
+
+body.recursos-page .reader-hint {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  color: var(--r-ink-soft);
+  text-align: center;
+  margin: 0 0 30px;
+  opacity: .75;
+}
+
+body.recursos-page .reader-foot {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--r-rule);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--r-ink-soft);
+}
+body.recursos-page .reader-foot a { color: var(--r-ink-soft); text-decoration: none; }
+body.recursos-page .reader-foot a:hover { color: var(--r-gold); }
+
+/* ---------- estante (shelf) ---------- */
+body.recursos-page .r-book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px 18px;
+  margin-bottom: 20px;
+}
+@media (max-width: 900px) { body.recursos-page .r-book-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { body.recursos-page .r-book-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; } }
+
+body.recursos-page .r-book-row {
+  display: block;
+  text-decoration: none;
+  color: var(--r-ink);
+}
+
+body.recursos-page .book-cover {
+  aspect-ratio: 3 / 4.3;
+  border-radius: 5px;
+  background:
+    radial-gradient(140% 90% at 8% 0%, rgba(201,162,39,.22), transparent 55%),
+    linear-gradient(165deg, #16223A 0%, #0B1424 100%);
+  border: 1px solid rgba(201,162,39,.3);
+  padding: 16px 15px 14px;
+  display: flex;
+  flex-direction: column;
+  color: #EDE6D6;
+  box-shadow: 0 14px 26px -18px rgba(var(--r-shadow), .5);
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+body.recursos-page .r-book-row:hover .book-cover {
+  transform: translateY(-4px);
+  border-color: rgba(201,162,39,.6);
+  box-shadow: 0 22px 34px -18px rgba(var(--r-shadow), .55);
+}
+body.recursos-page .book-cover-icon {
+  width: 22px; height: 22px;
+  color: #C9A227;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+body.recursos-page .book-cover-era {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #C9A227;
+  margin-bottom: auto;
+}
+body.recursos-page .book-cover-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.02rem;
+  line-height: 1.22;
+  color: #F4EEDF;
+  margin: 14px 0 8px;
+}
+body.recursos-page .book-cover-rule {
+  width: 22px; height: 1px;
+  background: rgba(201,162,39,.5);
+  margin-bottom: 8px;
+}
+body.recursos-page .book-cover-author {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-style: italic;
+  font-size: .74rem;
+  color: #9FA9BD;
+  line-height: 1.35;
+}
+
+body.recursos-page .r-book-title {
+  font-family: 'Fraunces', serif;
+  font-size: .95rem;
+  line-height: 1.3;
+  margin: 12px 0 4px;
+  transition: color .15s ease;
+}
+body.recursos-page .r-book-row:hover .r-book-title { color: var(--r-gold); }
+body.recursos-page .r-book-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--r-ink-soft);
+}

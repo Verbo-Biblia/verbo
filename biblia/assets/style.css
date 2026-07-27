@@ -50,6 +50,27 @@ body {
   flex-direction: column;
 }
 
+/* ---------- Ofrenda ---------- */
+
+.ofrenda-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  margin-left: 10px;
+  background: var(--gold-glow, #C89F58);
+  color: #2B1D10;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  vertical-align: middle;
+  transition: background .15s ease, transform .15s ease;
+}
+.ofrenda-btn:hover { background: #DDB53A; transform: translateY(-1px); }
+.ofrenda-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+.static-page__header .ofrenda-btn { margin-left: 8px; }
+
 /* ---------- Header ---------- */
 
 .app-header {
