@@ -1,0 +1,312 @@
+/* ============================================================
+   Verbo — Recursos: piel visual propia (Escuela Dominical,
+   Artículos y Reflexiones). Azul claro + dorado, en línea con
+   la portada (index.html raíz), pero más luminoso.
+   Se aplica sobre .static-page vía la clase adicional
+   body.recursos-page — no toca Misión / Sobre el fundador.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+body.recursos-page {
+  --r-sky-top: #F1F5FB;
+  --r-sky-bot: #DCE6F3;
+  --r-paper: #FFFFFF;
+  --r-ink: #0B1424;
+  --r-ink-soft: #3C4A64;
+  --r-gold: #93701F;
+  --r-gold-bright: #B08A2E;
+  --r-rule: #B9CBE0;
+  --r-rule-strong: #93AECC;
+  --r-shadow: 16, 25, 46;
+
+  background:
+    radial-gradient(1100px 520px at 12% -8%, rgba(176, 138, 46, .10), transparent 60%),
+    linear-gradient(175deg, var(--r-sky-top) 0%, var(--r-sky-bot) 78%);
+  background-attachment: fixed;
+  color: var(--r-ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+body.recursos-page .static-page__header {
+  max-width: 900px;
+  margin: 0 auto;
+  border-bottom-color: var(--r-rule);
+}
+body.recursos-page .static-page__brand {
+  font-family: 'Fraunces', serif;
+  color: var(--r-gold-bright);
+}
+body.recursos-page .static-page__back {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--r-ink-soft);
+}
+body.recursos-page .static-page__back:hover { color: var(--r-gold); }
+
+/* ---------- quick-nav: accesos a Biblia / Seminario / Librería / Recursos ---------- */
+body.recursos-page .quick-nav {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 18px 32px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+body.recursos-page .quick-nav a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 15px 9px 11px;
+  border: 1px solid var(--r-rule);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .55);
+  text-decoration: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .03em;
+  color: var(--r-ink-soft);
+  transition: border-color .15s ease, color .15s ease, background .15s ease, transform .15s ease;
+}
+body.recursos-page .quick-nav a:hover {
+  border-color: var(--r-gold);
+  color: var(--r-ink);
+  transform: translateY(-1px);
+}
+body.recursos-page .quick-nav a.is-current {
+  border-color: var(--r-gold-bright);
+  background: rgba(176, 138, 46, .13);
+  color: var(--r-ink);
+}
+body.recursos-page .quick-nav svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--r-gold);
+}
+
+/* ---------- contenedor principal: panel de "papel" flotando sobre el azul ---------- */
+body.recursos-page .static-page__main {
+  max-width: 760px;
+  margin: 40px auto 90px;
+  padding: 52px 64px 64px;
+  background: var(--r-paper);
+  border: 1px solid var(--r-rule);
+  border-radius: 6px;
+  box-shadow: 0 30px 60px -34px rgba(var(--r-shadow), .35);
+}
+@media (max-width: 720px) {
+  body.recursos-page .static-page__main { padding: 38px 26px 46px; border-radius: 0; margin: 0 auto 60px; }
+}
+
+/* Páginas índice (recursos/, escuela-dominical/, articulos-y-reflexiones/) son más anchas y sin panel de papel */
+body.recursos-page.recursos-index .static-page__main {
+  max-width: 900px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 40px 32px 72px;
+}
+
+body.recursos-page .static-page__main .lesson-badge,
+body.recursos-page .static-page__main .article-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--r-gold);
+}
+body.recursos-page .static-page__main article h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  color: var(--r-ink);
+  font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+  line-height: 1.22;
+}
+body.recursos-page .static-page__main article h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  color: var(--r-ink);
+  font-size: 1.28rem;
+  border-left: 3px solid var(--r-gold-bright);
+  padding-left: 12px;
+  margin: 36px 0 14px;
+}
+body.recursos-page .static-page__main article p {
+  color: var(--r-ink);
+  line-height: 1.75;
+}
+body.recursos-page .static-page__main article strong { color: var(--r-ink); }
+body.recursos-page .static-page__main article a { color: var(--r-gold); }
+body.recursos-page .static-page__main article a:hover { color: var(--r-gold-bright); }
+body.recursos-page .static-page__main article blockquote {
+  border-left: 2px solid var(--r-gold-bright);
+  background: none;
+  padding: 4px 0 4px 20px;
+  color: var(--r-ink-soft);
+  font-style: italic;
+}
+body.recursos-page .static-page__main article blockquote p { margin: 0; }
+body.recursos-page .static-page__main article hr {
+  border-top-color: var(--r-rule);
+}
+body.recursos-page .static-page__main article table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 0 18px;
+  font-size: .92rem;
+}
+body.recursos-page .static-page__main article th,
+body.recursos-page .static-page__main article td {
+  border: 1px solid var(--r-rule);
+  padding: 8px 10px;
+  text-align: left;
+}
+body.recursos-page .static-page__main article th {
+  background: rgba(176, 138, 46, .08);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .78rem;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--r-ink-soft);
+}
+
+body.recursos-page .lesson-nav {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--r-ink-soft);
+}
+body.recursos-page .lesson-nav a { color: var(--r-ink-soft); }
+body.recursos-page .lesson-nav a:hover { color: var(--r-gold); }
+
+/* ---------- índice: eyebrow + título + intro ---------- */
+body.recursos-page .r-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--r-gold);
+  display: block;
+  margin-bottom: 14px;
+}
+body.recursos-page .recursos-index h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 4.4vw, 2.6rem);
+  line-height: 1.16;
+  color: var(--r-ink);
+  margin: 0 0 18px;
+}
+body.recursos-page .r-lede {
+  font-size: 1.03rem;
+  color: var(--r-ink-soft);
+  max-width: 56ch;
+  margin: 0 0 44px;
+}
+body.recursos-page .r-section-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--r-rule);
+  padding-bottom: 10px;
+  margin: 0 0 22px;
+}
+body.recursos-page .r-section-label h2 {
+  font-size: 1rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--r-ink-soft);
+  margin: 0;
+}
+
+/* ---------- tarjetas ---------- */
+body.recursos-page .r-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 52px;
+}
+@media (max-width: 640px) { body.recursos-page .r-card-grid { grid-template-columns: 1fr; } }
+body.recursos-page .r-card {
+  display: block;
+  text-decoration: none;
+  background: linear-gradient(165deg, var(--r-paper) 0%, var(--r-sky-bot) 130%);
+  border: 1px solid var(--r-rule);
+  border-radius: 4px;
+  padding: 26px 26px 22px;
+  box-shadow: 0 1px 2px rgba(var(--r-shadow), .04);
+  transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+body.recursos-page .r-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--r-gold-bright);
+  box-shadow: 0 20px 34px -22px rgba(var(--r-shadow), .45);
+}
+body.recursos-page .r-card-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--r-gold);
+  letter-spacing: .06em;
+  margin-bottom: 10px;
+  display: block;
+}
+body.recursos-page .r-card h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 1.28rem;
+  margin: 0 0 10px;
+  color: var(--r-ink);
+}
+body.recursos-page .r-card p {
+  font-size: .93rem;
+  color: var(--r-ink-soft);
+  margin: 0 0 16px;
+  line-height: 1.55;
+}
+body.recursos-page .r-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+}
+body.recursos-page .r-pill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--r-rule-strong);
+  color: var(--r-ink-soft);
+}
+body.recursos-page .r-arrow { color: var(--r-ink-soft); transition: transform .15s ease, color .15s ease; }
+body.recursos-page .r-card:hover .r-arrow { color: var(--r-gold); transform: translateX(3px); }
+
+/* ---------- lista de artículos (índice cronológico) ---------- */
+body.recursos-page .r-article-list { display: flex; flex-direction: column; }
+body.recursos-page .r-article-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--r-rule);
+  text-decoration: none;
+  color: var(--r-ink);
+}
+body.recursos-page .r-article-row:first-child { padding-top: 4px; }
+body.recursos-page .r-article-row:hover .r-article-row-title { color: var(--r-gold); }
+body.recursos-page .r-article-row-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.06rem;
+  transition: color .15s ease;
+}
+body.recursos-page .r-article-row-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  color: var(--r-ink-soft);
+  white-space: nowrap;
+}
+
+@media print {
+  body.recursos-page .quick-nav { display: none; }
+}
