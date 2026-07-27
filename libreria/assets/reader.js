@@ -7,13 +7,17 @@
   var root = document.getElementById("reader-root");
   if (!root) return;
 
-  var HL_KEY = "verbo:libreria:" + cfg.id + ":hl";
+  // ":hl2" — formato con rangos de texto libres (start/end de caracteres).
+  // Distinto del formato viejo (":hl", párrafo completo sí/no) para no
+  // heredar datos incompatibles de la primera versión del lector.
+  var HL_KEY = "verbo:libreria:" + cfg.id + ":hl2";
   var BM_KEY = "verbo:libreria:" + cfg.id + ":bookmark";
 
   var chapters = [];
   var current = 0;
   var highlights = loadJSON(HL_KEY, {});
   var bookmark = loadJSON(BM_KEY, null);
+  var paraTexts = []; // texto plano de cada párrafo del capítulo actual
 
   function loadJSON(key, fallback) {
     try {
@@ -71,6 +75,115 @@
     return e;
   }
 
+  // ---------- resaltado por rangos de texto libres ----------
+
+  function mergeRanges(ranges) {
+    ranges.sort(function (a, b) { return a[0] - b[0]; });
+    var out = [];
+    ranges.forEach(function (r) {
+      var last = out[out.length - 1];
+      if (last && r[0] <= last[1]) {
+        last[1] = Math.max(last[1], r[1]);
+      } else {
+        out.push(r.slice());
+      }
+    });
+    return out;
+  }
+
+  function hlKey(paraIndex) { return current + ":" + paraIndex; }
+
+  function addHighlightRange(paraIndex, start, end) {
+    var key = hlKey(paraIndex);
+    var ranges = highlights[key] || [];
+    ranges.push([start, end]);
+    highlights[key] = mergeRanges(ranges);
+    saveJSON(HL_KEY, highlights);
+  }
+
+  function removeHighlightRange(paraIndex, start, end) {
+    var key = hlKey(paraIndex);
+    var ranges = highlights[key] || [];
+    ranges = ranges.filter(function (r) { return !(r[0] === start && r[1] === end); });
+    if (ranges.length) highlights[key] = ranges; else delete highlights[key];
+    saveJSON(HL_KEY, highlights);
+  }
+
+  // Reconstruye el contenido de un <p> a partir del texto plano y sus
+  // rangos resaltados, intercalando <mark> para las zonas resaltadas.
+  function renderParaContent(pEl, text, paraIndex) {
+    pEl.innerHTML = "";
+    var ranges = highlights[hlKey(paraIndex)] || [];
+    var pos = 0;
+    ranges.forEach(function (r) {
+      var start = Math.max(0, Math.min(r[0], text.length));
+      var end = Math.max(start, Math.min(r[1], text.length));
+      if (start > pos) pEl.appendChild(document.createTextNode(text.slice(pos, start)));
+      var mark = document.createElement("mark");
+      mark.className = "reader-hl";
+      mark.title = "Toca para quitar el resaltado";
+      mark.textContent = text.slice(start, end);
+      mark.addEventListener("click", function (e) {
+        e.stopPropagation();
+        removeHighlightRange(paraIndex, r[0], r[1]);
+        renderParaContent(pEl, text, paraIndex);
+      });
+      pEl.appendChild(mark);
+      pos = end;
+    });
+    if (pos < text.length) pEl.appendChild(document.createTextNode(text.slice(pos)));
+  }
+
+  // Calcula el offset (en caracteres, sobre el texto plano) de un punto
+  // (node, offset) de un Range, relativo a un contenedor dado.
+  function textOffsetInContainer(container, node, offset) {
+    var total = 0;
+    var found = -1;
+    function walk(n) {
+      if (found !== -1) return;
+      if (n.nodeType === Node.TEXT_NODE) {
+        if (n === node) {
+          found = total + offset;
+          return;
+        }
+        total += n.textContent.length;
+      } else {
+        for (var i = 0; i < n.childNodes.length; i++) {
+          walk(n.childNodes[i]);
+          if (found !== -1) return;
+        }
+      }
+    }
+    walk(container);
+    return found;
+  }
+
+  function handleSelection(contentEl) {
+    var sel = window.getSelection();
+    if (!sel || sel.isCollapsed || sel.rangeCount === 0) return;
+    var range = sel.getRangeAt(0);
+    if (!contentEl.contains(range.commonAncestorContainer)) return;
+
+    var startEl = range.startContainer.nodeType === 3 ? range.startContainer.parentElement : range.startContainer;
+    var endEl = range.endContainer.nodeType === 3 ? range.endContainer.parentElement : range.endContainer;
+    var startPara = startEl && startEl.closest(".reader-para");
+    var endPara = endEl && endEl.closest(".reader-para");
+    if (!startPara || !endPara || startPara !== endPara) {
+      sel.removeAllRanges();
+      return; // solo se admite resaltar dentro de un mismo párrafo
+    }
+
+    var paraIndex = parseInt(startPara.dataset.para, 10);
+    var a = textOffsetInContainer(startPara, range.startContainer, range.startOffset);
+    var b = textOffsetInContainer(startPara, range.endContainer, range.endOffset);
+    sel.removeAllRanges();
+    if (a < 0 || b < 0 || a === b) return;
+    var start = Math.min(a, b), end = Math.max(a, b);
+
+    addHighlightRange(paraIndex, start, end);
+    renderParaContent(startPara, paraTexts[paraIndex], paraIndex);
+  }
+
   function buildSkeleton() {
     root.innerHTML = "";
 
@@ -104,23 +217,27 @@
     root.appendChild(resume);
 
     var nav = el("div", "reader-chapternav");
-    var prevBtn = el("button", null, "← Anterior");
+    var prevBtn = document.createElement("button");
     prevBtn.type = "button";
+    prevBtn.innerHTML = '←<span class="chapternav-label"> Anterior</span>';
     var select = document.createElement("select");
     select.className = "reader-chapter-select";
-    var nextBtn = el("button", null, "Siguiente →");
+    var nextBtn = document.createElement("button");
     nextBtn.type = "button";
+    nextBtn.innerHTML = '<span class="chapternav-label">Siguiente </span>→';
     nav.appendChild(prevBtn);
     nav.appendChild(select);
     nav.appendChild(nextBtn);
     root.appendChild(nav);
 
-    root.appendChild(el("p", "reader-hint", "Toca un párrafo para resaltarlo. El resaltado y el marcador se guardan en este dispositivo."));
+    root.appendChild(el("p", "reader-hint", "Selecciona el texto que quieras resaltar (arrastra el dedo o el mouse). Toca un resaltado para quitarlo. Se guarda en este dispositivo."));
 
     var chapterTitle = el("h2", "reader-chapter-title");
     root.appendChild(chapterTitle);
 
     var content = el("div", "reader-content");
+    content.addEventListener("mouseup", function () { handleSelection(content); });
+    content.addEventListener("touchend", function () { handleSelection(content); });
     root.appendChild(content);
 
     var foot = el("div", "reader-foot");
@@ -143,21 +260,11 @@
     ui.chapterTitle.textContent = ch.title;
 
     ui.content.innerHTML = "";
-    var paras = splitIntoParagraphs(ch.text);
-    paras.forEach(function (text, pi) {
-      var p = el("p", "reader-para", text);
-      var key = current + ":" + pi;
-      if (highlights[key]) p.classList.add("is-highlighted");
-      p.addEventListener("click", function () {
-        if (highlights[key]) {
-          delete highlights[key];
-          p.classList.remove("is-highlighted");
-        } else {
-          highlights[key] = true;
-          p.classList.add("is-highlighted");
-        }
-        saveJSON(HL_KEY, highlights);
-      });
+    paraTexts = splitIntoParagraphs(ch.text);
+    paraTexts.forEach(function (text, pi) {
+      var p = el("p", "reader-para");
+      p.dataset.para = String(pi);
+      renderParaContent(p, text, pi);
       ui.content.appendChild(p);
     });
 

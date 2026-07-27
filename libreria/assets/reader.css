@@ -28,10 +28,12 @@ body.recursos-page .reader-badge {
 body.recursos-page .reader-head-top {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px 12px;
   margin-bottom: 10px;
 }
+body.recursos-page .reader-bookmark-btn { flex: 0 0 auto; }
 
 body.recursos-page .reader-title {
   font-family: 'Fraunces', serif;
@@ -113,14 +115,14 @@ body.recursos-page .reader-resume-banner button {
 body.recursos-page .reader-chapternav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   padding: 14px 0;
   border-top: 1px solid var(--r-rule);
   border-bottom: 1px solid var(--r-rule);
   margin-bottom: 30px;
 }
 body.recursos-page .reader-chapternav button {
+  flex: 0 0 auto;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12.5px;
   color: var(--r-ink-soft);
@@ -128,10 +130,17 @@ body.recursos-page .reader-chapternav button {
   border: none;
   cursor: pointer;
   padding: 6px 4px;
+  white-space: nowrap;
 }
 body.recursos-page .reader-chapternav button:hover:not(:disabled) { color: var(--r-gold); }
 body.recursos-page .reader-chapternav button:disabled { opacity: .3; cursor: default; }
+@media (max-width: 480px) {
+  body.recursos-page .reader-chapternav button .chapternav-label { display: none; }
+}
 body.recursos-page .reader-chapter-select {
+  flex: 1 1 0%;
+  width: 0;
+  min-width: 0;
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 13.5px;
   color: var(--r-ink);
@@ -139,7 +148,6 @@ body.recursos-page .reader-chapter-select {
   border: 1px solid var(--r-rule);
   border-radius: 4px;
   padding: 6px 10px;
-  max-width: 60%;
 }
 
 body.recursos-page .reader-chapter-title {
@@ -155,16 +163,26 @@ body.recursos-page .reader-para {
   line-height: 1.8;
   color: var(--r-ink);
   margin: 0 0 20px;
-  padding: 6px 10px;
-  margin-left: -10px;
-  margin-right: -10px;
-  border-radius: 4px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+body.recursos-page .reader-para::selection,
+body.recursos-page .reader-para *::selection {
+  background: rgba(201, 162, 39, .35);
+}
+/* Mismo resaltado amarillo que ya se usa en el lector bíblico
+   (.verse.hl-yellow en biblia/assets/style.css), para que se sienta
+   familiar a quien ya usa la Biblia de Verbo. */
+body.recursos-page mark.reader-hl {
+  background: rgba(254, 240, 138, .55);
+  color: var(--r-ink);
+  border-radius: 3px;
+  padding: 1px 2px;
+  margin: 0 -2px;
   cursor: pointer;
   transition: background .12s ease;
 }
-body.recursos-page .reader-para:hover { background: rgba(176, 138, 46, .06); }
-body.recursos-page .reader-para.is-highlighted { background: rgba(201, 162, 39, .22); }
-body.recursos-page .reader-para.is-highlighted:hover { background: rgba(201, 162, 39, .3); }
+body.recursos-page mark.reader-hl:hover { background: rgba(254, 240, 138, .8); }
 
 body.recursos-page .reader-hint {
   font-family: 'IBM Plex Mono', monospace;
