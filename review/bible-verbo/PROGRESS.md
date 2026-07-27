@@ -44,7 +44,11 @@ Un libro solo puede marcarse como cerrado cuando:
 | --- | ---: | --- | --- |
 | Génesis | 50 | candidato | Revisión integral completada: 50 capítulos y 1.533 versículos; JSON, estructura, cifras y auditoría de arcaísmos validados |
 | Éxodo | 40 | candidato | Revisión integral completada: 40 capítulos y 1.213 versículos; JSON, estructura, cifras, terminología y auditoría de arcaísmos validados |
-| Levítico–Apocalipsis | 1.099 | pendiente | Restan 64 libros y 28.338 versículos; Levítico es el siguiente libro |
+| Levítico | 27 | candidato | Revisión integral completada: 27 capítulos y 859 versículos; JSON, estructura, cifras, terminología y auditoría de arcaísmos validados |
+| Números | 36 | en revisión | Números 1–10 completado y validado (420 versículos); Números 11–15 entregado por agente y pendiente de auditoría |
+| Deuteronomio | 34 | en revisión | Deuteronomio 1–15 completado y validado (450 versículos); Deuteronomio 16–20 entregado por agente y pendiente de auditoría |
+| Josué | 24 | en revisión | Josué 1–15 completado y validado (414 versículos); Josué 16–20 entregado por agente y pendiente de auditoría |
+| Jueces–Apocalipsis | 978 | pendiente | Restan 60 libros después de Josué |
 
 ## Orden de trabajo
 
@@ -54,8 +58,7 @@ hasta Apocalipsis.
 
 ## Publicación
 
-Juan autorizó expresamente subir el avance después de cerrar Éxodo. Esta
-autorización cubre el texto revisado de Génesis y Éxodo, la identidad BV2026 y
-los archivos de estado correspondientes. La revisión completa continúa desde
-Levítico; no se declarará completa ni oficial la Biblia hasta cerrar los 66
-libros.
+Juan autorizó expresamente subir el avance cerrado de Levítico. Para cualquier
+nueva subida posterior, commit o publicación, se debe preguntar primero a Juan
+y recibir autorización expresa. La revisión completa continúa desde Números; no
+se declarará completa ni oficial la Biblia hasta cerrar los 66 libros.
