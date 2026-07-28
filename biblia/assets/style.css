@@ -1565,7 +1565,12 @@ body.map-viewer-fullscreen-active { overflow: hidden; }
 
 @media (max-width: 760px) {
   .maps-gallery__grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .map-viewer { max-height: 58vh; }
+  /* :not(--fullscreen) para que esta regla (panel chico) no le gane, por
+     orden de cascada, a "max-height: none" de .map-viewer--fullscreen — en
+     móvil ambas tienen la misma especificidad y esta viene después en el
+     archivo, así que sin el :not() el visor a pantalla completa quedaba
+     limitado a 58vh dejando un hueco vacío alrededor del mapa. */
+  .map-viewer:not(.map-viewer--fullscreen) { max-height: 58vh; }
 }
 
 .gospel-match { border:1px solid var(--accent); border-radius:10px; padding:12px; margin-bottom:14px; background:color-mix(in srgb, var(--accent) 10%, transparent); }
