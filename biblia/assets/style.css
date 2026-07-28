@@ -1439,9 +1439,9 @@ body[data-theme="rosewood"] {
   overflow: hidden;
   border-radius: 12px;
   background: color-mix(in srgb, var(--accent) 6%, var(--paper));
-  touch-action: none;
   cursor: grab;
 }
+
 .map-viewer--dragging { cursor: grabbing; }
 
 .map-viewer__img {
@@ -1463,14 +1463,24 @@ body[data-theme="rosewood"] {
    `transform`) a propósito: initMapViewer() escribe `transform` desde JS
    en cada gesto de pan/zoom, y así no se pisan entre sí. */
 
+/* Los controles de zoom/arrastre solo tienen sentido a pantalla completa —
+   en el panel chico (380px) no hay espacio real para explorar el mapa. */
 .map-viewer__controls {
+  display: none;
   position: absolute;
   right: 12px;
   bottom: 12px;
-  display: flex;
   flex-direction: column;
   gap: 8px;
   z-index: 2;
+}
+
+.map-viewer--fullscreen .map-viewer__controls {
+  display: flex;
+}
+
+.map-viewer:not(.map-viewer--fullscreen) {
+  cursor: default;
 }
 
 .map-viewer__btn {
@@ -1502,8 +1512,12 @@ body[data-theme="rosewood"] {
 /* Pantalla completa: el visor sale del flujo del panel y cubre la ventana.
    Sin ancestros con transform en el camino (side-panel solo lo usa para el
    sheet móvil, que "mapas" no utiliza), position:fixed queda relativo al
-   viewport real. */
+   viewport real. touch-action:none va aquí también (no en la vista chica):
+   ahí el pellizco es zoom propio del visor y no debe disparar el zoom del
+   navegador; en el panel chico el mapa es estático y el dedo debe poder
+   seguir haciendo scroll normal del panel. */
 .map-viewer--fullscreen {
+  touch-action: none;
   position: fixed;
   inset: 0;
   width: 100vw;
@@ -2120,6 +2134,16 @@ body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
   font-size: 12px;
   line-height: 1.4;
 }
+.backup-consent__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--sepia);
+  cursor: pointer;
+}
+.backup-consent__checkbox input { margin: 0; }
 .backup-consent__actions { display: flex; gap: 10px; justify-content: center; }
 .backup-consent__btn {
   padding: 8px 16px;

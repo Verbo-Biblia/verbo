@@ -79,7 +79,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const emptyState = (icon, text) => `<div class="panel-empty"><div class="panel-empty__icon">${icon}</div><div class="panel-empty__text">${text}</div></div>`;
   const activeVerse = () => Number(document.querySelector('.verse--active')?.dataset.verseN) || null;
   const hlKey = (book, chapter, n) => `${book}:${chapter}:${n}`;
-  const saveHighlights = () => VerboBackup.setAllResaltados(highlights);
+  const saveHighlights = () => { VerboBackup.setAllResaltados(highlights); maybeOfferBackupConsent(); };
+  // El aviso de "¿guardamos tu progreso?" solo aparece la primera vez que la
+  // persona crea algo real (nota, resaltado o marcador) — no por tiempo de
+  // uso a ciegas. Se llama tras cada acción de ese tipo; es barato repetir
+  // la comprobación porque shouldOfferConsent() ya deja de ser true en
+  // cuanto se concede/rechaza el permiso.
+  function maybeOfferBackupConsent(){
+    if(!VerboBackup.hayContenidoPropio() || !VerboBackup.shouldOfferConsent()) return;
+    setTimeout(()=>{ document.getElementById('backupConsent')?.removeAttribute('hidden'); }, 1500);
+  }
   const HL_COLORS = ['hl-yellow','hl-green','hl-blue','hl-pink','hl-coral','hl-violet'];
   const escapeHTML = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[ch]));
   const bibleCatalog = () => catalog.bibles.map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, lang:item.manifest.language || 'es', remote:Boolean(item.remote || item.manifest.remote), manifest:item.manifest }));
@@ -1726,7 +1735,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
       </div>
       ${map.subtitle?`<div class="maps-gallery__subtitle">${escapeHTML(map.subtitle)}</div>`:''}
-      <p class="maps-gallery__hint">Arrastra para mover el mapa ampliado. En móvil, junta o separa dos dedos para acercar o alejar. Usa ⛶ para verlo a pantalla completa.</p>`;
+      <p class="maps-gallery__hint">Toca ⛶ para ver el mapa a pantalla completa. Ahí puedes acercar/alejar con los botones, la rueda del mouse o pellizcando con dos dedos, y arrastrar para moverte.</p>`;
     initMapViewer();
   }
 
@@ -1800,8 +1809,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     document.getElementById('mapZoomReset')?.addEventListener('click', reset);
 
+    // Zoom, arrastre y gestos táctiles solo tienen efecto a pantalla completa
+    // (ver setFullscreen arriba) — en el panel chico el mapa es solo vista
+    // previa estática, no hay espacio real para explorar con zoom.
+
     // Rueda del mouse en escritorio.
     container.addEventListener('wheel', e=>{
+      if(!isFullscreen) return;
       e.preventDefault();
       setScale(scale*(e.deltaY<0?1.15:1/1.15), e.clientX, e.clientY);
     }, {passive:false});
@@ -1811,12 +1825,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     function toggleZoom(x,y){
       if(scale>MIN_SCALE) reset(); else setScale(2.5,x,y);
     }
-    container.addEventListener('dblclick', e=>{ e.preventDefault(); toggleZoom(e.clientX,e.clientY); });
+    container.addEventListener('dblclick', e=>{
+      if(!isFullscreen) return;
+      e.preventDefault(); toggleZoom(e.clientX,e.clientY);
+    });
 
     // Arrastre con mouse (solo aporta cuando hay zoom aplicado).
     let dragging=false, dragStartX=0, dragStartY=0, startTx=0, startTy=0;
     container.addEventListener('mousedown', e=>{
-      if(scale<=MIN_SCALE) return;
+      if(!isFullscreen || scale<=MIN_SCALE) return;
       dragging=true; dragStartX=e.clientX; dragStartY=e.clientY; startTx=tx; startTy=ty;
       container.classList.add('map-viewer--dragging');
     });
@@ -1837,6 +1854,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function touchMid(t0,t1){ return {x:(t0.clientX+t1.clientX)/2, y:(t0.clientY+t1.clientY)/2}; }
 
     container.addEventListener('touchstart', e=>{
+      if(!isFullscreen) return;
       if(e.touches.length===2){
         touchMode='pinch';
         pinchStartDist=touchDist(e.touches[0],e.touches[1]);
@@ -2090,7 +2108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const key=`${data.meta.bookId}-${data.meta.chapter}`, saved=VerboBackup.getNota(key);
     els.panelBody.innerHTML=`<label class="personal-note-form__label">Nota sobre ${data.meta.book} ${data.meta.chapter}</label><textarea id="personalNoteArea" class="personal-note-form__area" placeholder="Escribe aquí tu observación...">${saved}</textarea><div class="personal-note-form__status" id="noteSaveStatus">${saved?'Guardado':''}</div>`;
     const area=document.getElementById('personalNoteArea'), status=document.getElementById('noteSaveStatus'); let timer;
-    area.addEventListener('input',()=>{status.textContent='Escribiendo…';clearTimeout(timer);timer=setTimeout(()=>{VerboBackup.setNota(key,area.value);status.textContent='Guardado';},400);});
+    area.addEventListener('input',()=>{status.textContent='Escribiendo…';clearTimeout(timer);timer=setTimeout(()=>{VerboBackup.setNota(key,area.value);status.textContent='Guardado';maybeOfferBackupConsent();},400);});
   }
 
   async function openDictionary(code){
@@ -2330,10 +2348,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       else toast('El navegador bloqueó esa carpeta por seguridad (inicio o sistema). Elige "Documentos" u otra carpeta normal.', 4200);
       refreshStatus();
     });
-    consentDecline?.addEventListener('click', ()=>{ hideConsent(); VerboBackup.recordConsentDeclined(); });
+    const dontAskAgain=document.getElementById('backupConsentDontAskAgain');
+    consentDecline?.addEventListener('click', ()=>{
+      hideConsent();
+      VerboBackup.recordConsentDeclined(dontAskAgain?.checked);
+    });
 
-    // Oferta proactiva, sin ser insistente: tras un minuto de uso activo,
-    // y solo si no se ha concedido permiso ni rechazado recientemente.
-    setTimeout(()=>{ if(VerboBackup.shouldOfferConsent()) showConsent(); }, 60000);
+    // La oferta ya no es por tiempo: se dispara desde maybeOfferBackupConsent()
+    // (arriba en el archivo) justo cuando la persona crea su primera nota,
+    // resaltado o marcador — así el aviso llega cuando de verdad hay algo
+    // que respaldar, no a ciegas tras un minuto de solo leer.
   })();
 });

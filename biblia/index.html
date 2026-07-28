@@ -17,7 +17,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260728-mapas5">
+<link rel="stylesheet" href="assets/style.css?v=20260728-mapas7">
 </head>
 <body>
 
@@ -263,6 +263,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
   <div class="backup-consent" id="backupConsent" hidden>
     <p class="backup-consent__text">¿Guardamos tu progreso en tu computadora antes de continuar? Que Dios te acompañe.</p>
     <p class="backup-consent__hint">Al elegir la carpeta, selecciona "Documentos" u otra carpeta normal — el navegador no permite usar la carpeta de inicio ni carpetas del sistema.</p>
+    <label class="backup-consent__checkbox">
+      <input type="checkbox" id="backupConsentDontAskAgain">
+      <span>No volver a preguntarme</span>
+    </label>
     <div class="backup-consent__actions">
       <button type="button" class="backup-consent__btn backup-consent__btn--primary" id="backupConsentAccept">Sí, guardar</button>
       <button type="button" class="backup-consent__btn" id="backupConsentDecline">Ahora no</button>
@@ -271,9 +275,9 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 
   <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
   <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
-  <script src="assets/backup.js?v=20260727-capacitor-fs-bridge"></script>
+  <script src="assets/backup.js?v=20260728-consent-checkbox"></script>
   <script src="assets/module-loader.js?v=20260725-lazy-commentaries-2"></script>
-  <script src="assets/app.js?v=20260728-mapas5"></script>
+  <script src="assets/app.js?v=20260728-mapas7"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

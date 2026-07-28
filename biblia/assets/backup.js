@@ -234,13 +234,21 @@ const VerboBackup = (() => {
   // ---- Aviso de consentimiento (cuándo ofrecerlo, sin insistir) ----
   function shouldOfferConsent() {
     if (!supportsFSA() || hasFolderPermission()) return false;
+    if (localStorage.getItem('verbo:backup:neverAsk') === '1') return false;
     const declinedAt = Number(localStorage.getItem('verbo:backup:declinedAt') || 0);
     if (!declinedAt) return true;
     const unaSemanaMs = 7 * 24 * 60 * 60 * 1000;
     return Date.now() - declinedAt > unaSemanaMs;
   }
-  function recordConsentDeclined() {
-    localStorage.setItem('verbo:backup:declinedAt', String(Date.now()));
+  // hayContenidoPropio(): el aviso solo tiene sentido si la persona ya creó
+  // algo que valga la pena respaldar (nota, resaltado o marcador) — no por
+  // simplemente haber tenido la página abierta un rato.
+  function hayContenidoPropio() {
+    return cached.notas.length > 0 || cached.resaltados.length > 0 || cached.marcadores.length > 0;
+  }
+  function recordConsentDeclined(neverAskAgain) {
+    if (neverAskAgain) localStorage.setItem('verbo:backup:neverAsk', '1');
+    else localStorage.setItem('verbo:backup:declinedAt', String(Date.now()));
   }
 
   return {
@@ -250,7 +258,7 @@ const VerboBackup = (() => {
     getPosicionBiblia, setPosicionBiblia,
     supportsFSA, hasFolderPermission, requestFolderAccess,
     exportDownload, importFromFile,
-    shouldOfferConsent, recordConsentDeclined,
+    shouldOfferConsent, recordConsentDeclined, hayContenidoPropio,
     isCapacitorNative
   };
 })();
