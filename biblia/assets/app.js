@@ -1746,20 +1746,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     els.panelToolbar.innerHTML=`<button class="note-card__copy" id="backToMapsIndex" type="button">← Mapas bíblicos</button>`;
     document.getElementById('backToMapsIndex')?.addEventListener('click',()=>{ mapsOpenId=null; renderMapsPanel(); });
     els.panelBody.innerHTML=`
-      <div class="map-viewer" id="mapViewer">
-        <div class="map-viewer__frame" id="mapViewerFrame">
-          <img class="map-viewer__img" id="mapViewerImg" src="${MAPS_BASE}/full/${map.id}.jpg" alt="${escapeHTML(map.title)}" draggable="false">
-          <button type="button" class="map-viewer__btn map-viewer__expand" id="mapExpandBtn" aria-label="Ver a pantalla completa">⛶</button>
-          <div class="map-viewer__controls">
-            <button type="button" class="map-viewer__btn" id="mapZoomOut" aria-label="Alejar">−</button>
-            <button type="button" class="map-viewer__btn" id="mapZoomReset" aria-label="Restablecer vista">⟲</button>
-            <button type="button" class="map-viewer__btn" id="mapZoomIn" aria-label="Acercar">+</button>
+      <div class="map-viewer-page">
+        <div class="map-viewer" id="mapViewer">
+          <div class="map-viewer__frame" id="mapViewerFrame">
+            <img class="map-viewer__img" id="mapViewerImg" src="${MAPS_BASE}/full/${map.id}.jpg" alt="${escapeHTML(map.title)}" draggable="false">
+            <button type="button" class="map-viewer__btn map-viewer__expand" id="mapExpandBtn" aria-label="Ver a pantalla completa">⛶</button>
+            <div class="map-viewer__controls">
+              <button type="button" class="map-viewer__btn" id="mapZoomOut" aria-label="Alejar">−</button>
+              <button type="button" class="map-viewer__btn" id="mapZoomReset" aria-label="Restablecer vista">⟲</button>
+              <button type="button" class="map-viewer__btn" id="mapZoomIn" aria-label="Acercar">+</button>
+            </div>
           </div>
         </div>
-      </div>
-      ${map.subtitle?`<div class="maps-gallery__subtitle">${escapeHTML(map.subtitle)}</div>`:''}
-      ${map.credit?`<div class="maps-gallery__credit">${escapeHTML(map.credit)}</div>`:''}
-      <p class="maps-gallery__hint">Toca ⛶ para ver el mapa a pantalla completa. Ahí puedes acercar/alejar con los botones, la rueda del mouse o pellizcando con dos dedos, y arrastrar para moverte.</p>`;
+        ${map.subtitle?`<div class="maps-gallery__subtitle">${escapeHTML(map.subtitle)}</div>`:''}
+        ${map.credit?`<div class="maps-gallery__credit">${escapeHTML(map.credit)}</div>`:''}
+        <p class="maps-gallery__hint">Toca ⛶ para ver el mapa a pantalla completa. Ahí puedes acercar/alejar con los botones, la rueda del mouse o pellizcando con dos dedos, y arrastrar para moverte.</p>
+      </div>`;
     initMapViewer();
   }
 

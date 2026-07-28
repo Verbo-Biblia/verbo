@@ -1432,6 +1432,20 @@ body[data-theme="rosewood"] {
 .maps-gallery__credit { font-size: .74rem; opacity: .55; margin: 4px 2px 0; font-style: italic; }
 .maps-gallery__hint { font-size: .8rem; opacity: .6; margin: 8px 2px 0; }
 
+/* Envuelve el visor pequeño (imagen + subtítulo/crédito/hint) dentro de
+   .side-panel__body. Ese contenedor es de bloque normal, así que sin este
+   wrapper el visor queda pegado arriba y el espacio sobrante del sheet
+   móvil (72vh, más alto que el contenido) se ve como un hueco vacío debajo.
+   min-height:100% + flex column + justify-content:center reparte ese
+   sobrante arriba/abajo; si el contenido no cabe, se comporta como bloque
+   normal de arriba hacia abajo (sin recortar el inicio al hacer scroll). */
+.map-viewer-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+
 /* .map-viewer es el fondo/marco exterior; .map-viewer__frame es la caja
    que de verdad mantiene la proporción 4:3 del mapa (todos los archivos son
    1024x768) y contiene la imagen y los botones. En el panel chico ambas
