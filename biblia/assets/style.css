@@ -1431,37 +1431,44 @@ body[data-theme="rosewood"] {
 .maps-gallery__subtitle { font-size: .82rem; opacity: .68; margin: 10px 2px 0; }
 .maps-gallery__hint { font-size: .8rem; opacity: .6; margin: 8px 2px 0; }
 
+/* .map-viewer es el fondo/marco exterior; .map-viewer__frame es la caja
+   que de verdad mantiene la proporción 4:3 del mapa (todos los archivos son
+   1024x768) y contiene la imagen y los botones. En el panel chico ambas
+   cajas miden lo mismo; a pantalla completa .map-viewer se estira a toda
+   la ventana pero .map-viewer__frame se encoge dentro de ella respetando
+   4:3 — así el botón de cerrar queda pegado a la esquina del mapa visible,
+   no perdido en una esquina vacía de la pantalla. */
 .map-viewer {
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
   max-height: 68vh;
-  overflow: hidden;
   border-radius: 12px;
   background: color-mix(in srgb, var(--accent) 6%, var(--paper));
-  cursor: grab;
 }
 
-.map-viewer--dragging { cursor: grabbing; }
+.map-viewer__frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  cursor: default;
+}
+
+.map-viewer--fullscreen .map-viewer__frame { cursor: grab; }
+.map-viewer__frame.map-viewer--dragging { cursor: grabbing; }
 
 .map-viewer__img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transform-origin: center center;
-  translate: -50% -50%;
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
 }
-
-/* El centrado base usa la propiedad CSS `translate` (independiente de
-   `transform`) a propósito: initMapViewer() escribe `transform` desde JS
-   en cada gesto de pan/zoom, y así no se pisan entre sí. */
 
 /* Los controles de zoom/arrastre solo tienen sentido a pantalla completa —
    en el panel chico (380px) no hay espacio real para explorar el mapa. */
@@ -1477,10 +1484,6 @@ body[data-theme="rosewood"] {
 
 .map-viewer--fullscreen .map-viewer__controls {
   display: flex;
-}
-
-.map-viewer:not(.map-viewer--fullscreen) {
-  cursor: default;
 }
 
 .map-viewer__btn {
@@ -1509,13 +1512,14 @@ body[data-theme="rosewood"] {
   z-index: 2;
 }
 
-/* Pantalla completa: el visor sale del flujo del panel y cubre la ventana.
-   Sin ancestros con transform en el camino (side-panel solo lo usa para el
-   sheet móvil, que "mapas" no utiliza), position:fixed queda relativo al
-   viewport real. touch-action:none va aquí también (no en la vista chica):
-   ahí el pellizco es zoom propio del visor y no debe disparar el zoom del
-   navegador; en el panel chico el mapa es estático y el dedo debe poder
-   seguir haciendo scroll normal del panel. */
+/* Pantalla completa: .map-viewer sale del flujo del panel y cubre la
+   ventana como fondo oscuro tipo visor de imágenes, centrando .frame con
+   flexbox. Sin ancestros con transform en el camino (side-panel solo lo
+   usa para el sheet móvil, que "mapas" no utiliza), position:fixed queda
+   relativo al viewport real. touch-action:none va aquí (no en la vista
+   chica): ahí el pellizco es zoom propio del visor y no debe disparar el
+   zoom del navegador; en el panel chico el mapa es estático y el dedo debe
+   poder seguir haciendo scroll normal del panel. */
 .map-viewer--fullscreen {
   touch-action: none;
   position: fixed;
@@ -1526,7 +1530,20 @@ body[data-theme="rosewood"] {
   max-height: none;
   aspect-ratio: auto;
   border-radius: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 5000;
+}
+
+.map-viewer--fullscreen .map-viewer__frame {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
 }
 
 body.map-viewer-fullscreen-active { overflow: hidden; }

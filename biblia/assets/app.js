@@ -1726,12 +1726,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('backToMapsIndex')?.addEventListener('click',()=>{ mapsOpenId=null; renderMapsPanel(); });
     els.panelBody.innerHTML=`
       <div class="map-viewer" id="mapViewer">
-        <img class="map-viewer__img" id="mapViewerImg" src="${MAPS_BASE}/full/${map.id}.jpg" alt="${escapeHTML(map.title)}" draggable="false">
-        <button type="button" class="map-viewer__btn map-viewer__expand" id="mapExpandBtn" aria-label="Ver a pantalla completa">⛶</button>
-        <div class="map-viewer__controls">
-          <button type="button" class="map-viewer__btn" id="mapZoomOut" aria-label="Alejar">−</button>
-          <button type="button" class="map-viewer__btn" id="mapZoomReset" aria-label="Restablecer vista">⟲</button>
-          <button type="button" class="map-viewer__btn" id="mapZoomIn" aria-label="Acercar">+</button>
+        <div class="map-viewer__frame" id="mapViewerFrame">
+          <img class="map-viewer__img" id="mapViewerImg" src="${MAPS_BASE}/full/${map.id}.jpg" alt="${escapeHTML(map.title)}" draggable="false">
+          <button type="button" class="map-viewer__btn map-viewer__expand" id="mapExpandBtn" aria-label="Ver a pantalla completa">⛶</button>
+          <div class="map-viewer__controls">
+            <button type="button" class="map-viewer__btn" id="mapZoomOut" aria-label="Alejar">−</button>
+            <button type="button" class="map-viewer__btn" id="mapZoomReset" aria-label="Restablecer vista">⟲</button>
+            <button type="button" class="map-viewer__btn" id="mapZoomIn" aria-label="Acercar">+</button>
+          </div>
         </div>
       </div>
       ${map.subtitle?`<div class="maps-gallery__subtitle">${escapeHTML(map.subtitle)}</div>`:''}
@@ -1740,19 +1742,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Zoom/pan con CSS transform puro (translate + scale), sin librerías.
-  // El contenedor usa touch-action:none para que el gesto de pellizco no
-  // dispare el zoom del navegador ni el scroll de la página.
+  // `viewerEl` (#mapViewer) es solo el fondo de pantalla completa; `frame`
+  // (#mapViewerFrame) es la caja que de verdad mantiene la proporción 4:3
+  // del mapa y contiene la imagen y los botones — así el botón de cerrar
+  // queda pegado a la esquina del mapa visible, no de la ventana entera.
   function initMapViewer(){
-    const container=document.getElementById('mapViewer');
+    const viewerEl=document.getElementById('mapViewer');
+    const frame=document.getElementById('mapViewerFrame');
     const img=document.getElementById('mapViewerImg');
-    if(!container||!img) return;
+    if(!viewerEl||!frame||!img) return;
     const MIN_SCALE=1, MAX_SCALE=5, STEP=1.5;
     let scale=1, tx=0, ty=0;
 
     function apply(){ img.style.transform=`translate(${tx}px, ${ty}px) scale(${scale})`; }
 
     function clamp(){
-      const cw=container.clientWidth, ch=container.clientHeight;
+      const cw=frame.clientWidth, ch=frame.clientHeight;
       const iw=img.clientWidth*scale, ih=img.clientHeight*scale;
       const maxX=Math.max(0,(iw-cw)/2), maxY=Math.max(0,(ih-ch)/2);
       tx=Math.min(maxX,Math.max(-maxX,tx));
@@ -1763,7 +1768,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       newScale=Math.min(MAX_SCALE,Math.max(MIN_SCALE,newScale));
       if(anchorX!==undefined){
         // Mantiene el punto bajo el cursor/dedo fijo mientras cambia la escala.
-        const rect=container.getBoundingClientRect();
+        const rect=frame.getBoundingClientRect();
         const cx=anchorX-rect.left-rect.width/2;
         const cy=anchorY-rect.top-rect.height/2;
         const ratio=newScale/scale;
@@ -1778,13 +1783,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function reset(){ scale=1; tx=0; ty=0; apply(); }
 
-    // Pantalla completa: cubre toda la ventana mientras se explora el mapa,
-    // sin salir del panel (se cierra con el mismo botón o Escape).
+    // Pantalla completa: el fondo cubre toda la ventana, pero `frame` se
+    // encoge para mantener la proporción 4:3 del mapa dentro de ese fondo
+    // (ver CSS .map-viewer--fullscreen .map-viewer__frame). Se cierra con
+    // el mismo botón o Escape.
     const expandBtn=document.getElementById('mapExpandBtn');
     let isFullscreen=false;
     function setFullscreen(v){
       isFullscreen=v;
-      container.classList.toggle('map-viewer--fullscreen', v);
+      viewerEl.classList.toggle('map-viewer--fullscreen', v);
       document.body.classList.toggle('map-viewer-fullscreen-active', v);
       if(expandBtn){
         expandBtn.textContent=v?'✕':'⛶';
@@ -1794,17 +1801,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     expandBtn?.addEventListener('click', ()=>setFullscreen(!isFullscreen));
     function onKeydown(e){
-      if(!document.body.contains(container)){ document.removeEventListener('keydown', onKeydown); return; }
+      if(!document.body.contains(viewerEl)){ document.removeEventListener('keydown', onKeydown); return; }
       if(e.key==='Escape' && isFullscreen) setFullscreen(false);
     }
     document.addEventListener('keydown', onKeydown);
 
     document.getElementById('mapZoomIn')?.addEventListener('click',()=>{
-      const r=container.getBoundingClientRect();
+      const r=frame.getBoundingClientRect();
       setScale(scale*STEP, r.left+r.width/2, r.top+r.height/2);
     });
     document.getElementById('mapZoomOut')?.addEventListener('click',()=>{
-      const r=container.getBoundingClientRect();
+      const r=frame.getBoundingClientRect();
       setScale(scale/STEP, r.left+r.width/2, r.top+r.height/2);
     });
     document.getElementById('mapZoomReset')?.addEventListener('click', reset);
@@ -1814,7 +1821,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // previa estática, no hay espacio real para explorar con zoom.
 
     // Rueda del mouse en escritorio.
-    container.addEventListener('wheel', e=>{
+    frame.addEventListener('wheel', e=>{
       if(!isFullscreen) return;
       e.preventDefault();
       setScale(scale*(e.deltaY<0?1.15:1/1.15), e.clientX, e.clientY);
@@ -1825,17 +1832,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     function toggleZoom(x,y){
       if(scale>MIN_SCALE) reset(); else setScale(2.5,x,y);
     }
-    container.addEventListener('dblclick', e=>{
+    frame.addEventListener('dblclick', e=>{
       if(!isFullscreen) return;
       e.preventDefault(); toggleZoom(e.clientX,e.clientY);
     });
 
     // Arrastre con mouse (solo aporta cuando hay zoom aplicado).
     let dragging=false, dragStartX=0, dragStartY=0, startTx=0, startTy=0;
-    container.addEventListener('mousedown', e=>{
+    frame.addEventListener('mousedown', e=>{
       if(!isFullscreen || scale<=MIN_SCALE) return;
       dragging=true; dragStartX=e.clientX; dragStartY=e.clientY; startTx=tx; startTy=ty;
-      container.classList.add('map-viewer--dragging');
+      frame.classList.add('map-viewer--dragging');
     });
     window.addEventListener('mousemove', e=>{
       if(!dragging) return;
@@ -1843,7 +1850,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       ty=startTy+(e.clientY-dragStartY);
       clamp(); apply();
     });
-    window.addEventListener('mouseup', ()=>{ dragging=false; container.classList.remove('map-viewer--dragging'); });
+    window.addEventListener('mouseup', ()=>{ dragging=false; frame.classList.remove('map-viewer--dragging'); });
 
     // Touch: un dedo para arrastrar, dos dedos para pellizcar y hacer zoom.
     let touchMode=null; // 'pan' | 'pinch'
@@ -1853,7 +1860,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function touchDist(t0,t1){ return Math.hypot(t1.clientX-t0.clientX, t1.clientY-t0.clientY); }
     function touchMid(t0,t1){ return {x:(t0.clientX+t1.clientX)/2, y:(t0.clientY+t1.clientY)/2}; }
 
-    container.addEventListener('touchstart', e=>{
+    frame.addEventListener('touchstart', e=>{
       if(!isFullscreen) return;
       if(e.touches.length===2){
         touchMode='pinch';
@@ -1874,7 +1881,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }, {passive:true});
 
-    container.addEventListener('touchmove', e=>{
+    frame.addEventListener('touchmove', e=>{
       if(touchMode==='pinch' && e.touches.length===2){
         e.preventDefault();
         const dist=touchDist(e.touches[0],e.touches[1]);
@@ -1890,7 +1897,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }, {passive:false});
 
-    container.addEventListener('touchend', e=>{
+    frame.addEventListener('touchend', e=>{
       if(e.touches.length<2) touchMode = e.touches.length===1 ? 'pan' : null;
     });
 
