@@ -338,42 +338,6 @@ body {
   .chapter-nav-btn:disabled { opacity: 0.18; cursor: not-allowed; }
 }
 
-.tts-btn {
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--rule-strong);
-  background: var(--paper-raised);
-  color: var(--wine, #7f2d35);
-  font-size: 13px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
-}
-
-.tts-btn[hidden] {
-  display: none;
-}
-
-.tts-btn:hover {
-  border-color: var(--wine-soft);
-  background: var(--gold-glow, rgba(201,166,107,.16));
-}
-
-.tts-btn--active {
-  background: var(--wine, #7f2d35);
-  color: #fff;
-  border-color: var(--wine, #7f2d35);
-}
-
-.tts-btn--stop {
-  font-size: 12px;
-}
-
 .chapter-eyebrow {
   font-family: var(--font-mono);
   font-size: 11.5px;
@@ -405,12 +369,6 @@ body {
 
 .verse--active {
   background: rgba(201, 166, 107, 0.16);
-}
-
-.verse--tts-active {
-  background: rgba(127, 45, 53, 0.08);
-  border-left: 3px solid var(--wine, #7f2d35);
-  transition: background 0.2s ease;
 }
 
 .verse__num {
@@ -1436,6 +1394,134 @@ body[data-theme="rosewood"] {
 .dictionary-library__item small { opacity:.58; flex:0 0 auto; }
 .dict-entry__def a.bible { color:var(--accent); text-decoration:underline; text-decoration-thickness:1px; cursor:pointer; }
 
+/* ---------- Mapas bíblicos ---------- */
+
+.maps-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.maps-gallery__item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+  background: var(--paper);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+.maps-gallery__item:hover { border-color: var(--accent); }
+
+.maps-gallery__thumb {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: color-mix(in srgb, var(--accent) 6%, var(--paper));
+}
+.maps-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.maps-gallery__label { font-size: .84rem; line-height: 1.3; }
+
+.maps-gallery__subtitle { font-size: .82rem; opacity: .68; margin: 10px 2px 0; }
+.maps-gallery__hint { font-size: .8rem; opacity: .6; margin: 8px 2px 0; }
+
+.map-viewer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 68vh;
+  overflow: hidden;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 6%, var(--paper));
+  touch-action: none;
+  cursor: grab;
+}
+.map-viewer--dragging { cursor: grabbing; }
+
+.map-viewer__img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  transform-origin: center center;
+  translate: -50% -50%;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* El centrado base usa la propiedad CSS `translate` (independiente de
+   `transform`) a propósito: initMapViewer() escribe `transform` desde JS
+   en cada gesto de pan/zoom, y así no se pisan entre sí. */
+
+.map-viewer__controls {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 2;
+}
+
+.map-viewer__btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper-raised, var(--paper));
+  color: var(--wine, inherit);
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.map-viewer__btn:active { transform: scale(0.94); }
+#mapZoomReset { font-size: 16px; }
+
+.map-viewer__expand {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 18px;
+  z-index: 2;
+}
+
+/* Pantalla completa: el visor sale del flujo del panel y cubre la ventana.
+   Sin ancestros con transform en el camino (side-panel solo lo usa para el
+   sheet móvil, que "mapas" no utiliza), position:fixed queda relativo al
+   viewport real. */
+.map-viewer--fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  aspect-ratio: auto;
+  border-radius: 0;
+  z-index: 5000;
+}
+
+body.map-viewer-fullscreen-active { overflow: hidden; }
+
+@media (max-width: 760px) {
+  .maps-gallery__grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .map-viewer { max-height: 58vh; }
+}
+
 .gospel-match { border:1px solid var(--accent); border-radius:10px; padding:12px; margin-bottom:14px; background:color-mix(in srgb, var(--accent) 10%, transparent); }
 .gospel-match__label { font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; opacity:.75; margin-bottom:8px; }
 .gospel-match__item { display:block; width:100%; text-align:left; padding:9px 10px; margin-bottom:4px; border:0; border-radius:8px; background:var(--paper); color:inherit; cursor:pointer; font:inherit; }
@@ -1960,54 +2046,6 @@ body[data-theme="rosewood"] {
 body.sermon-mode .verse-action-bar .verse-swatch,
 body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
   display: none;
-}
-
-/* ---------- Control flotante de lectura en voz alta ---------- */
-/* position:sticky (no fixed) anclado dentro de .reading-pane, que ya es el
-   contenedor con scroll propio: así el control queda siempre dentro del
-   ancho de la columna de Biblia (nunca se monta sobre el panel lateral en
-   PC) sin tener que calcular su posición por JS. El wrapper con height:0
-   no ocupa espacio en el flujo — solo "asoma" el control flotando. */
-.tts-float {
-  position: sticky;
-  bottom: 22px;
-  height: 0;
-  overflow: visible;
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 24px;
-  pointer-events: none;
-  z-index: 40;
-}
-
-.tts-float__inner {
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px;
-  border-radius: 999px;
-  background: rgba(255,253,248,.94);
-  backdrop-filter: blur(18px) saturate(1.6);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
-  border: 1px solid rgba(127,45,53,.14);
-  box-shadow: 0 8px 32px rgba(42,31,23,.22), 0 1px 3px rgba(42,31,23,.1);
-}
-
-.tts-voice-select {
-  max-width: 160px;
-  border: none;
-  background: transparent;
-  color: var(--sepia);
-  font: inherit;
-  font-size: 12px;
-  padding: 4px 2px;
-  cursor: pointer;
-}
-
-@media (max-width: 760px) {
-  .tts-float { padding: 0 16px; bottom: 16px; }
-  .tts-voice-select { max-width: 110px; }
 }
 
 /* ---------- Respaldo local (sistema de guardado unificado) ---------- */

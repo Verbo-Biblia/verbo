@@ -7,10 +7,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     next: document.getElementById('nextChapter'),
     innerPrev: document.getElementById('innerPrev'),
     innerNext: document.getElementById('innerNext'),
-    ttsPlay: document.getElementById('ttsPlayBtn'),
-    ttsStop: document.getElementById('ttsStopBtn'),
-    ttsFloat: document.getElementById('ttsFloat'),
-    ttsVoiceSelect: document.getElementById('ttsVoiceSelect'),
     versionInput: document.getElementById('mainVersionInput'),
     versionDropdown: document.getElementById('versionDropdown'),
     nativeVersionSelect: document.getElementById('nativeVersionSelect'),
@@ -45,9 +41,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   let sermonEditor = null;
   let sermonEditorContent = null;
   let sermonBible = null;
-  const ttsSupported = 'speechSynthesis' in window;
-  let ttsQueue = [], ttsIndex = -1, ttsPaused = false, ttsVoicesPromise = null, ttsSession = 0;
-  let ttsAllVoices = [];
   let selectedVerses = new Set();
   let highlights = VerboBackup.getResaltadosMap();
   let suppressCommentSync = false;
@@ -112,6 +105,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     return `${bookAbbr[bookId] || data?.meta?.book || bookId} ${chapter}:${ranges.join(',')}`;
   };
   const copyToClipboard = async (text) => {
+    // Dentro de la app nativa (Capacitor), usar la hoja de compartir del
+    // sistema en vez de solo el portapapeles: incluye "Copiar" como una de
+    // sus opciones, más Mensajes/Mail/etc. — integración nativa real, no solo
+    // un sitio envuelto (Apple Guideline 4.2). En el sitio web normal
+    // `window.Capacitor` no existe y este bloque no hace nada.
+    if (window.Capacitor?.isNativePlatform?.() && window.Capacitor?.Plugins?.Share) {
+      try { await window.Capacitor.Plugins.Share.share({ text }); return; } catch {}
+    }
     try { await navigator.clipboard.writeText(text); toast('Copiado'); }
     catch { const area=document.createElement('textarea'); area.value=text; document.body.appendChild(area); area.select(); document.execCommand('copy'); area.remove(); toast('Copiado'); }
   };
@@ -152,10 +153,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateNavButtons();
   }
 
-  async function loadPassage({preserveVersion=true, skipStopTTS=false}={}) {
+  async function loadPassage({preserveVersion=true}={}) {
     setLoading(true);
     resetXrefMode();
-    if(!skipStopTTS) stopTTS();
     try {
       const previous = preserveVersion ? currentVersion : null;
       data = await VerboModules.buildChapterData({bookId: currentBook, chapter: currentChapter, commentaryId: currentCommentary, bibleId: previous || currentVersion});
@@ -296,7 +296,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function selectBibleVersion(id) {
     const v = activeVerse();
     closeVersionDropdown();
-    stopTTS();
     // Si la versión seleccionada no tiene el libro actual, navegar a su primer libro
     const bibleEntry = catalog.bibles.find(b => b.manifest.id === id);
     if (bibleEntry?.manifest.books?.length) {
@@ -450,7 +449,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       window.fums('trackView', version.fumsToken);
       version.fumsReported = true;
     }
-    renderTTSVoiceSelect();
   }
 
   function selectVerse(row, verse) {
@@ -502,158 +500,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     copyToClipboard(lines.join('\n'));
   }
 
-  // ── Lectura en voz alta del capítulo (Web Speech API, solo modo lectura) ────
-  // Se encadena una utterance por versículo vía onend en vez de una sola
-  // utterance larga: onboundary es poco confiable entre navegadores para
-  // ubicar versículos, y las utterances muy largas tienen un bug conocido en
-  // Chrome que las corta a los pocos segundos. Con una por versículo el
-  // resaltado es exacto (onstart) y se evita ese bug de paso.
-  function ttsLangCode(){ return contentLang()==='en' ? 'en-US' : 'es-ES'; }
-
-  function loadTTSVoices(){
-    if(ttsVoicesPromise) return ttsVoicesPromise;
-    ttsVoicesPromise = new Promise(resolve=>{
-      const existing = speechSynthesis.getVoices();
-      if(existing.length) return resolve(existing);
-      const onChange = ()=>{
-        const voices = speechSynthesis.getVoices();
-        if(voices.length){ speechSynthesis.removeEventListener('voiceschanged', onChange); resolve(voices); }
-      };
-      speechSynthesis.addEventListener('voiceschanged', onChange);
-      setTimeout(()=>{ speechSynthesis.removeEventListener('voiceschanged', onChange); resolve(speechSynthesis.getVoices()); }, 1200);
-    });
-    return ttsVoicesPromise;
-  }
-
-  function voicesForLang(langCode){
-    const prefix = langCode.slice(0,2);
-    return ttsAllVoices.filter(v=>v.lang?.toLowerCase().startsWith(prefix));
-  }
-
-  function storedVoiceURI(langCode){ return localStorage.getItem('verbo:ttsVoice:'+langCode); }
-
-  async function pickTTSVoice(langCode){
-    const voices = ttsAllVoices.length ? ttsAllVoices : await loadTTSVoices();
-    const matches = voices.filter(v=>v.lang?.toLowerCase().startsWith(langCode.slice(0,2)));
-    const savedURI = storedVoiceURI(langCode);
-    const saved = savedURI && matches.find(v=>v.voiceURI===savedURI);
-    return saved || matches.find(v=>v.localService) || matches[0] || null;
-  }
-
-  // El <select> de voz se repuebla cada vez que llega voiceschanged (no solo
-  // una vez): en Chrome getVoices() suele devolver [] en la primera llamada,
-  // así que si el usuario ya tenía el panel abierto, esto lo completa solo
-  // en cuanto el navegador termine de cargar las voces del sistema.
-  function renderTTSVoiceSelect(){
-    if(!els.ttsVoiceSelect) return;
-    const langCode = ttsLangCode();
-    const matches = voicesForLang(langCode);
-    if(matches.length < 2){ els.ttsVoiceSelect.hidden = true; els.ttsVoiceSelect.innerHTML=''; return; }
-    const savedURI = storedVoiceURI(langCode);
-    els.ttsVoiceSelect.innerHTML = matches.map(v=>
-      `<option value="${escapeHTML(v.voiceURI)}" ${v.voiceURI===savedURI?'selected':''}>${escapeHTML(v.name)}</option>`
-    ).join('');
-    els.ttsVoiceSelect.hidden = !ttsSupported || els.ttsPlay?.hidden !== false;
-  }
-
-  if(ttsSupported){
-    ttsAllVoices = speechSynthesis.getVoices();
-    speechSynthesis.addEventListener('voiceschanged', ()=>{
-      ttsAllVoices = speechSynthesis.getVoices();
-      renderTTSVoiceSelect();
-    });
-  }
-
-  function clearTTSHighlight(){
-    document.querySelectorAll('.verse--tts-active').forEach(x=>x.classList.remove('verse--tts-active'));
-  }
-
-  function updateTTSButtons(){
-    if(!els.ttsPlay) return;
-    const speaking = ttsIndex>=0;
-    els.ttsPlay.textContent = speaking && !ttsPaused ? '⏸' : '▶';
-    els.ttsPlay.classList.toggle('tts-btn--active', speaking && !ttsPaused);
-    els.ttsPlay.title = speaking && !ttsPaused ? 'Pausar lectura' : (speaking ? 'Reanudar lectura' : 'Lectura continua en voz alta');
-    if(els.ttsStop) els.ttsStop.hidden = !speaking;
-  }
-
-  function stopTTS(){
-    if(!ttsSupported) return;
-    ttsSession++;
-    if(ttsIndex>=0 || speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
-    ttsQueue=[]; ttsIndex=-1; ttsPaused=false;
-    clearTTSHighlight();
-    updateTTSButtons();
-  }
-
-  async function speakVerseAt(i, session){
-    if(session!==ttsSession) return; // se detuvo/reinició mientras se resolvía la voz async
-    if(i>=ttsQueue.length){ await advanceChapterForTTS(session); return; }
-    ttsIndex=i;
-    const {n, text} = ttsQueue[i];
-    clearTTSHighlight();
-    const row=els.list.querySelector(`[data-verse-n="${n}"]`);
-    row?.classList.add('verse--tts-active');
-    if(row) row.scrollIntoView({block:'center', behavior:'smooth'});
-    updateTTSButtons();
-    const utterance=new SpeechSynthesisUtterance(text);
-    const langCode=ttsLangCode();
-    utterance.lang=langCode;
-    const voice=await pickTTSVoice(langCode);
-    if(session!==ttsSession) return;
-    if(voice) utterance.voice=voice;
-    utterance.onend=()=>{ if(session===ttsSession) speakVerseAt(i+1, session); };
-    utterance.onerror=()=>{ if(session===ttsSession) speakVerseAt(i+1, session); };
-    speechSynthesis.speak(utterance);
-    updateTTSButtons();
-  }
-
-  function startTTS(){
-    if(!ttsSupported || !data?.verses?.length) return;
-    ttsSession++;
-    speechSynthesis.cancel();
-    ttsQueue=data.verses.map(v=>({
-      n: v.n,
-      text: String(v.text[currentVersion] || Object.values(v.text)[0] || '').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()
-    })).filter(item=>item.text);
-    ttsPaused=false;
-    speakVerseAt(0, ttsSession);
-  }
-
-  // Al terminar el último versículo del capítulo, pasa solo al siguiente y se
-  // sigue leyendo, hasta que el usuario pulse Detener o ya no haya más capítulos.
-  // moveChapter() normalmente dispara loadPassage() -> stopTTS(), lo que cortaría
-  // la lectura; por eso aquí se le pide a loadPassage que se salte ese stopTTS
-  // (nada está sonando en este instante, ya se terminó el último versículo) y se
-  // usa el "session" capturado antes de cargar para detectar si el usuario pulsó
-  // Detener (u otra acción que sí llama a stopTTS de verdad) mientras se cargaba.
-  async function advanceChapterForTTS(session){
-    if(session!==ttsSession || els.next.disabled){ stopTTS(); return; }
-    clearTTSHighlight();
-    await moveChapter(1, {skipStopTTS:true});
-    if(session!==ttsSession) return; // se detuvo mientras cargaba el siguiente capítulo
-    startTTS();
-  }
-
-  function toggleTTS(){
-    if(!ttsSupported) return;
-    if(ttsIndex<0){ startTTS(); return; }
-    if(ttsPaused){ speechSynthesis.resume(); ttsPaused=false; } else { speechSynthesis.pause(); ttsPaused=true; }
-    updateTTSButtons();
-  }
-
-  if(ttsSupported && els.ttsPlay){
-    els.ttsPlay.hidden=false;
-    els.ttsPlay.addEventListener('click', toggleTTS);
-    els.ttsStop?.addEventListener('click', stopTTS);
-    els.ttsVoiceSelect?.addEventListener('change', e=>{
-      localStorage.setItem('verbo:ttsVoice:'+ttsLangCode(), e.target.value);
-    });
-    renderTTSVoiceSelect();
-  } else if(els.ttsFloat){
-    els.ttsFloat.hidden = true;
-  }
-
   // Antes solo Comentario/Comparar/Diccionario usaban la hoja parcial (72vh);
   // Biblioteca ya usaba el panel completo y a Juan le pareció que se veía mejor,
   // así que en mobile los tres pasan a comportarse igual que Biblioteca (2026-07-24).
@@ -664,7 +510,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const panelWasClosed=!els.side.classList.contains('side-panel--open');
     activeTab=tab;
     const isSheet=window.innerWidth<=760 && SHEET_TABS.includes(tab);
-    els.side.classList.toggle('side-panel--left', ['biblioteca','padres','evangelio','licencias'].includes(tab));
+    els.side.classList.toggle('side-panel--left', ['biblioteca','padres','licencias','contacto'].includes(tab));
     if(isSheet){
       els.side.dataset.sheet='1';  // CSS aplica translateY(105%) inmediatamente
       els.side.offsetHeight;       // fuerza reflow para que el estado inicial esté fijo
@@ -680,6 +526,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   function closePanel(){
     const wasSheet=!!els.side.dataset.sheet;
     activeTab=null;
+    // El visor de mapas usa position:fixed (pantalla completa) fuera del flujo
+    // del panel: si se cierra el panel sin salir antes del fullscreen, hay que
+    // forzar la limpieza aquí o el mapa queda "pegado" cubriendo la pantalla.
+    document.getElementById('mapViewer')?.classList.remove('map-viewer--fullscreen');
+    document.body.classList.remove('map-viewer-fullscreen-active');
     els.side.classList.remove('side-panel--open','side-panel--left'); // CSS: translateY(105%) para sheets
     els.backdrop?.classList.remove('sheet-backdrop--visible');
     els.tabs.forEach(b=>b.classList.remove('tab-rail__btn--active'));
@@ -781,13 +632,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if(tab==='diccionario') renderDictionaryPanel(focus || activeVerse());
     if(tab==='biblioteca') renderLibraryPanel(focus || activeVerse());
-    if(tab==='evangelio') renderGospelPanel();
     if(tab==='padres') renderPadresPanel(focus || activeVerse());
     if(tab==='notas') renderNotes();
     if(tab==='exegesis') renderExegesis(focus || activeVerse());
     if(tab==='tema') renderTheme();
+    if(tab==='mapas') renderMapsPanel();
     if(tab==='licencias') renderLicensesPanel();
+    if(tab==='contacto') renderContactPanel();
     if(tab==='buscar') renderSearch();
+  }
+
+  function renderContactPanel(){
+    els.panelTitle.textContent='Contacto';
+    els.panelToolbar.innerHTML='';
+    els.panelBody.innerHTML=`
+      <section class="license-page">
+        <div class="license-page__intro">
+          <div class="license-page__seal" aria-hidden="true">V</div>
+          <div>
+            <h2>Escríbenos</h2>
+            <p>¿Preguntas, reportes de error o sugerencias sobre Verbo? Escríbenos directamente.</p>
+          </div>
+        </div>
+        <article class="license-card">
+          <h3>Soporte</h3>
+          <p><a href="mailto:soporte@verbobiblia.com">soporte@verbobiblia.com</a></p>
+        </article>
+      </section>`;
   }
 
   function renderLicensesPanel(){
@@ -827,6 +698,15 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="license-card__links">
             <a href="https://www.crosswire.org/sword/modules/ModInfo.jsp?modName=StrongsHebrew" target="_blank" rel="noopener noreferrer">Strong hebreo</a>
             <a href="https://www.crosswire.org/sword/modules/ModInfo.jsp?modName=StrongsGreek" target="_blank" rel="noopener noreferrer">Strong griego</a>
+          </div>
+        </article>
+
+        <article class="license-card">
+          <h3>Mapas bíblicos</h3>
+          <p>Los 14 mapas del panel "Mapas bíblicos" fueron creados por <strong>churchmaps.info</strong> y publicados en dominio público. Se muestran en la versión recortada y en inglés distribuida por <strong>FreeBibleimages.org</strong> bajo licencia <strong>CC0 1.0 Universal</strong> (Public Domain Dedication).</p>
+          <div class="license-card__links">
+            <a href="https://churchmaps.info" target="_blank" rel="noopener noreferrer">churchmaps.info</a>
+            <a href="https://www.freebibleimages.org/illustrations/church-maps/" target="_blank" rel="noopener noreferrer">FreeBibleimages.org</a>
           </div>
         </article>
 
@@ -1087,7 +967,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function toggleSermonMode(){
-    stopTTS();
     sermonMode = !sermonMode;
     selectedVerses.clear();
     document.querySelectorAll('.verse--selected').forEach(x=>x.classList.remove('verse--selected'));
@@ -1786,6 +1665,220 @@ document.addEventListener('DOMContentLoaded', async () => {
     return text.split(/\n\s*\n/).map(p=>`<p>${escapeHTML(p.trim()).replace(/\n/g,'<br>')}</p>`).join('');
   }
 
+  // ── Mapas bíblicos ───────────────────────────────────────────────────────────
+  // Fuente: churchmaps.info (dominio público), recorte y distribución vía
+  // FreeBibleimages.org bajo CC0. Los rótulos de los mapas están en inglés
+  // (única versión disponible); los títulos aquí son una traducción propia
+  // solo de la ficha, no del contenido cartográfico. Ver "Fuentes y licencias".
+  const CHURCH_MAPS=[
+    {id:'01', title:'El mundo antiguo en tiempos de los patriarcas', subtitle:'2000–1600 a.C.'},
+    {id:'02', title:'Canaán y Egipto en tiempos de los patriarcas', subtitle:'2000–1600 a.C.'},
+    {id:'03', title:'Mesopotamia en tiempos de los patriarcas', subtitle:'2000–1600 a.C.'},
+    {id:'04', title:'Ruta del éxodo y la conquista de Canaán', subtitle:'Recorrido tradicional propuesto'},
+    {id:'05', title:'Ruta del éxodo de Israel desde Egipto', subtitle:'Recorrido tradicional propuesto'},
+    {id:'06', title:'La conquista de Canaán'},
+    {id:'07', title:'Israel en tiempos de Jesús'},
+    {id:'08', title:'Norte de Israel, Fenicia y Siria', subtitle:'En tiempos de Jesús'},
+    {id:'09', title:'Galilea, Samaria y Judea', subtitle:'En tiempos de Jesús'},
+    {id:'10', title:'Samaria, Judea e Idumea', subtitle:'En tiempos de Jesús'},
+    {id:'11', title:'Los viajes del apóstol Pablo', subtitle:'Vista general'},
+    {id:'12', title:'Primer viaje misionero de Pablo'},
+    {id:'13', title:'Los tres viajes misioneros de Pablo'},
+    {id:'14', title:'Viajes misioneros de Pablo y su travesía a Roma'},
+  ];
+  const MAPS_BASE='assets/maps/churchmaps';
+  let mapsOpenId=null;
+
+  function renderMapsPanel(){
+    if(mapsOpenId){ renderMapViewer(mapsOpenId); return; }
+    els.panelTitle.textContent='Mapas bíblicos';
+    els.panelToolbar.innerHTML='';
+    els.panelBody.innerHTML=`
+      <div class="maps-gallery">
+        <div class="dictionary-library__count">${CHURCH_MAPS.length} mapas disponibles</div>
+        <div class="maps-gallery__grid">
+          ${CHURCH_MAPS.map(m=>`
+            <button type="button" class="maps-gallery__item" data-map-id="${m.id}">
+              <span class="maps-gallery__thumb"><img src="${MAPS_BASE}/thumb/${m.id}.jpg" alt="" loading="lazy"></span>
+              <span class="maps-gallery__label">${escapeHTML(m.title)}</span>
+            </button>`).join('')}
+        </div>
+      </div>`;
+    els.panelBody.querySelectorAll('[data-map-id]').forEach(btn=>{
+      btn.addEventListener('click',()=>{ mapsOpenId=btn.dataset.mapId; renderMapViewer(mapsOpenId); });
+    });
+  }
+
+  function renderMapViewer(id){
+    const map=CHURCH_MAPS.find(m=>m.id===id);
+    if(!map){ mapsOpenId=null; renderMapsPanel(); return; }
+    els.panelTitle.textContent=map.title;
+    els.panelToolbar.innerHTML=`<button class="note-card__copy" id="backToMapsIndex" type="button">← Mapas bíblicos</button>`;
+    document.getElementById('backToMapsIndex')?.addEventListener('click',()=>{ mapsOpenId=null; renderMapsPanel(); });
+    els.panelBody.innerHTML=`
+      <div class="map-viewer" id="mapViewer">
+        <img class="map-viewer__img" id="mapViewerImg" src="${MAPS_BASE}/full/${map.id}.jpg" alt="${escapeHTML(map.title)}" draggable="false">
+        <button type="button" class="map-viewer__btn map-viewer__expand" id="mapExpandBtn" aria-label="Ver a pantalla completa">⛶</button>
+        <div class="map-viewer__controls">
+          <button type="button" class="map-viewer__btn" id="mapZoomOut" aria-label="Alejar">−</button>
+          <button type="button" class="map-viewer__btn" id="mapZoomReset" aria-label="Restablecer vista">⟲</button>
+          <button type="button" class="map-viewer__btn" id="mapZoomIn" aria-label="Acercar">+</button>
+        </div>
+      </div>
+      ${map.subtitle?`<div class="maps-gallery__subtitle">${escapeHTML(map.subtitle)}</div>`:''}
+      <p class="maps-gallery__hint">Arrastra para mover el mapa ampliado. En móvil, junta o separa dos dedos para acercar o alejar. Usa ⛶ para verlo a pantalla completa.</p>`;
+    initMapViewer();
+  }
+
+  // Zoom/pan con CSS transform puro (translate + scale), sin librerías.
+  // El contenedor usa touch-action:none para que el gesto de pellizco no
+  // dispare el zoom del navegador ni el scroll de la página.
+  function initMapViewer(){
+    const container=document.getElementById('mapViewer');
+    const img=document.getElementById('mapViewerImg');
+    if(!container||!img) return;
+    const MIN_SCALE=1, MAX_SCALE=5, STEP=1.5;
+    let scale=1, tx=0, ty=0;
+
+    function apply(){ img.style.transform=`translate(${tx}px, ${ty}px) scale(${scale})`; }
+
+    function clamp(){
+      const cw=container.clientWidth, ch=container.clientHeight;
+      const iw=img.clientWidth*scale, ih=img.clientHeight*scale;
+      const maxX=Math.max(0,(iw-cw)/2), maxY=Math.max(0,(ih-ch)/2);
+      tx=Math.min(maxX,Math.max(-maxX,tx));
+      ty=Math.min(maxY,Math.max(-maxY,ty));
+    }
+
+    function setScale(newScale, anchorX, anchorY){
+      newScale=Math.min(MAX_SCALE,Math.max(MIN_SCALE,newScale));
+      if(anchorX!==undefined){
+        // Mantiene el punto bajo el cursor/dedo fijo mientras cambia la escala.
+        const rect=container.getBoundingClientRect();
+        const cx=anchorX-rect.left-rect.width/2;
+        const cy=anchorY-rect.top-rect.height/2;
+        const ratio=newScale/scale;
+        tx=cx-(cx-tx)*ratio;
+        ty=cy-(cy-ty)*ratio;
+      }
+      scale=newScale;
+      if(scale===MIN_SCALE){ tx=0; ty=0; }
+      clamp();
+      apply();
+    }
+
+    function reset(){ scale=1; tx=0; ty=0; apply(); }
+
+    // Pantalla completa: cubre toda la ventana mientras se explora el mapa,
+    // sin salir del panel (se cierra con el mismo botón o Escape).
+    const expandBtn=document.getElementById('mapExpandBtn');
+    let isFullscreen=false;
+    function setFullscreen(v){
+      isFullscreen=v;
+      container.classList.toggle('map-viewer--fullscreen', v);
+      document.body.classList.toggle('map-viewer-fullscreen-active', v);
+      if(expandBtn){
+        expandBtn.textContent=v?'✕':'⛶';
+        expandBtn.setAttribute('aria-label', v?'Salir de pantalla completa':'Ver a pantalla completa');
+      }
+      clamp(); apply();
+    }
+    expandBtn?.addEventListener('click', ()=>setFullscreen(!isFullscreen));
+    function onKeydown(e){
+      if(!document.body.contains(container)){ document.removeEventListener('keydown', onKeydown); return; }
+      if(e.key==='Escape' && isFullscreen) setFullscreen(false);
+    }
+    document.addEventListener('keydown', onKeydown);
+
+    document.getElementById('mapZoomIn')?.addEventListener('click',()=>{
+      const r=container.getBoundingClientRect();
+      setScale(scale*STEP, r.left+r.width/2, r.top+r.height/2);
+    });
+    document.getElementById('mapZoomOut')?.addEventListener('click',()=>{
+      const r=container.getBoundingClientRect();
+      setScale(scale/STEP, r.left+r.width/2, r.top+r.height/2);
+    });
+    document.getElementById('mapZoomReset')?.addEventListener('click', reset);
+
+    // Rueda del mouse en escritorio.
+    container.addEventListener('wheel', e=>{
+      e.preventDefault();
+      setScale(scale*(e.deltaY<0?1.15:1/1.15), e.clientX, e.clientY);
+    }, {passive:false});
+
+    // Doble clic/doble tap: alterna entre vista completa y zoom 2.5x.
+    let lastTapTime=0, lastTapX=0, lastTapY=0;
+    function toggleZoom(x,y){
+      if(scale>MIN_SCALE) reset(); else setScale(2.5,x,y);
+    }
+    container.addEventListener('dblclick', e=>{ e.preventDefault(); toggleZoom(e.clientX,e.clientY); });
+
+    // Arrastre con mouse (solo aporta cuando hay zoom aplicado).
+    let dragging=false, dragStartX=0, dragStartY=0, startTx=0, startTy=0;
+    container.addEventListener('mousedown', e=>{
+      if(scale<=MIN_SCALE) return;
+      dragging=true; dragStartX=e.clientX; dragStartY=e.clientY; startTx=tx; startTy=ty;
+      container.classList.add('map-viewer--dragging');
+    });
+    window.addEventListener('mousemove', e=>{
+      if(!dragging) return;
+      tx=startTx+(e.clientX-dragStartX);
+      ty=startTy+(e.clientY-dragStartY);
+      clamp(); apply();
+    });
+    window.addEventListener('mouseup', ()=>{ dragging=false; container.classList.remove('map-viewer--dragging'); });
+
+    // Touch: un dedo para arrastrar, dos dedos para pellizcar y hacer zoom.
+    let touchMode=null; // 'pan' | 'pinch'
+    let pinchStartDist=0, pinchStartScale=1;
+    let panStartX=0, panStartY=0, panStartTx=0, panStartTy=0;
+
+    function touchDist(t0,t1){ return Math.hypot(t1.clientX-t0.clientX, t1.clientY-t0.clientY); }
+    function touchMid(t0,t1){ return {x:(t0.clientX+t1.clientX)/2, y:(t0.clientY+t1.clientY)/2}; }
+
+    container.addEventListener('touchstart', e=>{
+      if(e.touches.length===2){
+        touchMode='pinch';
+        pinchStartDist=touchDist(e.touches[0],e.touches[1]);
+        pinchStartScale=scale;
+      } else if(e.touches.length===1){
+        const now=Date.now();
+        const t=e.touches[0];
+        if(now-lastTapTime<320 && Math.hypot(t.clientX-lastTapX,t.clientY-lastTapY)<24){
+          toggleZoom(t.clientX,t.clientY);
+          lastTapTime=0;
+          touchMode=null;
+          return;
+        }
+        lastTapTime=now; lastTapX=t.clientX; lastTapY=t.clientY;
+        touchMode='pan';
+        panStartX=t.clientX; panStartY=t.clientY; panStartTx=tx; panStartTy=ty;
+      }
+    }, {passive:true});
+
+    container.addEventListener('touchmove', e=>{
+      if(touchMode==='pinch' && e.touches.length===2){
+        e.preventDefault();
+        const dist=touchDist(e.touches[0],e.touches[1]);
+        const mid=touchMid(e.touches[0],e.touches[1]);
+        setScale(pinchStartScale*(dist/pinchStartDist), mid.x, mid.y);
+      } else if(touchMode==='pan' && e.touches.length===1){
+        if(scale<=MIN_SCALE) return;
+        e.preventDefault();
+        const t=e.touches[0];
+        tx=panStartTx+(t.clientX-panStartX);
+        ty=panStartTy+(t.clientY-panStartY);
+        clamp(); apply();
+      }
+    }, {passive:false});
+
+    container.addEventListener('touchend', e=>{
+      if(e.touches.length<2) touchMode = e.touches.length===1 ? 'pan' : null;
+    });
+
+    apply();
+  }
+
   function patristicModeToggleHtml(){
     return `<button type="button" class="note-card__copy${patristicMode==='docs'?' sermon-mode-toggle--active':''}" data-patristic-mode="docs">📖 Explorar documentos</button>
       <button type="button" class="note-card__copy${patristicMode==='verse'?' sermon-mode-toggle--active':''}" data-patristic-mode="verse">🔗 Por versículo</button>`;
@@ -2034,13 +2127,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }catch(error){console.error(error);els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir esta entrada del diccionario.');}
   }
   function updateNavButtons(){ const idx=catalog.books.findIndex(b=>b.id===currentBook); const atStart=idx===0&&currentChapter===1; const atEnd=idx===catalog.books.length-1&&currentChapter===els.chapter.options.length; els.prev.disabled=atStart; els.next.disabled=atEnd; if(els.innerPrev) els.innerPrev.disabled=atStart; if(els.innerNext) els.innerNext.disabled=atEnd; }
-  async function moveChapter(delta, {skipStopTTS=false}={}){
+  async function moveChapter(delta){
     const idx=catalog.books.findIndex(b=>b.id===currentBook), count=els.chapter.options.length;
     if(delta<0&&currentChapter>1) currentChapter--; else if(delta>0&&currentChapter<count) currentChapter++; else {
       const nextIdx=idx+delta; if(nextIdx<0||nextIdx>=catalog.books.length)return;
       currentBook=catalog.books[nextIdx].id; els.book.value=currentBook; currentChapter=delta>0?1:(await VerboModules.getBookInfo(currentBook)).chapterCount; await refreshChapters();
     }
-    els.chapter.value=String(currentChapter); updateNavButtons(); await loadPassage({skipStopTTS});
+    els.chapter.value=String(currentChapter); updateNavButtons(); await loadPassage();
   }
   function setLoading(on){ els.body.classList.toggle('app-loading',on); }
   function showFatal(error){ els.list.innerHTML=emptyState('⚠️',`No se pudieron cargar los módulos JSON. Ejecuta la app desde un servidor local. ${error.message}`); }

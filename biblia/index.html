@@ -17,7 +17,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260727-ofrenda">
+<link rel="stylesheet" href="assets/style.css?v=20260728-mapas5">
 </head>
 <body>
 
@@ -85,11 +85,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
           <path d="M9 21v-6h6v6"/>
         </svg>
       </button>
-      <button class="library-rail__btn" data-tab="evangelio" title="Evangelio cronológico de Jesús" aria-label="Evangelio cronológico de Jesús">
+      <button class="library-rail__btn" data-tab="contacto" title="Contacto" aria-label="Contacto">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M12 21V7"/>
-          <path d="M12 7c0-2.5-2-4.5-5-4.5S3 4 3 6.5C3 13 12 13 12 21"/>
-          <path d="M12 7c0-2.5 2-4.5 5-4.5S21 4 21 6.5C21 13 12 13 12 21"/>
+          <rect x="3" y="5" width="18" height="14" rx="2"/>
+          <path d="M3 7l9 6 9-6"/>
         </svg>
       </button>
       <a class="library-rail__btn library-rail__btn--bottom-group" href="../sobre-el-fundador/" title="Sobre el fundador" aria-label="Sobre el fundador">
@@ -123,13 +122,6 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
         </div>
         <div id="verseList"></div>
         <div class="bible-attribution" id="bibleAttribution" hidden></div>
-      </div>
-      <div class="tts-float" id="ttsFloat">
-        <div class="tts-float__inner">
-          <select class="tts-voice-select" id="ttsVoiceSelect" aria-label="Voz de lectura" hidden></select>
-          <button class="tts-btn" id="ttsPlayBtn" type="button" aria-label="Lectura continua en voz alta" title="Lectura continua en voz alta" hidden>▶</button>
-          <button class="tts-btn tts-btn--stop" id="ttsStopBtn" type="button" aria-label="Detener lectura" title="Detener lectura" hidden>⏹</button>
-        </div>
       </div>
     </main>
 
@@ -182,6 +174,13 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
           <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>
         </svg>
       </button>
+      <button class="tab-rail__btn" data-tab="mapas" title="Mapas bíblicos" aria-label="Mapas bíblicos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/>
+          <path d="M9 4v14"/>
+          <path d="M15 6v14"/>
+        </svg>
+      </button>
       <button class="tab-rail__btn" data-tab="tema" title="Tema" aria-label="Tema">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/>
@@ -212,6 +211,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
         <span class="mobile-tool-label">Mis notas</span>
       </button>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="mapas" type="button" aria-label="Mapas bíblicos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>
+        <span class="mobile-tool-label">Mapas bíblicos</span>
+      </button>
       <button class="mobile-tool-btn tab-rail__btn" data-tab="tema" type="button" aria-label="Tema">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/><circle cx="7.5" cy="10.5" r=".8"/><circle cx="10" cy="6.8" r=".8"/><circle cx="14.3" cy="6.8" r=".8"/><circle cx="17" cy="10.5" r=".8"/></svg>
         <span class="mobile-tool-label">Tema</span>
@@ -224,9 +227,9 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>
         <span class="mobile-tool-label">Padres Apostólicos</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="evangelio" type="button" aria-label="Evangelio cronológico de Jesucristo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21V7"/><path d="M12 7c0-2.5-2-4.5-5-4.5S3 4 3 6.5C3 13 12 13 12 21"/><path d="M12 7c0-2.5 2-4.5 5-4.5S21 4 21 6.5C21 13 12 13 12 21"/></svg>
-        <span class="mobile-tool-label">Evangelio cronológico de Jesucristo</span>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="contacto" type="button" aria-label="Contacto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        <span class="mobile-tool-label">Contacto</span>
       </button>
       <button class="mobile-tool-btn tab-rail__btn" data-tab="licencias" type="button" aria-label="Fuentes y licencias">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 10v6"/><circle cx="12" cy="7" r=".7" fill="currentColor" stroke="none"/></svg>
@@ -268,8 +271,15 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 
   <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
   <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
-  <script src="assets/backup.js?v=20260725-respaldo-local-1"></script>
+  <script src="assets/backup.js?v=20260727-capacitor-fs-bridge"></script>
   <script src="assets/module-loader.js?v=20260725-lazy-commentaries-2"></script>
-  <script src="assets/app.js?v=20260725-lazy-commentaries"></script>
+  <script src="assets/app.js?v=20260728-mapas5"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js').catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>

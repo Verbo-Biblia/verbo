@@ -97,6 +97,7 @@ const VerboBackup = (() => {
     cached.fecha_guardado = new Date().toISOString();
     await idbSet(DATA_KEY, cached);
     scheduleFolderWrite();
+    scheduleCapacitorWrite();
   }
 
   // ---- Resaltados (mapa BOOK:CAP:VERSO -> clase de color, igual forma que ya usaba app.js) ----
@@ -174,9 +175,40 @@ const VerboBackup = (() => {
     saveTimer = setTimeout(() => { writeToFolder().catch(() => {}); }, 3000);
   }
 
+  // ---- Capa 4: puente Filesystem nativo (solo dentro del wrapper Capacitor de
+  // iOS/Android). IndexedDB puede ser purgado por iOS tras ~7 días sin uso
+  // (política antitracking de WKWebView); este escrito en el sandbox nativo
+  // de la app no está sujeto a esa purga. No hay File System Access API en
+  // WebKit, así que esta capa reemplaza a la de "Capa 2" únicamente dentro
+  // de la app nativa, sin diálogo de consentimiento (es el sandbox propio de
+  // la app, no una carpeta arbitraria del usuario).
+  let capacitorSaveTimer = null;
+  function isCapacitorNative() {
+    return Boolean(window.Capacitor?.isNativePlatform?.());
+  }
+  async function writeToCapacitorFS() {
+    const FS = window.Capacitor?.Plugins?.Filesystem;
+    if (!FS) return false;
+    try {
+      await FS.writeFile({
+        path: FILE_NAME,
+        data: JSON.stringify(cached, null, 2),
+        directory: 'DOCUMENTS',
+        encoding: 'utf8'
+      });
+      return true;
+    } catch { return false; }
+  }
+  function scheduleCapacitorWrite() {
+    if (!isCapacitorNative()) return;
+    clearTimeout(capacitorSaveTimer);
+    capacitorSaveTimer = setTimeout(() => { writeToCapacitorFS().catch(() => {}); }, 3000);
+  }
+
   async function saveNow() {
     await persist();
     if (dirHandle) return writeToFolder();
+    if (isCapacitorNative()) return writeToCapacitorFS();
     return false;
   }
 
@@ -218,6 +250,7 @@ const VerboBackup = (() => {
     getPosicionBiblia, setPosicionBiblia,
     supportsFSA, hasFolderPermission, requestFolderAccess,
     exportDownload, importFromFile,
-    shouldOfferConsent, recordConsentDeclined
+    shouldOfferConsent, recordConsentDeclined,
+    isCapacitorNative
   };
 })();
