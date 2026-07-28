@@ -50,7 +50,7 @@ Un libro solo puede marcarse como cerrado cuando:
 | Josué | 24 | candidato | Revisión integral completada: 24 capítulos y 658 versículos; JSON, estructura, cifras, límites, terminología y auditoría de arcaísmos validados |
 | Jueces | 21 | candidato | Revisión integral completada: 21 capítulos y 618 versículos; JSON, estructura, cifras, nombres, ciclos narrativos, discursos y auditoría de arcaísmos validados |
 | Rut | 4 | candidato | Revisión integral completada: 4 capítulos y 85 versículos; JSON, estructura, parentescos, redención, medidas y genealogía validados |
-| 1 Samuel | 31 | en revisión | 1 Samuel 1–5 en revisión paralela |
+| 1 Samuel | 31 | en revisión | Revisión editorial de los 31 capítulos y 810 versículos completada; corregida la versificación moderna de 23:29–24:22; pendiente auditoría integral final antes de marcarlo candidato y subirlo |
 | 2 Samuel–Apocalipsis | 922 | pendiente | Restan 57 libros después de 1 Samuel |
 
 ## Orden de trabajo
