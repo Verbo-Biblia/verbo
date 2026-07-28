@@ -712,10 +712,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <article class="license-card">
           <h3>Mapas bíblicos</h3>
-          <p>Los 14 mapas del panel "Mapas bíblicos" fueron creados por <strong>churchmaps.info</strong> y publicados en dominio público. Se muestran en la versión recortada y en inglés distribuida por <strong>FreeBibleimages.org</strong> bajo licencia <strong>CC0 1.0 Universal</strong> (Public Domain Dedication).</p>
+          <p>14 de los 18 mapas del panel "Mapas bíblicos" fueron creados por <strong>churchmaps.info</strong> y publicados en dominio público. Se muestran en la versión recortada y en inglés distribuida por <strong>FreeBibleimages.org</strong> bajo licencia <strong>CC0 1.0 Universal</strong> (Public Domain Dedication).</p>
           <div class="license-card__links">
             <a href="https://churchmaps.info" target="_blank" rel="noopener noreferrer">churchmaps.info</a>
             <a href="https://www.freebibleimages.org/illustrations/church-maps/" target="_blank" rel="noopener noreferrer">FreeBibleimages.org</a>
+          </div>
+          <p>Los otros 4 mapas (reino dividido, doce tribus, tabernáculo y templo de Herodes) proceden de Wikimedia Commons. El reino dividido, las doce tribus y el tabernáculo están bajo licencia <strong>CC BY-SA 3.0</strong> (atribución visible en el propio visor de cada mapa; las dos primeras ya venían/se tradujeron al español, el tabernáculo se tradujo del diagrama original en polaco). El templo de Herodes es dominio público real, tomado de la <em>Encyclopædia Britannica</em> de 1911.</p>
+          <div class="license-card__links">
+            <a href="https://commons.wikimedia.org/wiki/File:Kingdoms_of_Israel_and_Judah_map_830-es.svg" target="_blank" rel="noopener noreferrer">Reino dividido (Commons)</a>
+            <a href="https://commons.wikimedia.org/wiki/File:12_Tribes_of_Israel_Map.svg" target="_blank" rel="noopener noreferrer">Doce tribus (Commons)</a>
+            <a href="https://commons.wikimedia.org/wiki/File:Przybytek_Moj%C5%BCeszowy.svg" target="_blank" rel="noopener noreferrer">Tabernáculo (Commons)</a>
+            <a href="https://commons.wikimedia.org/wiki/File:EB1911_Temple_-_Plan_of_Herod%27s_Temple_and_Courts.jpg" target="_blank" rel="noopener noreferrer">Templo de Herodes (Commons)</a>
           </div>
         </article>
 
@@ -1675,10 +1682,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // ── Mapas bíblicos ───────────────────────────────────────────────────────────
-  // Fuente: churchmaps.info (dominio público), recorte y distribución vía
-  // FreeBibleimages.org bajo CC0. Los rótulos de los mapas están en inglés
+  // Mapas 01-14: churchmaps.info (dominio público), recorte y distribución vía
+  // FreeBibleimages.org bajo CC0. Los rótulos de esos mapas están en inglés
   // (única versión disponible); los títulos aquí son una traducción propia
-  // solo de la ficha, no del contenido cartográfico. Ver "Fuentes y licencias".
+  // solo de la ficha, no del contenido cartográfico.
+  // Mapas 15-18 (agregados 2026-07-28): Wikimedia Commons. 15 y 16 son
+  // CC BY-SA 3.0 (rótulos traducidos al español donde aplicaba) y llevan
+  // `credit` con atribución visible obligatoria; 17 también CC BY-SA 3.0
+  // (mismo autor tradujo del original en polaco); 18 es dominio público real
+  // (Encyclopædia Britannica 1911), `credit` ahí es solo referencia de fuente,
+  // no una obligación legal. Ver "Fuentes y licencias".
   const CHURCH_MAPS=[
     {id:'01', title:'El mundo antiguo en tiempos de los patriarcas', subtitle:'2000–1600 a.C.'},
     {id:'02', title:'Canaán y Egipto en tiempos de los patriarcas', subtitle:'2000–1600 a.C.'},
@@ -1694,6 +1707,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     {id:'12', title:'Primer viaje misionero de Pablo'},
     {id:'13', title:'Los tres viajes misioneros de Pablo'},
     {id:'14', title:'Viajes misioneros de Pablo y su travesía a Roma'},
+    {id:'15', title:'El reino dividido: Israel y Judá', subtitle:'Siglo IX a.C.',
+      credit:'Mapa de Kordas, Richardprins y FinnWikiNo — Wikimedia Commons, CC BY-SA 3.0'},
+    {id:'16', title:'El reparto de las doce tribus de Israel', subtitle:'Según el libro de Josué',
+      credit:'Mapa de Richardprins, Kordas, יוסי y Janz — Wikimedia Commons, CC BY-SA 3.0 (tribus traducidas al español)'},
+    {id:'17', title:'El tabernáculo de Moisés', subtitle:'Planta del santuario en el desierto',
+      credit:'Diagrama de Adik86 — Wikimedia Commons, CC BY-SA 3.0 (etiquetas traducidas al español)'},
+    {id:'18', title:'El templo de Herodes en Jerusalén', subtitle:'Planta del templo y sus atrios',
+      credit:'Encyclopædia Britannica, 11.ª edición (1911) — dominio público'},
   ];
   const MAPS_BASE='assets/maps/churchmaps';
   let mapsOpenId=null;
@@ -1737,6 +1758,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
       </div>
       ${map.subtitle?`<div class="maps-gallery__subtitle">${escapeHTML(map.subtitle)}</div>`:''}
+      ${map.credit?`<div class="maps-gallery__credit">${escapeHTML(map.credit)}</div>`:''}
       <p class="maps-gallery__hint">Toca ⛶ para ver el mapa a pantalla completa. Ahí puedes acercar/alejar con los botones, la rueda del mouse o pellizcando con dos dedos, y arrastrar para moverte.</p>`;
     initMapViewer();
   }

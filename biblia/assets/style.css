@@ -1429,6 +1429,7 @@ body[data-theme="rosewood"] {
 .maps-gallery__label { font-size: .84rem; line-height: 1.3; }
 
 .maps-gallery__subtitle { font-size: .82rem; opacity: .68; margin: 10px 2px 0; }
+.maps-gallery__credit { font-size: .74rem; opacity: .55; margin: 4px 2px 0; font-style: italic; }
 .maps-gallery__hint { font-size: .8rem; opacity: .6; margin: 8px 2px 0; }
 
 /* .map-viewer es el fondo/marco exterior; .map-viewer__frame es la caja
