@@ -4,7 +4,7 @@
 
 - 66 libros
 - 1.189 capítulos
-- 31.084 versículos
+- 31.102 versículos según la numeración moderna
 - Identidad editorial final: Biblia Verbo BV2026
 - Base principal de trabajo: el texto actual de Biblia Verbo BV2026, conservando
   todas las mejoras que ya contiene
@@ -45,10 +45,13 @@ Un libro solo puede marcarse como cerrado cuando:
 | Génesis | 50 | candidato | Revisión integral completada: 50 capítulos y 1.533 versículos; JSON, estructura, cifras y auditoría de arcaísmos validados |
 | Éxodo | 40 | candidato | Revisión integral completada: 40 capítulos y 1.213 versículos; JSON, estructura, cifras, terminología y auditoría de arcaísmos validados |
 | Levítico | 27 | candidato | Revisión integral completada: 27 capítulos y 859 versículos; JSON, estructura, cifras, terminología y auditoría de arcaísmos validados |
-| Números | 36 | en revisión | Números 1–10 completado y validado (420 versículos); Números 11–15 entregado por agente y pendiente de auditoría |
-| Deuteronomio | 34 | en revisión | Deuteronomio 1–15 completado y validado (450 versículos); Deuteronomio 16–20 entregado por agente y pendiente de auditoría |
-| Josué | 24 | en revisión | Josué 1–15 completado y validado (414 versículos); Josué 16–20 entregado por agente y pendiente de auditoría |
-| Jueces–Apocalipsis | 978 | pendiente | Restan 60 libros después de Josué |
+| Números | 36 | candidato | Revisión integral completada: 36 capítulos y 1.288 versículos; corregida la versificación moderna de 12:16–13:33 y 29:40–30:16; JSON, estructura, cifras, nombres, límites territoriales y auditoría de arcaísmos validados |
+| Deuteronomio | 34 | candidato | Revisión integral completada: 34 capítulos y 959 versículos; JSON, estructura, cifras, pacto, cántico, bendiciones y auditoría de arcaísmos validados |
+| Josué | 24 | candidato | Revisión integral completada: 24 capítulos y 658 versículos; JSON, estructura, cifras, límites, terminología y auditoría de arcaísmos validados |
+| Jueces | 21 | en revisión | Jueces 1–15 completado y validado (440 versículos); Jueces 16–21 en revisión paralela |
+| Rut | 4 | candidato | Revisión integral completada: 4 capítulos y 85 versículos; JSON, estructura, parentescos, redención, medidas y genealogía validados |
+| 1 Samuel | 31 | en revisión | 1 Samuel 1–5 en revisión paralela |
+| 2 Samuel–Apocalipsis | 922 | pendiente | Restan 57 libros después de 1 Samuel |
 
 ## Orden de trabajo
 
@@ -58,7 +61,6 @@ hasta Apocalipsis.
 
 ## Publicación
 
-Juan autorizó expresamente subir el avance cerrado de Levítico. Para cualquier
-nueva subida posterior, commit o publicación, se debe preguntar primero a Juan
-y recibir autorización expresa. La revisión completa continúa desde Números; no
-se declarará completa ni oficial la Biblia hasta cerrar los 66 libros.
+Juan autorizó expresamente subir cada libro cuando quede cerrado. La revisión
+completa continúa desde Jueces; no se declarará completa ni oficial la Biblia
+hasta cerrar los 66 libros.
