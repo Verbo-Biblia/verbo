@@ -353,6 +353,7 @@ def fmt_fecha_corta(iso):
 
 
 TIPO_LABEL = {"devocional": "Devocional", "articulo": "Artículo", "reflexion": "Reflexión"}
+TIPO_I18N_KEY = {"devocional": "temas.devocional", "articulo": "filtros.articulo", "reflexion": "filtros.reflexion"}
 TEMA_LABEL = {
     "apologetica": "Apologética", "teologia": "Teología", "vida-cristiana": "Vida cristiana",
     "historia-de-la-biblia": "Historia de la Biblia", "gracia": "Gracia", "fe": "Fe",
@@ -371,8 +372,21 @@ def tema_label(slug):
     return TEMA_LABEL.get(slug, slug.replace("-", " ").capitalize())
 
 
+def tema_i18n_key(slug):
+    """slug kebab-case -> clave camelCase de biblia/assets/i18n/{es,en}.json
+    (namespace "temas"), ej. "historia-de-la-biblia" -> "historiaDeLaBiblia"."""
+    parts = slug.split("-")
+    return parts[0] + "".join(p.capitalize() for p in parts[1:])
+
+
 def esc(s):
-    return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    return (
+        (s or "")
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
 
 
 # ---------- bloque: lista filtrable de Artículos y Reflexiones ----------
@@ -384,15 +398,19 @@ def render_articulos_block(items):
     out.append('<!-- CONTENT-FILTERS:START -->')
     out.append('<div class="r-filterbar" data-filter-bar data-filter-target="#articulos-list">')
     out.append('  <div class="r-filter-group" data-filter-group="tipo">')
-    out.append('    <span class="r-filter-group-label">Tipo</span>')
-    out.append('    <button type="button" class="r-filter-pill is-active" data-value="todos">Todos</button>')
-    for val, label in (("devocional", "Devocional"), ("articulo", "Artículo"), ("reflexion", "Reflexión")):
-        out.append(f'    <button type="button" class="r-filter-pill" data-value="{val}">{label}</button>')
+    out.append('    <span class="r-filter-group-label" data-i18n="filtros.tipo">Tipo</span>')
+    out.append('    <button type="button" class="r-filter-pill is-active" data-value="todos" data-i18n="filtros.todos">Todos</button>')
+    for val, label, i18n_key in (
+        ("devocional", "Devocional", "temas.devocional"),
+        ("articulo", "Artículo", "filtros.articulo"),
+        ("reflexion", "Reflexión", "filtros.reflexion"),
+    ):
+        out.append(f'    <button type="button" class="r-filter-pill" data-value="{val}" data-i18n="{i18n_key}">{label}</button>')
     out.append('  </div>')
-    out.append('  <select class="r-filter-select" data-filter-group="tema" aria-label="Filtrar por tema">')
-    out.append('    <option value="todos">Todos los temas</option>')
+    out.append('  <select class="r-filter-select" data-filter-group="tema" data-i18n-attr="aria-label:filtros.filtrarPorTema" aria-label="Filtrar por tema">')
+    out.append('    <option value="todos" data-i18n="filtros.todosLosTemas">Todos los temas</option>')
     for t in temas:
-        out.append(f'    <option value="{t}">{tema_label(t)}</option>')
+        out.append(f'    <option value="{t}" data-i18n="temas.{tema_i18n_key(t)}">{tema_label(t)}</option>')
     out.append('  </select>')
     out.append('</div>')
     out.append('<div class="r-article-list" id="articulos-list">')
@@ -418,12 +436,12 @@ def render_articulos_block(items):
             f'<span class="r-article-row-main">'
             f'<span class="r-article-row-title">{esc(it["titulo"])}</span>'
             f'<span class="r-article-row-tags">'
-            f'<span class="r-tag r-tag-tipo">{TIPO_LABEL[it["tipo"]]}</span>'
+            f'<span class="r-tag r-tag-tipo" data-i18n="{TIPO_I18N_KEY[it["tipo"]]}">{TIPO_LABEL[it["tipo"]]}</span>'
             f'</span></span>'
             f'<span class="r-article-row-date">{fmt_fecha_corta(it["fecha_agregado"])}</span></a>'
         )
     out.append('</div>')
-    out.append('<p class="r-filter-empty" hidden>No hay piezas que coincidan con estos filtros.</p>')
+    out.append('<p class="r-filter-empty" hidden data-i18n="filtros.sinResultadosArticulos">No hay piezas que coincidan con estos filtros.</p>')
     out.append('<!-- CONTENT-FILTERS:END -->')
     return "\n".join(out)
 

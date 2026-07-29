@@ -239,10 +239,14 @@
   },
   "filtros": {
     "idioma": "Idioma",
+    "tipo": "Tipo",
     "todos": "Todos",
+    "articulo": "Artículo",
+    "reflexion": "Reflexión",
     "todosLosTemas": "Todos los temas",
     "filtrarPorTema": "Filtrar por tema",
-    "sinResultados": "No hay libros que coincidan con estos filtros."
+    "sinResultados": "No hay libros que coincidan con estos filtros.",
+    "sinResultadosArticulos": "No hay piezas que coincidan con estos filtros."
   },
   "temas": {
     "apologetica": "Apologética",
@@ -250,17 +254,35 @@
     "chapelLibrary": "Chapel Library",
     "comentarioBiblico": "Comentario bíblico",
     "devocional": "Devocional",
+    "escatologia": "Escatología",
+    "esperanza": "Esperanza",
     "evangelios": "Evangelios",
     "evangelismo": "Evangelismo",
     "familia": "Familia",
+    "fe": "Fe",
+    "fidelidadDeDios": "Fidelidad de Dios",
     "gracia": "Gracia",
+    "historiaDeLaBiblia": "Historia de la Biblia",
+    "identidadEnCristo": "Identidad en Cristo",
     "patristica": "Patrística",
     "salmos": "Salmos",
+    "santidad": "Santidad",
+    "seguridadEnCristo": "Seguridad en Cristo",
     "sigloI": "Siglo I",
     "sigloXVII": "Siglo XVII",
     "sigloXIX": "Siglo XIX",
     "sigloII": "Siglo II",
+    "sufrimiento": "Sufrimiento",
     "teologia": "Teología",
-    "vidaCristiana": "Vida cristiana"
+    "vidaCristiana": "Vida cristiana",
+    "vidaEnCristo": "Vida en Cristo"
+  },
+  "articulosIndex": {
+    "pageTitle": "Artículos y Reflexiones | Verbo",
+    "metaDescription": "Ensayos y reflexiones sobre fe, apologética y vida cristiana, escritos para pensar despacio.",
+    "eyebrow": "Recursos · Artículos y Reflexiones",
+    "heading": "Artículos y Reflexiones",
+    "lede": "Ensayos y reflexiones sobre fe, apologética y vida cristiana, escritos para pensar despacio.",
+    "piezas": "piezas"
   }
 }

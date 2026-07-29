@@ -239,10 +239,14 @@
   },
   "filtros": {
     "idioma": "Language",
+    "tipo": "Type",
     "todos": "All",
+    "articulo": "Article",
+    "reflexion": "Reflection",
     "todosLosTemas": "All topics",
     "filtrarPorTema": "Filter by topic",
-    "sinResultados": "No books match these filters."
+    "sinResultados": "No books match these filters.",
+    "sinResultadosArticulos": "No pieces match these filters."
   },
   "temas": {
     "apologetica": "Apologetics",
@@ -250,17 +254,35 @@
     "chapelLibrary": "Chapel Library",
     "comentarioBiblico": "Bible commentary",
     "devocional": "Devotional",
+    "escatologia": "Eschatology",
+    "esperanza": "Hope",
     "evangelios": "Gospels",
     "evangelismo": "Evangelism",
     "familia": "Family",
+    "fe": "Faith",
+    "fidelidadDeDios": "God's faithfulness",
     "gracia": "Grace",
+    "historiaDeLaBiblia": "History of the Bible",
+    "identidadEnCristo": "Identity in Christ",
     "patristica": "Patristic",
     "salmos": "Psalms",
+    "santidad": "Holiness",
+    "seguridadEnCristo": "Security in Christ",
     "sigloI": "1st century",
     "sigloXVII": "17th century",
     "sigloXIX": "19th century",
     "sigloII": "2nd century",
+    "sufrimiento": "Suffering",
     "teologia": "Theology",
-    "vidaCristiana": "Christian living"
+    "vidaCristiana": "Christian living",
+    "vidaEnCristo": "Life in Christ"
+  },
+  "articulosIndex": {
+    "pageTitle": "Articles and Reflections | Verbo",
+    "metaDescription": "Essays and reflections on faith, apologetics and Christian life, written to think slowly.",
+    "eyebrow": "Resources · Articles and Reflections",
+    "heading": "Articles and Reflections",
+    "lede": "Essays and reflections on faith, apologetics and Christian life, written to think slowly.",
+    "piezas": "pieces"
   }
 }
