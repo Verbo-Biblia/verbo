@@ -389,32 +389,60 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
   }
 
   footer a:hover { color: var(--gold); }
+
+  /* ---------- Selector de idioma de interfaz ---------- */
+  .ui-lang-switcher {
+    display: inline-flex;
+    border: 1px solid rgba(201, 162, 39, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-right: 0.75rem;
+  }
+  .ui-lang-switcher__btn {
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    padding: 0.4rem 0.65rem;
+    cursor: pointer;
+  }
+  .ui-lang-switcher__btn + .ui-lang-switcher__btn { border-left: 1px solid rgba(201, 162, 39, 0.3); }
+  .ui-lang-switcher__btn:hover { color: var(--parchment); }
+  .ui-lang-switcher__btn.is-active { background: var(--gold); color: var(--ink-deep); }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="wordmark">Verbo<span>compendio bíblico</span></div>
-  <a href="https://paypal.me/VerboBiblia" target="_blank" rel="noopener noreferrer" class="ofrenda-btn" aria-label="Apoyar a Verbo con una ofrenda">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-    <span>Ofrenda</span>
-  </a>
+  <div class="wordmark">Verbo<span data-i18n="portal.tagline">compendio bíblico</span></div>
+  <div style="display:flex;align-items:center;">
+    <div class="ui-lang-switcher" id="uiLangSwitcher" role="group" data-i18n-attr="aria-label:header.uiLangAria">
+      <button type="button" class="ui-lang-switcher__btn" data-lang="es">ES</button>
+      <button type="button" class="ui-lang-switcher__btn" data-lang="en">EN</button>
+    </div>
+    <a href="https://paypal.me/VerboBiblia" target="_blank" rel="noopener noreferrer" class="ofrenda-btn" data-i18n-attr="aria-label:header.ofrendaAria">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <span data-i18n="header.ofrendaLabel">Ofrenda</span>
+    </a>
+  </div>
 </header>
 
 <section class="hero">
   <div class="hero-inner">
-    <span class="eyebrow">Estudio · Formación · Lectura</span>
-    <h1>Todo lo que necesitas, <em>en un solo lugar.</em></h1>
+    <span class="eyebrow" data-i18n="portal.heroEyebrow">Estudio · Formación · Lectura</span>
+    <h1><span data-i18n="portal.heroHeading">Todo lo que necesitas,</span> <em data-i18n="portal.heroHeadingEm">en un solo lugar.</em></h1>
     <div class="hero-rule"></div>
-    <p>Un compendio gratuito de herramientas bíblicas, formación teológica y recursos pastorales, hecho para quienes predican, enseñan y forman.</p>
-    <a class="btn-primary" href="#secciones">Explorar Verbo →</a>
+    <p data-i18n="portal.heroSubtext">Un compendio gratuito de herramientas bíblicas, formación teológica y recursos pastorales, hecho para quienes predican, enseñan y forman.</p>
+    <a class="btn-primary" href="#secciones" data-i18n="portal.heroCta">Explorar Verbo →</a>
   </div>
 </section>
 
 <section class="sections" id="secciones">
   <div class="sections-head">
-    <h2>Cuatro espacios, un mismo propósito</h2>
-    <span>100% gratuito</span>
+    <h2 data-i18n="portal.sectionsHeading">Cuatro espacios, un mismo propósito</h2>
+    <span data-i18n="portal.sectionsBadge">100% gratuito</span>
   </div>
 
   <div class="card-grid">
@@ -427,10 +455,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
           <path d="M12 5C10 3.5 6.5 3 4 3.5v15c2.5-.5 6 0 8 1.5m0-15c2-1.5 5.5-2 8-1.5v15c-2.5-.5-6 0-8 1.5m0-15v15"/>
         </svg>
       </div>
-      <h3>Biblia</h3>
-      <p>Estudio bíblico completo: comentarios, Strong, referencias cruzadas y preparación de sermones.</p>
+      <h3 data-i18n="portal.cardBibliaTitle">Biblia</h3>
+      <p data-i18n="portal.cardBibliaDesc">Estudio bíblico completo: comentarios, Strong, referencias cruzadas y preparación de sermones.</p>
       <div class="card-footer">
-        <span class="ref-pill live">Disponible</span>
+        <span class="ref-pill live" data-i18n="portal.badgeDisponible">Disponible</span>
         <span class="card-arrow">→</span>
       </div>
     </a>
@@ -444,10 +472,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
           <path d="M7 10.8V16c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-5.2"/>
         </svg>
       </div>
-      <h3>Seminario</h3>
-      <p>Teología bíblica, exégesis y hermenéutica, e historia del cristianismo — enfocado en conocer a Dios, no en memorizar terminología.</p>
+      <h3 data-i18n="portal.cardSeminarioTitle">Seminario</h3>
+      <p data-i18n="portal.cardSeminarioDesc">Teología bíblica, exégesis y hermenéutica, e historia del cristianismo — enfocado en conocer a Dios, no en memorizar terminología.</p>
       <div class="card-footer">
-        <span class="ref-pill soon">Próximamente</span>
+        <span class="ref-pill soon" data-i18n="portal.badgeProximamente">Próximamente</span>
         <span class="card-arrow">→</span>
       </div>
     </a>
@@ -460,10 +488,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
           <path d="M4 4h3v16H4zM9 4h3v16H9zM14 5l3-.5 2 15.5-3 .5z"/>
         </svg>
       </div>
-      <h3>Librería</h3>
-      <p>Lectura de libros clásicos y patrísticos completos, con marcadores y resaltado de texto.</p>
+      <h3 data-i18n="portal.cardLibreriaTitle">Librería</h3>
+      <p data-i18n="portal.cardLibreriaDesc">Lectura de libros clásicos y patrísticos completos, con marcadores y resaltado de texto.</p>
       <div class="card-footer">
-        <span class="ref-pill live">Disponible</span>
+        <span class="ref-pill live" data-i18n="portal.badgeDisponible">Disponible</span>
         <span class="card-arrow">→</span>
       </div>
     </a>
@@ -477,10 +505,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
           <path d="M9 14h6"/>
         </svg>
       </div>
-      <h3>Recursos</h3>
-      <p>Lecciones listas para maestros de niños y preadolescentes, descargables para impartir directamente.</p>
+      <h3 data-i18n="portal.cardRecursosTitle">Recursos</h3>
+      <p data-i18n="portal.cardRecursosDesc">Lecciones listas para maestros de niños y preadolescentes, descargables para impartir directamente.</p>
       <div class="card-footer">
-        <span class="ref-pill live">Disponible</span>
+        <span class="ref-pill live" data-i18n="portal.badgeDisponible">Disponible</span>
         <span class="card-arrow">→</span>
       </div>
     </a>
@@ -491,16 +519,16 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <!-- NOVEDADES:START -->
 <section class="novedades" id="novedades">
   <div class="sections-head">
-    <h2>Novedades</h2>
-    <span>lo último agregado</span>
+    <h2 data-i18n="portal.novedadesHeading">Novedades</h2>
+    <span data-i18n="portal.novedadesBadge">lo último agregado</span>
   </div>
   <div class="novedades-grid">
-    <a class="novedad-card" href="libreria/deberes-de-hijos-y-padres/"><span class="novedad-seccion">Librería</span><span class="novedad-title">Los Deberes de Hijos y Padres</span><span class="novedad-date">28 jul 2026</span></a>
-    <a class="novedad-card" href="libreria/totalmente-por-gracia/"><span class="novedad-seccion">Librería</span><span class="novedad-title">Totalmente por Gracia</span><span class="novedad-date">28 jul 2026</span></a>
-    <a class="novedad-card" href="libreria/el-tesoro-de-david-condensado/"><span class="novedad-seccion">Librería</span><span class="novedad-title">El Tesoro de David (condensado)</span><span class="novedad-date">28 jul 2026</span></a>
-    <a class="novedad-card" href="libreria/matthew-henry/"><span class="novedad-seccion">Librería</span><span class="novedad-title">Comentario Bíblico de Matthew Henry</span><span class="novedad-date">28 jul 2026</span></a>
-    <a class="novedad-card" href="recursos/articulos-y-reflexiones/2corintios-5/"><span class="novedad-seccion">Recursos</span><span class="novedad-title">2 Corintios 5:15-17: nueva criatura, nueva manera de ver</span><span class="novedad-date">27 jul 2026</span></a>
-    <a class="novedad-card" href="recursos/articulos-y-reflexiones/aceptados-por-cristo/"><span class="novedad-seccion">Recursos</span><span class="novedad-title">No aceptados porque vencimos, sino porque Cristo venció</span><span class="novedad-date">27 jul 2026</span></a>
+    <a class="novedad-card" href="libreria/deberes-de-hijos-y-padres/"><span class="novedad-seccion" data-i18n="portal.seccionLibreria">Librería</span><span class="novedad-title">Los Deberes de Hijos y Padres</span><span class="novedad-date">28 jul 2026</span></a>
+    <a class="novedad-card" href="libreria/totalmente-por-gracia/"><span class="novedad-seccion" data-i18n="portal.seccionLibreria">Librería</span><span class="novedad-title">Totalmente por Gracia</span><span class="novedad-date">28 jul 2026</span></a>
+    <a class="novedad-card" href="libreria/el-tesoro-de-david-condensado/"><span class="novedad-seccion" data-i18n="portal.seccionLibreria">Librería</span><span class="novedad-title">El Tesoro de David (condensado)</span><span class="novedad-date">28 jul 2026</span></a>
+    <a class="novedad-card" href="libreria/matthew-henry/"><span class="novedad-seccion" data-i18n="portal.seccionLibreria">Librería</span><span class="novedad-title">Comentario Bíblico de Matthew Henry</span><span class="novedad-date">28 jul 2026</span></a>
+    <a class="novedad-card" href="recursos/articulos-y-reflexiones/2corintios-5/"><span class="novedad-seccion" data-i18n="portal.seccionRecursos">Recursos</span><span class="novedad-title">2 Corintios 5:15-17: nueva criatura, nueva manera de ver</span><span class="novedad-date">27 jul 2026</span></a>
+    <a class="novedad-card" href="recursos/articulos-y-reflexiones/aceptados-por-cristo/"><span class="novedad-seccion" data-i18n="portal.seccionRecursos">Recursos</span><span class="novedad-title">No aceptados porque vencimos, sino porque Cristo venció</span><span class="novedad-date">27 jul 2026</span></a>
   </div>
 </section>
 <!-- NOVEDADES:END -->
@@ -511,9 +539,11 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 </section>
 
 <footer>
-  <span>Verbo — hecho para quienes predican, enseñan y forman.</span>
+  <span data-i18n="portal.footerTagline">Verbo — hecho para quienes predican, enseñan y forman.</span>
   <span><a href="#">verbobiblia.com</a></span>
 </footer>
 
+<script src="biblia/assets/i18n.js?v=20260729-shared-dict"></script>
+<script src="biblia/assets/site-chrome.js?v=20260729-1"></script>
 </body>
 </html>

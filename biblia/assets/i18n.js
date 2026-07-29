@@ -1,6 +1,12 @@
 (function(){
   'use strict';
-  const DICT_URLS = { es: 'assets/i18n/es.json', en: 'assets/i18n/en.json' };
+  // Resuelto relativo a la ubicación de este script (no a la página que lo
+  // incluye), para que el mismo archivo sirva tanto a /biblia/ como a
+  // cualquier otra página del sitio (portal, misión, librería, etc.) sin
+  // duplicar diccionarios — ej. <script src="../biblia/assets/i18n.js">.
+  const scriptPath = (document.currentScript && document.currentScript.src || '').split('?')[0];
+  const SCRIPT_BASE = scriptPath ? scriptPath.replace(/[^/]+$/, '') : './';
+  const DICT_URLS = { es: SCRIPT_BASE + 'i18n/es.json', en: SCRIPT_BASE + 'i18n/en.json' };
   const SUPPORTED = Object.keys(DICT_URLS);
   const UI_LANG_KEY = 'verbo:uiLang';
 
