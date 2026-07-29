@@ -2196,7 +2196,10 @@ body.static-page {
      de accesibilidad, no es display:none) y se muestra solo una flecha
      grande vía ::before — suficiente para volver, sin texto. */
   .static-page__back {
-    font-size: 0;
+    /* !important: recursos.css (body.recursos-page .static-page__back, más
+       específico) fija su propio font-size y le ganaba a esta regla en las
+       páginas de Recursos, dejando el texto visible pese al breakpoint. */
+    font-size: 0 !important;
     display: inline-flex;
     align-items: center;
     justify-content: center;
