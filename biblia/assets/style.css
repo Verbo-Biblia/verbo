@@ -2190,6 +2190,25 @@ body.static-page {
 }
 .static-page__back { font-size: 13px; color: var(--sepia); text-decoration: none; }
 .static-page__back:hover { color: var(--wine); }
+@media (max-width: 760px) {
+  /* En móvil el texto ("← Articles and Reflections", "← Índice 8 a 10 años"...)
+     no cabe bien y se ve recargado. Se colapsa a tamaño 0 (sigue en el árbol
+     de accesibilidad, no es display:none) y se muestra solo una flecha
+     grande vía ::before — suficiente para volver, sin texto. */
+  .static-page__back {
+    font-size: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    margin: -8px;
+  }
+  .static-page__back::before {
+    content: "←";
+    font-size: 22px;
+    line-height: 1;
+  }
+}
 .static-page__main { max-width: 640px; margin: 0 auto; padding: 40px 32px 80px; }
 @media (min-width: 1024px) { .static-page__main { max-width: 720px; } }
 .static-page__main article h1 {
