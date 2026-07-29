@@ -189,6 +189,7 @@ H1_RE = re.compile(r"<h1>(.+?)</h1>", re.S)
 def build_articulos(approx_flags):
     items = []
     base = RECURSOS / "articulos-y-reflexiones"
+    base_en = RECURSOS / "articles-and-reflections-en"
     for d in sorted(base.iterdir()):
         if not d.is_dir():
             continue
@@ -201,6 +202,17 @@ def build_articulos(approx_flags):
         topic, datestr = (m.group(1).strip(), m.group(2).strip()) if m else ("", "")
         h1_m = H1_RE.search(html)
         titulo = re.sub(r"\s+", " ", h1_m.group(1)).strip() if h1_m else slug
+
+        # Contraparte nativa en inglés (traducida por Codex, 2026-07-29). Si
+        # todavía no existe -> el artículo se queda sin titulo_en/ruta_en y el
+        # listado/navegador cae de vuelta al español en silencio (ver
+        # lang-aware-list.js / article-lang-redirect.js).
+        idx_en = base_en / slug / "index.html"
+        titulo_en = None
+        if idx_en.exists():
+            html_en = idx_en.read_text(encoding="utf-8")
+            h1_en_m = H1_RE.search(html_en)
+            titulo_en = re.sub(r"\s+", " ", h1_en_m.group(1)).strip() if h1_en_m else None
 
         git_date = git_add_date(idx)
         fecha = parse_badge_date(datestr, git_date, approx_flags) if datestr else git_date
@@ -221,6 +233,10 @@ def build_articulos(approx_flags):
             "temas": temas,
             "fecha_agregado": fecha,
             "url": f"/recursos/articulos-y-reflexiones/{slug}/",
+            "titulo_es": titulo,
+            "titulo_en": titulo_en,
+            "ruta_es": f"/recursos/articulos-y-reflexiones/{slug}/",
+            "ruta_en": f"/recursos/articles-and-reflections-en/{slug}/" if titulo_en else None,
             "estrategia_traduccion": estrategia_para(slug),
             **({"pendiente_revision": True, "nota_pendiente": PENDIENTES[slug]} if slug in PENDIENTES else {}),
         })
@@ -336,7 +352,6 @@ def fmt_fecha_corta(iso):
     return f"{int(d)} {MESES_LARGO[int(m)]} {y}"
 
 
-LANG_FLAG = {"es": "🇪🇸 ES", "en": "🇺🇸 EN", "bilingue": "🌐 ES/EN"}
 TIPO_LABEL = {"devocional": "Devocional", "articulo": "Artículo", "reflexion": "Reflexión"}
 TEMA_LABEL = {
     "apologetica": "Apologética", "teologia": "Teología", "vida-cristiana": "Vida cristiana",
@@ -374,12 +389,6 @@ def render_articulos_block(items):
     for val, label in (("devocional", "Devocional"), ("articulo", "Artículo"), ("reflexion", "Reflexión")):
         out.append(f'    <button type="button" class="r-filter-pill" data-value="{val}">{label}</button>')
     out.append('  </div>')
-    out.append('  <div class="r-filter-group" data-filter-group="idioma">')
-    out.append('    <span class="r-filter-group-label">Idioma</span>')
-    out.append('    <button type="button" class="r-filter-pill is-active" data-value="todos">Todos</button>')
-    out.append('    <button type="button" class="r-filter-pill" data-value="es">🇪🇸 Español</button>')
-    out.append('    <button type="button" class="r-filter-pill" data-value="en">🇺🇸 English</button>')
-    out.append('  </div>')
     out.append('  <select class="r-filter-select" data-filter-group="tema" aria-label="Filtrar por tema">')
     out.append('    <option value="todos">Todos los temas</option>')
     for t in temas:
@@ -389,14 +398,27 @@ def render_articulos_block(items):
     out.append('<div class="r-article-list" id="articulos-list">')
     for it in items_sorted:
         temas_attr = ",".join(it["temas"])
+        # El listado es una sola página física (recursos/articulos-y-reflexiones/
+        # index.html) que sirve ambos idiomas: lang-aware-list.js reescribe
+        # título+href en tiempo de ejecución según VerboI18n.getUiLang(),
+        # leyendo data-titulo-es/en y data-ruta-es/en. href/texto impresos
+        # abajo son el español -> comportamiento correcto sin JS (progresivo)
+        # y fallback silencioso si algún día falta la traducción de un
+        # artículo nuevo (no se imprime data-ruta-en/data-titulo-en).
+        ruta_en_attr = ""
+        titulo_en_attr = ""
+        if it.get("ruta_en") and it.get("titulo_en"):
+            ruta_en_rel = f"../articles-and-reflections-en/{it['id']}/"
+            ruta_en_attr = f' data-ruta-en="{ruta_en_rel}"'
+            titulo_en_attr = f' data-titulo-en="{esc(it["titulo_en"])}"'
         out.append(
             f'  <a class="r-article-row" data-item data-tipo="{it["tipo"]}" '
-            f'data-idioma="{it["idioma"]}" data-tema="{temas_attr}" href="{it["id"]}/">'
+            f'data-tema="{temas_attr}" data-titulo-es="{esc(it["titulo_es"])}" '
+            f'data-ruta-es="{it["id"]}/"{titulo_en_attr}{ruta_en_attr} href="{it["id"]}/">'
             f'<span class="r-article-row-main">'
             f'<span class="r-article-row-title">{esc(it["titulo"])}</span>'
             f'<span class="r-article-row-tags">'
             f'<span class="r-tag r-tag-tipo">{TIPO_LABEL[it["tipo"]]}</span>'
-            f'<span class="r-tag r-tag-lang">{LANG_FLAG[it["idioma"]]}</span>'
             f'</span></span>'
             f'<span class="r-article-row-date">{fmt_fecha_corta(it["fecha_agregado"])}</span></a>'
         )
