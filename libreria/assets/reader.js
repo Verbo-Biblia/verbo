@@ -295,7 +295,7 @@
     chapters.forEach(function (ch, i) {
       var opt = document.createElement("option");
       opt.value = String(i);
-      var alreadyLabeled = /^(Libro|Cap[ií]tulo|Secci[oó]n|Fragmento|Visi[oó]n|Mandamiento|S[ií]mil)/i.test(ch.title);
+      var alreadyLabeled = /^(Libro|Cap[ií]tulo|Secci[oó]n|Fragmento|Visi[oó]n|Mandamiento|S[ií]mil|Salmo)/i.test(ch.title);
       var label = alreadyLabeled ? ch.title : (cfg.unitLabel + " " + (i + 1) + " — " + ch.title);
       opt.textContent = label.slice(0, 70);
       ui.select.appendChild(opt);

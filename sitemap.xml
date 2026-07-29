@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://verbobiblia.com/libreria/</loc>
-    <lastmod>2026-07-27</lastmod>
+    <lastmod>2026-07-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -25,8 +25,20 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://verbobiblia.com/libreria/deberes-de-hijos-y-padres/</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://verbobiblia.com/libreria/el-pastor-de-hermas/</loc>
     <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://verbobiblia.com/libreria/el-tesoro-de-david-condensado/</loc>
+    <lastmod>2026-07-28</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -87,6 +99,12 @@
   <url>
     <loc>https://verbobiblia.com/libreria/segunda-clemente/</loc>
     <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://verbobiblia.com/libreria/totalmente-por-gracia/</loc>
+    <lastmod>2026-07-28</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
