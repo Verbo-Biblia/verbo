@@ -2147,8 +2147,12 @@ body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
   font-family: var(--font-body);
   font-size: 13.5px;
   white-space: nowrap;
-  cursor: not-allowed;
+  cursor: pointer;
 }
+.ajustes-sync-form__btn:hover { border-color: var(--wine-soft); color: var(--wine); }
+.ajustes-sync-form__input:disabled,
+.ajustes-sync-form__btn:disabled { opacity: .55; cursor: not-allowed; }
+.ajustes-sync-pending { margin: 10px 0 0; font-size: .88rem; color: var(--ink-soft); }
 .ajustes-backup-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .ajustes-backup-btn {
   padding: 9px 16px;

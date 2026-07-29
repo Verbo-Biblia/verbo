@@ -70,7 +70,18 @@
     "refNoReconocida": "Couldn't recognize this reference",
     "descargando": "Downloading verbo-datos.json",
     "datosImportados": "Data imported, reloading…",
-    "noImportar": "Couldn't import the file"
+    "noImportar": "Couldn't import the file",
+    "errorSync": "Couldn't complete the sync. Please try again."
+  },
+  "ajustes": {
+    "titulo": "Settings",
+    "syncTitle": "Sync devices",
+    "syncDescripcion": "Link your email to keep your notes, bookmarks, and highlights synced across your devices. No account or password required — we only use your email to recognize your devices.",
+    "syncPlaceholder": "you@email.com",
+    "syncBtn": "Link device",
+    "syncPendingMsg": "Check your email and open the link to confirm. The link expires in 30 minutes.",
+    "syncLinkedMsg": "Linked to {{email}}. Your data syncs automatically across your devices.",
+    "syncUnlinkBtn": "Unlink this device"
   },
   "biblia": {
     "loadError": "Couldn't load this passage.",

@@ -36,6 +36,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   const backupData = await VerboBackup.init();
+  if (window.VerboSync) {
+    VerboSync.on('data-updated', () => location.reload());
+    VerboSync.on('linked', () => { syncPending = false; if (activeTab === 'ajustes') renderAjustes(); });
+    VerboSync.on('unlinked', () => { if (activeTab === 'ajustes') renderAjustes(); });
+    VerboSync.on('link-error', () => { toast(t('toast.errorSync')); if (activeTab === 'ajustes') renderAjustes(); });
+    VerboSync.init().catch(err => console.warn('[sync] init falló', err));
+  }
   let catalog, data, activeTab = null, currentVersion = localStorage.getItem('verbo:lastVersion') || null, compareVersion = null;
   let xrefTarget = null, xrefData = null;
   function resetXrefMode(){ xrefTarget = null; xrefData = null; }
@@ -1364,20 +1371,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     localStorage.setItem('verbo:theme', safeTheme);
   }
 
+  let syncPending = false;
+  let syncBusy = false;
+
+  function renderSyncSection(){
+    if (!window.VerboSync) {
+      return `<div class="ajustes-section">
+        <h3>${t('ajustes.syncTitle')}</h3>
+        <p>${t('ajustes.syncDescripcion')}</p>
+      </div>`;
+    }
+    if (VerboSync.isLinked()) {
+      return `<div class="ajustes-section">
+        <h3>${t('ajustes.syncTitle')}</h3>
+        <p>${t('ajustes.syncLinkedMsg',{email:escapeHTML(VerboSync.getEmailMasked())})}</p>
+        <button class="ajustes-backup-btn" type="button" id="ajustesUnlinkBtn">${t('ajustes.syncUnlinkBtn')}</button>
+      </div>`;
+    }
+    return `<div class="ajustes-section">
+      <h3>${t('ajustes.syncTitle')}</h3>
+      <p>${t('ajustes.syncDescripcion')}</p>
+      <form class="ajustes-sync-form" id="ajustesSyncForm">
+        <input class="ajustes-sync-form__input" type="email" id="ajustesSyncEmail" placeholder="${t('ajustes.syncPlaceholder')}" required ${syncBusy?'disabled':''}>
+        <button class="ajustes-sync-form__btn" type="submit" ${syncBusy?'disabled':''}>${t('ajustes.syncBtn')}</button>
+      </form>
+      ${syncPending?`<p class="ajustes-sync-pending">${t('ajustes.syncPendingMsg')}</p>`:''}
+    </div>`;
+  }
+
   function renderAjustes(){
-    els.panelTitle.textContent='Ajustes';
+    els.panelTitle.textContent=t('ajustes.titulo');
     els.panelToolbar.innerHTML='';
     const currentTheme = document.body.dataset.theme || 'paper';
     els.panelBody.innerHTML=`
       <section class="ajustes-panel">
-        <div class="ajustes-section">
-          <h3>Sincronizar dispositivos</h3>
-          <p>Próximamente: sincroniza tus notas entre dispositivos.</p>
-          <form class="ajustes-sync-form">
-            <input class="ajustes-sync-form__input" type="email" placeholder="tu@correo.com" disabled>
-            <button class="ajustes-sync-form__btn" type="button" disabled>Muy pronto</button>
-          </form>
-        </div>
+        ${renderSyncSection()}
         <div class="ajustes-section">
           <h3>Tema</h3>
           <p>Elige un tono claro para descansar mejor la vista. Se guardará solo en este dispositivo.</p>
@@ -1414,6 +1442,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       try{ await VerboBackup.importFromFile(file); toast(t('toast.datosImportados')); setTimeout(()=>location.reload(), 900); }
       catch(error){ console.error(error); toast(t('toast.noImportar')); }
       importInput.value='';
+    });
+    document.getElementById('ajustesSyncForm')?.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const email=document.getElementById('ajustesSyncEmail')?.value.trim();
+      if(!email || syncBusy) return;
+      syncBusy=true; renderAjustes();
+      try{ await VerboSync.requestLink(email); syncPending=true; }
+      catch(error){ console.error(error); toast(t('toast.errorSync')); }
+      syncBusy=false; renderAjustes();
+    });
+    document.getElementById('ajustesUnlinkBtn')?.addEventListener('click', async ()=>{
+      await VerboSync.unlink();
+      syncPending=false;
+      renderAjustes();
     });
   }
 

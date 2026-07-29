@@ -70,7 +70,18 @@
     "refNoReconocida": "No se pudo reconocer esta referencia",
     "descargando": "Descargando verbo-datos.json",
     "datosImportados": "Datos importados, recargando…",
-    "noImportar": "No se pudo importar el archivo"
+    "noImportar": "No se pudo importar el archivo",
+    "errorSync": "No se pudo completar la sincronización. Intenta de nuevo."
+  },
+  "ajustes": {
+    "titulo": "Ajustes",
+    "syncTitle": "Sincronizar dispositivos",
+    "syncDescripcion": "Vincula tu correo para mantener tus notas, marcadores y subrayados sincronizados entre tus dispositivos. No creamos una cuenta ni pedimos contraseña — solo usamos tu correo para reconocer tus dispositivos.",
+    "syncPlaceholder": "tu@correo.com",
+    "syncBtn": "Vincular dispositivo",
+    "syncPendingMsg": "Revisa tu correo y abre el enlace para confirmar el vínculo. El enlace expira en 30 minutos.",
+    "syncLinkedMsg": "Vinculado a {{email}}. Tus datos se sincronizan solos entre tus dispositivos.",
+    "syncUnlinkBtn": "Desvincular este dispositivo"
   },
   "biblia": {
     "loadError": "No se pudo cargar este pasaje.",

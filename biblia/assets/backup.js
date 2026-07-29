@@ -75,6 +75,11 @@ const VerboBackup = (() => {
   }
 
   let cached = null;
+  let persistSubscribers = [];
+
+  // Permite que otros módulos (ej. sync.js) se enteren de cada guardado local
+  // para disparar una sincronización, sin acoplar backup.js a la red.
+  function onPersist(cb) { persistSubscribers.push(cb); }
 
   async function init() {
     cached = await idbGet(DATA_KEY);
@@ -93,6 +98,19 @@ const VerboBackup = (() => {
     cached.fecha_guardado = new Date().toISOString();
     await idbSet(DATA_KEY, cached);
     scheduleCapacitorWrite();
+    persistSubscribers.forEach(cb => { try { cb(cached); } catch {} });
+  }
+
+  // Reemplaza los datos locales con un blob remoto más nuevo (sync). A
+  // diferencia de persist(), no notifica a persistSubscribers: viene de la
+  // red, no de un cambio local que haya que reenviar.
+  async function replaceData(newData) {
+    cached = { ...emptyData(), ...newData };
+    for (const campo of ['notas', 'resaltados', 'marcadores']) if (!Array.isArray(cached[campo])) cached[campo] = [];
+    if (!cached.posicion_lectura) cached.posicion_lectura = {};
+    await idbSet(DATA_KEY, cached);
+    scheduleCapacitorWrite();
+    return cached;
   }
 
   // ---- Resaltados (mapa BOOK:CAP:VERSO -> clase de color, igual forma que ya usaba app.js) ----
@@ -186,6 +204,7 @@ const VerboBackup = (() => {
     getNota, setNota,
     getPosicionBiblia, setPosicionBiblia,
     exportDownload, importFromFile,
-    isCapacitorNative
+    isCapacitorNative,
+    onPersist, replaceData
   };
 })();
