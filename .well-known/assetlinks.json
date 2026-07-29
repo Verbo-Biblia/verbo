@@ -1,8 +1,13 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.verbobiblia.app",
-    "sha256_cert_fingerprints": ["7B:B4:E4:C9:23:B1:9C:20:85:39:7A:99:DB:34:04:2B:74:96:07:85:9D:07:7E:D6:1E:DC:67:BB:BB:F6:4E:FA"]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.verbobiblia.app",
+      "sha256_cert_fingerprints": [
+        "7B:B4:E4:C9:23:B1:9C:20:85:39:7A:99:DB:34:04:2B:74:96:07:85:9D:07:7E:D6:1E:DC:67:BB:BB:F6:4E:FA",
+        "F9:D0:3E:48:8D:70:7A:31:B7:E4:69:B3:ED:0B:28:82:2F:0D:95:C9:14:57:EE:28:19:94:27:B1:41:B5:4E:19"
+      ]
+    }
   }
-}]
+]
