@@ -2,12 +2,12 @@
   "schemaVersion": 2,
   "id": "rv-verbo-strong-provisional",
   "type": "bible",
-  "name": "Biblia Verbo BV2026 con Strong (provisional)",
-  "abbreviation": "BV2026+ P",
+  "name": "Biblia Verbo con Strong (provisional)",
+  "abbreviation": "Biblia Verbo+ P",
   "language": "es",
   "year": 2026,
-  "description": "BV2026 con capa Strong provisional, alineada por coincidencia textual exacta y verificada por versículo contra STEPBible.",
-  "license": "Texto BV2026 con procedencia histórica en RV1909 de dominio público; referencia de etiquetado RV1909+ autorizada para redistribución no comercial por Bible SuperSearch; verificación STEPBible CC BY 4.0",
+  "description": "Biblia Verbo con capa Strong provisional, alineada por coincidencia textual exacta y verificada por versículo contra STEPBible.",
+  "license": "Texto Biblia Verbo con procedencia histórica en RV1909 de dominio público; referencia de etiquetado RV1909+ autorizada para redistribución no comercial por Bible SuperSearch; verificación STEPBible CC BY 4.0",
   "hasStrongs": true,
   "books": [
     {

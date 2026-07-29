@@ -707,7 +707,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </article>
 
         <article class="license-card">
-          <h3>Biblia Verbo BV2026</h3>
+          <h3>Biblia Verbo</h3>
           <p>Edición bíblica propia en español contemporáneo, con procedencia histórica en la Reina-Valera 1909 de dominio público. Actualmente se publica sin una capa Strong española.</p>
         </article>
 

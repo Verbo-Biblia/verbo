@@ -1,12 +1,12 @@
-# Revisión integral de Biblia Verbo BV2026
+# Revisión integral de Biblia Verbo
 
 ## Alcance
 
 - 66 libros
 - 1.189 capítulos
 - 31.102 versículos según la numeración moderna
-- Identidad editorial final: Biblia Verbo BV2026
-- Base principal de trabajo: el texto actual de Biblia Verbo BV2026, conservando
+- Identidad editorial final: Biblia Verbo
+- Base principal de trabajo: el texto actual de Biblia Verbo, conservando
   todas las mejoras que ya contiene
 - Procedencia histórica: Reina-Valera 1909 de dominio público
 - Resultado esperado: una revisión completa, no una muestra ni un piloto
@@ -16,7 +16,7 @@
 Un libro solo puede marcarse como cerrado cuando:
 
 1. Todos sus capítulos fueron revisados versículo por versículo.
-2. Se preservaron las mejoras válidas que ya contenía BV2026. RV1909 se consultó
+2. Se preservaron las mejoras válidas que ya contenía Biblia Verbo. RV1909 se consultó
    únicamente cuando fue necesario investigar una posible omisión, error de
    conversión o diferencia con la procedencia histórica.
 3. Se corrigieron errores gramaticales, conversiones defectuosas de `vosotros`
@@ -50,17 +50,23 @@ Un libro solo puede marcarse como cerrado cuando:
 | Josué | 24 | candidato | Revisión integral completada: 24 capítulos y 658 versículos; JSON, estructura, cifras, límites, terminología y auditoría de arcaísmos validados |
 | Jueces | 21 | candidato | Revisión integral completada: 21 capítulos y 618 versículos; JSON, estructura, cifras, nombres, ciclos narrativos, discursos y auditoría de arcaísmos validados |
 | Rut | 4 | candidato | Revisión integral completada: 4 capítulos y 85 versículos; JSON, estructura, parentescos, redención, medidas y genealogía validados |
-| 1 Samuel | 31 | en revisión | Revisión editorial de los 31 capítulos y 810 versículos completada; corregida la versificación moderna de 23:29–24:22; pendiente auditoría integral final antes de marcarlo candidato y subirlo |
-| 2 Samuel–Apocalipsis | 922 | pendiente | Restan 57 libros después de 1 Samuel |
+| 1 Samuel | 31 | candidato | Revisión integral completada y publicada: 31 capítulos y 809 entradas JSON; corregida la versificación moderna de 23:29–24:22 |
+| 2 Samuel | 24 | candidato | Revisión integral completada y publicada: 24 capítulos y 694 versículos |
+| 1 Reyes | 22 | candidato | Revisión integral completada y publicada: 22 capítulos y 816 versículos |
+| 2 Reyes | 25 | candidato | Revisión integral completada y publicada: 25 capítulos y 719 versículos |
+| 1 Crónicas | 29 | candidato | Revisión integral completada y publicada: 29 capítulos y 942 versículos |
+| 2 Crónicas | 36 | candidato | Revisión integral completada y publicada: 36 capítulos y 821 versículos |
+| Esdras | 10 | candidato | Revisión integral completada: 10 capítulos y 280 versículos; JSON, estructura, nombres, listas, decretos y auditoría de arcaísmos validados |
+| Nehemías–Apocalipsis | 915 | pendiente | Restan 51 libros después de Esdras |
 
 ## Orden de trabajo
 
 Se seguirá el orden canónico, cerrando cada libro antes de declarar terminado el
 proyecto: Génesis, Éxodo, Levítico, Números, Deuteronomio y así sucesivamente
-hasta Apocalipsis.
+hasta Apocalipsis. La revisión continúa desde Nehemías.
 
 ## Publicación
 
 Juan autorizó expresamente subir cada libro cuando quede cerrado. La revisión
-completa continúa desde 1 Samuel; no se declarará completa ni oficial la Biblia
+completa continúa desde Nehemías; no se declarará completa ni oficial la Biblia
 hasta cerrar los 66 libros.
