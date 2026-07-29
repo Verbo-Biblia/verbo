@@ -35,6 +35,13 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 
   html { scroll-behavior: smooth; }
 
+  html, body {
+    /* El header (wordmark + selector de idioma + botón Ofrenda) no envuelve
+       ni encoge en pantallas muy angostas y se pasa unos px del viewport —
+       se siente como "juego" horizontal al deslizar. overflow-x:hidden lo
+       recorta sin afectar el layout normal (nada visible llega a ese borde). */
+    overflow-x: hidden;
+  }
   body {
     background: var(--ink);
     color: var(--text-on-ink);

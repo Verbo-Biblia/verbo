@@ -2209,6 +2209,7 @@ body.static-page {
   .static-page__back::before {
     content: "←";
     font-size: 22px;
+    font-weight: 600;
     line-height: 1;
   }
 }
