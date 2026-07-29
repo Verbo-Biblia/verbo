@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="../biblia/assets/icons/icon-192.png">
 <meta name="theme-color" content="#7f2d35">
 <link rel="stylesheet" href="../biblia/assets/style.css?v=20260727-ofrenda">
-<link rel="stylesheet" href="../recursos/assets/recursos.css?v=20260727-recursos-skin">
+<link rel="stylesheet" href="../recursos/assets/recursos.css?v=20260728-taxonomia">
 <link rel="stylesheet" href="assets/reader.css?v=1">
 </head>
 <body class="static-page recursos-page recursos-index">
@@ -45,11 +45,45 @@
     <h1>Librería</h1>
     <p class="r-lede">Lectura completa de libros clásicos y patrísticos, con marcadores y resaltado de texto que se guardan en tu dispositivo.</p>
 
-    <div class="r-section-label"><h2>15 libros</h2></div>
-    <div class="r-book-grid">
+    <div class="r-section-label"><h2>16 libros</h2></div>
 
-      <a class="r-book-row" href="evangelio-segun-jesucristo/">
+    <!-- CONTENT-FILTERS:START -->
+    <div class="r-filterbar" data-filter-bar data-filter-target="#libreria-grid">
+      <div class="r-filter-group" data-filter-group="idioma">
+        <span class="r-filter-group-label">Idioma</span>
+        <button type="button" class="r-filter-pill is-active" data-value="todos">Todos</button>
+        <button type="button" class="r-filter-pill" data-value="es">🇪🇸 Español</button>
+        <button type="button" class="r-filter-pill" data-value="en">🇺🇸 English</button>
+      </div>
+      <select class="r-filter-select" data-filter-group="tema" aria-label="Filtrar por tema">
+        <option value="todos">Todos los temas</option>
+        <option value="apologetica">Apologética</option>
+        <option value="armonia-evangelica">Armonía evangélica</option>
+        <option value="chapel-library">Chapel Library</option>
+        <option value="comentario-biblico">Comentario bíblico</option>
+        <option value="devocional">Devocional</option>
+        <option value="evangelios">Evangelios</option>
+        <option value="evangelismo">Evangelismo</option>
+        <option value="familia">Familia</option>
+        <option value="gracia">Gracia</option>
+        <option value="patristica">Patrística</option>
+        <option value="salmos">Salmos</option>
+        <option value="siglo-1">Siglo I</option>
+        <option value="siglo-17">Siglo XVII</option>
+        <option value="siglo-19">Siglo XIX</option>
+        <option value="siglo-2">Siglo II</option>
+        <option value="teologia">Teología</option>
+        <option value="vida-cristiana">Vida cristiana</option>
+      </select>
+    </div>
+    <p class="r-filter-empty" hidden>No hay libros que coincidan con estos filtros.</p>
+    <!-- CONTENT-FILTERS:END -->
+
+    <div class="r-book-grid" id="libreria-grid">
+
+      <a class="r-book-row" href="evangelio-segun-jesucristo/" data-item data-idioma="es" data-tema="evangelios,armonia-evangelica">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3v18M6 9h12"/></svg>
           <span class="book-cover-era">Armonía de los Evangelios</span>
           <span class="book-cover-title">El Evangelio según Jesucristo</span>
@@ -60,8 +94,9 @@
         <p class="r-book-meta">100 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="la-didache/">
+      <a class="r-book-row" href="la-didache/" data-item data-idioma="es" data-tema="patristica,siglo-1">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21V12M12 12 5 3M12 12l7-9"/></svg>
           <span class="book-cover-era">Siglo I</span>
           <span class="book-cover-title">La Didaché</span>
@@ -72,8 +107,9 @@
         <p class="r-book-meta">16 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="primera-clemente/">
+      <a class="r-book-row" href="primera-clemente/" data-item data-idioma="es" data-tema="patristica,siglo-1">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 6h16v12H4V6Z"/><path d="M4 6l8 6 8-6"/></svg>
           <span class="book-cover-era">Siglo I · c. 96 d.C.</span>
           <span class="book-cover-title">1 Clemente</span>
@@ -84,8 +120,9 @@
         <p class="r-book-meta">65 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="segunda-clemente/">
+      <a class="r-book-row" href="segunda-clemente/" data-item data-idioma="es" data-tema="patristica,siglo-2">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 6h16v12H4V6Z"/><path d="M4 6l8 6 8-6"/></svg>
           <span class="book-cover-era">Siglo II</span>
           <span class="book-cover-title">2 Clemente</span>
@@ -96,8 +133,9 @@
         <p class="r-book-meta">20 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="el-pastor-de-hermas/">
+      <a class="r-book-row" href="el-pastor-de-hermas/" data-item data-idioma="es" data-tema="patristica,siglo-2">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 21V7a4 4 0 1 1 8 0c0 2-2 3-4 3"/></svg>
           <span class="book-cover-era">Siglo II</span>
           <span class="book-cover-title">El Pastor de Hermas</span>
@@ -108,8 +146,9 @@
         <p class="r-book-meta">108 secciones</p>
       </a>
 
-      <a class="r-book-row" href="epistola-de-bernabe/">
+      <a class="r-book-row" href="epistola-de-bernabe/" data-item data-idioma="es" data-tema="patristica,siglo-1,siglo-2">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 4a2 2 0 0 0 0 4h12M6 20a2 2 0 0 1 0-4h12M8 8v8"/></svg>
           <span class="book-cover-era">Siglo I–II</span>
           <span class="book-cover-title">La Epístola de Bernabé</span>
@@ -120,8 +159,9 @@
         <p class="r-book-meta">21 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="epistola-a-diogneto/">
+      <a class="r-book-row" href="epistola-a-diogneto/" data-item data-idioma="es" data-tema="patristica,apologetica,siglo-2">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3a5 5 0 0 0-3 9v3h6v-3a5 5 0 0 0-3-9Z"/><path d="M10 19h4"/></svg>
           <span class="book-cover-era">Siglo II</span>
           <span class="book-cover-title">Epístola a Diogneto</span>
@@ -132,8 +172,9 @@
         <p class="r-book-meta">12 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="fragmentos-de-papias/">
+      <a class="r-book-row" href="fragmentos-de-papias/" data-item data-idioma="es" data-tema="patristica,siglo-2">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 8c-2 1-3 3-3 5s1 3 3 3M17 8c-2 1-3 3-3 5s1 3 3 3"/></svg>
           <span class="book-cover-era">Siglo II</span>
           <span class="book-cover-title">Fragmentos de Papías</span>
@@ -144,8 +185,9 @@
         <p class="r-book-meta">10 fragmentos</p>
       </a>
 
-      <a class="r-book-row" href="martirio-de-ignacio/">
+      <a class="r-book-row" href="martirio-de-ignacio/" data-item data-idioma="es" data-tema="patristica,siglo-2">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3c3 3-1 5-1 8a3 3 0 1 0 6 0c0-2-1-3-2-4 0 2-1 2-1 2-1-2 0-4-2-6Z"/></svg>
           <span class="book-cover-era">Siglo II</span>
           <span class="book-cover-title">El Martirio de Ignacio</span>
@@ -156,8 +198,9 @@
         <p class="r-book-meta">7 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="martirio-de-policarpo/">
+      <a class="r-book-row" href="martirio-de-policarpo/" data-item data-idioma="es" data-tema="patristica,siglo-2">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 18h16l-1-8-4 4-3-6-3 6-4-4-1 8Z"/></svg>
           <span class="book-cover-era">Siglo II · c. 155 d.C.</span>
           <span class="book-cover-title">El Martirio de Policarpo</span>
@@ -168,8 +211,9 @@
         <p class="r-book-meta">22 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="policarpo-a-los-filipenses/">
+      <a class="r-book-row" href="policarpo-a-los-filipenses/" data-item data-idioma="es" data-tema="patristica,siglo-2">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 6h16v12H4V6Z"/><path d="M4 6l8 6 8-6"/></svg>
           <span class="book-cover-era">Siglo II</span>
           <span class="book-cover-title">Policarpo a los Filipenses</span>
@@ -180,8 +224,9 @@
         <p class="r-book-meta">14 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="contra-las-herejias/">
+      <a class="r-book-row" href="contra-las-herejias/" data-item data-idioma="es" data-tema="patristica,apologetica,siglo-2">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V6l7-3Z"/></svg>
           <span class="book-cover-era">Siglo II</span>
           <span class="book-cover-title">Contra las Herejías</span>
@@ -192,8 +237,9 @@
         <p class="r-book-meta">92 secciones</p>
       </a>
 
-      <a class="r-book-row" href="deberes-de-hijos-y-padres/">
+      <a class="r-book-row" href="deberes-de-hijos-y-padres/" data-item data-idioma="es" data-tema="vida-cristiana,familia,chapel-library,siglo-17">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>
           <span class="book-cover-era">Siglo XVII</span>
           <span class="book-cover-title">Los Deberes de Hijos y Padres</span>
@@ -204,8 +250,9 @@
         <p class="r-book-meta">5 secciones</p>
       </a>
 
-      <a class="r-book-row" href="totalmente-por-gracia/">
+      <a class="r-book-row" href="totalmente-por-gracia/" data-item data-idioma="es" data-tema="gracia,evangelismo,chapel-library,siglo-19">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="16" r="4"/><path d="M12 3v3M5.5 9.5l2 2M18.5 9.5l-2 2M3 16h3M18 16h3"/></svg>
           <span class="book-cover-era">Siglo XIX</span>
           <span class="book-cover-title">Totalmente por Gracia</span>
@@ -216,8 +263,9 @@
         <p class="r-book-meta">20 capítulos</p>
       </a>
 
-      <a class="r-book-row" href="el-tesoro-de-david-condensado/">
+      <a class="r-book-row" href="el-tesoro-de-david-condensado/" data-item data-idioma="es" data-tema="salmos,devocional,chapel-library,siglo-19">
         <div class="book-cover">
+          <span class="book-cover-lang">ES</span>
           <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l7 12H5z"/><path d="M12 21L5 9h14z"/></svg>
           <span class="book-cover-era">Siglo XIX · Selección de los Salmos</span>
           <span class="book-cover-title">El Tesoro de David (condensado)</span>
@@ -228,7 +276,21 @@
         <p class="r-book-meta">10 salmos</p>
       </a>
 
+      <a class="r-book-row" href="matthew-henry/" data-item data-idioma="en" data-tema="comentario-biblico,teologia">
+        <div class="book-cover">
+          <span class="book-cover-lang">EN</span>
+          <svg class="book-cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+          <span class="book-cover-era">66 libros · Comentario completo</span>
+          <span class="book-cover-title">Comentario Bíblico de Matthew Henry</span>
+          <span class="book-cover-rule"></span>
+          <span class="book-cover-author">Matthew Henry (1662–1714)</span>
+        </div>
+        <p class="r-book-title">Comentario Bíblico de Matthew Henry</p>
+        <p class="r-book-meta">66 libros de la Biblia</p>
+      </a>
+
     </div>
   </main>
+  <script src="../recursos/assets/filters.js?v=1"></script>
 </body>
 </html>

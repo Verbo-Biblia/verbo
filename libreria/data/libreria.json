@@ -1,0 +1,235 @@
+[
+  {
+    "id": "evangelio-segun-jesucristo",
+    "titulo": "El Evangelio según Jesucristo",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "evangelios",
+      "armonia-evangelica"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Versión Cronológica Fluida — Verbo",
+    "url": "/libreria/evangelio-segun-jesucristo/"
+  },
+  {
+    "id": "la-didache",
+    "titulo": "La Didaché",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "siglo-1"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Enseñanza de los Doce Apóstoles",
+    "url": "/libreria/la-didache/"
+  },
+  {
+    "id": "primera-clemente",
+    "titulo": "1 Clemente",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "siglo-1"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Clemente de Roma",
+    "url": "/libreria/primera-clemente/"
+  },
+  {
+    "id": "segunda-clemente",
+    "titulo": "2 Clemente",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "siglo-2"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Atribuida a Clemente de Roma",
+    "url": "/libreria/segunda-clemente/"
+  },
+  {
+    "id": "el-pastor-de-hermas",
+    "titulo": "El Pastor de Hermas",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "siglo-2"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Hermas",
+    "url": "/libreria/el-pastor-de-hermas/"
+  },
+  {
+    "id": "epistola-de-bernabe",
+    "titulo": "La Epístola de Bernabé",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "siglo-1",
+      "siglo-2"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Atribuida a Bernabé",
+    "url": "/libreria/epistola-de-bernabe/"
+  },
+  {
+    "id": "epistola-a-diogneto",
+    "titulo": "Epístola a Diogneto",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "apologetica",
+      "siglo-2"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Autor anónimo (Mathietes)",
+    "url": "/libreria/epistola-a-diogneto/"
+  },
+  {
+    "id": "fragmentos-de-papias",
+    "titulo": "Fragmentos de Papías",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "siglo-2"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Papías de Hierápolis",
+    "url": "/libreria/fragmentos-de-papias/"
+  },
+  {
+    "id": "martirio-de-ignacio",
+    "titulo": "El Martirio de Ignacio",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "siglo-2"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Ignacio de Antioquía",
+    "url": "/libreria/martirio-de-ignacio/"
+  },
+  {
+    "id": "martirio-de-policarpo",
+    "titulo": "El Martirio de Policarpo",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "siglo-2"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Iglesia de Esmirna",
+    "url": "/libreria/martirio-de-policarpo/"
+  },
+  {
+    "id": "policarpo-a-los-filipenses",
+    "titulo": "Policarpo a los Filipenses",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "siglo-2"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Policarpo de Esmirna",
+    "url": "/libreria/policarpo-a-los-filipenses/"
+  },
+  {
+    "id": "contra-las-herejias",
+    "titulo": "Contra las Herejías",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "patristica",
+      "apologetica",
+      "siglo-2"
+    ],
+    "fecha_agregado": "2026-07-27",
+    "autor": "Ireneo de Lyon",
+    "url": "/libreria/contra-las-herejias/"
+  },
+  {
+    "id": "deberes-de-hijos-y-padres",
+    "titulo": "Los Deberes de Hijos y Padres",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "vida-cristiana",
+      "familia",
+      "chapel-library",
+      "siglo-17"
+    ],
+    "fecha_agregado": "2026-07-28",
+    "autor": "Richard Adams",
+    "url": "/libreria/deberes-de-hijos-y-padres/"
+  },
+  {
+    "id": "totalmente-por-gracia",
+    "titulo": "Totalmente por Gracia",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "gracia",
+      "evangelismo",
+      "chapel-library",
+      "siglo-19"
+    ],
+    "fecha_agregado": "2026-07-28",
+    "autor": "Charles Spurgeon",
+    "url": "/libreria/totalmente-por-gracia/"
+  },
+  {
+    "id": "el-tesoro-de-david-condensado",
+    "titulo": "El Tesoro de David (condensado)",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "salmos",
+      "devocional",
+      "chapel-library",
+      "siglo-19"
+    ],
+    "fecha_agregado": "2026-07-28",
+    "autor": "Charles Spurgeon",
+    "url": "/libreria/el-tesoro-de-david-condensado/"
+  },
+  {
+    "id": "matthew-henry",
+    "titulo": "Comentario Bíblico de Matthew Henry",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "comentario-biblico",
+      "teologia"
+    ],
+    "fecha_agregado": "2026-07-28",
+    "autor": "Matthew Henry (1662–1714)",
+    "url": "/libreria/matthew-henry/"
+  }
+]

@@ -57,13 +57,26 @@
     return paras.length ? paras : [text];
   }
 
+  // Convierte HTML de origen (ej. Matthew Henry, con <p>/<b>/<i>) a texto
+  // plano legible, conservando saltos de párrafo. El resaltado por rangos
+  // de caracteres (ver más abajo) solo funciona sobre texto plano, así que
+  // el marcado se descarta aquí en vez de intentar resaltar dentro de HTML.
+  function htmlToPlainText(html) {
+    var withBreaks = html.replace(/<\/p>|<br\s*\/?>|<BR\s*\/?>/gi, "\n\n");
+    var div = document.createElement("div");
+    div.innerHTML = withBreaks;
+    return (div.textContent || "").replace(/\n{3,}/g, "\n\n").trim();
+  }
+
   function normalize(raw) {
     var arr = raw[cfg.dataKey] || [];
     return arr.map(function (item, i) {
+      var text = item[cfg.textField] || "";
+      if (cfg.htmlSource) text = htmlToPlainText(text);
       return {
         n: item.n || i + 1,
         title: item[cfg.titleField] || (cfg.unitLabel + " " + (item.n || i + 1)),
-        text: item[cfg.textField] || ""
+        text: text
       };
     });
   }

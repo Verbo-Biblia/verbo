@@ -304,6 +304,52 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     transform: translateX(3px);
   }
 
+  /* ---------- NOVEDADES ---------- */
+  .novedades {
+    padding: 0 clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem);
+  }
+
+  .novedades-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 900px) { .novedades-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .novedades-grid { grid-template-columns: 1fr; } }
+
+  .novedad-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.1rem 1.3rem;
+    background: linear-gradient(155deg, #16223A 0%, #0F1A2E 100%);
+    border: 1px solid rgba(201, 162, 39, 0.12);
+    border-radius: 6px;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .novedad-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(201, 162, 39, 0.4);
+  }
+  .novedad-seccion {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .novedad-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    color: var(--parchment);
+    line-height: 1.35;
+  }
+  .novedad-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
   /* ---------- QUOTE STRIP ---------- */
   .quote-strip {
     padding: 4rem clamp(1.5rem, 5vw, 4rem);
@@ -441,6 +487,23 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 
   </div>
 </section>
+
+<!-- NOVEDADES:START -->
+<section class="novedades" id="novedades">
+  <div class="sections-head">
+    <h2>Novedades</h2>
+    <span>lo último agregado</span>
+  </div>
+  <div class="novedades-grid">
+    <a class="novedad-card" href="libreria/deberes-de-hijos-y-padres/"><span class="novedad-seccion">Librería</span><span class="novedad-title">Los Deberes de Hijos y Padres</span><span class="novedad-date">28 jul 2026</span></a>
+    <a class="novedad-card" href="libreria/totalmente-por-gracia/"><span class="novedad-seccion">Librería</span><span class="novedad-title">Totalmente por Gracia</span><span class="novedad-date">28 jul 2026</span></a>
+    <a class="novedad-card" href="libreria/el-tesoro-de-david-condensado/"><span class="novedad-seccion">Librería</span><span class="novedad-title">El Tesoro de David (condensado)</span><span class="novedad-date">28 jul 2026</span></a>
+    <a class="novedad-card" href="libreria/matthew-henry/"><span class="novedad-seccion">Librería</span><span class="novedad-title">Comentario Bíblico de Matthew Henry</span><span class="novedad-date">28 jul 2026</span></a>
+    <a class="novedad-card" href="recursos/articulos-y-reflexiones/2corintios-5/"><span class="novedad-seccion">Recursos</span><span class="novedad-title">2 Corintios 5:15-17: nueva criatura, nueva manera de ver</span><span class="novedad-date">27 jul 2026</span></a>
+    <a class="novedad-card" href="recursos/articulos-y-reflexiones/aceptados-por-cristo/"><span class="novedad-seccion">Recursos</span><span class="novedad-title">No aceptados porque vencimos, sino porque Cristo venció</span><span class="novedad-date">27 jul 2026</span></a>
+  </div>
+</section>
+<!-- NOVEDADES:END -->
 
 <section class="quote-strip">
   <blockquote>"Vosotros sois la luz del mundo. Una ciudad asentada sobre un monte no se puede esconder."</blockquote>

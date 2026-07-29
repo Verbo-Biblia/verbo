@@ -307,6 +307,110 @@ body.recursos-page .r-article-row-date {
   white-space: nowrap;
 }
 
+/* ---------- barra de filtros (tipo / idioma / tema) ---------- */
+body.recursos-page .r-filterbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  margin: 0 0 30px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--r-rule);
+}
+body.recursos-page .r-filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+body.recursos-page .r-filter-group-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--r-ink-soft);
+  margin-right: 2px;
+}
+body.recursos-page .r-filter-pill {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--r-ink-soft);
+  background: rgba(255, 255, 255, .6);
+  border: 1px solid var(--r-rule);
+  border-radius: 999px;
+  padding: 5px 13px;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+body.recursos-page .r-filter-pill:hover { border-color: var(--r-gold); color: var(--r-ink); }
+body.recursos-page .r-filter-pill.is-active {
+  border-color: var(--r-gold-bright);
+  background: rgba(176, 138, 46, .15);
+  color: var(--r-ink);
+}
+body.recursos-page .r-filter-select {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--r-ink);
+  background: rgba(255, 255, 255, .6);
+  border: 1px solid var(--r-rule);
+  border-radius: 999px;
+  padding: 5px 13px;
+}
+/* el atributo nativo "hidden" pierde contra cualquier regla de autor que
+   fije display en el mismo elemento (aquí .r-article-row/.r-book-row ya
+   fijan display:flex/block) — se restaura con una regla más específica. */
+body.recursos-page [data-item][hidden] { display: none; }
+
+body.recursos-page .r-filter-empty {
+  color: var(--r-ink-soft);
+  font-size: .93rem;
+  padding: 30px 4px;
+  text-align: center;
+}
+
+/* ---------- etiquetas pequeñas (tipo / idioma) sobre tarjetas y filas ---------- */
+body.recursos-page .r-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: .03em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--r-rule-strong);
+  color: var(--r-ink-soft);
+  white-space: nowrap;
+}
+body.recursos-page .r-tag-tipo { border-color: var(--r-gold-bright); color: var(--r-gold); }
+
+body.recursos-page .r-article-row {
+  flex-wrap: wrap;
+}
+body.recursos-page .r-article-row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+body.recursos-page .r-article-row-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* etiqueta de idioma sobre la portada del libro */
+body.recursos-page .book-cover-lang {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: .04em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .45);
+  color: #F4EEDF;
+  border: 1px solid rgba(201, 162, 39, .5);
+}
+
 @media print {
   body.recursos-page .quick-nav { display: none; }
+  body.recursos-page .r-filterbar { display: none; }
 }
