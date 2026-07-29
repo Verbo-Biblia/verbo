@@ -17,7 +17,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260728-i18n-switcher">
+<link rel="stylesheet" href="assets/style.css?v=20260729-ajustes-indexeddb">
 </head>
 <body>
 
@@ -56,18 +56,6 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
         <span>✎</span>
         <span data-i18n="header.sermonLabel">Preparación de Bosquejo/Estudio</span>
       </button>
-      <div class="backup-menu">
-        <button class="search-trigger backup-menu__trigger" id="backupMenuTrigger" type="button" data-i18n-attr="aria-label:header.backupAria" aria-haspopup="true" aria-expanded="false">
-          <span>💾</span>
-        </button>
-        <div class="backup-menu__panel" id="backupMenuPanel" hidden>
-          <div class="backup-menu__status" id="backupMenuStatus"></div>
-          <button type="button" class="backup-menu__item" id="backupSaveBtn" data-i18n="header.backupSave">Guardar mi progreso</button>
-          <button type="button" class="backup-menu__item" id="backupExportBtn" data-i18n="header.backupExport">Exportar mis datos</button>
-          <button type="button" class="backup-menu__item" id="backupImportBtn" data-i18n="header.backupImport">Importar mis datos</button>
-          <input type="file" id="backupImportInput" accept="application/json" hidden>
-        </div>
-      </div>
     </div>
   </header>
 
@@ -185,13 +173,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
           <path d="M15 6v14"/>
         </svg>
       </button>
-      <button class="tab-rail__btn" data-tab="tema" data-i18n-attr="title:nav.tema,aria-label:nav.tema">
+      <button class="tab-rail__btn" data-tab="ajustes" data-i18n-attr="title:nav.ajustes,aria-label:nav.ajustes">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/>
-          <circle cx="7.5" cy="10.5" r=".8"/>
-          <circle cx="10" cy="6.8" r=".8"/>
-          <circle cx="14.3" cy="6.8" r=".8"/>
-          <circle cx="17" cy="10.5" r=".8"/>
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82A1.65 1.65 0 0 0 3 13.09H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
         </svg>
       </button>
     </nav>
@@ -219,9 +204,9 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>
         <span class="mobile-tool-label" data-i18n="nav.mapasBiblicos">Mapas bíblicos</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="tema" type="button" data-i18n-attr="aria-label:nav.tema">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/><circle cx="7.5" cy="10.5" r=".8"/><circle cx="10" cy="6.8" r=".8"/><circle cx="14.3" cy="6.8" r=".8"/><circle cx="17" cy="10.5" r=".8"/></svg>
-        <span class="mobile-tool-label" data-i18n="nav.tema">Tema</span>
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="ajustes" type="button" data-i18n-attr="aria-label:nav.ajustes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82A1.65 1.65 0 0 0 3 13.09H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="mobile-tool-label" data-i18n="nav.ajustes">Ajustes</span>
       </button>
       <button class="mobile-tool-btn tab-rail__btn" data-tab="biblioteca" type="button" data-i18n-attr="aria-label:nav.biblioteca">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 6h7"/><path d="M9 10h7"/></svg>
@@ -264,25 +249,12 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     <button class="verse-action-bar__close" id="closeVerseAction" type="button" data-i18n-attr="aria-label:verseAction.cerrarAria">✕</button>
   </div>
 
-  <div class="backup-consent" id="backupConsent" hidden>
-    <p class="backup-consent__text" data-i18n="backupConsent.text">¿Guardamos tu progreso en tu computadora antes de continuar? Que Dios te acompañe.</p>
-    <p class="backup-consent__hint" data-i18n="backupConsent.hint">Al elegir la carpeta, selecciona "Documentos" u otra carpeta normal — el navegador no permite usar la carpeta de inicio ni carpetas del sistema.</p>
-    <label class="backup-consent__checkbox">
-      <input type="checkbox" id="backupConsentDontAskAgain">
-      <span data-i18n="backupConsent.dontAskAgain">No volver a preguntarme</span>
-    </label>
-    <div class="backup-consent__actions">
-      <button type="button" class="backup-consent__btn backup-consent__btn--primary" id="backupConsentAccept" data-i18n="backupConsent.accept">Sí, guardar</button>
-      <button type="button" class="backup-consent__btn" id="backupConsentDecline" data-i18n="backupConsent.decline">Ahora no</button>
-    </div>
-  </div>
-
   <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
   <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
-  <script src="assets/backup.js?v=20260728-consent-checkbox"></script>
-  <script src="assets/i18n.js?v=1"></script>
+  <script src="assets/backup.js?v=20260729-indexeddb-only"></script>
+  <script src="assets/i18n.js?v=20260729-shared-dict"></script>
   <script src="assets/module-loader.js?v=20260725-lazy-commentaries-2"></script>
-  <script src="assets/app.js?v=20260728-interfaz-i18n"></script>
+  <script src="assets/app.js?v=20260729-ajustes-indexeddb"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

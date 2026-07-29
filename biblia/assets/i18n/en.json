@@ -14,10 +14,6 @@
     "searchLabel": "Search",
     "sermonAria": "Sermon/Study Prep",
     "sermonLabel": "Sermon/Study Prep",
-    "backupAria": "Save my progress",
-    "backupSave": "Save my progress",
-    "backupExport": "Export my data",
-    "backupImport": "Import my data",
     "uiLangAria": "Interface language"
   },
   "rail": {
@@ -38,7 +34,7 @@
     "notas": "My notes",
     "mapas": "Maps",
     "mapasBiblicos": "Bible maps",
-    "tema": "Theme",
+    "ajustes": "Settings",
     "biblioteca": "Library",
     "padres": "Apostolic Fathers",
     "contacto": "Contact",
@@ -68,28 +64,13 @@
     "ref": "Ref.",
     "cerrarAria": "Close"
   },
-  "backupConsent": {
-    "text": "Should we save your progress on this computer before continuing? God bless you.",
-    "hint": "When choosing the folder, pick \"Documents\" or another regular folder — the browser doesn't allow using the home folder or system folders.",
-    "dontAskAgain": "Don't ask me again",
-    "accept": "Yes, save",
-    "decline": "Not now"
-  },
   "toast": {
     "copiado": "Copied",
     "noBibleOnline": "Couldn't load this Bible online",
     "refNoReconocida": "Couldn't recognize this reference",
-    "progresoGuardado": "Progress saved",
     "descargando": "Downloading verbo-datos.json",
     "datosImportados": "Data imported, reloading…",
-    "noImportar": "Couldn't import the file",
-    "carpetaConectada": "Folder connected",
-    "carpetaBloqueada": "The browser blocked that folder for security reasons (home or system folder). Choose \"Documents\" or another regular folder."
-  },
-  "backupMenu": {
-    "statusFolder": "Saved to your folder and to this browser.",
-    "statusBrowserOnly": "Saved only in this browser.",
-    "statusExportHint": "Saved in this browser. Export your data to back it up."
+    "noImportar": "Couldn't import the file"
   },
   "biblia": {
     "loadError": "Couldn't load this passage.",

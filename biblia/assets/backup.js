@@ -1,14 +1,13 @@
 /* Sistema de respaldo local unificado de Verbo.
-   Tres capas: IndexedDB (base universal) + File System Access API (persistencia
-   real en disco, solo Chromium de escritorio) + exportar/importar (respaldo
-   manual universal). Sin cuentas, sin backend — todo vive en la máquina del
-   usuario. Ver prompt original para el diseño completo. */
+   Una sola capa automática y silenciosa: IndexedDB, sin ningún diálogo de
+   permiso. Exportar/importar sigue disponible como respaldo manual explícito
+   (botón en el panel de Ajustes). Sin cuentas, sin backend — todo vive en la
+   máquina del usuario. */
 const VerboBackup = (() => {
   const DB_NAME = 'verbo-db';
   const DB_VERSION = 1;
   const STORE = 'kv';
   const DATA_KEY = 'unified-data';
-  const HANDLE_KEY = 'backup-dir-handle';
   const FILE_NAME = 'verbo-datos.json';
 
   let dbPromise = null;
@@ -76,8 +75,6 @@ const VerboBackup = (() => {
   }
 
   let cached = null;
-  let dirHandle = null;
-  let saveTimer = null;
 
   async function init() {
     cached = await idbGet(DATA_KEY);
@@ -87,7 +84,6 @@ const VerboBackup = (() => {
     }
     for (const campo of ['notas', 'resaltados', 'marcadores']) if (!Array.isArray(cached[campo])) cached[campo] = [];
     if (!cached.posicion_lectura) cached.posicion_lectura = {};
-    dirHandle = await idbGet(HANDLE_KEY);
     return cached;
   }
 
@@ -96,7 +92,6 @@ const VerboBackup = (() => {
   async function persist() {
     cached.fecha_guardado = new Date().toISOString();
     await idbSet(DATA_KEY, cached);
-    scheduleFolderWrite();
     scheduleCapacitorWrite();
   }
 
@@ -131,57 +126,12 @@ const VerboBackup = (() => {
     persist();
   }
 
-  // ---- Capa 2: File System Access API ----
-  function supportsFSA() { return typeof window.showDirectoryPicker === 'function'; }
-  function hasFolderPermission() { return !!dirHandle; }
-
-  async function verifyPermission(handle, mode = 'readwrite') {
-    try {
-      const opts = { mode };
-      if ((await handle.queryPermission(opts)) === 'granted') return true;
-      return (await handle.requestPermission(opts)) === 'granted';
-    } catch { return false; }
-  }
-
-  async function requestFolderAccess() {
-    if (!supportsFSA()) return false;
-    try {
-      const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
-      const ok = await verifyPermission(handle);
-      if (!ok) return false;
-      dirHandle = handle;
-      await idbSet(HANDLE_KEY, handle);
-      await writeToFolder();
-      return true;
-    } catch { return false; }
-  }
-
-  async function writeToFolder() {
-    if (!dirHandle) return false;
-    try {
-      const ok = await verifyPermission(dirHandle);
-      if (!ok) return false;
-      const fileHandle = await dirHandle.getFileHandle(FILE_NAME, { create: true });
-      const writable = await fileHandle.createWritable();
-      await writable.write(JSON.stringify(cached, null, 2));
-      await writable.close();
-      return true;
-    } catch { return false; }
-  }
-
-  function scheduleFolderWrite() {
-    if (!dirHandle) return;
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => { writeToFolder().catch(() => {}); }, 3000);
-  }
-
-  // ---- Capa 4: puente Filesystem nativo (solo dentro del wrapper Capacitor de
-  // iOS/Android). IndexedDB puede ser purgado por iOS tras ~7 días sin uso
-  // (política antitracking de WKWebView); este escrito en el sandbox nativo
-  // de la app no está sujeto a esa purga. No hay File System Access API en
-  // WebKit, así que esta capa reemplaza a la de "Capa 2" únicamente dentro
-  // de la app nativa, sin diálogo de consentimiento (es el sandbox propio de
-  // la app, no una carpeta arbitraria del usuario).
+  // ---- Puente Filesystem nativo (solo dentro del wrapper Capacitor de
+  // iOS/Android, NO es File System Access API). IndexedDB puede ser purgado
+  // por iOS tras ~7 días sin uso (política antitracking de WKWebView); este
+  // escrito en el sandbox nativo de la app no está sujeto a esa purga. No
+  // pide ningún permiso ni muestra diálogo — es el sandbox propio de la app,
+  // no una carpeta arbitraria del usuario.
   let capacitorSaveTimer = null;
   function isCapacitorNative() {
     return Boolean(window.Capacitor?.isNativePlatform?.());
@@ -207,12 +157,11 @@ const VerboBackup = (() => {
 
   async function saveNow() {
     await persist();
-    if (dirHandle) return writeToFolder();
     if (isCapacitorNative()) return writeToCapacitorFS();
-    return false;
+    return true;
   }
 
-  // ---- Capa 3: Exportar / Importar (universal) ----
+  // ---- Exportar / Importar (respaldo manual explícito, universal) ----
   function exportDownload() {
     const blob = new Blob([JSON.stringify(cached, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -231,34 +180,12 @@ const VerboBackup = (() => {
     return cached;
   }
 
-  // ---- Aviso de consentimiento (cuándo ofrecerlo, sin insistir) ----
-  function shouldOfferConsent() {
-    if (!supportsFSA() || hasFolderPermission()) return false;
-    if (localStorage.getItem('verbo:backup:neverAsk') === '1') return false;
-    const declinedAt = Number(localStorage.getItem('verbo:backup:declinedAt') || 0);
-    if (!declinedAt) return true;
-    const unaSemanaMs = 7 * 24 * 60 * 60 * 1000;
-    return Date.now() - declinedAt > unaSemanaMs;
-  }
-  // hayContenidoPropio(): el aviso solo tiene sentido si la persona ya creó
-  // algo que valga la pena respaldar (nota, resaltado o marcador) — no por
-  // simplemente haber tenido la página abierta un rato.
-  function hayContenidoPropio() {
-    return cached.notas.length > 0 || cached.resaltados.length > 0 || cached.marcadores.length > 0;
-  }
-  function recordConsentDeclined(neverAskAgain) {
-    if (neverAskAgain) localStorage.setItem('verbo:backup:neverAsk', '1');
-    else localStorage.setItem('verbo:backup:declinedAt', String(Date.now()));
-  }
-
   return {
     init, getData, saveNow,
     getResaltadosMap, setAllResaltados,
     getNota, setNota,
     getPosicionBiblia, setPosicionBiblia,
-    supportsFSA, hasFolderPermission, requestFolderAccess,
     exportDownload, importFromFile,
-    shouldOfferConsent, recordConsentDeclined, hayContenidoPropio,
     isCapacitorNative
   };
 })();

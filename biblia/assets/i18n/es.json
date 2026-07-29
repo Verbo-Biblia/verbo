@@ -14,10 +14,6 @@
     "searchLabel": "Buscar",
     "sermonAria": "Preparación de Bosquejo/Estudio",
     "sermonLabel": "Preparación de Bosquejo/Estudio",
-    "backupAria": "Guardar mi progreso",
-    "backupSave": "Guardar mi progreso",
-    "backupExport": "Exportar mis datos",
-    "backupImport": "Importar mis datos",
     "uiLangAria": "Idioma de la interfaz"
   },
   "rail": {
@@ -38,7 +34,7 @@
     "notas": "Mis notas",
     "mapas": "Mapas",
     "mapasBiblicos": "Mapas bíblicos",
-    "tema": "Tema",
+    "ajustes": "Ajustes",
     "biblioteca": "Biblioteca",
     "padres": "Padres Apostólicos",
     "contacto": "Contacto",
@@ -68,28 +64,13 @@
     "ref": "Ref.",
     "cerrarAria": "Cerrar"
   },
-  "backupConsent": {
-    "text": "¿Guardamos tu progreso en tu computadora antes de continuar? Que Dios te acompañe.",
-    "hint": "Al elegir la carpeta, selecciona \"Documentos\" u otra carpeta normal — el navegador no permite usar la carpeta de inicio ni carpetas del sistema.",
-    "dontAskAgain": "No volver a preguntarme",
-    "accept": "Sí, guardar",
-    "decline": "Ahora no"
-  },
   "toast": {
     "copiado": "Copiado",
     "noBibleOnline": "No se pudo cargar la Biblia en línea",
     "refNoReconocida": "No se pudo reconocer esta referencia",
-    "progresoGuardado": "Progreso guardado",
     "descargando": "Descargando verbo-datos.json",
     "datosImportados": "Datos importados, recargando…",
-    "noImportar": "No se pudo importar el archivo",
-    "carpetaConectada": "Carpeta conectada",
-    "carpetaBloqueada": "El navegador bloqueó esa carpeta por seguridad (inicio o sistema). Elige \"Documentos\" u otra carpeta normal."
-  },
-  "backupMenu": {
-    "statusFolder": "Se guarda en tu carpeta y en este navegador.",
-    "statusBrowserOnly": "Guardado solo en este navegador.",
-    "statusExportHint": "Guardado en este navegador. Exporta tus datos para respaldarlos."
+    "noImportar": "No se pudo importar el archivo"
   },
   "biblia": {
     "loadError": "No se pudo cargar este pasaje.",

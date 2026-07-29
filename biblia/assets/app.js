@@ -81,16 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const emptyState = (icon, text) => `<div class="panel-empty"><div class="panel-empty__icon">${icon}</div><div class="panel-empty__text">${text}</div></div>`;
   const activeVerse = () => Number(document.querySelector('.verse--active')?.dataset.verseN) || null;
   const hlKey = (book, chapter, n) => `${book}:${chapter}:${n}`;
-  const saveHighlights = () => { VerboBackup.setAllResaltados(highlights); maybeOfferBackupConsent(); };
-  // El aviso de "¿guardamos tu progreso?" solo aparece la primera vez que la
-  // persona crea algo real (nota, resaltado o marcador) — no por tiempo de
-  // uso a ciegas. Se llama tras cada acción de ese tipo; es barato repetir
-  // la comprobación porque shouldOfferConsent() ya deja de ser true en
-  // cuanto se concede/rechaza el permiso.
-  function maybeOfferBackupConsent(){
-    if(!VerboBackup.hayContenidoPropio() || !VerboBackup.shouldOfferConsent()) return;
-    setTimeout(()=>{ document.getElementById('backupConsent')?.removeAttribute('hidden'); }, 1500);
-  }
+  const saveHighlights = () => { VerboBackup.setAllResaltados(highlights); };
   const HL_COLORS = ['hl-yellow','hl-green','hl-blue','hl-pink','hl-coral','hl-violet'];
   const escapeHTML = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[ch]));
   const bibleCatalog = () => catalog.bibles.map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, lang:item.manifest.language || 'es', remote:Boolean(item.remote || item.manifest.remote), manifest:item.manifest }));
@@ -660,7 +651,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(tab==='padres') renderPadresPanel(focus || activeVerse());
     if(tab==='notas') renderNotes();
     if(tab==='exegesis') renderExegesis(focus || activeVerse());
-    if(tab==='tema') renderTheme();
+    if(tab==='ajustes') renderAjustes();
     if(tab==='mapas') renderMapsPanel();
     if(tab==='licencias') renderLicensesPanel();
     if(tab==='contacto') renderContactPanel();
@@ -1373,24 +1364,57 @@ document.addEventListener('DOMContentLoaded', async () => {
     localStorage.setItem('verbo:theme', safeTheme);
   }
 
-  function renderTheme(){
-    els.panelTitle.textContent='Tema';
+  function renderAjustes(){
+    els.panelTitle.textContent='Ajustes';
     els.panelToolbar.innerHTML='';
     const currentTheme = document.body.dataset.theme || 'paper';
     els.panelBody.innerHTML=`
-      <section class="theme-panel">
-        <div class="theme-panel__intro">Elige un tono claro para descansar mejor la vista. Se guardará solo en este dispositivo.</div>
-        <div class="theme-options">
-          ${themes.map(t=>`<button class="theme-option${t.id===currentTheme?' theme-option--active':''}" type="button" data-theme="${t.id}">
-            <span class="theme-option__sample" style="background:${t.sample}"></span>
-            <span class="theme-option__label">${escapeHTML(t.label)}</span>
-          </button>`).join('')}
+      <section class="ajustes-panel">
+        <div class="ajustes-section">
+          <h3>Sincronizar dispositivos</h3>
+          <p>Próximamente: sincroniza tus notas entre dispositivos.</p>
+          <form class="ajustes-sync-form">
+            <input class="ajustes-sync-form__input" type="email" placeholder="tu@correo.com" disabled>
+            <button class="ajustes-sync-form__btn" type="button" disabled>Muy pronto</button>
+          </form>
+        </div>
+        <div class="ajustes-section">
+          <h3>Tema</h3>
+          <p>Elige un tono claro para descansar mejor la vista. Se guardará solo en este dispositivo.</p>
+          <div class="theme-options">
+            ${themes.map(th=>`<button class="theme-option${th.id===currentTheme?' theme-option--active':''}" type="button" data-theme="${th.id}">
+              <span class="theme-option__sample" style="background:${th.sample}"></span>
+              <span class="theme-option__label">${escapeHTML(th.label)}</span>
+            </button>`).join('')}
+          </div>
+        </div>
+        <div class="ajustes-section">
+          <h3>Exportar / Importar datos</h3>
+          <p>Descarga un archivo con tus notas, resaltados y marcadores, o restáuralos en otro dispositivo.</p>
+          <div class="ajustes-backup-actions">
+            <button class="ajustes-backup-btn" type="button" id="ajustesExportBtn">Exportar mis datos</button>
+            <button class="ajustes-backup-btn" type="button" id="ajustesImportBtn">Importar mis datos</button>
+            <input type="file" id="ajustesImportInput" accept="application/json" hidden>
+          </div>
         </div>
       </section>`;
     els.panelBody.querySelectorAll('.theme-option').forEach(btn=>btn.addEventListener('click',()=>{
       applyTheme(btn.dataset.theme);
-      renderTheme();
+      renderAjustes();
     }));
+    document.getElementById('ajustesExportBtn')?.addEventListener('click', ()=>{
+      VerboBackup.exportDownload();
+      toast(t('toast.descargando'));
+    });
+    const importInput=document.getElementById('ajustesImportInput');
+    document.getElementById('ajustesImportBtn')?.addEventListener('click', ()=> importInput?.click());
+    importInput?.addEventListener('change', async ()=>{
+      const file=importInput.files?.[0];
+      if(!file) return;
+      try{ await VerboBackup.importFromFile(file); toast(t('toast.datosImportados')); setTimeout(()=>location.reload(), 900); }
+      catch(error){ console.error(error); toast(t('toast.noImportar')); }
+      importInput.value='';
+    });
   }
 
 
@@ -2155,7 +2179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const key=`${data.meta.bookId}-${data.meta.chapter}`, saved=VerboBackup.getNota(key);
     els.panelBody.innerHTML=`<label class="personal-note-form__label">${t('notas.label',{ref:`${data.meta.book} ${data.meta.chapter}`})}</label><textarea id="personalNoteArea" class="personal-note-form__area" placeholder="${t('notas.placeholder')}">${saved}</textarea><div class="personal-note-form__status" id="noteSaveStatus">${saved?t('notas.guardado'):''}</div>`;
     const area=document.getElementById('personalNoteArea'), status=document.getElementById('noteSaveStatus'); let timer;
-    area.addEventListener('input',()=>{status.textContent=t('notas.escribiendo');clearTimeout(timer);timer=setTimeout(()=>{VerboBackup.setNota(key,area.value);status.textContent=t('notas.guardado');maybeOfferBackupConsent();},400);});
+    area.addEventListener('input',()=>{status.textContent=t('notas.escribiendo');clearTimeout(timer);timer=setTimeout(()=>{VerboBackup.setNota(key,area.value);status.textContent=t('notas.guardado');},400);});
   }
 
   async function openDictionary(code){
@@ -2322,89 +2346,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   window.addEventListener('scroll',()=>{ clearTimeout(commentSyncTimer); commentSyncTimer=setTimeout(syncCommentToReading,120); }, {passive:true});
 
-  // ---- Respaldo local: menú de guardado + aviso de consentimiento ----
-  (function initBackupUI(){
-    const trigger=document.getElementById('backupMenuTrigger');
-    const panel=document.getElementById('backupMenuPanel');
-    const status=document.getElementById('backupMenuStatus');
-    const saveBtn=document.getElementById('backupSaveBtn');
-    const exportBtn=document.getElementById('backupExportBtn');
-    const importBtn=document.getElementById('backupImportBtn');
-    const importInput=document.getElementById('backupImportInput');
-    const consent=document.getElementById('backupConsent');
-    const consentAccept=document.getElementById('backupConsentAccept');
-    const consentDecline=document.getElementById('backupConsentDecline');
-    if(!trigger || !panel) return;
-
-    function refreshStatus(){
-      if(!status) return;
-      if(VerboBackup.hasFolderPermission()) status.textContent=t('backupMenu.statusFolder');
-      else if(VerboBackup.supportsFSA()) status.textContent=t('backupMenu.statusBrowserOnly');
-      else status.textContent=t('backupMenu.statusExportHint');
-    }
-    function closePanel(){
-      panel.hidden=true; trigger.setAttribute('aria-expanded','false');
-      panel.style.cssText='';
-    }
-    function togglePanel(){
-      const willOpen=panel.hidden;
-      panel.hidden=!willOpen; trigger.setAttribute('aria-expanded',String(willOpen));
-      if(willOpen){
-        refreshStatus();
-        // En móvil el header tiene overflow:hidden — posicionar con fixed via JS para no ser recortado ni quedar inclicable
-        if(window.innerWidth<=720){
-          const rect=trigger.getBoundingClientRect();
-          Object.assign(panel.style,{
-            position:'fixed',
-            top:(rect.bottom+8)+'px',
-            right:(window.innerWidth-rect.right)+'px',
-            left:'',
-            minWidth:'200px',
-            zIndex:'2100'
-          });
-        } else {
-          panel.style.cssText='';
-        }
-      }
-    }
-    trigger.addEventListener('click',(e)=>{ e.stopPropagation(); togglePanel(); });
-    document.addEventListener('click',(e)=>{ if(!panel.hidden && !panel.contains(e.target) && e.target!==trigger) closePanel(); });
-
-    function showConsent(){ if(consent) consent.hidden=false; }
-    function hideConsent(){ if(consent) consent.hidden=true; }
-
-    saveBtn?.addEventListener('click', async ()=>{
-      if(!VerboBackup.hasFolderPermission() && VerboBackup.supportsFSA()){ showConsent(); return; }
-      await VerboBackup.saveNow();
-      toast(t('toast.progresoGuardado'));
-      refreshStatus();
-    });
-    exportBtn?.addEventListener('click', ()=>{ VerboBackup.exportDownload(); toast(t('toast.descargando')); });
-    importBtn?.addEventListener('click', ()=> importInput?.click());
-    importInput?.addEventListener('change', async ()=>{
-      const file=importInput.files?.[0];
-      if(!file) return;
-      try{ await VerboBackup.importFromFile(file); toast(t('toast.datosImportados')); setTimeout(()=>location.reload(), 900); }
-      catch(error){ console.error(error); toast(t('toast.noImportar')); }
-      importInput.value='';
-    });
-    consentAccept?.addEventListener('click', async ()=>{
-      hideConsent();
-      const ok=await VerboBackup.requestFolderAccess();
-      if(ok) toast(t('toast.carpetaConectada'));
-      else toast(t('toast.carpetaBloqueada'), 4200);
-      refreshStatus();
-    });
-    const dontAskAgain=document.getElementById('backupConsentDontAskAgain');
-    consentDecline?.addEventListener('click', ()=>{
-      hideConsent();
-      VerboBackup.recordConsentDeclined(dontAskAgain?.checked);
-    });
-
-    // La oferta ya no es por tiempo: se dispara desde maybeOfferBackupConsent()
-    // (arriba en el archivo) justo cuando la persona crea su primera nota,
-    // resaltado o marcador — así el aviso llega cuando de verdad hay algo
-    // que respaldar, no a ciegas tras un minuto de solo leer.
+  // ---- Respaldo local: guardado automático y silencioso en IndexedDB, sin
+  // ningún diálogo de permiso. Se refuerza el volcado (incluye el puente
+  // nativo de Capacitor, que va debounced) cuando la app pasa a segundo
+  // plano o se cierra la pestaña — el equivalente a un botón "Salir" en
+  // esta SPA, que no tiene uno explícito.
+  (function initBackupAutoSave(){
+    const flush=()=>{ VerboBackup.saveNow().catch(()=>{}); };
+    document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden') flush(); });
+    window.addEventListener('pagehide', flush);
   })();
 
   // ---- Selector de idioma de interfaz: independiente del selector de Biblia ----

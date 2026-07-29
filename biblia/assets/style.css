@@ -998,8 +998,6 @@ button:focus-visible,
     order: 3;
     display: flex;
   }
-
-  .backup-menu { order: 4; }
 }
 
 /* Strong y diccionario */
@@ -2122,110 +2120,47 @@ body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
   display: none;
 }
 
-/* ---------- Respaldo local (sistema de guardado unificado) ---------- */
-.backup-menu { position: relative; }
-.backup-menu__trigger { padding: 6px 10px; font-size: 16px; line-height: 1; }
-.backup-menu__panel {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  z-index: 40;
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px;
+/* ---------- Ajustes (Sincronizar / Tema / Exportar-Importar) ---------- */
+.ajustes-panel { padding: 2px 0 10px; }
+.ajustes-section { padding: 14px 0; border-bottom: 1px solid rgba(112,83,53,.15); }
+.ajustes-section:first-child { padding-top: 0; }
+.ajustes-section:last-child { border-bottom: none; }
+.ajustes-section h3 { margin: 0 0 7px; font-size: .98rem; color: var(--ink); }
+.ajustes-section p { margin: 0 0 12px; font-size: .92rem; line-height: 1.45; color: var(--ink-soft); }
+.ajustes-sync-form { display: flex; gap: 8px; }
+.ajustes-sync-form__input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
   background: var(--paper-raised);
-  border: 1px solid var(--rule-strong);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(42,31,23,.18);
-}
-.backup-menu__panel[hidden] { display: none; }
-.backup-menu__status {
-  font-size: 11.5px;
   color: var(--sepia);
-  padding: 2px 6px 6px;
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: 4px;
+  font: inherit;
 }
-.backup-menu__item {
-  text-align: left;
-  padding: 8px 10px;
-  border: none;
-  border-radius: 8px;
+.ajustes-sync-form__btn {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--rule-strong);
   background: transparent;
-  color: var(--ink);
+  color: var(--sepia);
   font-family: var(--font-body);
   font-size: 13.5px;
-  cursor: pointer;
+  white-space: nowrap;
+  cursor: not-allowed;
 }
-.backup-menu__item:hover { background: rgba(200,159,88,.16); color: var(--wine); }
-
-.backup-consent {
-  position: fixed;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  z-index: 200;
-  max-width: 380px;
-  width: calc(100% - 32px);
-  padding: 16px 18px;
-  background: var(--paper-raised);
-  border: 1px solid var(--wine-soft);
-  border-radius: 14px;
-  box-shadow: 0 12px 32px rgba(42,31,23,.28);
-  text-align: center;
-}
-@media (max-width: 760px) {
-  .backup-consent {
-    bottom: calc(var(--mobile-dock-height, 76px) + 14px + env(safe-area-inset-bottom, 0px));
-  }
-}
-.backup-consent__text {
-  margin: 0 0 12px;
-  font-family: var(--font-display);
-  color: var(--ink);
-  font-size: 15px;
-  line-height: 1.4;
-}
-.backup-consent__hint {
-  margin: 0 0 14px;
-  color: var(--sepia);
-  font-size: 12px;
-  line-height: 1.4;
-}
-.backup-consent__checkbox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 14px;
-  font-size: 13px;
-  color: var(--sepia);
-  cursor: pointer;
-}
-.backup-consent__checkbox input { margin: 0; }
-.backup-consent__actions { display: flex; gap: 10px; justify-content: center; }
-.backup-consent__btn {
-  padding: 8px 16px;
+.ajustes-backup-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.ajustes-backup-btn {
+  padding: 9px 16px;
   border-radius: 20px;
   border: 1px solid var(--rule-strong);
-  background: transparent;
-  color: var(--sepia);
+  background: var(--paper-raised);
+  color: var(--ink);
   font-family: var(--font-body);
   font-size: 13.5px;
   cursor: pointer;
 }
-.backup-consent__btn--primary {
-  background: var(--wine);
-  border-color: var(--wine);
-  color: #fff;
-}
-.backup-consent__btn:hover { border-color: var(--wine-soft); color: var(--wine); }
-.backup-consent__btn--primary:hover { background: var(--wine-soft); color: #fff; }
-
-@media (max-width: 760px) {
-  .backup-menu__panel { right: -8px; min-width: 200px; }
-}
+.ajustes-backup-btn:hover { border-color: var(--wine-soft); color: var(--wine); }
 
 /* ---------- Páginas estáticas (Sobre el fundador, Misión) ---------- */
 .library-rail__btn[href], .mobile-tool-btn[href] { text-decoration: none; }
