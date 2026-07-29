@@ -73,6 +73,22 @@
     if(el.dataset.origText != null){ el.textContent = el.dataset.origText; delete el.dataset.translated; }
   }
 
+  // Variante sin DOM: traduce un string suelto (con el mismo caché) y lo
+  // devuelve. Para consumidores que no renderizan vía textContent directo
+  // (ej. el lector de Librería, que reconstruye párrafos a mano para poder
+  // superponer el resaltado). Si falla la traducción, devuelve el original.
+  async function translateText(text, id, sourceLang, targetLang){
+    if(!text || !text.trim()) return text;
+    const key = cacheKey(id, text, targetLang);
+    let translated = tcacheGet(key);
+    if(!translated){
+      translated = await googleTranslate(text, sourceLang, targetLang);
+      if(!translated) return text;
+      tcacheSet(key, translated);
+    }
+    return translated;
+  }
+
   // Aplica a todo [data-i18n-live] dentro de root según el idioma activo de
   // VerboI18n. El sitio nace en español, así que sourceLang es 'es' salvo
   // que se indique otra cosa.
@@ -89,5 +105,5 @@
     }
   }
 
-  window.VerboSiteTranslate = { applyLiveTranslation };
+  window.VerboSiteTranslate = { applyLiveTranslation, translateText };
 })();

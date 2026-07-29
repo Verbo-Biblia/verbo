@@ -11,7 +11,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Versión Cronológica Fluida — Verbo",
-    "url": "/libreria/evangelio-segun-jesucristo/"
+    "url": "/libreria/evangelio-segun-jesucristo/",
+    "estrategia_traduccion": {
+      "modo": "requiere_traduccion_manual",
+      "motivo": "Es texto bíblico (armonía cronológica de los Evangelios), no un ensayo — mismo criterio que excluye el texto bíblico de traducción automática en el resto del sitio. Traducir a mano o evaluar una armonía nativa en inglés si Juan lo decide."
+    }
   },
   {
     "id": "la-didache",
@@ -25,7 +29,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Enseñanza de los Doce Apóstoles",
-    "url": "/libreria/la-didache/"
+    "url": "/libreria/la-didache/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "primera-clemente",
@@ -39,7 +47,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Clemente de Roma",
-    "url": "/libreria/primera-clemente/"
+    "url": "/libreria/primera-clemente/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "segunda-clemente",
@@ -53,7 +65,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Atribuida a Clemente de Roma",
-    "url": "/libreria/segunda-clemente/"
+    "url": "/libreria/segunda-clemente/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "el-pastor-de-hermas",
@@ -67,7 +83,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Hermas",
-    "url": "/libreria/el-pastor-de-hermas/"
+    "url": "/libreria/el-pastor-de-hermas/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "epistola-de-bernabe",
@@ -82,7 +102,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Atribuida a Bernabé",
-    "url": "/libreria/epistola-de-bernabe/"
+    "url": "/libreria/epistola-de-bernabe/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "epistola-a-diogneto",
@@ -97,7 +121,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Autor anónimo (Mathietes)",
-    "url": "/libreria/epistola-a-diogneto/"
+    "url": "/libreria/epistola-a-diogneto/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "fragmentos-de-papias",
@@ -111,7 +139,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Papías de Hierápolis",
-    "url": "/libreria/fragmentos-de-papias/"
+    "url": "/libreria/fragmentos-de-papias/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "martirio-de-ignacio",
@@ -125,7 +157,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Ignacio de Antioquía",
-    "url": "/libreria/martirio-de-ignacio/"
+    "url": "/libreria/martirio-de-ignacio/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "martirio-de-policarpo",
@@ -139,7 +175,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Iglesia de Esmirna",
-    "url": "/libreria/martirio-de-policarpo/"
+    "url": "/libreria/martirio-de-policarpo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "policarpo-a-los-filipenses",
@@ -153,7 +193,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Policarpo de Esmirna",
-    "url": "/libreria/policarpo-a-los-filipenses/"
+    "url": "/libreria/policarpo-a-los-filipenses/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "contra-las-herejias",
@@ -168,7 +212,11 @@
     ],
     "fecha_agregado": "2026-07-27",
     "autor": "Ireneo de Lyon",
-    "url": "/libreria/contra-las-herejias/"
+    "url": "/libreria/contra-las-herejias/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible",
+      "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."
+    }
   },
   {
     "id": "deberes-de-hijos-y-padres",
@@ -184,7 +232,11 @@
     ],
     "fecha_agregado": "2026-07-28",
     "autor": "Richard Adams",
-    "url": "/libreria/deberes-de-hijos-y-padres/"
+    "url": "/libreria/deberes-de-hijos-y-padres/",
+    "estrategia_traduccion": {
+      "modo": "requiere_traduccion_manual",
+      "motivo": "Símbolo residual de OCR en el texto fuente (ligadura mal decodificada del PDF original, U+F065/U+F066 al final del texto) — riesgo de romper la traducción automática."
+    }
   },
   {
     "id": "totalmente-por-gracia",
@@ -200,7 +252,10 @@
     ],
     "fecha_agregado": "2026-07-28",
     "autor": "Charles Spurgeon",
-    "url": "/libreria/totalmente-por-gracia/"
+    "url": "/libreria/totalmente-por-gracia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "el-tesoro-de-david-condensado",
@@ -216,7 +271,11 @@
     ],
     "fecha_agregado": "2026-07-28",
     "autor": "Charles Spurgeon",
-    "url": "/libreria/el-tesoro-de-david-condensado/"
+    "url": "/libreria/el-tesoro-de-david-condensado/",
+    "estrategia_traduccion": {
+      "modo": "requiere_traduccion_manual",
+      "motivo": "Símbolo residual de OCR en el texto fuente (ligadura mal decodificada del PDF original, U+F066 al final del texto) — riesgo de romper la traducción automática."
+    }
   },
   {
     "id": "matthew-henry",
@@ -230,6 +289,11 @@
     ],
     "fecha_agregado": "2026-07-28",
     "autor": "Matthew Henry (1662–1714)",
-    "url": "/libreria/matthew-henry/"
+    "url": "/libreria/matthew-henry/",
+    "estrategia_traduccion": {
+      "modo": "nativo_disponible",
+      "nativo_ref": "biblia/modules/commentaries/matthew-henry-en",
+      "nota": "El lector de Librería ya sirve el texto inglés nativo; la traducción EN->ES para lectores hispanos usa el mecanismo existente del panel de Comentario, no está conectada todavía en el lector de Librería (gap detectado, fuera de alcance de esta tarea)."
+    }
   }
 ]

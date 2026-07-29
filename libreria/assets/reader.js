@@ -19,6 +19,81 @@
   var bookmark = loadJSON(BM_KEY, null);
   var paraTexts = []; // texto plano de cada párrafo del capítulo actual
 
+  // ---------- traducción ES->EN on-demand (estrategia_traduccion) ----------
+  // "auto" (default): se traduce el capítulo completo vía el mismo
+  // mecanismo que usa el resto del sitio (Google Translate no oficial +
+  // caché en localStorage), cuando el idioma de interfaz activo no es
+  // español. "manual": nunca se traduce, se muestra un aviso discreto.
+  var strategy = cfg.estrategiaTraduccion || "auto";
+  var translatedMode = false; // true si el capítulo actual se está mostrando traducido
+  var renderToken = 0; // evita que una traducción vieja pise una más nueva al cambiar de capítulo/idioma rápido
+
+  function currentLang() {
+    return window.VerboI18n ? window.VerboI18n.getUiLang() : "es";
+  }
+
+  function canAutoTranslate() {
+    return strategy === "auto" && currentLang() !== "es" && !!window.VerboSiteTranslate;
+  }
+
+  function resolveChapterText(ch) {
+    if (!canAutoTranslate()) return Promise.resolve({ text: ch.text, title: ch.title, translated: false });
+    var lang = currentLang();
+    var idBase = cfg.id + ":" + ch.n;
+    return Promise.all([
+      window.VerboSiteTranslate.translateText(ch.text, idBase, "es", lang),
+      window.VerboSiteTranslate.translateText(ch.title, idBase + ":title", "es", lang)
+    ]).then(function (r) {
+      return { text: r[0], title: r[1], translated: r[0] !== ch.text };
+    });
+  }
+
+  // Título del libro, autor y la palabra de unidad ("Capítulo" -> "Chapter")
+  // — se traducen una sola vez por idioma (cacheadas), independiente de en
+  // qué capítulo esté el lector.
+  function resolveBookStrings() {
+    if (!canAutoTranslate()) return Promise.resolve({ title: cfg.title, author: cfg.author, unitLabel: cfg.unitLabel });
+    var lang = currentLang();
+    return Promise.all([
+      window.VerboSiteTranslate.translateText(cfg.title, cfg.id + ":booktitle", "es", lang),
+      window.VerboSiteTranslate.translateText(cfg.author, cfg.id + ":author", "es", lang),
+      window.VerboSiteTranslate.translateText(cfg.unitLabel, cfg.id + ":unitlabel", "es", lang)
+    ]).then(function (r) {
+      return { title: r[0], author: r[1], unitLabel: r[2] };
+    });
+  }
+
+  function updateManualBanner(ui) {
+    if (!ui.manualNote) return;
+    var show = strategy === "manual" && currentLang() !== "es";
+    ui.manualNote.hidden = !show;
+    if (show && window.VerboI18n) {
+      window.VerboI18n.ready().then(function () {
+        ui.manualNote.textContent = window.VerboI18n.t("site.translationPending");
+      });
+    }
+  }
+
+  // Chrome fijo del lector (título del libro, autor, textos de ayuda,
+  // botones) — se resuelve aparte del cuerpo del capítulo porque no cambia
+  // al navegar entre capítulos, solo al cambiar de idioma.
+  function applyChrome(ui) {
+    var t = window.VerboI18n ? window.VerboI18n.t : function (k) { return k; };
+    ui.hint.textContent = t("reader.hint");
+    ui.resumeLink.textContent = t("reader.continue");
+    ui.resumeDismiss.textContent = t("reader.discard");
+    ui.bmBtn.textContent = (bookmark && bookmark.chapter === current) ? t("reader.marked") : t("reader.markChapter");
+    return resolveBookStrings().then(function (book) {
+      ui.badge.textContent = "Librería · " + book.author;
+      ui.title.textContent = book.title;
+      ui.unitLabel = book.unitLabel; // usado por render()/foot/resume/opciones
+      buildChapterOptions(ui);
+      if (ui.resume && !ui.resume.hidden && bookmark) {
+        ui.resumeText.textContent = t("reader.resumeBookmark", { unit: book.unitLabel.toLowerCase(), n: bookmark.chapter + 1 });
+      }
+    });
+  }
+
   function loadJSON(key, fallback) {
     try {
       var raw = window.localStorage.getItem(key);
@@ -126,7 +201,11 @@
   // rangos resaltados, intercalando <mark> para las zonas resaltadas.
   function renderParaContent(pEl, text, paraIndex) {
     pEl.innerHTML = "";
-    var ranges = highlights[hlKey(paraIndex)] || [];
+    // En modo traducido no se aplican los rangos guardados: los offsets de
+    // caracteres corresponden al texto original en español y no coinciden
+    // con el texto traducido (el resaltado no se pierde, solo no se dibuja
+    // mientras se ve la traducción).
+    var ranges = translatedMode ? [] : (highlights[hlKey(paraIndex)] || []);
     var pos = 0;
     ranges.forEach(function (r) {
       var start = Math.max(0, Math.min(r[0], text.length));
@@ -172,6 +251,10 @@
   }
 
   function handleSelection(contentEl) {
+    // El resaltado se guarda como rangos de caracteres sobre el texto en
+    // español; en modo traducido esos offsets no significarían nada al
+    // volver a español, así que se deshabilita mientras se ve la traducción.
+    if (translatedMode) return;
     var sel = window.getSelection();
     if (!sel || sel.isCollapsed || sel.rangeCount === 0) return;
     var range = sel.getRangeAt(0);
@@ -201,13 +284,19 @@
     root.innerHTML = "";
 
     var headTop = el("div", "reader-head-top");
-    headTop.appendChild(el("span", "reader-badge", "Librería · " + cfg.author));
+    var badge = el("span", "reader-badge", "Librería · " + cfg.author);
+    headTop.appendChild(badge);
     var bmBtn = el("button", "reader-bookmark-btn", "☆ Marcar este capítulo");
     bmBtn.type = "button";
     headTop.appendChild(bmBtn);
     root.appendChild(headTop);
 
-    root.appendChild(el("h1", "reader-title", cfg.title));
+    var manualNote = el("p", "reader-manual-note");
+    manualNote.hidden = true;
+    root.appendChild(manualNote);
+
+    var title = el("h1", "reader-title", cfg.title);
+    root.appendChild(title);
 
     var progress = el("div", "reader-progress");
     var progressBar = el("div", "reader-progress-bar");
@@ -243,7 +332,8 @@
     nav.appendChild(nextBtn);
     root.appendChild(nav);
 
-    root.appendChild(el("p", "reader-hint", "Selecciona el texto que quieras resaltar (arrastra el dedo o el mouse). Toca un resaltado para quitarlo. Se guarda en este dispositivo."));
+    var hint = el("p", "reader-hint", "Selecciona el texto que quieras resaltar (arrastra el dedo o el mouse). Toca un resaltado para quitarlo. Se guarda en este dispositivo.");
+    root.appendChild(hint);
 
     var chapterTitle = el("h2", "reader-chapter-title");
     root.appendChild(chapterTitle);
@@ -257,34 +347,65 @@
     root.appendChild(foot);
 
     return {
-      bmBtn: bmBtn, progressBar: progressBar,
+      badge: badge, title: title, hint: hint, unitLabel: cfg.unitLabel,
+      bmBtn: bmBtn, progressBar: progressBar, manualNote: manualNote,
       resume: resume, resumeText: resumeText, resumeLink: resumeLink, resumeDismiss: resumeDismiss,
       prevBtn: prevBtn, select: select, nextBtn: nextBtn,
       chapterTitle: chapterTitle, content: content, foot: foot
     };
   }
 
+  // Reconstruye las opciones del selector de capítulos. Se llama al iniciar
+  // y de nuevo cuando cambia el idioma, para que al menos la palabra de
+  // unidad ("Capítulo" -> "Chapter") quede traducida; el resto del título
+  // (descriptivo) se deja en español para no disparar decenas de llamadas
+  // de traducción por cada cambio de idioma.
+  function buildChapterOptions(ui) {
+    var unitLabel = ui.unitLabel || cfg.unitLabel;
+    ui.select.innerHTML = "";
+    chapters.forEach(function (ch, i) {
+      var opt = document.createElement("option");
+      opt.value = String(i);
+      var alreadyLabeled = /^(Libro|Cap[ií]tulo|Secci[oó]n|Fragmento|Visi[oó]n|Mandamiento|S[ií]mil|Salmo)/i.test(ch.title);
+      var label = alreadyLabeled ? ch.title : (unitLabel + " " + (i + 1) + " — " + ch.title);
+      opt.textContent = label.slice(0, 70);
+      ui.select.appendChild(opt);
+    });
+    ui.select.value = String(current);
+  }
+
   function render(ui) {
     var ch = chapters[current];
+    var token = ++renderToken;
+    var t = window.VerboI18n ? window.VerboI18n.t : function (k) { return k; };
+    updateManualBanner(ui);
+
     ui.progressBar.style.width = Math.round(((current + 1) / chapters.length) * 100) + "%";
     ui.select.value = String(current);
     ui.prevBtn.disabled = current === 0;
     ui.nextBtn.disabled = current === chapters.length - 1;
-    ui.chapterTitle.textContent = ch.title;
 
-    ui.content.innerHTML = "";
-    paraTexts = splitIntoParagraphs(ch.text);
-    paraTexts.forEach(function (text, pi) {
-      var p = el("p", "reader-para");
-      p.dataset.para = String(pi);
-      renderParaContent(p, text, pi);
-      ui.content.appendChild(p);
+    ui.content.innerHTML = '<p class="reader-hint">' + t("reader.loading") + '</p>';
+
+    resolveChapterText(ch).then(function (resolved) {
+      if (token !== renderToken) return; // el usuario ya navegó a otro capítulo/idioma
+      translatedMode = resolved.translated;
+      ui.chapterTitle.textContent = resolved.title;
+      ui.content.innerHTML = "";
+      paraTexts = splitIntoParagraphs(resolved.text);
+      paraTexts.forEach(function (text, pi) {
+        var p = el("p", "reader-para");
+        p.dataset.para = String(pi);
+        renderParaContent(p, text, pi);
+        ui.content.appendChild(p);
+      });
     });
 
     ui.bmBtn.classList.toggle("is-active", !!(bookmark && bookmark.chapter === current));
-    ui.bmBtn.textContent = (bookmark && bookmark.chapter === current) ? "★ Marcado" : "☆ Marcar este capítulo";
+    ui.bmBtn.textContent = (bookmark && bookmark.chapter === current) ? t("reader.marked") : t("reader.markChapter");
 
-    ui.foot.textContent = cfg.unitLabel + " " + (current + 1) + " de " + chapters.length;
+    var unitLabel = ui.unitLabel || cfg.unitLabel;
+    ui.foot.textContent = t("reader.footOf", { unit: unitLabel, current: current + 1, total: chapters.length });
 
     window.location.hash = String(current + 1);
     window.scrollTo({ top: root.getBoundingClientRect().top + window.scrollY - 90, behavior: "smooth" });
@@ -304,15 +425,7 @@
     }
 
     var ui = buildSkeleton();
-
-    chapters.forEach(function (ch, i) {
-      var opt = document.createElement("option");
-      opt.value = String(i);
-      var alreadyLabeled = /^(Libro|Cap[ií]tulo|Secci[oó]n|Fragmento|Visi[oó]n|Mandamiento|S[ií]mil|Salmo)/i.test(ch.title);
-      var label = alreadyLabeled ? ch.title : (cfg.unitLabel + " " + (i + 1) + " — " + ch.title);
-      opt.textContent = label.slice(0, 70);
-      ui.select.appendChild(opt);
-    });
+    buildChapterOptions(ui);
 
     var hashChapter = parseInt((window.location.hash || "").replace("#", ""), 10);
     if (hashChapter && hashChapter >= 1 && hashChapter <= chapters.length) {
@@ -340,11 +453,20 @@
         bookmark = { chapter: current, ts: Date.now() };
       }
       saveJSON(BM_KEY, bookmark);
+      var t = window.VerboI18n ? window.VerboI18n.t : function (k) { return k; };
       ui.bmBtn.classList.toggle("is-active", !!bookmark);
-      ui.bmBtn.textContent = bookmark ? "★ Marcado" : "☆ Marcar este capítulo";
+      ui.bmBtn.textContent = bookmark ? t("reader.marked") : t("reader.markChapter");
     });
 
-    render(ui);
+    document.addEventListener("verbo:uilang-changed", function () {
+      applyChrome(ui).then(function () { render(ui); });
+    });
+
+    if (window.VerboI18n) {
+      window.VerboI18n.ready().then(function () { applyChrome(ui).then(function () { render(ui); }); });
+    } else {
+      render(ui);
+    }
   }
 
   root.innerHTML = '<p class="reader-hint">Cargando…</p>';

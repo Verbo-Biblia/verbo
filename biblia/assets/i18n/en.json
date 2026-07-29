@@ -183,7 +183,8 @@
     "navBiblia": "Bible",
     "navSeminario": "Seminary",
     "navLibreria": "Library",
-    "navRecursos": "Resources"
+    "navRecursos": "Resources",
+    "translationPending": "English translation in preparation — showing the Spanish original below."
   },
   "portal": {
     "tagline": "Bible compendium",
@@ -208,7 +209,22 @@
     "novedadesBadge": "latest additions",
     "seccionLibreria": "Library",
     "seccionRecursos": "Resources",
-    "footerTagline": "Verbo — made for those who preach, teach, and disciple."
+    "footerTagline": "Verbo — made for those who preach, teach, and disciple.",
+    "quote": "\"Ye are the light of the world. A city that is set on an hill cannot be hid.\"",
+    "quoteCite": "Matthew 5:14"
+  },
+  "reader": {
+    "markChapter": "☆ Mark this chapter",
+    "marked": "★ Marked",
+    "hint": "Select the text you want to highlight (drag your finger or mouse). Tap a highlight to remove it. Saved on this device only.",
+    "loading": "Loading…",
+    "loadError": "This book's content could not be loaded.",
+    "prev": "Previous",
+    "next": "Next",
+    "resumeBookmark": "You have a bookmark at {{unit}} {{n}}.",
+    "continue": "Continue →",
+    "discard": "Discard",
+    "footOf": "{{unit}} {{current}} of {{total}}"
   },
   "filtros": {
     "idioma": "Language",

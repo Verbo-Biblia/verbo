@@ -4,9 +4,15 @@
   // incluye), para que el mismo archivo sirva tanto a /biblia/ como a
   // cualquier otra página del sitio (portal, misión, librería, etc.) sin
   // duplicar diccionarios — ej. <script src="../biblia/assets/i18n.js">.
-  const scriptPath = (document.currentScript && document.currentScript.src || '').split('?')[0];
+  const scriptSrc = document.currentScript && document.currentScript.src || '';
+  const scriptPath = scriptSrc.split('?')[0];
   const SCRIPT_BASE = scriptPath ? scriptPath.replace(/[^/]+$/, '') : './';
-  const DICT_URLS = { es: SCRIPT_BASE + 'i18n/es.json', en: SCRIPT_BASE + 'i18n/en.json' };
+  // Reutiliza el "?v=" del propio <script src="i18n.js?v=..."> como cache-
+  // busting de los diccionarios: no tenían query string propio, así que un
+  // navegador que ya los cacheó nunca veía claves nuevas (ver CLAUDE.md,
+  // "Cache-busting de assets" — mismo problema, aplicado aquí).
+  const scriptQuery = scriptSrc.includes('?') ? '?' + scriptSrc.split('?')[1] : '';
+  const DICT_URLS = { es: SCRIPT_BASE + 'i18n/es.json' + scriptQuery, en: SCRIPT_BASE + 'i18n/en.json' + scriptQuery };
   const SUPPORTED = Object.keys(DICT_URLS);
   const UI_LANG_KEY = 'verbo:uiLang';
 

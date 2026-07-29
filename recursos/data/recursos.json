@@ -10,7 +10,10 @@
       "identidad-en-cristo"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/2corintios-5/"
+    "url": "/recursos/articulos-y-reflexiones/2corintios-5/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "aceptados-por-cristo",
@@ -23,7 +26,10 @@
       "gracia"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/aceptados-por-cristo/"
+    "url": "/recursos/articulos-y-reflexiones/aceptados-por-cristo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "aun-no-es-el-fin",
@@ -35,7 +41,10 @@
       "escatologia"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/aun-no-es-el-fin/"
+    "url": "/recursos/articulos-y-reflexiones/aun-no-es-el-fin/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "caminar-en-la-luz-del-dios-encarnado",
@@ -47,7 +56,10 @@
       "teologia"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/caminar-en-la-luz-del-dios-encarnado/"
+    "url": "/recursos/articulos-y-reflexiones/caminar-en-la-luz-del-dios-encarnado/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "como-agradar-a-dios",
@@ -59,7 +71,10 @@
       "santidad"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/como-agradar-a-dios/"
+    "url": "/recursos/articulos-y-reflexiones/como-agradar-a-dios/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "cosas-mejores-vendran",
@@ -71,7 +86,10 @@
       "esperanza"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/cosas-mejores-vendran/"
+    "url": "/recursos/articulos-y-reflexiones/cosas-mejores-vendran/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "de-donde-salio-la-biblia",
@@ -83,7 +101,10 @@
       "historia-de-la-biblia"
     ],
     "fecha_agregado": "2025-11-01",
-    "url": "/recursos/articulos-y-reflexiones/de-donde-salio-la-biblia/"
+    "url": "/recursos/articulos-y-reflexiones/de-donde-salio-la-biblia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "del-misterio-a-la-plenitud",
@@ -95,7 +116,10 @@
       "teologia"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/del-misterio-a-la-plenitud/"
+    "url": "/recursos/articulos-y-reflexiones/del-misterio-a-la-plenitud/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "desierto-eclesiastes-3",
@@ -108,7 +132,10 @@
       "esperanza"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/desierto-eclesiastes-3/"
+    "url": "/recursos/articulos-y-reflexiones/desierto-eclesiastes-3/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "dios-no-compite-con-el-ruido",
@@ -120,7 +147,10 @@
       "vida-cristiana"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/dios-no-compite-con-el-ruido/"
+    "url": "/recursos/articulos-y-reflexiones/dios-no-compite-con-el-ruido/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "efesios-2",
@@ -133,7 +163,10 @@
       "identidad-en-cristo"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/efesios-2/"
+    "url": "/recursos/articulos-y-reflexiones/efesios-2/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "el-ayuno-biblico-en-su-contexto",
@@ -145,7 +178,10 @@
       "vida-cristiana"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/el-ayuno-biblico-en-su-contexto/"
+    "url": "/recursos/articulos-y-reflexiones/el-ayuno-biblico-en-su-contexto/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "el-deseo-desconectado",
@@ -157,7 +193,10 @@
       "vida-cristiana"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/el-deseo-desconectado/"
+    "url": "/recursos/articulos-y-reflexiones/el-deseo-desconectado/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "el-diluvio-la-cruz-y-la-mentira-del-control",
@@ -169,7 +208,10 @@
       "apologetica"
     ],
     "fecha_agregado": "2025-11-01",
-    "url": "/recursos/articulos-y-reflexiones/el-diluvio-la-cruz-y-la-mentira-del-control/"
+    "url": "/recursos/articulos-y-reflexiones/el-diluvio-la-cruz-y-la-mentira-del-control/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "el-pecado-que-nadie-admite",
@@ -181,7 +223,10 @@
       "vida-cristiana"
     ],
     "fecha_agregado": "2025-11-01",
-    "url": "/recursos/articulos-y-reflexiones/el-pecado-que-nadie-admite/"
+    "url": "/recursos/articulos-y-reflexiones/el-pecado-que-nadie-admite/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "el-placer-de-ser-deseado",
@@ -193,7 +238,10 @@
       "vida-cristiana"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/el-placer-de-ser-deseado/"
+    "url": "/recursos/articulos-y-reflexiones/el-placer-de-ser-deseado/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "el-poder-anticipado-de-la-palabra",
@@ -205,7 +253,10 @@
       "teologia"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/el-poder-anticipado-de-la-palabra/"
+    "url": "/recursos/articulos-y-reflexiones/el-poder-anticipado-de-la-palabra/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "el-sindrome-ateo-del-descubridor-iluminado",
@@ -217,7 +268,10 @@
       "apologetica"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/el-sindrome-ateo-del-descubridor-iluminado/"
+    "url": "/recursos/articulos-y-reflexiones/el-sindrome-ateo-del-descubridor-iluminado/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "es-la-navidad-pagana-o-no-lo-es",
@@ -229,7 +283,10 @@
       "apologetica"
     ],
     "fecha_agregado": "2025-11-01",
-    "url": "/recursos/articulos-y-reflexiones/es-la-navidad-pagana-o-no-lo-es/"
+    "url": "/recursos/articulos-y-reflexiones/es-la-navidad-pagana-o-no-lo-es/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "es-malo-escuchar-musica-hecha-con-ia",
@@ -241,7 +298,10 @@
       "vida-cristiana"
     ],
     "fecha_agregado": "2025-11-01",
-    "url": "/recursos/articulos-y-reflexiones/es-malo-escuchar-musica-hecha-con-ia/"
+    "url": "/recursos/articulos-y-reflexiones/es-malo-escuchar-musica-hecha-con-ia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "fe-que-no-negocia",
@@ -253,7 +313,10 @@
       "fe"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/fe-que-no-negocia/"
+    "url": "/recursos/articulos-y-reflexiones/fe-que-no-negocia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "fe-y-voluntad",
@@ -265,7 +328,10 @@
       "fe"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/fe-y-voluntad/"
+    "url": "/recursos/articulos-y-reflexiones/fe-y-voluntad/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "fue-baruch-spinoza-el-primero-en-preguntar-sobre-la-biblia",
@@ -277,7 +343,10 @@
       "apologetica"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/fue-baruch-spinoza-el-primero-en-preguntar-sobre-la-biblia/"
+    "url": "/recursos/articulos-y-reflexiones/fue-baruch-spinoza-el-primero-en-preguntar-sobre-la-biblia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "hoy-si-oyes-su-voz",
@@ -289,7 +358,10 @@
       "fe"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/hoy-si-oyes-su-voz/"
+    "url": "/recursos/articulos-y-reflexiones/hoy-si-oyes-su-voz/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "isaias-53-y-el-mesias",
@@ -301,7 +373,10 @@
       "apologetica"
     ],
     "fecha_agregado": "2025-11-01",
-    "url": "/recursos/articulos-y-reflexiones/isaias-53-y-el-mesias/"
+    "url": "/recursos/articulos-y-reflexiones/isaias-53-y-el-mesias/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "jesus-y-el-antiguo-testamento",
@@ -313,7 +388,10 @@
       "apologetica"
     ],
     "fecha_agregado": "2025-11-01",
-    "url": "/recursos/articulos-y-reflexiones/jesus-y-el-antiguo-testamento/"
+    "url": "/recursos/articulos-y-reflexiones/jesus-y-el-antiguo-testamento/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "la-biblia-copio-mitologias",
@@ -325,7 +403,10 @@
       "apologetica"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/la-biblia-copio-mitologias/"
+    "url": "/recursos/articulos-y-reflexiones/la-biblia-copio-mitologias/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "mirada-que-nos-alcanzo",
@@ -337,7 +418,10 @@
       "gracia"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/mirada-que-nos-alcanzo/"
+    "url": "/recursos/articulos-y-reflexiones/mirada-que-nos-alcanzo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "permanece-en-la-vid",
@@ -349,7 +433,10 @@
       "vida-en-cristo"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/permanece-en-la-vid/"
+    "url": "/recursos/articulos-y-reflexiones/permanece-en-la-vid/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "piedad-sin-condescendencia",
@@ -361,7 +448,10 @@
       "santidad"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/piedad-sin-condescendencia/"
+    "url": "/recursos/articulos-y-reflexiones/piedad-sin-condescendencia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "por-que-un-universo-tan-vastamente-grande",
@@ -373,7 +463,10 @@
       "apologetica"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/por-que-un-universo-tan-vastamente-grande/"
+    "url": "/recursos/articulos-y-reflexiones/por-que-un-universo-tan-vastamente-grande/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "preparar-el-camino-y-disponer-el-corazon",
@@ -385,7 +478,10 @@
       "teologia"
     ],
     "fecha_agregado": "2025-10-01",
-    "url": "/recursos/articulos-y-reflexiones/preparar-el-camino-y-disponer-el-corazon/"
+    "url": "/recursos/articulos-y-reflexiones/preparar-el-camino-y-disponer-el-corazon/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "revelacion-progresiva",
@@ -397,7 +493,10 @@
       "teologia"
     ],
     "fecha_agregado": "2025-11-01",
-    "url": "/recursos/articulos-y-reflexiones/revelacion-progresiva/"
+    "url": "/recursos/articulos-y-reflexiones/revelacion-progresiva/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "romanos-8",
@@ -409,7 +508,10 @@
       "seguridad-en-cristo"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/romanos-8/"
+    "url": "/recursos/articulos-y-reflexiones/romanos-8/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "su-fidelidad-no-la-mia",
@@ -422,7 +524,10 @@
       "fidelidad-de-dios"
     ],
     "fecha_agregado": "2026-07-27",
-    "url": "/recursos/articulos-y-reflexiones/su-fidelidad-no-la-mia/"
+    "url": "/recursos/articulos-y-reflexiones/su-fidelidad-no-la-mia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-01-dios-creo-la-luz",
@@ -436,7 +541,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-01-dios-creo-la-luz/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-01-dios-creo-la-luz/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-02-dios-creo-el-cielo-y-el-mar",
@@ -450,7 +558,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-02-dios-creo-el-cielo-y-el-mar/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-02-dios-creo-el-cielo-y-el-mar/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-03-dios-creo-las-plantas",
@@ -464,7 +575,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-03-dios-creo-las-plantas/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-03-dios-creo-las-plantas/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-04-dios-creo-el-sol-la-luna-y-las-estrellas",
@@ -478,7 +592,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-04-dios-creo-el-sol-la-luna-y-las-estrellas/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-04-dios-creo-el-sol-la-luna-y-las-estrellas/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-05-dios-creo-los-animales",
@@ -492,7 +609,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-05-dios-creo-los-animales/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-05-dios-creo-los-animales/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-06-dios-creo-al-hombre-y-a-la-mujer",
@@ -506,7 +626,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-06-dios-creo-al-hombre-y-a-la-mujer/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-06-dios-creo-al-hombre-y-a-la-mujer/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-07-adan-y-eva-aprenden-a-obedecer",
@@ -520,7 +643,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-07-adan-y-eva-aprenden-a-obedecer/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-07-adan-y-eva-aprenden-a-obedecer/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-08-dios-cuida-a-noe",
@@ -534,7 +660,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-08-dios-cuida-a-noe/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-08-dios-cuida-a-noe/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-09-dios-llama-a-abraham",
@@ -548,7 +677,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-09-dios-llama-a-abraham/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-09-dios-llama-a-abraham/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-10-dios-promete-una-gran-familia",
@@ -562,7 +694,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-10-dios-promete-una-gran-familia/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-10-dios-promete-una-gran-familia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-11-el-nacimiento-de-isaac",
@@ -576,7 +711,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-11-el-nacimiento-de-isaac/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-11-el-nacimiento-de-isaac/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-12-dios-cuida-a-jacob",
@@ -590,7 +728,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-12-dios-cuida-a-jacob/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-12-dios-cuida-a-jacob/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-13-jose-y-sus-hermanos",
@@ -604,7 +745,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-13-jose-y-sus-hermanos/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-13-jose-y-sus-hermanos/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-14-jose-perdona",
@@ -618,7 +762,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-14-jose-perdona/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-14-jose-perdona/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-15-moises-bebe-protegido",
@@ -632,7 +779,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-15-moises-bebe-protegido/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-15-moises-bebe-protegido/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-16-la-zarza-ardiente",
@@ -646,7 +796,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-16-la-zarza-ardiente/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-16-la-zarza-ardiente/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-17-dios-libera-a-su-pueblo",
@@ -660,7 +813,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-17-dios-libera-a-su-pueblo/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-17-dios-libera-a-su-pueblo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-18-dios-abre-el-mar-rojo",
@@ -674,7 +830,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-18-dios-abre-el-mar-rojo/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-18-dios-abre-el-mar-rojo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-19-el-mana-del-cielo",
@@ -688,7 +847,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-19-el-mana-del-cielo/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-19-el-mana-del-cielo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-20-los-diez-mandamientos",
@@ -702,7 +864,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-20-los-diez-mandamientos/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-20-los-diez-mandamientos/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-21-samuel-el-nino-que-escuchaba",
@@ -716,7 +881,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-21-samuel-el-nino-que-escuchaba/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-21-samuel-el-nino-que-escuchaba/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-22-david-pastorcito",
@@ -730,7 +898,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-22-david-pastorcito/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-22-david-pastorcito/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-23-david-y-goliat",
@@ -744,7 +915,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-23-david-y-goliat/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-23-david-y-goliat/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-24-dios-esta-con-david",
@@ -758,7 +932,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-24-dios-esta-con-david/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-24-dios-esta-con-david/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-25-david-canta-a-dios",
@@ -772,7 +949,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-25-david-canta-a-dios/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-25-david-canta-a-dios/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-26-elias-y-el-silbo-apacible",
@@ -786,7 +966,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-26-elias-y-el-silbo-apacible/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-26-elias-y-el-silbo-apacible/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-27-jonas-y-el-gran-pez",
@@ -800,7 +983,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-27-jonas-y-el-gran-pez/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-27-jonas-y-el-gran-pez/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-28-daniel-en-el-foso-de-los-leones",
@@ -814,7 +1000,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-28-daniel-en-el-foso-de-los-leones/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-28-daniel-en-el-foso-de-los-leones/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-29-el-angel-anuncia-el-nacimiento-de-jesus",
@@ -828,7 +1017,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-29-el-angel-anuncia-el-nacimiento-de-jesus/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-29-el-angel-anuncia-el-nacimiento-de-jesus/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-30-jesus-nace",
@@ -842,7 +1034,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-30-jesus-nace/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-30-jesus-nace/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-31-los-pastores-adoran-a-jesus",
@@ -856,7 +1051,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-31-los-pastores-adoran-a-jesus/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-31-los-pastores-adoran-a-jesus/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-32-los-sabios-siguen-la-estrella",
@@ -870,7 +1068,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-32-los-sabios-siguen-la-estrella/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-32-los-sabios-siguen-la-estrella/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-33-jesus-llama-a-sus-amigos-los-discipulos",
@@ -884,7 +1085,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-33-jesus-llama-a-sus-amigos-los-discipulos/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-33-jesus-llama-a-sus-amigos-los-discipulos/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-34-jesus-sana-al-paralitico",
@@ -898,7 +1102,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-34-jesus-sana-al-paralitico/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-34-jesus-sana-al-paralitico/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-35-jesus-calma-la-tormenta",
@@ -912,7 +1119,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-35-jesus-calma-la-tormenta/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-35-jesus-calma-la-tormenta/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-36-jesus-alimenta-a-la-multitud",
@@ -926,7 +1136,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-36-jesus-alimenta-a-la-multitud/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-36-jesus-alimenta-a-la-multitud/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-37-jesus-ama-a-los-ninos",
@@ -940,7 +1153,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-37-jesus-ama-a-los-ninos/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-37-jesus-ama-a-los-ninos/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-38-jesus-resucita-a-la-nina",
@@ -954,7 +1170,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-38-jesus-resucita-a-la-nina/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-38-jesus-resucita-a-la-nina/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-39-el-buen-samaritano",
@@ -968,7 +1187,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-39-el-buen-samaritano/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-39-el-buen-samaritano/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-40-el-hijo-prodigo",
@@ -982,7 +1204,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-40-el-hijo-prodigo/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-40-el-hijo-prodigo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-41-la-entrada-triunfal-de-jesus",
@@ -996,7 +1221,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-41-la-entrada-triunfal-de-jesus/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-41-la-entrada-triunfal-de-jesus/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-42-jesus-da-su-vida-por-amor",
@@ -1010,7 +1238,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-42-jesus-da-su-vida-por-amor/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-42-jesus-da-su-vida-por-amor/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-43-jesus-resucita",
@@ -1024,7 +1255,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-43-jesus-resucita/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-43-jesus-resucita/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-44-la-gran-comision-version-infantil",
@@ -1038,7 +1272,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-44-la-gran-comision-version-infantil/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-44-la-gran-comision-version-infantil/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-45-pentecostes",
@@ -1052,7 +1289,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-45-pentecostes/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-45-pentecostes/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-46-pedro-comparte-sobre-jesus",
@@ -1066,7 +1306,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-46-pedro-comparte-sobre-jesus/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-46-pedro-comparte-sobre-jesus/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-47-pablo-viaja-a-muchas-ciudades",
@@ -1080,7 +1323,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-47-pablo-viaja-a-muchas-ciudades/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-47-pablo-viaja-a-muchas-ciudades/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-48-oramos-a-dios",
@@ -1094,7 +1340,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-48-oramos-a-dios/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-48-oramos-a-dios/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-49-podemos-confiar-en-dios",
@@ -1108,7 +1357,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-49-podemos-confiar-en-dios/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-49-podemos-confiar-en-dios/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-50-jesus-nos-ensena-a-perdonar",
@@ -1122,7 +1374,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-50-jesus-nos-ensena-a-perdonar/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-50-jesus-nos-ensena-a-perdonar/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-51-dios-nos-ama-siempre",
@@ -1136,7 +1391,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-51-dios-nos-ama-siempre/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-51-dios-nos-ama-siempre/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-52-jesus-es-nuestro-mejor-amigo",
@@ -1150,7 +1408,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "4-7",
-    "url": "/recursos/escuela-dominical/4-7-anos/leccion-52-jesus-es-nuestro-mejor-amigo/"
+    "url": "/recursos/escuela-dominical/4-7-anos/leccion-52-jesus-es-nuestro-mejor-amigo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-01-quien-es-jesus",
@@ -1164,7 +1425,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-01-quien-es-jesus/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-01-quien-es-jesus/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-02-el-nacimiento-que-cambio-la-historia",
@@ -1178,7 +1442,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-02-el-nacimiento-que-cambio-la-historia/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-02-el-nacimiento-que-cambio-la-historia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-03-el-bautismo-de-jesus",
@@ -1192,7 +1459,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-03-el-bautismo-de-jesus/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-03-el-bautismo-de-jesus/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-04-la-tentacion-en-el-desierto",
@@ -1206,7 +1476,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-04-la-tentacion-en-el-desierto/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-04-la-tentacion-en-el-desierto/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-05-jesus-llama-a-sus-primeros-discipulos",
@@ -1220,7 +1493,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-05-jesus-llama-a-sus-primeros-discipulos/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-05-jesus-llama-a-sus-primeros-discipulos/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-06-el-primer-milagro-jesus-transforma-el-agua-en-vino",
@@ -1234,7 +1510,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-06-el-primer-milagro-jesus-transforma-el-agua-en-vino/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-06-el-primer-milagro-jesus-transforma-el-agua-en-vino/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-07-jesus-sana-al-paralitico-fe-que-abre-caminos",
@@ -1248,7 +1527,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-07-jesus-sana-al-paralitico-fe-que-abre-caminos/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-07-jesus-sana-al-paralitico-fe-que-abre-caminos/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-08-jesus-limpia-al-leproso-compasion-que-toca-al-rechazado",
@@ -1262,7 +1544,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-08-jesus-limpia-al-leproso-compasion-que-toca-al-rechazado/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-08-jesus-limpia-al-leproso-compasion-que-toca-al-rechazado/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-09-jesus-calma-la-tormenta",
@@ -1276,7 +1561,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-09-jesus-calma-la-tormenta/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-09-jesus-calma-la-tormenta/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-10-jesus-alimenta-a-los-cinco-mil",
@@ -1290,7 +1578,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-10-jesus-alimenta-a-los-cinco-mil/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-10-jesus-alimenta-a-los-cinco-mil/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-11-la-parabola-del-sembrador",
@@ -1304,7 +1595,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-11-la-parabola-del-sembrador/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-11-la-parabola-del-sembrador/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-12-la-lampara-que-alumbra",
@@ -1318,7 +1612,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-12-la-lampara-que-alumbra/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-12-la-lampara-que-alumbra/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-13-la-semilla-de-mostaza",
@@ -1332,7 +1629,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-13-la-semilla-de-mostaza/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-13-la-semilla-de-mostaza/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-14-la-levadura-que-transforma",
@@ -1346,7 +1646,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-14-la-levadura-que-transforma/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-14-la-levadura-que-transforma/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-15-el-tesoro-escondido-y-la-perla-de-gran-precio",
@@ -1360,7 +1663,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-15-el-tesoro-escondido-y-la-perla-de-gran-precio/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-15-el-tesoro-escondido-y-la-perla-de-gran-precio/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-16-la-red-llena-de-peces",
@@ -1374,7 +1680,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-16-la-red-llena-de-peces/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-16-la-red-llena-de-peces/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-17-el-buen-samaritano",
@@ -1388,7 +1697,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-17-el-buen-samaritano/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-17-el-buen-samaritano/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-18-la-oveja-perdida",
@@ -1402,7 +1714,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-18-la-oveja-perdida/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-18-la-oveja-perdida/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-19-el-hijo-prodigo",
@@ -1416,7 +1731,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-19-el-hijo-prodigo/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-19-el-hijo-prodigo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-20-el-siervo-que-no-perdono",
@@ -1430,7 +1748,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-20-el-siervo-que-no-perdono/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-20-el-siervo-que-no-perdono/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-21-las-bienaventuranzas",
@@ -1444,7 +1765,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-21-las-bienaventuranzas/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-21-las-bienaventuranzas/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-22-la-sal-y-la-luz",
@@ -1458,7 +1782,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-22-la-sal-y-la-luz/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-22-la-sal-y-la-luz/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-23-amar-a-los-enemigos",
@@ -1472,7 +1799,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-23-amar-a-los-enemigos/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-23-amar-a-los-enemigos/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-24-el-padre-nuestro",
@@ -1486,7 +1816,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-24-el-padre-nuestro/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-24-el-padre-nuestro/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-25-el-ayuno-buscar-a-dios-de-corazon",
@@ -1500,7 +1833,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-25-el-ayuno-buscar-a-dios-de-corazon/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-25-el-ayuno-buscar-a-dios-de-corazon/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-26-tesoros-en-el-cielo",
@@ -1514,7 +1850,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-26-tesoros-en-el-cielo/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-26-tesoros-en-el-cielo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-27-no-juzgar-a-los-demas",
@@ -1528,7 +1867,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-27-no-juzgar-a-los-demas/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-27-no-juzgar-a-los-demas/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-28-la-regla-de-oro",
@@ -1542,7 +1884,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-28-la-regla-de-oro/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-28-la-regla-de-oro/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-29-los-dos-cimientos",
@@ -1556,7 +1901,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-29-los-dos-cimientos/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-29-los-dos-cimientos/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-30-la-fe-del-centurion",
@@ -1570,7 +1918,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-30-la-fe-del-centurion/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-30-la-fe-del-centurion/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-31-jesus-y-la-mujer-samaritana-el-agua-viva",
@@ -1584,7 +1935,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-31-jesus-y-la-mujer-samaritana-el-agua-viva/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-31-jesus-y-la-mujer-samaritana-el-agua-viva/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-32-jesus-y-nicodemo-nacer-de-nuevo",
@@ -1598,7 +1952,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-32-jesus-y-nicodemo-nacer-de-nuevo/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-32-jesus-y-nicodemo-nacer-de-nuevo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-33-jesus-en-casa-de-marta-y-maria-lo-mas-importante",
@@ -1612,7 +1969,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-33-jesus-en-casa-de-marta-y-maria-lo-mas-importante/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-33-jesus-en-casa-de-marta-y-maria-lo-mas-importante/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-34-la-mujer-del-flujo-de-sangre-fe-que-toca-a-jesus",
@@ -1626,7 +1986,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-34-la-mujer-del-flujo-de-sangre-fe-que-toca-a-jesus/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-34-la-mujer-del-flujo-de-sangre-fe-que-toca-a-jesus/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-35-jesus-resucita-a-la-hija-de-jairo-no-temas-cree",
@@ -1640,7 +2003,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-35-jesus-resucita-a-la-hija-de-jairo-no-temas-cree/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-35-jesus-resucita-a-la-hija-de-jairo-no-temas-cree/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-36-la-mujer-sorprendida-en-adulterio-gracia-que-restaura",
@@ -1654,7 +2020,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-36-la-mujer-sorprendida-en-adulterio-gracia-que-restaura/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-36-la-mujer-sorprendida-en-adulterio-gracia-que-restaura/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-37-el-joven-rico-lo-que-realmente-importa",
@@ -1668,7 +2037,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-37-el-joven-rico-lo-que-realmente-importa/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-37-el-joven-rico-lo-que-realmente-importa/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-38-zaqueo-un-encuentro-que-cambia-la-vida",
@@ -1682,7 +2054,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-38-zaqueo-un-encuentro-que-cambia-la-vida/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-38-zaqueo-un-encuentro-que-cambia-la-vida/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-39-bartimeo-gritando-por-misericordia",
@@ -1696,7 +2071,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-39-bartimeo-gritando-por-misericordia/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-39-bartimeo-gritando-por-misericordia/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-40-los-diez-leprosos-corazon-agradecido",
@@ -1710,7 +2088,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-40-los-diez-leprosos-corazon-agradecido/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-40-los-diez-leprosos-corazon-agradecido/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-41-la-entrada-triunfal-el-rey-humilde",
@@ -1724,7 +2105,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-41-la-entrada-triunfal-el-rey-humilde/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-41-la-entrada-triunfal-el-rey-humilde/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-42-la-ultima-cena-recuerden-lo-que-hice-por-ustedes",
@@ -1738,7 +2122,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-42-la-ultima-cena-recuerden-lo-que-hice-por-ustedes/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-42-la-ultima-cena-recuerden-lo-que-hice-por-ustedes/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-43-jesus-lava-los-pies-grandeza-en-servir",
@@ -1752,7 +2139,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-43-jesus-lava-los-pies-grandeza-en-servir/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-43-jesus-lava-los-pies-grandeza-en-servir/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-44-getsemani-obediencia-en-el-dolor",
@@ -1766,7 +2156,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-44-getsemani-obediencia-en-el-dolor/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-44-getsemani-obediencia-en-el-dolor/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-45-el-arresto-de-jesus-el-plan-de-dios-sigue",
@@ -1780,7 +2173,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-45-el-arresto-de-jesus-el-plan-de-dios-sigue/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-45-el-arresto-de-jesus-el-plan-de-dios-sigue/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-46-el-juicio-injusto-jesus-sufrio-por-nosotros",
@@ -1794,7 +2190,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-46-el-juicio-injusto-jesus-sufrio-por-nosotros/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-46-el-juicio-injusto-jesus-sufrio-por-nosotros/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-47-la-crucifixion-el-sacrificio-perfecto",
@@ -1808,7 +2207,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-47-la-crucifixion-el-sacrificio-perfecto/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-47-la-crucifixion-el-sacrificio-perfecto/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-48-las-siete-palabras-en-la-cruz-amor-hasta-el-final",
@@ -1822,7 +2224,10 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-48-las-siete-palabras-en-la-cruz-amor-hasta-el-final/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-48-las-siete-palabras-en-la-cruz-amor-hasta-el-final/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   },
   {
     "id": "leccion-49-la-resurreccion-jesus-vivio-de-nuevo",
@@ -1836,6 +2241,9 @@
     ],
     "fecha_agregado": "2026-07-25",
     "grupo_edad": "8-10",
-    "url": "/recursos/escuela-dominical/8-10-anos/leccion-49-la-resurreccion-jesus-vivio-de-nuevo/"
+    "url": "/recursos/escuela-dominical/8-10-anos/leccion-49-la-resurreccion-jesus-vivio-de-nuevo/",
+    "estrategia_traduccion": {
+      "modo": "auto_traducible"
+    }
   }
 ]

@@ -183,7 +183,8 @@
     "navBiblia": "Biblia",
     "navSeminario": "Seminario",
     "navLibreria": "Librería",
-    "navRecursos": "Recursos"
+    "navRecursos": "Recursos",
+    "translationPending": "Traducción al inglés en preparación — se muestra el original en español."
   },
   "portal": {
     "tagline": "compendio bíblico",
@@ -208,7 +209,22 @@
     "novedadesBadge": "lo último agregado",
     "seccionLibreria": "Librería",
     "seccionRecursos": "Recursos",
-    "footerTagline": "Verbo — hecho para quienes predican, enseñan y forman."
+    "footerTagline": "Verbo — hecho para quienes predican, enseñan y forman.",
+    "quote": "\"Vosotros sois la luz del mundo. Una ciudad asentada sobre un monte no se puede esconder.\"",
+    "quoteCite": "Mateo 5:14"
+  },
+  "reader": {
+    "markChapter": "☆ Marcar este capítulo",
+    "marked": "★ Marcado",
+    "hint": "Selecciona el texto que quieras resaltar (arrastra el dedo o el mouse). Toca un resaltado para quitarlo. Se guarda en este dispositivo.",
+    "loading": "Cargando…",
+    "loadError": "No se pudo cargar el contenido de este libro.",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "resumeBookmark": "Tienes un marcador en {{unit}} {{n}}.",
+    "continue": "Continuar →",
+    "discard": "Descartar",
+    "footOf": "{{unit}} {{current}} de {{total}}"
   },
   "filtros": {
     "idioma": "Idioma",

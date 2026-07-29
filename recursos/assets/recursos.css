@@ -116,6 +116,19 @@ body.recursos-page .static-page__main .article-badge {
   text-transform: uppercase;
   color: var(--r-gold);
 }
+body.recursos-page .static-page__main .i18n-manual-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(176, 138, 46, .08);
+  border: 1px solid var(--r-rule-strong);
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin: 0 0 20px;
+  font-size: .88rem;
+  color: var(--r-ink-soft);
+}
+body.recursos-page .static-page__main .i18n-manual-note[hidden] { display: none; }
 body.recursos-page .static-page__main article h1 {
   font-family: 'Fraunces', serif;
   font-weight: 600;

@@ -16,31 +16,33 @@
 <body class="static-page recursos-page">
 
   <header class="static-page__header">
-    <a class="static-page__brand" href="../../../">Verbo</a> <a href="https://paypal.me/VerboBiblia" target="_blank" rel="noopener noreferrer" class="ofrenda-btn" aria-label="Apoyar a Verbo con una ofrenda"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span>Ofrenda</span></a>
+    <a class="static-page__brand" href="../../../">Verbo</a>
+    <div class="ui-lang-switcher" id="uiLangSwitcher" role="group" data-i18n-attr="aria-label:header.uiLangAria"><button type="button" class="ui-lang-switcher__btn" data-lang="es">ES</button><button type="button" class="ui-lang-switcher__btn" data-lang="en">EN</button></div>
+    <a href="https://paypal.me/VerboBiblia" target="_blank" rel="noopener noreferrer" class="ofrenda-btn" data-i18n-attr="aria-label:header.ofrendaAria"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span data-i18n="header.ofrendaLabel">Ofrenda</span></a>
     <a class="static-page__back" href="../">← Artículos y Reflexiones</a>
   </header>
 
-  <nav class="quick-nav" aria-label="Otras áreas de Verbo">
+  <nav class="quick-nav" data-i18n-attr="aria-label:site.otrasAreasAria">
     <a href="../../../biblia/">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5C10 3.5 6.5 3 4 3.5v15c2.5-.5 6 0 8 1.5m0-15c2-1.5 5.5-2 8-1.5v15c-2.5-.5-6 0-8 1.5m0-15v15"/></svg>
-      Biblia
+      <span data-i18n="site.navBiblia">Biblia</span>
     </a>
     <a href="../../../seminario/">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 8.5L12 4l9 4.5-9 4.5-9-4.5Z"/><path d="M7 10.8V16c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-5.2"/></svg>
-      Seminario
+      <span data-i18n="site.navSeminario">Seminario</span>
     </a>
     <a href="../../../libreria/">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h3v16H4zM9 4h3v16H9zM14 5l3-.5 2 15.5-3 .5z"/></svg>
-      Librería
+      <span data-i18n="site.navLibreria">Librería</span>
     </a>
     <a href="../../../recursos/" class="is-current">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h16v4H4zM4 10h16v10H4z"/><path d="M9 14h6"/></svg>
-      Recursos
+      <span data-i18n="site.navRecursos">Recursos</span>
     </a>
   </nav>
 
   <main class="static-page__main">
-    <article>
+    <article data-i18n-strategy="auto">
       <p class="article-badge">Artículos y Reflexiones · Reflexión · 27 jul 2026</p>
       <h1>Efesios 2: de extraños a familia, solo por gracia</h1>
 
@@ -64,5 +66,9 @@
       <p class="lesson-nav"><a href="../2corintios-5/">← 2 Corintios 5:15-17: nueva criatura, nueva manera de ver</a> · <a href="../">Índice</a> · <a href="../romanos-8/">Romanos 8: seguridad en Cristo, no ausencia de dolor →</a></p>
     </article>
   </main>
+  <script src="../../../biblia/assets/i18n.js?v=20260729-shared-dict2"></script>
+  <script src="../../../biblia/assets/site-translate.js?v=20260729-2"></script>
+  <script src="../../../biblia/assets/content-translate.js?v=20260729-1"></script>
+  <script src="../../../biblia/assets/site-chrome.js?v=20260729-1"></script>
 </body>
 </html>

@@ -108,6 +108,61 @@ TIPO_OVERRIDE = {
 # el mecanismo por si aparecen nuevas piezas ambiguas más adelante.
 PENDIENTES = {}
 
+# ============================================================
+# Estrategia de traducción (2026-07-29) — español -> inglés on-demand.
+# Regla de prioridad: nativo_disponible > auto_traducible > requiere
+# traducción manual (arcaísmos/OCR que rompen el traductor automático).
+# Por defecto todo el contenido moderno de Juan (Recursos) es
+# auto_traducible; las excepciones curadas a mano van aquí, encontradas
+# escaneando el texto fuente en busca de caracteres de Área de Uso Privado
+# (U+E000-U+F8FF), residuo típico de ligaduras OCR mal decodificadas al
+# convertir un PDF escaneado.
+# ============================================================
+
+ESTRATEGIA_DEFAULT = {"modo": "auto_traducible"}
+
+ESTRATEGIA_OVERRIDE = {
+    # Librería — patrística ES traducida por Juan desde DOCX (sin OCR),
+    # pero basada en Ante-Nicene Fathers (ed. Roberts & Donaldson), que SÍ
+    # tiene traducción inglesa nativa de dominio público en newadvent.org/
+    # fathers. No la marcamos nativo_disponible porque ese texto inglés no
+    # vive en este repo todavía — queda como auto_traducible con nota, para
+    # que Juan decida si vale la pena sumarlo como fuente nativa después.
+    "la-didache": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "primera-clemente": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "segunda-clemente": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "el-pastor-de-hermas": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "epistola-de-bernabe": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "epistola-a-diogneto": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "fragmentos-de-papias": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "martirio-de-ignacio": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "martirio-de-policarpo": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "policarpo-a-los-filipenses": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+    "contra-las-herejias": {"modo": "auto_traducible", "nota": "Traducción de Ante-Nicene Fathers (dominio público); existe versión inglesa nativa en newadvent.org/fathers, no incluida aún en el repo."},
+
+    # Librería — Matthew Henry ya es el texto inglés nativo (dominio
+    # público), reutilizado del módulo de comentario que ya usa el panel
+    # de /biblia/. No hace falta traducir nada hacia inglés.
+    "matthew-henry": {"modo": "nativo_disponible", "nativo_ref": "biblia/modules/commentaries/matthew-henry-en", "nota": "El lector de Librería ya sirve el texto inglés nativo; la traducción EN->ES para lectores hispanos usa el mecanismo existente del panel de Comentario, no está conectada todavía en el lector de Librería (gap detectado, fuera de alcance de esta tarea)."},
+
+    # Librería — Chapel Library: dos de los tres folletos tienen residuos
+    # de OCR (ligaduras mal decodificadas del PDF original) detectados por
+    # escaneo de caracteres U+E000-U+F8FF en el texto fuente.
+    "deberes-de-hijos-y-padres": {"modo": "requiere_traduccion_manual", "motivo": "Símbolo residual de OCR en el texto fuente (ligadura mal decodificada del PDF original, U+F065/U+F066 al final del texto) — riesgo de romper la traducción automática."},
+    "el-tesoro-de-david-condensado": {"modo": "requiere_traduccion_manual", "motivo": "Símbolo residual de OCR en el texto fuente (ligadura mal decodificada del PDF original, U+F066 al final del texto) — riesgo de romper la traducción automática."},
+    # "totalmente-por-gracia" no tiene residuos de OCR detectados -> auto_traducible por defecto.
+
+    # Librería — Evangelio según Jesucristo es texto bíblico (armonía
+    # cronológica de los cuatro Evangelios), no un ensayo de Juan. Mismo
+    # criterio ya usado en el resto del sitio: el texto bíblico no se
+    # traduce automáticamente (ver decisión i18n 2026-07-29).
+    "evangelio-segun-jesucristo": {"modo": "requiere_traduccion_manual", "motivo": "Es texto bíblico (armonía cronológica de los Evangelios), no un ensayo — mismo criterio que excluye el texto bíblico de traducción automática en el resto del sitio. Traducir a mano o evaluar una armonía nativa en inglés si Juan lo decide."},
+}
+
+
+def estrategia_para(slug):
+    return ESTRATEGIA_OVERRIDE.get(slug, ESTRATEGIA_DEFAULT)
+
 TEMAS_OVERRIDE = {
     "2corintios-5": ["gracia", "identidad-en-cristo"],
     "efesios-2": ["gracia", "identidad-en-cristo"],
@@ -166,6 +221,7 @@ def build_articulos(approx_flags):
             "temas": temas,
             "fecha_agregado": fecha,
             "url": f"/recursos/articulos-y-reflexiones/{slug}/",
+            "estrategia_traduccion": estrategia_para(slug),
             **({"pendiente_revision": True, "nota_pendiente": PENDIENTES[slug]} if slug in PENDIENTES else {}),
         })
     return items
@@ -209,6 +265,7 @@ def build_escuela_dominical():
                 "fecha_agregado": fecha,
                 "grupo_edad": grupo_edad,
                 "url": f"/recursos/escuela-dominical/{grupo_edad}-anos/{slug}/",
+                "estrategia_traduccion": estrategia_para(slug),
             })
     return items
 
@@ -242,7 +299,9 @@ LIBRERIA_META = {
 }
 
 BOOK_ROW_RE = re.compile(
-    r'<a class="r-book-row" href="([^/"]+)/"[^>]*>.*?<span class="book-cover-title">([^<]+)</span>',
+    r'<a class="r-book-row" href="([^/"]+)/"[^>]*>'
+    r'(?:(?!<a class="r-book-row").)*?'
+    r'<span class="book-cover-title"[^>]*>([^<]+)</span>',
     re.S,
 )
 
@@ -263,6 +322,7 @@ def build_libreria():
             "fecha_agregado": fecha,
             "autor": meta.get("autor"),
             "url": f"/libreria/{slug}/",
+            "estrategia_traduccion": estrategia_para(slug),
         })
     return items
 
@@ -539,7 +599,7 @@ def generate_matthew_henry():
             back_href="../",
             back_label="Matthew Henry",
             body_html=body,
-            extra_head='<link rel="stylesheet" href="../../assets/reader.css?v=4">\n',
+            extra_head='<link rel="stylesheet" href="../../assets/reader.css?v=5">\n',
             body_class="static-page recursos-page",
         )
         (d / "index.html").write_text(html, encoding="utf-8")

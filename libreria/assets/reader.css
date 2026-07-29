@@ -112,6 +112,17 @@ body.recursos-page .reader-resume-banner button {
   text-decoration: underline;
 }
 
+body.recursos-page .reader-manual-note[hidden] { display: none; }
+body.recursos-page .reader-manual-note {
+  background: rgba(176, 138, 46, .08);
+  border: 1px solid var(--r-rule-strong);
+  border-radius: 4px;
+  padding: 10px 16px;
+  margin: 0 0 20px;
+  font-size: .88rem;
+  color: var(--r-ink-soft);
+}
+
 body.recursos-page .reader-chapternav {
   display: flex;
   align-items: center;
