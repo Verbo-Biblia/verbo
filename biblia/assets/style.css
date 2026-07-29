@@ -135,6 +135,29 @@ body {
   gap: 18px;
 }
 
+.ui-lang-switcher {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--rule-strong);
+  border-radius: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.ui-lang-switcher__btn {
+  border: 0;
+  background: var(--paper-raised);
+  color: var(--sepia);
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: .02em;
+  padding: 6px 11px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ui-lang-switcher__btn + .ui-lang-switcher__btn { border-left: 1px solid var(--rule-strong); }
+.ui-lang-switcher__btn:hover { color: var(--wine-soft); }
+.ui-lang-switcher__btn.is-active { background: var(--wine-soft); color: #fff; }
+
 .book-picker {
   display: flex;
   align-items: baseline;

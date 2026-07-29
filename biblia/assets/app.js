@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  if (window.VerboI18n) await window.VerboI18n.ready();
+  const t = (key, vars) => (window.VerboI18n ? window.VerboI18n.t(key, vars) : key);
   const els = {
     body: document.body,
     book: document.getElementById('bookSelect'),
@@ -122,8 +124,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (window.Capacitor?.isNativePlatform?.() && window.Capacitor?.Plugins?.Share) {
       try { await window.Capacitor.Plugins.Share.share({ text }); return; } catch {}
     }
-    try { await navigator.clipboard.writeText(text); toast('Copiado'); }
-    catch { const area=document.createElement('textarea'); area.value=text; document.body.appendChild(area); area.select(); document.execCommand('copy'); area.remove(); toast('Copiado'); }
+    try { await navigator.clipboard.writeText(text); toast(t('toast.copiado')); }
+    catch { const area=document.createElement('textarea'); area.value=text; document.body.appendChild(area); area.select(); document.execCommand('copy'); area.remove(); toast(t('toast.copiado')); }
   };
   const toast = (message, duration=1400) => {
     let el=document.querySelector('.verbo-toast');
@@ -136,6 +138,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     catalog = await VerboModules.getCatalog();
+    // Primera visita (sin `verbo:lastVersion` guardado todavía): usar el
+    // idioma detectado/guardado de interfaz (ver assets/i18n.js) para elegir
+    // también la Biblia por defecto — una Biblia en ese idioma si existe, si
+    // no RVA 1909 como respaldo. Es una decisión de arranque única: en
+    // cuanto el usuario elige una Biblia (o esta corrida guarda una), queda
+    // fijada en `verbo:lastVersion` como siempre y esta lógica no vuelve a
+    // correr. No toca contentLang() ni el idioma de interfaz.
+    if (!currentVersion && window.VerboI18n) {
+      const detectedLang = window.VerboI18n.getUiLang();
+      const bySameLang = bibleCatalog().find(v => v.lang === detectedLang);
+      const fallback = detectedLang !== 'es' ? bibleCatalog().find(v => v.id === 'rva-1909') : null;
+      const preferred = bySameLang || fallback;
+      if (preferred) currentVersion = preferred.id;
+    }
     populateBooks();
     if (!commentaryCatalog().some(c => c.id === currentCommentary)) currentCommentary = commentaryCatalog()[0]?.id || null;
     if (!dictionaryCatalog().some(c => c.id === currentDictionary)) currentDictionary = dictionaryCatalog()[0]?.id || null;
@@ -188,7 +204,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       window.scrollTo({top:0, behavior:'smooth'});
     } catch (error) {
       console.error(error);
-      els.list.innerHTML = emptyState('⚠️', 'No se pudo cargar este pasaje.');
+      els.list.innerHTML = emptyState('⚠️', t('biblia.loadError'));
     } finally { setLoading(false); }
   }
 
@@ -329,7 +345,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (activeTab === 'comentario') renderPanel('comentario');
     } catch (error) {
       console.error(error);
-      toast(error.message || 'No se pudo cargar la Biblia en línea');
+      toast(error.message || t('toast.noBibleOnline'));
       populateVersions();
     } finally { setLoading(false); }
   }
@@ -352,7 +368,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const word=document.createElement('span'); word.className='word-segment'; word.textContent=(index?' ':'')+(seg.text||'');
           text.appendChild(word);
           const strongCodes=[...(seg.strong?[seg.strong]:[]),...(Array.isArray(seg.strongs)?seg.strongs:[])].filter((code,pos,all)=>code&&all.indexOf(code)===pos);
-          strongCodes.forEach((code,codeIndex)=>{ const tag=document.createElement('button'); tag.type='button'; tag.className='strongs-tag'; tag.textContent=code; tag.dataset.strongCode=code; const morphs=[...(seg.morph?[seg.morph]:[]),...(Array.isArray(seg.morphs)?seg.morphs:[])]; tag.title=morphs[codeIndex]?`Morfología: ${morphs[codeIndex]}`:'Abrir diccionario'; text.appendChild(tag); });
+          strongCodes.forEach((code,codeIndex)=>{ const tag=document.createElement('button'); tag.type='button'; tag.className='strongs-tag'; tag.textContent=code; tag.dataset.strongCode=code; const morphs=[...(seg.morph?[seg.morph]:[]),...(Array.isArray(seg.morphs)?seg.morphs:[])]; tag.title=morphs[codeIndex]?t('biblia.morfologiaTitle',{value:morphs[codeIndex]}):t('biblia.abrirDiccionarioTitle'); text.appendChild(tag); });
         });
       } else text.textContent=v.text[currentVersion] || Object.values(v.text)[0] || '';
       const margin=document.createElement('span'); margin.className='marginalia';
@@ -370,9 +386,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         indicator.className='verse__comment-indicator';
         const count=v.commentaries.length;
         indicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">💬</span><span class="verse__comment-indicator__count">${count}</span>`;
-        const plural=count===1?'comentario disponible':'comentarios disponibles';
-        indicator.title=`${count} ${plural} para este versículo`;
-        indicator.setAttribute('aria-label',`Ver ${count} ${plural} en ${data.meta.book} ${data.meta.chapter}:${v.n}`);
+        const plural=t(count===1?'biblia.comentarioSingular':'biblia.comentarioPlural');
+        indicator.title=t('biblia.comentariosTitle',{count,plural});
+        indicator.setAttribute('aria-label',t('biblia.verComentariosAria',{count,plural,ref:`${data.meta.book} ${data.meta.chapter}:${v.n}`}));
         indicator.addEventListener('click',(e)=>{
           e.stopPropagation();
           document.querySelectorAll('.verse--active').forEach(x=>x.classList.remove('verse--active'));
@@ -386,9 +402,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         libIndicator.type='button';
         libIndicator.className='verse__comment-indicator verse__comment-indicator--library';
         libIndicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">📚</span><span class="verse__comment-indicator__count">${v.libraryCount}</span>`;
-        const libPlural=v.libraryCount===1?'artículo disponible':'artículos disponibles';
-        libIndicator.title=`${v.libraryCount} ${libPlural} en Biblioteca para este versículo`;
-        libIndicator.setAttribute('aria-label',`Ver ${v.libraryCount} ${libPlural} de Biblioteca en ${data.meta.book} ${data.meta.chapter}:${v.n}`);
+        const libPlural=t(v.libraryCount===1?'biblia.articuloSingular':'biblia.articuloPlural');
+        libIndicator.title=t('biblia.verBibliotecaTitle',{count:v.libraryCount,plural:libPlural});
+        libIndicator.setAttribute('aria-label',t('biblia.verBibliotecaAria',{count:v.libraryCount,plural:libPlural,ref:`${data.meta.book} ${data.meta.chapter}:${v.n}`}));
         libIndicator.addEventListener('click',(e)=>{
           e.stopPropagation();
           document.querySelectorAll('.verse--active').forEach(x=>x.classList.remove('verse--active'));
@@ -402,9 +418,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         patristicIndicator.type='button';
         patristicIndicator.className='verse__comment-indicator verse__comment-indicator--patristic';
         patristicIndicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">📜</span><span class="verse__comment-indicator__count">${v.patristicCount}</span>`;
-        const patristicPlural=v.patristicCount===1?'fragmento patrístico disponible':'fragmentos patrísticos disponibles';
-        patristicIndicator.title=`${v.patristicCount} ${patristicPlural} para este versículo`;
-        patristicIndicator.setAttribute('aria-label',`Ver ${v.patristicCount} ${patristicPlural} en ${data.meta.book} ${data.meta.chapter}:${v.n}`);
+        const patristicPlural=t(v.patristicCount===1?'biblia.fragmentoSingular':'biblia.fragmentoPlural');
+        patristicIndicator.title=t('biblia.verPadresTitle',{count:v.patristicCount,plural:patristicPlural});
+        patristicIndicator.setAttribute('aria-label',t('biblia.verPadresAria',{count:v.patristicCount,plural:patristicPlural,ref:`${data.meta.book} ${data.meta.chapter}:${v.n}`}));
         patristicIndicator.addEventListener('click',(e)=>{
           e.stopPropagation();
           document.querySelectorAll('.verse--active').forEach(x=>x.classList.remove('verse--active'));
@@ -427,7 +443,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const addChip=ref=>{
           const chip=document.createElement('button');
           chip.type='button'; chip.className='verse__xref-chip'; chip.textContent=ref.label;
-          chip.title=`Ver referencia cruzada: ${ref.label}`;
+          chip.title=t('biblia.verXrefTitle',{ref:ref.label});
           chip.addEventListener('click',(e)=>{ e.stopPropagation(); openCrossref(ref); });
           xrefRow.appendChild(chip);
         };
@@ -435,7 +451,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if((v.crossrefs||[]).length>XREF_LIMIT){
           const rest=v.crossrefs.slice(XREF_LIMIT);
           const more=document.createElement('button');
-          more.type='button'; more.className='verse__xref-more'; more.textContent=`+${rest.length} más`;
+          more.type='button'; more.className='verse__xref-more'; more.textContent=t('biblia.masReferencias',{n:rest.length});
           more.addEventListener('click',(e)=>{
             e.stopPropagation();
             rest.forEach(addChip);
@@ -595,7 +611,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const moduleInfo=selectedVerse?.commentaries?.find(c=>c.commentaryId===currentCommentary);
         focus = moduleInfo?.noteIds?.[0] || null;
       }
-      els.panelTitle.textContent='Comentario';
+      els.panelTitle.textContent=t('comentario.title');
       const installed=commentaryCatalog();
       const currentManifest=catalog?.commentaries?.find(c=>c.manifest.id===currentCommentary)?.manifest;
       const commentarySourceLang=currentManifest?.language||null;
@@ -627,10 +643,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       els.panelBody.innerHTML=entries.length?entries.map(([id,n])=>{
         const cachedTranslation=needsCommentaryTranslation ? tcacheGet(translationCacheKey(id,n.body,contentLang())) : null;
         const bodyHtml=needsCommentaryTranslation
-          ? `${autoTranslationNoticeHtml()}${cachedTranslation||`<p class="note-card__translating">Traduciendo…</p>`}${originalSourceDetailsHtml(n.body,commentarySourceLang)}`
+          ? `${autoTranslationNoticeHtml()}${cachedTranslation||`<p class="note-card__translating">${t('comentario.traduciendo')}</p>`}${originalSourceDetailsHtml(n.body,commentarySourceLang)}`
           : n.body;
-        return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${commentCtx.data.meta.book} ${commentCtx.data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">Copiar comentario</button><div class="note-card__body">${bodyHtml}</div></div>`;
-      }).join(''):emptyState('📖','Este capítulo todavía no tiene comentarios cargados.');
+        return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${commentCtx.data.meta.book} ${commentCtx.data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">${t('comentario.copiarComentario')}</button><div class="note-card__body">${bodyHtml}</div></div>`;
+      }).join(''):emptyState('📖',t('comentario.sinComentarios'));
       els.panelBody.querySelectorAll('[data-copy-note]').forEach(btn=>btn.addEventListener('click',()=>{ const note=commentCtx.data.notes[btn.dataset.copyNote]; if(note) copyToClipboard(`${note.title}\n${String(note.body).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`); }));
       if(focus){ if(delayScroll) setTimeout(()=>scrollCommentToNote(focus),320); else scrollCommentToNote(focus); }
       if(needsCommentaryTranslation) setTimeout(()=>applyCommentaryTranslation(focus, commentarySourceLang), 150);
@@ -766,11 +782,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     return blocks.map(block=>`<p>${escapeHTML(block)}</p>`).join('');
   }
   function originalSourceDetailsHtml(htmlContent, sourceLang='en'){
-    const label=sourceLang==='en'?'Original en inglés':'Texto original';
+    const label=sourceLang==='en'?t('comentario.originalIngles'):t('comentario.textoOriginal');
     return `<details class="note-card__original"><summary>${label}</summary><div class="note-card__original-body">${htmlContent}</div></details>`;
   }
   function autoTranslationNoticeHtml(){
-    return `<p class="note-card__translation-note">Traducción automática provisional. Si el inglés fuente viene de OCR o está escrito de forma antigua, compara con el original.</p>`;
+    return `<p class="note-card__translation-note">${t('comentario.avisoTraduccion')}</p>`;
   }
 
   function splitTextIntoChunks(text, maxLen=4500){
@@ -1276,16 +1292,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const visible=results.slice(start,end);
     els.panelBody.innerHTML=`
       <div class="search-summary">
-        <strong>${results.length} resultados</strong>
-        <span>${escapeHTML(scopeLabel)} · mostrando ${start+1}–${end}</span>
+        <strong>${t('busqueda.resultadosCount',{count:results.length})}</strong>
+        <span>${t('busqueda.mostrando',{scope:escapeHTML(scopeLabel),start:start+1,end})}</span>
       </div>
       <div class="search-results-list">
         ${visible.map((r,i)=>`<button class="search-result" type="button" data-result="${start+i}"><span class="search-result__ref">${escapeHTML(r.book)} ${r.chapter}:${r.verse}${r.verseEnd && r.verseEnd!==r.verse ? `-${r.verseEnd}` : ''}${semantic ? ` · ${(r.score*100).toFixed(1)}%` : ''}</span><span class="search-result__text">${escapeHTML(r.text)}</span></button>`).join('')}
       </div>
-      <nav class="search-pagination" aria-label="Páginas de resultados">
-        <button class="search-page-button" id="searchPrevPage" type="button" ${page===0?'disabled':''}>‹ Anterior</button>
-        <span class="search-page-status">Página ${page+1} de ${totalPages}</span>
-        <button class="search-page-button" id="searchNextPage" type="button" ${page>=totalPages-1?'disabled':''}>Siguiente ›</button>
+      <nav class="search-pagination" aria-label="${t('busqueda.paginasAria')}">
+        <button class="search-page-button" id="searchPrevPage" type="button" ${page===0?'disabled':''}>${t('busqueda.anterior')}</button>
+        <span class="search-page-status">${t('busqueda.paginaEstado',{page:page+1,total:totalPages})}</span>
+        <button class="search-page-button" id="searchNextPage" type="button" ${page>=totalPages-1?'disabled':''}>${t('busqueda.siguiente')}</button>
       </nav>`;
     els.panelBody.querySelectorAll('.search-result').forEach(btn=>btn.addEventListener('click',()=>openSearchResult(results[Number(btn.dataset.result)], versionId)));
     document.getElementById('searchPrevPage')?.addEventListener('click',()=>{ if(page>0){ searchState.page=page-1; renderSavedSearchResults(); els.panelBody.scrollTop=0;} });
@@ -1293,22 +1309,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function renderSearch(){
-    els.panelTitle.textContent='Buscar en la Biblia';
+    els.panelTitle.textContent=t('busqueda.title');
     // "Perícopas" (bloques de ~6 versículos) es el modo por defecto porque el
     // modelo de embeddings da una similitud mucho más confiable a bloques con
     // contexto que a versículos sueltos muy cortos, que suelen quedar mal
     // rankeados (ver evaluación con "chisme": el versículo correcto quedaba
     // en el puesto ~9500/31000, pero la perícopa correcta en el puesto ~400/5700).
-    const saved = searchState || { query:'', versionId:'rv-verbo', indexType:'pericopes', results:[], page:0, scopeLabel:'Semántica · Biblia completa BV2026', semantic:true };
+    const saved = searchState || { query:'', versionId:'rv-verbo', indexType:'pericopes', results:[], page:0, scopeLabel:t('busqueda.scopeInicial'), semantic:true };
     els.panelToolbar.innerHTML=`<form class="search-panel-form" id="searchForm">
-      <input id="searchInput" class="search-panel-input" type="search" minlength="2" placeholder="Pregunta o tema…" autocomplete="off" value="${escapeHTML(saved.query)}">
-      <select id="searchIndexType" class="search-panel-select" aria-label="Tipo de índice semántico">
-        <option value="pericopes" ${saved.indexType!=='verses'?'selected':''}>Bloques de versículos (recomendado)</option>
-        <option value="verses" ${saved.indexType==='verses'?'selected':''}>Versículo individual</option>
+      <input id="searchInput" class="search-panel-input" type="search" minlength="2" placeholder="${t('busqueda.placeholder')}" autocomplete="off" value="${escapeHTML(saved.query)}">
+      <select id="searchIndexType" class="search-panel-select" aria-label="${t('busqueda.tipoIndiceAria')}">
+        <option value="pericopes" ${saved.indexType!=='verses'?'selected':''}>${t('busqueda.bloques')}</option>
+        <option value="verses" ${saved.indexType==='verses'?'selected':''}>${t('busqueda.versiculoIndividual')}</option>
       </select>
-      <button class="search-panel-button" type="submit">Buscar</button>
+      <button class="search-panel-button" type="submit">${t('busqueda.boton')}</button>
     </form>`;
-    els.panelBody.innerHTML=emptyState('⌕','Busca en lenguaje natural en toda la Biblia Verbo BV2026. Los resultados se ordenan con un índice semántico local.');
+    els.panelBody.innerHTML=emptyState('⌕',t('busqueda.intro'));
 
     const form=document.getElementById('searchForm');
     const input=document.getElementById('searchInput');
@@ -1319,7 +1335,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const indexType=indexTypeSelect.value;
       if(searchState && (q!==searchState.query || indexType!==searchState.indexType)){
         searchState=null;
-        els.panelBody.innerHTML=q.length?emptyState('⌕','Pulsa Buscar para ver nuevos resultados.'):emptyState('⌕','Escribe al menos dos caracteres.');
+        els.panelBody.innerHTML=q.length?emptyState('⌕',t('busqueda.pulsaBuscar')):emptyState('⌕',t('busqueda.minCaracteres'));
       }
     };
 
@@ -1334,20 +1350,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       const query=input.value.trim();
       const versionId='rv-verbo';
       const indexType=indexTypeSelect.value === 'pericopes' ? 'pericopes' : 'verses';
-      if(query.length<2){ searchState=null; els.panelBody.innerHTML=emptyState('⌕','Escribe al menos dos caracteres.'); return; }
-      els.panelBody.innerHTML=emptyState('⌛','Preparando búsqueda semántica…');
+      if(query.length<2){ searchState=null; els.panelBody.innerHTML=emptyState('⌕',t('busqueda.minCaracteres')); return; }
+      els.panelBody.innerHTML=emptyState('⌛',t('busqueda.preparando'));
       try{
-        const stageText={index:'Cargando índice local…',model:'Cargando modelo semántico local…',embedding:'Leyendo la pregunta…',ranking:'Ordenando resultados…'};
+        const stageText={index:t('busqueda.stageIndex'),model:t('busqueda.stageModel'),embedding:t('busqueda.stageEmbedding'),ranking:t('busqueda.stageRanking')};
         const results=await VerboModules.searchSemanticBible(query,{
           indexType,
           limit:90,
-          onProgress:p=>{els.panelBody.innerHTML=emptyState('⌛',stageText[p.stage] || 'Buscando…');}
+          onProgress:p=>{els.panelBody.innerHTML=emptyState('⌛',stageText[p.stage] || t('busqueda.buscando'));}
         });
-        const scopeLabel=`Semántica · Biblia completa BV2026 · ${indexType==='pericopes'?'perícopas':'versículos'}`;
+        const scopeLabel=t('busqueda.scopeDinamica',{tipo:t(indexType==='pericopes'?'busqueda.tipoPericopas':'busqueda.tipoVersiculos')});
         searchState={query, versionId, indexType, results, page:0, scopeLabel, semantic:true};
-        if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',`No se encontraron resultados para “${escapeHTML(query)}”.`); return; }
+        if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',t('busqueda.sinResultados',{query:escapeHTML(query)})); return; }
         renderSavedSearchResults();
-      }catch(error){ console.error(error); els.panelBody.innerHTML=emptyState('⚠️','No se pudo completar la búsqueda.'); }
+      }catch(error){ console.error(error); els.panelBody.innerHTML=emptyState('⚠️',t('busqueda.errorBusqueda')); }
     });
   }
 
@@ -1393,7 +1409,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return verseNumber >= start && verseNumber <= end;
   }
 
-  function renderLinkedResourceEntries(resource, entries, focus, emptyIcon='📚', emptyText='Este capítulo todavía no tiene entradas cargadas.', manifestPath=null){
+  function renderLinkedResourceEntries(resource, entries, focus, emptyIcon='📚', emptyText=t('linked.sinEntradas'), manifestPath=null){
     if(!entries.length){ els.panelBody.innerHTML=emptyState(emptyIcon, emptyText); return; }
     els.panelBody.innerHTML=entries.map((entry,index)=>{
       const id=entry.id || `${resource.manifest.id}-${currentBook}-${currentChapter}-${index}`;
@@ -1404,13 +1420,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       // un excerpt corto + articleId en vez del contenido completo, para no duplicar articulos
       // largos en cada verso que citan. El boton carga el articulo completo bajo demanda.
       const readFullBtn = (entry.articleId && manifestPath)
-        ? `<button class="note-card__copy" type="button" data-read-full="${index}">Leer artículo completo</button>`
+        ? `<button class="note-card__copy" type="button" data-read-full="${index}">${t('linked.leerCompleto')}</button>`
         : '';
       return `<div class="note-card${active}" data-linked-id="${escapeHTML(id)}" data-linked-index="${index}">
         <div class="note-card__ref">${escapeHTML(data.meta.book)} ${data.meta.chapter}${entry.reference?.verseStart ? ':'+escapeHTML(entry.reference.verseStart) : ''}</div>
         <div class="note-card__title">${escapeHTML(title)}</div>
         <div class="note-card__author">${escapeHTML(entry.author || resource.manifest.name)}</div>
-        <button class="note-card__copy" type="button" data-copy-linked="${index}">Copiar</button>
+        <button class="note-card__copy" type="button" data-copy-linked="${index}">${t('linked.copiar')}</button>
         ${readFullBtn}
         <div class="note-card__body" data-linked-body="${index}">${body}</div>
       </div>`;
@@ -1427,19 +1443,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       if(!entry || !bodyEl) return;
       if(btn.dataset.expanded==='1'){
         bodyEl.innerHTML=entry.excerpt || entry.content || '';
-        btn.textContent='Leer artículo completo';
+        btn.textContent=t('linked.leerCompleto');
         btn.dataset.expanded='0';
         return;
       }
-      btn.textContent='Cargando…'; btn.disabled=true;
+      btn.textContent=t('linked.cargando'); btn.disabled=true;
       try{
         const article=await VerboModules.loadLinkedArticle(manifestPath, entry.articleId);
         bodyEl.innerHTML=article?.content || entry.excerpt || '';
-        btn.textContent='Ver solo extracto';
+        btn.textContent=t('linked.verExtracto');
         btn.dataset.expanded='1';
       }catch(error){
         console.error(error);
-        btn.textContent='No se pudo cargar el artículo';
+        btn.textContent=t('linked.errorArticulo');
       }finally{ btn.disabled=false; }
     }));
     if(focus){
@@ -1474,8 +1490,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   function wireDictionaryLinks(root){
     root.querySelectorAll('a.strong').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const m=((a.getAttribute('href')||'')+' '+a.textContent).match(/[GH]\d+/i);if(m)openDictionary(m[0].toUpperCase());}));
     root.querySelectorAll('a.bible').forEach(a=>{
-      a.title='Abrir pasaje en Verbo';
-      a.addEventListener('click',async e=>{e.preventDefault();const ref=parseBibleReference(a.textContent);if(ref)await goToBibleReference(ref);else toast('No se pudo reconocer esta referencia');});
+      a.title=t('diccionario.abrirPasajeTitle');
+      a.addEventListener('click',async e=>{e.preventDefault();const ref=parseBibleReference(a.textContent);if(ref)await goToBibleReference(ref);else toast(t('toast.refNoReconocida'));});
     });
   }
   function dictionaryEntryTitle(code,entry){
@@ -1929,8 +1945,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function patristicModeToggleHtml(){
-    return `<button type="button" class="note-card__copy${patristicMode==='docs'?' sermon-mode-toggle--active':''}" data-patristic-mode="docs">📖 Explorar documentos</button>
-      <button type="button" class="note-card__copy${patristicMode==='verse'?' sermon-mode-toggle--active':''}" data-patristic-mode="verse">🔗 Por versículo</button>`;
+    return `<button type="button" class="note-card__copy${patristicMode==='docs'?' sermon-mode-toggle--active':''}" data-patristic-mode="docs">📖 ${t('padres.modoDocumentos')}</button>
+      <button type="button" class="note-card__copy${patristicMode==='verse'?' sermon-mode-toggle--active':''}" data-patristic-mode="verse">🔗 ${t('padres.modoVersiculo')}</button>`;
   }
   function wirePatristicModeToggle(){
     document.querySelectorAll('[data-patristic-mode]').forEach(btn=>btn.addEventListener('click',()=>{
@@ -1946,7 +1962,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(!patristicByVerseCatalog){
       els.panelToolbar.innerHTML=`<div class="compare-toolbar">${patristicModeToggleHtml()}</div>`;
       wirePatristicModeToggle();
-      els.panelBody.innerHTML=emptyState('⌛','Cargando fuentes ancladas a versículo…');
+      els.panelBody.innerHTML=emptyState('⌛',t('padres.cargandoFuentes'));
       try{
         const registry=await VerboModules.getCatalog();
         patristicByVerseCatalog=(registry.patristicByVerse||[]).map(item=>({id:item.manifest.id,label:item.manifest.abbreviation||item.manifest.name,full:item.manifest.name,path:item.path,manifest:item.manifest}));
@@ -1955,7 +1971,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(!patristicByVerseCatalog || !patristicByVerseCatalog.length){
       els.panelToolbar.innerHTML=`<div class="compare-toolbar">${patristicModeToggleHtml()}</div>`;
       wirePatristicModeToggle();
-      els.panelBody.innerHTML=emptyState('🔗','Todavía no hay padres apostólicos anclados a versículo.');
+      els.panelBody.innerHTML=emptyState('🔗',t('padres.sinAncladas'));
       return;
     }
 
@@ -1976,7 +1992,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const selected=patristicByVerseCatalog.find(x=>x.id===currentPatristicByVerse) || patristicByVerseCatalog[0];
 
     const sourceOptions=patristicByVerseCatalog.map(x=>`<option value="${x.id}" ${x.id===currentPatristicByVerse?'selected':''}>${escapeHTML(x.label)}</option>`).join('');
-    els.panelToolbar.innerHTML=`<div class="compare-toolbar">${patristicModeToggleHtml()}</div><div class="compare-toolbar"><span class="compare-toolbar__label">Fuente</span><select class="compare-toolbar__select" id="patristicByVerseSelect">${sourceOptions}</select></div>`;
+    els.panelToolbar.innerHTML=`<div class="compare-toolbar">${patristicModeToggleHtml()}</div><div class="compare-toolbar"><span class="compare-toolbar__label">${t('padres.fuenteLabel')}</span><select class="compare-toolbar__select" id="patristicByVerseSelect">${sourceOptions}</select></div>`;
     wirePatristicModeToggle();
     document.getElementById('patristicByVerseSelect')?.addEventListener('change', e=>{
       localStorage.setItem('verbo:lastPatristicByVerse', e.target.value);
@@ -1984,15 +2000,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       renderPatristicByVerse(activeVerse());
     });
 
-    els.panelBody.innerHTML=emptyState('⌛','Cargando fragmento del pasaje…');
+    els.panelBody.innerHTML=emptyState('⌛',t('padres.cargandoFragmento'));
     try{
       const resource=await VerboModules.loadLinkedEntries(selected.path,currentBook,currentChapter);
-      renderLinkedResourceEntries(resource, resource.entries, focus, '🔗', 'Este capítulo no tiene fragmentos patrísticos anclados todavía.', selected.path);
-    }catch(error){ console.error(error); els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir este recurso.'); }
+      renderLinkedResourceEntries(resource, resource.entries, focus, '🔗', t('padres.sinFragmentos'), selected.path);
+    }catch(error){ console.error(error); els.panelBody.innerHTML=emptyState('⚠️',t('padres.errorRecurso')); }
   }
 
   async function renderPadresPanel(focus=null){
-    els.panelTitle.textContent='Padres Apostólicos';
+    els.panelTitle.textContent=t('padres.title');
 
     if(patristicMode==='verse'){
       await renderPatristicByVerse(focus);
@@ -2002,14 +2018,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     els.panelToolbar.innerHTML='';
 
     if(!patristicCatalog){
-      els.panelBody.innerHTML=emptyState('⌛','Cargando colección…');
+      els.panelBody.innerHTML=emptyState('⌛',t('padres.cargandoColeccion'));
       try{
         const registry=await VerboModules.getCatalog();
         patristicCatalog=(registry.patristic||[]).map(item=>({id:item.manifest.id,label:item.manifest.abbreviation||item.manifest.name,full:item.manifest.name,manifest:item.manifest}));
       }catch(error){console.error(error);}
     }
     if(!patristicCatalog || !patristicCatalog.length){
-      els.panelBody.innerHTML=emptyState('📜','La colección de Padres Apostólicos está en preparación. Pronto encontrarás aquí la Didaché, las cartas de Clemente, Ignacio, Policarpo y más.');
+      els.panelBody.innerHTML=emptyState('📜',t('padres.coleccionPreparacion'));
       return;
     }
 
@@ -2042,26 +2058,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function renderPatristicIndex(){
     if(!patristicDocData || patristicDocData.manifest.id!==patristicOpenDoc){
-      els.panelBody.innerHTML=emptyState('⌛','Cargando documento…');
+      els.panelBody.innerHTML=emptyState('⌛',t('padres.cargandoDocumento'));
       try{
         patristicDocData=await VerboModules.loadPatristic(patristicOpenDoc);
       }catch(error){console.error(error);}
     }
     if(!patristicDocData){
-      els.panelBody.innerHTML=emptyState('⚠️','No se pudo cargar este documento.');
+      els.panelBody.innerHTML=emptyState('⚠️',t('padres.errorDocumento'));
       return;
     }
-    els.panelToolbar.innerHTML=`<button class="note-card__copy" id="backToPatristicDocs" type="button">← Colección</button>`;
+    els.panelToolbar.innerHTML=`<button class="note-card__copy" id="backToPatristicDocs" type="button">← ${t('padres.volverColeccion')}</button>`;
     document.getElementById('backToPatristicDocs')?.addEventListener('click',()=>{ patristicOpenDoc=null; patristicDocData=null; renderPadresPanel(); els.panelBody.scrollTop=0; });
 
-    const statusBanner=patristicDocData.manifest.status?`<div class="gospel-match"><div class="gospel-match__label">Estado</div><div style="padding:4px 2px;">${escapeHTML(patristicDocData.manifest.status)}</div></div>`:'';
+    const statusBanner=patristicDocData.manifest.status?`<div class="gospel-match"><div class="gospel-match__label">${t('padres.estadoLabel')}</div><div style="padding:4px 2px;">${escapeHTML(patristicDocData.manifest.status)}</div></div>`:'';
 
     const list=patristicDocData.sections.map(s=>`
       <button type="button" class="dictionary-library__item" data-patristic-section="${s.n}">
         <span>${escapeHTML(s.title)}</span>
       </button>`).join('');
 
-    els.panelBody.innerHTML=`${statusBanner}<div class="dictionary-library"><div class="dictionary-library__count">${patristicDocData.sections.length} secciones</div><div>${list}</div></div>`;
+    els.panelBody.innerHTML=`${statusBanner}<div class="dictionary-library"><div class="dictionary-library__count">${t('padres.seccionesCount',{count:patristicDocData.sections.length})}</div><div>${list}</div></div>`;
     document.querySelectorAll('[data-patristic-section]').forEach(btn=>{
       btn.addEventListener('click',()=>{ patristicOpenSection=Number(btn.dataset.patristicSection); renderPadresPanel(); els.panelBody.scrollTop=0; });
     });
@@ -2069,20 +2085,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function renderPatristicSection(){
     const section=patristicDocData.sections.find(s=>s.n===patristicOpenSection);
-    if(!section){ els.panelBody.innerHTML=emptyState('⚠️','No se encontró esta sección.'); return; }
+    if(!section){ els.panelBody.innerHTML=emptyState('⚠️',t('padres.seccionNoEncontrada')); return; }
     els.panelToolbar.innerHTML=`
-      <button class="note-card__copy" id="backToPatristicIndex" type="button">← Índice del documento</button>
-      <button class="note-card__copy" id="copyPatristicSection" type="button">Copiar sección</button>`;
+      <button class="note-card__copy" id="backToPatristicIndex" type="button">← ${t('padres.volverIndice')}</button>
+      <button class="note-card__copy" id="copyPatristicSection" type="button">${t('padres.copiarSeccion')}</button>`;
     document.getElementById('backToPatristicIndex')?.addEventListener('click',()=>{ patristicOpenSection=null; renderPadresPanel(); els.panelBody.scrollTop=0; });
     const source=patristicDocData.manifest.language||'es';
     const target=contentLang();
     const needsTranslation=source!==target;
     const contentHtml=nl2p(section.content);
     const bodyHtml=needsTranslation
-      ? (tcacheGet(translationCacheKey(`patristic:${patristicOpenDoc}:${section.n}`,section.content,target))||`<p class="note-card__translating">Traduciendo…</p>${contentHtml}`)
+      ? (tcacheGet(translationCacheKey(`patristic:${patristicOpenDoc}:${section.n}`,section.content,target))||`<p class="note-card__translating">${t('comentario.traduciendo')}</p>${contentHtml}`)
       : contentHtml;
     const translationNote=needsTranslation
-      ? `<p class="note-card__translation-note">Traducción automática ${source.toUpperCase()}→${target.toUpperCase()} según la Biblia activa.</p>`
+      ? `<p class="note-card__translation-note">${t('padres.traduccionAuto',{source:source.toUpperCase(),target:target.toUpperCase()})}</p>`
       : '';
     els.panelBody.innerHTML=`<article class="dict-entry">
       <div class="dict-entry__term">${escapeHTML(section.title)}</div>
@@ -2135,11 +2151,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function renderNotes(){
-    els.panelTitle.textContent='Mis notas';
+    els.panelTitle.textContent=t('notas.title');
     const key=`${data.meta.bookId}-${data.meta.chapter}`, saved=VerboBackup.getNota(key);
-    els.panelBody.innerHTML=`<label class="personal-note-form__label">Nota sobre ${data.meta.book} ${data.meta.chapter}</label><textarea id="personalNoteArea" class="personal-note-form__area" placeholder="Escribe aquí tu observación...">${saved}</textarea><div class="personal-note-form__status" id="noteSaveStatus">${saved?'Guardado':''}</div>`;
+    els.panelBody.innerHTML=`<label class="personal-note-form__label">${t('notas.label',{ref:`${data.meta.book} ${data.meta.chapter}`})}</label><textarea id="personalNoteArea" class="personal-note-form__area" placeholder="${t('notas.placeholder')}">${saved}</textarea><div class="personal-note-form__status" id="noteSaveStatus">${saved?t('notas.guardado'):''}</div>`;
     const area=document.getElementById('personalNoteArea'), status=document.getElementById('noteSaveStatus'); let timer;
-    area.addEventListener('input',()=>{status.textContent='Escribiendo…';clearTimeout(timer);timer=setTimeout(()=>{VerboBackup.setNota(key,area.value);status.textContent='Guardado';maybeOfferBackupConsent();},400);});
+    area.addEventListener('input',()=>{status.textContent=t('notas.escribiendo');clearTimeout(timer);timer=setTimeout(()=>{VerboBackup.setNota(key,area.value);status.textContent=t('notas.guardado');maybeOfferBackupConsent();},400);});
   }
 
   async function openDictionary(code){
@@ -2147,18 +2163,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const selected=getStrongDictionary(code);
     currentDictionary=selected?.id || null;
     if(currentDictionary) localStorage.setItem('verbo:lastDictionary', currentDictionary);
-    els.panelTitle.textContent=`${selected?.full || 'Léxico Strong'} · ${code}`;
+    els.panelTitle.textContent=`${selected?.full || t('diccionario.lexicoStrong')} · ${code}`;
     els.panelToolbar.innerHTML='';
-    els.panelBody.innerHTML=emptyState('⌛','Buscando entrada en Multiléxico…');
+    els.panelBody.innerHTML=emptyState('⌛',t('diccionario.buscandoEntrada'));
     try{
       const result=await VerboModules.getDictionaryEntry(code, currentDictionary);
-      if(!result){ els.panelBody.innerHTML=emptyState('🔎',`No se encontró una entrada para ${code} en el diccionario seleccionado.`); return; }
+      if(!result){ els.panelBody.innerHTML=emptyState('🔎',t('diccionario.sinEntrada',{code})); return; }
       const rawHtml=result.entry.html||result.entry.definition||result.entry.content||'';
       const html=formatStrongEntryHtml(result.code,result.entry,rawHtml);
       const renderEntry=async()=>{
         const showEnglish=contentLang()==='en';
         els.panelToolbar.innerHTML='';
-        els.panelBody.innerHTML=`<article class="dict-entry"><div class="dict-entry__term">${result.code}</div><div class="dict-entry__source">${escapeHTML(result.manifest.name)}</div><button class="note-card__copy" id="copyDictEntry" type="button">Copiar diccionario</button><div class="dict-entry__def" id="dictionaryEntryBody">${showEnglish?html:`<p class="note-card__translating">Traduciendo al español…</p>${html}`}</div></article>`;
+        els.panelBody.innerHTML=`<article class="dict-entry"><div class="dict-entry__term">${result.code}</div><div class="dict-entry__source">${escapeHTML(result.manifest.name)}</div><button class="note-card__copy" id="copyDictEntry" type="button">${t('diccionario.copiarDiccionario')}</button><div class="dict-entry__def" id="dictionaryEntryBody">${showEnglish?html:`<p class="note-card__translating">${t('diccionario.traduciendoEspanol')}</p>${html}`}</div></article>`;
         const body=document.getElementById('dictionaryEntryBody');
         if(!showEnglish && body){
           const translated=await translateDictionaryEntry(result.code,html);
@@ -2173,7 +2189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       };
       await renderEntry();
-    }catch(error){console.error(error);els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir esta entrada del diccionario.');}
+    }catch(error){console.error(error);els.panelBody.innerHTML=emptyState('⚠️',t('diccionario.errorEntrada'));}
   }
   function updateNavButtons(){ const idx=catalog.books.findIndex(b=>b.id===currentBook); const atStart=idx===0&&currentChapter===1; const atEnd=idx===catalog.books.length-1&&currentChapter===els.chapter.options.length; els.prev.disabled=atStart; els.next.disabled=atEnd; if(els.innerPrev) els.innerPrev.disabled=atStart; if(els.innerNext) els.innerNext.disabled=atEnd; }
   async function moveChapter(delta){
@@ -2185,7 +2201,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     els.chapter.value=String(currentChapter); updateNavButtons(); await loadPassage();
   }
   function setLoading(on){ els.body.classList.toggle('app-loading',on); }
-  function showFatal(error){ els.list.innerHTML=emptyState('⚠️',`No se pudieron cargar los módulos JSON. Ejecuta la app desde un servidor local. ${error.message}`); }
+  function showFatal(error){ els.list.innerHTML=emptyState('⚠️',t('biblia.moduloJsonError',{message:error.message})); }
 
   els.book.addEventListener('change',async()=>{currentBook=els.book.value;currentChapter=1;await refreshChapters();await loadPassage();});
   els.chapter.addEventListener('change',async()=>{currentChapter=Number(els.chapter.value);updateNavButtons();await loadPassage();});
@@ -2322,9 +2338,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function refreshStatus(){
       if(!status) return;
-      if(VerboBackup.hasFolderPermission()) status.textContent='Se guarda en tu carpeta y en este navegador.';
-      else if(VerboBackup.supportsFSA()) status.textContent='Guardado solo en este navegador.';
-      else status.textContent='Guardado en este navegador. Exporta tus datos para respaldarlos.';
+      if(VerboBackup.hasFolderPermission()) status.textContent=t('backupMenu.statusFolder');
+      else if(VerboBackup.supportsFSA()) status.textContent=t('backupMenu.statusBrowserOnly');
+      else status.textContent=t('backupMenu.statusExportHint');
     }
     function closePanel(){
       panel.hidden=true; trigger.setAttribute('aria-expanded','false');
@@ -2360,23 +2376,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     saveBtn?.addEventListener('click', async ()=>{
       if(!VerboBackup.hasFolderPermission() && VerboBackup.supportsFSA()){ showConsent(); return; }
       await VerboBackup.saveNow();
-      toast('Progreso guardado');
+      toast(t('toast.progresoGuardado'));
       refreshStatus();
     });
-    exportBtn?.addEventListener('click', ()=>{ VerboBackup.exportDownload(); toast('Descargando verbo-datos.json'); });
+    exportBtn?.addEventListener('click', ()=>{ VerboBackup.exportDownload(); toast(t('toast.descargando')); });
     importBtn?.addEventListener('click', ()=> importInput?.click());
     importInput?.addEventListener('change', async ()=>{
       const file=importInput.files?.[0];
       if(!file) return;
-      try{ await VerboBackup.importFromFile(file); toast('Datos importados, recargando…'); setTimeout(()=>location.reload(), 900); }
-      catch(error){ console.error(error); toast('No se pudo importar el archivo'); }
+      try{ await VerboBackup.importFromFile(file); toast(t('toast.datosImportados')); setTimeout(()=>location.reload(), 900); }
+      catch(error){ console.error(error); toast(t('toast.noImportar')); }
       importInput.value='';
     });
     consentAccept?.addEventListener('click', async ()=>{
       hideConsent();
       const ok=await VerboBackup.requestFolderAccess();
-      if(ok) toast('Carpeta conectada');
-      else toast('El navegador bloqueó esa carpeta por seguridad (inicio o sistema). Elige "Documentos" u otra carpeta normal.', 4200);
+      if(ok) toast(t('toast.carpetaConectada'));
+      else toast(t('toast.carpetaBloqueada'), 4200);
       refreshStatus();
     });
     const dontAskAgain=document.getElementById('backupConsentDontAskAgain');
@@ -2389,5 +2405,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     // (arriba en el archivo) justo cuando la persona crea su primera nota,
     // resaltado o marcador — así el aviso llega cuando de verdad hay algo
     // que respaldar, no a ciegas tras un minuto de solo leer.
+  })();
+
+  // ---- Selector de idioma de interfaz: independiente del selector de Biblia ----
+  // Cambiar acá NO toca currentVersion/verbo:lastVersion, y elegir una Biblia
+  // en el version-picker tampoco toca esto — ver VerboI18n.setUiLang (assets/i18n.js).
+  (function initUiLangSwitcher(){
+    if(!window.VerboI18n) return;
+    const buttons=[...document.querySelectorAll('#uiLangSwitcher [data-lang]')];
+    if(!buttons.length) return;
+    const markActive=()=>{
+      const current=VerboI18n.getUiLang();
+      buttons.forEach(btn=>btn.classList.toggle('is-active', btn.dataset.lang===current));
+    };
+    // Los rótulos estáticos del HTML (data-i18n) ya se re-aplican solos
+    // dentro de setUiLang(); lo que queda por refrescar acá es lo que app.js
+    // arma con t() en tiempo de render (título del capítulo, panel lateral
+    // abierto) — sin esto quedarían en el idioma anterior hasta el próximo
+    // cambio de versículo/pestaña.
+    const refreshDynamicText=()=>{
+      if(data) renderChapter(activeVerse());
+      if(activeTab) renderPanel(activeTab);
+    };
+    buttons.forEach(btn=>btn.addEventListener('click',()=>VerboI18n.setUiLang(btn.dataset.lang)));
+    document.addEventListener('verbo:uilang-changed', ()=>{ markActive(); refreshDynamicText(); });
+    markActive();
   })();
 });

@@ -17,50 +17,54 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Verbo">
-<link rel="stylesheet" href="assets/style.css?v=20260728-mapas11">
+<link rel="stylesheet" href="assets/style.css?v=20260728-i18n-switcher">
 </head>
 <body>
 
   <header class="app-header">
-    <a class="app-header__portal-back" href="../" title="Volver al portal Verbo" aria-label="Volver al portal Verbo">←</a>
+    <a class="app-header__portal-back" href="../" data-i18n-attr="title:header.backToPortal,aria-label:header.backToPortal">←</a>
     <div class="app-header__brand">
       <span class="app-header__mark">Verbo</span>
-      <span class="app-header__sub">Estudio bíblico en español</span>
-      <a href="https://paypal.me/VerboBiblia" target="_blank" rel="noopener noreferrer" class="ofrenda-btn" aria-label="Apoyar a Verbo con una ofrenda"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span>Ofrenda</span></a>
+      <span class="app-header__sub" data-i18n="header.tagline">Estudio bíblico en español</span>
+      <a href="https://paypal.me/VerboBiblia" target="_blank" rel="noopener noreferrer" class="ofrenda-btn" data-i18n-attr="aria-label:header.ofrendaAria"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span data-i18n="header.ofrendaLabel">Ofrenda</span></a>
     </div>
     <div class="app-header__nav">
+      <div class="ui-lang-switcher" id="uiLangSwitcher" role="group" data-i18n-attr="aria-label:header.uiLangAria">
+        <button type="button" class="ui-lang-switcher__btn" data-lang="es">ES</button>
+        <button type="button" class="ui-lang-switcher__btn" data-lang="en">EN</button>
+      </div>
       <div class="version-picker">
         <div class="version-picker__combo" id="versionCombo">
           <div class="version-picker__field">
-            <input type="text" id="mainVersionInput" class="version-picker__input" autocomplete="off" spellcheck="false" aria-label="Versión de la Biblia" readonly>
+            <input type="text" id="mainVersionInput" class="version-picker__input" autocomplete="off" spellcheck="false" data-i18n-attr="aria-label:header.versionAria" readonly>
             <ul class="version-picker__dropdown" id="versionDropdown" hidden></ul>
           </div>
         </div>
-        <select id="nativeVersionSelect" class="version-picker__native-select passage-picker__select" aria-label="Versión de la Biblia"></select>
+        <select id="nativeVersionSelect" class="version-picker__native-select passage-picker__select" data-i18n-attr="aria-label:header.versionAria"></select>
       </div>
-      <div class="passage-picker" aria-label="Seleccionar pasaje">
-        <select id="bookSelect" class="passage-picker__select passage-picker__select--book" aria-label="Libro"></select>
-        <select id="chapterSelect" class="passage-picker__select passage-picker__select--chapter" aria-label="Capítulo"></select>
-        <button id="prevChapter" class="passage-picker__button" type="button" aria-label="Capítulo anterior">‹</button>
-        <button id="nextChapter" class="passage-picker__button" type="button" aria-label="Capítulo siguiente">›</button>
+      <div class="passage-picker" data-i18n-attr="aria-label:header.passagePickerAria">
+        <select id="bookSelect" class="passage-picker__select passage-picker__select--book" data-i18n-attr="aria-label:header.bookAria"></select>
+        <select id="chapterSelect" class="passage-picker__select passage-picker__select--chapter" data-i18n-attr="aria-label:header.chapterAria"></select>
+        <button id="prevChapter" class="passage-picker__button" type="button" data-i18n-attr="aria-label:header.prevChapterAria">‹</button>
+        <button id="nextChapter" class="passage-picker__button" type="button" data-i18n-attr="aria-label:header.nextChapterAria">›</button>
       </div>
-      <button class="search-trigger" id="searchTrigger" type="button" aria-label="Buscar en la Biblia">
+      <button class="search-trigger" id="searchTrigger" type="button" data-i18n-attr="aria-label:header.searchAria">
         <span>⌕</span>
-        <span>Buscar</span>
+        <span data-i18n="header.searchLabel">Buscar</span>
       </button>
-      <button class="search-trigger sermon-mode-toggle" id="sermonModeToggle" type="button" aria-pressed="false" aria-label="Preparación de Bosquejo/Estudio">
+      <button class="search-trigger sermon-mode-toggle" id="sermonModeToggle" type="button" aria-pressed="false" data-i18n-attr="aria-label:header.sermonAria">
         <span>✎</span>
-        <span>Preparación de Bosquejo/Estudio</span>
+        <span data-i18n="header.sermonLabel">Preparación de Bosquejo/Estudio</span>
       </button>
       <div class="backup-menu">
-        <button class="search-trigger backup-menu__trigger" id="backupMenuTrigger" type="button" aria-label="Guardar mi progreso" aria-haspopup="true" aria-expanded="false">
+        <button class="search-trigger backup-menu__trigger" id="backupMenuTrigger" type="button" data-i18n-attr="aria-label:header.backupAria" aria-haspopup="true" aria-expanded="false">
           <span>💾</span>
         </button>
         <div class="backup-menu__panel" id="backupMenuPanel" hidden>
           <div class="backup-menu__status" id="backupMenuStatus"></div>
-          <button type="button" class="backup-menu__item" id="backupSaveBtn">Guardar mi progreso</button>
-          <button type="button" class="backup-menu__item" id="backupExportBtn">Exportar mis datos</button>
-          <button type="button" class="backup-menu__item" id="backupImportBtn">Importar mis datos</button>
+          <button type="button" class="backup-menu__item" id="backupSaveBtn" data-i18n="header.backupSave">Guardar mi progreso</button>
+          <button type="button" class="backup-menu__item" id="backupExportBtn" data-i18n="header.backupExport">Exportar mis datos</button>
+          <button type="button" class="backup-menu__item" id="backupImportBtn" data-i18n="header.backupImport">Importar mis datos</button>
           <input type="file" id="backupImportInput" accept="application/json" hidden>
         </div>
       </div>
@@ -69,8 +73,8 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 
   <div class="app-body">
 
-    <nav class="library-rail" aria-label="Biblioteca">
-      <button class="library-rail__btn" data-tab="biblioteca" title="Biblioteca" aria-label="Biblioteca">
+    <nav class="library-rail" data-i18n-attr="aria-label:rail.biblioteca">
+      <button class="library-rail__btn" data-tab="biblioteca" data-i18n-attr="title:rail.biblioteca,aria-label:rail.biblioteca">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
@@ -78,31 +82,31 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
           <path d="M9 10h7"/>
         </svg>
       </button>
-      <button class="library-rail__btn" data-tab="padres" title="Padres Apostólicos" aria-label="Padres Apostólicos">
+      <button class="library-rail__btn" data-tab="padres" data-i18n-attr="title:rail.padres,aria-label:rail.padres">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M3 21h18"/>
           <path d="M5 21V8l7-5 7 5v13"/>
           <path d="M9 21v-6h6v6"/>
         </svg>
       </button>
-      <button class="library-rail__btn" data-tab="contacto" title="Contacto" aria-label="Contacto">
+      <button class="library-rail__btn" data-tab="contacto" data-i18n-attr="title:rail.contacto,aria-label:rail.contacto">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <rect x="3" y="5" width="18" height="14" rx="2"/>
           <path d="M3 7l9 6 9-6"/>
         </svg>
       </button>
-      <a class="library-rail__btn library-rail__btn--bottom-group" href="../sobre-el-fundador/" title="Sobre el fundador" aria-label="Sobre el fundador">
+      <a class="library-rail__btn library-rail__btn--bottom-group" href="../sobre-el-fundador/" data-i18n-attr="title:rail.fundador,aria-label:rail.fundador">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <circle cx="12" cy="8" r="4"/>
           <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
         </svg>
       </a>
-      <a class="library-rail__btn" href="../mision/" title="Nuestra misión" aria-label="Nuestra misión">
+      <a class="library-rail__btn" href="../mision/" data-i18n-attr="title:rail.mision,aria-label:rail.mision">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M12 21s-7-4.35-9.5-9C.9 8.4 2.7 4.5 6.5 4c2-.26 3.6.9 5.5 3 1.9-2.1 3.5-3.26 5.5-3 3.8.5 5.6 4.4 4 8-2.5 4.65-9.5 9-9.5 9z"/>
         </svg>
       </a>
-      <button class="library-rail__btn" data-tab="licencias" title="Fuentes y licencias" aria-label="Fuentes y licencias">
+      <button class="library-rail__btn" data-tab="licencias" data-i18n-attr="title:rail.licencias,aria-label:rail.licencias">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <circle cx="12" cy="12" r="9"/>
           <path d="M12 10v6"/>
@@ -116,9 +120,9 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
         <div class="reading-pane__app-mark" aria-hidden="true">Verbo</div>
         <div class="chapter-eyebrow"></div>
         <div class="chapter-title-row">
-          <button class="chapter-nav-btn" id="innerPrev" type="button" aria-label="Capítulo anterior">‹</button>
+          <button class="chapter-nav-btn" id="innerPrev" type="button" data-i18n-attr="aria-label:header.prevChapterAria">‹</button>
           <h1 class="chapter-title"></h1>
-          <button class="chapter-nav-btn chapter-nav-btn--next" id="innerNext" type="button" aria-label="Capítulo siguiente">›</button>
+          <button class="chapter-nav-btn chapter-nav-btn--next" id="innerNext" type="button" data-i18n-attr="aria-label:header.nextChapterAria">›</button>
         </div>
         <div id="verseList"></div>
         <div class="bible-attribution" id="bibleAttribution" hidden></div>
@@ -141,8 +145,8 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
       <div class="side-panel__inner">
         <div class="sheet-handle" aria-hidden="true"></div>
         <div class="side-panel__header">
-          <span class="side-panel__title" id="panelTitle">Panel</span>
-          <button class="side-panel__close" id="panelClose" aria-label="Cerrar panel">✕</button>
+          <span class="side-panel__title" id="panelTitle" data-i18n="panel.defaultTitle">Panel</span>
+          <button class="side-panel__close" id="panelClose" data-i18n-attr="aria-label:panel.closeAria">✕</button>
         </div>
         <div class="side-panel__toolbar" id="panelToolbar"></div>
         <div class="side-panel__body" id="panelBody"></div>
@@ -150,38 +154,38 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     </aside>
 
     <nav class="tab-rail">
-      <button class="tab-rail__btn" data-tab="comentario" title="Comentario" aria-label="Comentario">
+      <button class="tab-rail__btn" data-tab="comentario" data-i18n-attr="title:nav.comentario,aria-label:nav.comentario">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
         <span class="tab-rail__dot"></span>
       </button>
-      <button class="tab-rail__btn" data-tab="comparar" title="Comparar versiones" aria-label="Comparar versiones">
+      <button class="tab-rail__btn" data-tab="comparar" data-i18n-attr="title:nav.compararVersiones,aria-label:nav.compararVersiones">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <rect x="3" y="4" width="7" height="16" rx="1"/>
           <rect x="14" y="4" width="7" height="16" rx="1"/>
         </svg>
       </button>
-      <button class="tab-rail__btn" data-tab="diccionario" title="Diccionario" aria-label="Diccionario">
+      <button class="tab-rail__btn" data-tab="diccionario" data-i18n-attr="title:nav.diccionario,aria-label:nav.diccionario">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
         </svg>
       </button>
-      <button class="tab-rail__btn" data-tab="notas" title="Mis notas" aria-label="Mis notas">
+      <button class="tab-rail__btn" data-tab="notas" data-i18n-attr="title:nav.notas,aria-label:nav.notas">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M12 20h9"/>
           <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>
         </svg>
       </button>
-      <button class="tab-rail__btn" data-tab="mapas" title="Mapas bíblicos" aria-label="Mapas bíblicos">
+      <button class="tab-rail__btn" data-tab="mapas" data-i18n-attr="title:nav.mapasBiblicos,aria-label:nav.mapasBiblicos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/>
           <path d="M9 4v14"/>
           <path d="M15 6v14"/>
         </svg>
       </button>
-      <button class="tab-rail__btn" data-tab="tema" title="Tema" aria-label="Tema">
+      <button class="tab-rail__btn" data-tab="tema" data-i18n-attr="title:nav.tema,aria-label:nav.tema">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/>
           <circle cx="7.5" cy="10.5" r=".8"/>
@@ -194,90 +198,91 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 
   </div>
 
-    <nav class="mobile-tool-dock" aria-label="Herramientas de estudio">
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="comentario" type="button" aria-label="Comentarios">
+    <nav class="mobile-tool-dock" data-i18n-attr="aria-label:nav.toolsAria">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="comentario" type="button" data-i18n-attr="aria-label:nav.comentarios">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span class="mobile-tool-label">Comentarios</span>
+        <span class="mobile-tool-label" data-i18n="nav.comentarios">Comentarios</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="comparar" type="button" aria-label="Comparar">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="comparar" type="button" data-i18n-attr="aria-label:nav.comparar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="7" height="16" rx="1"/><rect x="14" y="4" width="7" height="16" rx="1"/></svg>
-        <span class="mobile-tool-label">Comparar</span>
+        <span class="mobile-tool-label" data-i18n="nav.comparar">Comparar</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="diccionario" type="button" aria-label="Diccionario">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="diccionario" type="button" data-i18n-attr="aria-label:nav.diccionario">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        <span class="mobile-tool-label">Diccionario</span>
+        <span class="mobile-tool-label" data-i18n="nav.diccionario">Diccionario</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="notas" type="button" aria-label="Mis notas">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="notas" type="button" data-i18n-attr="aria-label:nav.notas">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
-        <span class="mobile-tool-label">Mis notas</span>
+        <span class="mobile-tool-label" data-i18n="nav.notas">Mis notas</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="mapas" type="button" aria-label="Mapas bíblicos">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="mapas" type="button" data-i18n-attr="aria-label:nav.mapasBiblicos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>
-        <span class="mobile-tool-label">Mapas bíblicos</span>
+        <span class="mobile-tool-label" data-i18n="nav.mapasBiblicos">Mapas bíblicos</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="tema" type="button" aria-label="Tema">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="tema" type="button" data-i18n-attr="aria-label:nav.tema">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22a10 10 0 1 1 10-10c0 1.7-1.4 3-3.1 3h-1.4a1.5 1.5 0 0 0-1.5 1.5c0 .4.1.7.3 1A2.9 2.9 0 0 1 13.8 22H12z"/><circle cx="7.5" cy="10.5" r=".8"/><circle cx="10" cy="6.8" r=".8"/><circle cx="14.3" cy="6.8" r=".8"/><circle cx="17" cy="10.5" r=".8"/></svg>
-        <span class="mobile-tool-label">Tema</span>
+        <span class="mobile-tool-label" data-i18n="nav.tema">Tema</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="biblioteca" type="button" aria-label="Biblioteca">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="biblioteca" type="button" data-i18n-attr="aria-label:nav.biblioteca">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 6h7"/><path d="M9 10h7"/></svg>
-        <span class="mobile-tool-label">Biblioteca</span>
+        <span class="mobile-tool-label" data-i18n="nav.biblioteca">Biblioteca</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="padres" type="button" aria-label="Padres Apostólicos">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="padres" type="button" data-i18n-attr="aria-label:nav.padres">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>
-        <span class="mobile-tool-label">Padres Apostólicos</span>
+        <span class="mobile-tool-label" data-i18n="nav.padres">Padres Apostólicos</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="contacto" type="button" aria-label="Contacto">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="contacto" type="button" data-i18n-attr="aria-label:nav.contacto">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-        <span class="mobile-tool-label">Contacto</span>
+        <span class="mobile-tool-label" data-i18n="nav.contacto">Contacto</span>
       </button>
-      <button class="mobile-tool-btn tab-rail__btn" data-tab="licencias" type="button" aria-label="Fuentes y licencias">
+      <button class="mobile-tool-btn tab-rail__btn" data-tab="licencias" type="button" data-i18n-attr="aria-label:nav.licencias">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 10v6"/><circle cx="12" cy="7" r=".7" fill="currentColor" stroke="none"/></svg>
-        <span class="mobile-tool-label">Fuentes y licencias</span>
+        <span class="mobile-tool-label" data-i18n="nav.licencias">Fuentes y licencias</span>
       </button>
-      <a class="mobile-tool-btn tab-rail__btn" href="../sobre-el-fundador/" aria-label="Sobre el fundador">
+      <a class="mobile-tool-btn tab-rail__btn" href="../sobre-el-fundador/" data-i18n-attr="aria-label:nav.fundador">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-        <span class="mobile-tool-label">Sobre el fundador</span>
+        <span class="mobile-tool-label" data-i18n="nav.fundador">Sobre el fundador</span>
       </a>
-      <a class="mobile-tool-btn tab-rail__btn" href="../mision/" aria-label="Nuestra misión">
+      <a class="mobile-tool-btn tab-rail__btn" href="../mision/" data-i18n-attr="aria-label:nav.mision">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.35-9.5-9C.9 8.4 2.7 4.5 6.5 4c2-.26 3.6.9 5.5 3 1.9-2.1 3.5-3.26 5.5-3 3.8.5 5.6 4.4 4 8-2.5 4.65-9.5 9-9.5 9z"/></svg>
-        <span class="mobile-tool-label">Nuestra misión</span>
+        <span class="mobile-tool-label" data-i18n="nav.mision">Nuestra misión</span>
       </a>
     </nav>
 
   <div class="verse-action-bar" id="verseActionBar" hidden>
-    <button class="verse-swatch" data-color="hl-yellow" aria-label="Amarillo" title="Resaltar amarillo"></button>
-    <button class="verse-swatch" data-color="hl-green"  aria-label="Verde"    title="Resaltar verde"></button>
-    <button class="verse-swatch" data-color="hl-blue"   aria-label="Azul"     title="Resaltar azul"></button>
-    <button class="verse-swatch" data-color="hl-pink"   aria-label="Rosa"     title="Resaltar rosa"></button>
-    <button class="verse-swatch" data-color="hl-coral"  aria-label="Coral"    title="Resaltar coral"></button>
-    <button class="verse-swatch" data-color="hl-violet" aria-label="Violeta"  title="Resaltar violeta"></button>
-    <button class="verse-swatch verse-swatch--erase" data-color="" aria-label="Quitar resaltado" title="Quitar resaltado">✕</button>
+    <button class="verse-swatch" data-color="hl-yellow" data-i18n-attr="aria-label:verseAction.amarillo,title:verseAction.amarilloTitle"></button>
+    <button class="verse-swatch" data-color="hl-green"  data-i18n-attr="aria-label:verseAction.verde,title:verseAction.verdeTitle"></button>
+    <button class="verse-swatch" data-color="hl-blue"   data-i18n-attr="aria-label:verseAction.azul,title:verseAction.azulTitle"></button>
+    <button class="verse-swatch" data-color="hl-pink"   data-i18n-attr="aria-label:verseAction.rosa,title:verseAction.rosaTitle"></button>
+    <button class="verse-swatch" data-color="hl-coral"  data-i18n-attr="aria-label:verseAction.coral,title:verseAction.coralTitle"></button>
+    <button class="verse-swatch" data-color="hl-violet" data-i18n-attr="aria-label:verseAction.violeta,title:verseAction.violetaTitle"></button>
+    <button class="verse-swatch verse-swatch--erase" data-color="" data-i18n-attr="aria-label:verseAction.quitar,title:verseAction.quitar">✕</button>
     <div class="verse-action-bar__sep"></div>
-    <button class="verse-action-btn" id="copyVerseText" type="button">Copiar</button>
-    <button class="verse-action-btn verse-action-btn--secondary" id="copyVerseRef" type="button">Ref.</button>
+    <button class="verse-action-btn" id="copyVerseText" type="button" data-i18n="verseAction.copiar">Copiar</button>
+    <button class="verse-action-btn verse-action-btn--secondary" id="copyVerseRef" type="button" data-i18n="verseAction.ref">Ref.</button>
     <div class="verse-action-bar__sep"></div>
-    <button class="verse-action-bar__close" id="closeVerseAction" type="button" aria-label="Cerrar">✕</button>
+    <button class="verse-action-bar__close" id="closeVerseAction" type="button" data-i18n-attr="aria-label:verseAction.cerrarAria">✕</button>
   </div>
 
   <div class="backup-consent" id="backupConsent" hidden>
-    <p class="backup-consent__text">¿Guardamos tu progreso en tu computadora antes de continuar? Que Dios te acompañe.</p>
-    <p class="backup-consent__hint">Al elegir la carpeta, selecciona "Documentos" u otra carpeta normal — el navegador no permite usar la carpeta de inicio ni carpetas del sistema.</p>
+    <p class="backup-consent__text" data-i18n="backupConsent.text">¿Guardamos tu progreso en tu computadora antes de continuar? Que Dios te acompañe.</p>
+    <p class="backup-consent__hint" data-i18n="backupConsent.hint">Al elegir la carpeta, selecciona "Documentos" u otra carpeta normal — el navegador no permite usar la carpeta de inicio ni carpetas del sistema.</p>
     <label class="backup-consent__checkbox">
       <input type="checkbox" id="backupConsentDontAskAgain">
-      <span>No volver a preguntarme</span>
+      <span data-i18n="backupConsent.dontAskAgain">No volver a preguntarme</span>
     </label>
     <div class="backup-consent__actions">
-      <button type="button" class="backup-consent__btn backup-consent__btn--primary" id="backupConsentAccept">Sí, guardar</button>
-      <button type="button" class="backup-consent__btn" id="backupConsentDecline">Ahora no</button>
+      <button type="button" class="backup-consent__btn backup-consent__btn--primary" id="backupConsentAccept" data-i18n="backupConsent.accept">Sí, guardar</button>
+      <button type="button" class="backup-consent__btn" id="backupConsentDecline" data-i18n="backupConsent.decline">Ahora no</button>
     </div>
   </div>
 
   <script src="https://pkg.api.bible/fumsV3.min.js" defer></script>
   <script>window.fumsData=window.fumsData||[];window.fums=window.fums||function(){window.fumsData.push(arguments);};</script>
   <script src="assets/backup.js?v=20260728-consent-checkbox"></script>
+  <script src="assets/i18n.js?v=1"></script>
   <script src="assets/module-loader.js?v=20260725-lazy-commentaries-2"></script>
-  <script src="assets/app.js?v=20260728-mapas10"></script>
+  <script src="assets/app.js?v=20260728-interfaz-i18n"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
