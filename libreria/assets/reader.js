@@ -6,6 +6,7 @@
 
   var root = document.getElementById("reader-root");
   if (!root) return;
+  var readerAssetBase = new URL(".", document.currentScript.src);
 
   // ":hl2" — formato con rangos de texto libres (start/end de caracteres).
   // Distinto del formato viejo (":hl", párrafo completo sí/no) para no
@@ -18,6 +19,13 @@
   var highlights = loadJSON(HL_KEY, {});
   var bookmark = loadJSON(BM_KEY, null);
   var paraTexts = []; // texto plano de cada párrafo del capítulo actual
+  var tts = {
+    worker: null, ui: null, context: null, source: null, audioBuffer: null,
+    playing: false, pending: false, requestId: 0, chapterText: "",
+    chunkText: "", chunkStart: 0, chunkEnd: 0, audioOffset: 0,
+    audioStartedAt: 0, objectLanguage: "", continueAfterRender: false,
+    swReady: null
+  };
 
   // ---------- traducción ES->EN on-demand (estrategia_traduccion) ----------
   // "auto" (default): se traduce el capítulo completo vía el mismo
@@ -108,6 +116,242 @@
     } catch (e) {
       /* almacenamiento no disponible, se ignora silenciosamente */
     }
+  }
+
+  // ---------- Piper TTS local (solo Librería) ----------
+
+  function ttsLabel(key) {
+    var lang = currentLang();
+    var labels = {
+      play: { es: "Reproducir", en: "Play" },
+      pause: { es: "Pausar", en: "Pause" },
+      loading: { es: "Preparando voz…", en: "Preparing voice…" },
+      synthesizing: { es: "Generando audio…", en: "Generating audio…" },
+      error: { es: "No se pudo generar el audio", en: "Could not generate audio" }
+    };
+    return (labels[key] && labels[key][lang]) || labels[key].es;
+  }
+
+  function updateTtsButton() {
+    if (!tts.ui) return;
+    tts.ui.ttsBtn.textContent = tts.playing ? "❚❚" : "▶";
+    tts.ui.ttsBtn.title = tts.playing ? ttsLabel("pause") : ttsLabel("play");
+    tts.ui.ttsBtn.setAttribute("aria-label", tts.ui.ttsBtn.title);
+    tts.ui.ttsBtn.classList.toggle("is-active", tts.playing);
+  }
+
+  function setTtsStatus(text) {
+    if (!tts.ui) return;
+    tts.ui.ttsStatus.textContent = text || "";
+    tts.ui.ttsStatus.hidden = !text;
+  }
+
+  function ensureTtsWorker() {
+    if (tts.worker) return tts.worker;
+    tts.worker = new Worker(new URL("tts/tts-worker.js", readerAssetBase));
+    tts.worker.addEventListener("message", handleTtsMessage);
+    tts.worker.addEventListener("error", function () {
+      ttsPause(true);
+      setTtsStatus(ttsLabel("error"));
+    });
+    return tts.worker;
+  }
+
+  function ensureAudioContext() {
+    if (!tts.context) {
+      var AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) throw new Error("Web Audio no disponible");
+      tts.context = new AudioContext();
+    }
+    return tts.context.resume();
+  }
+
+  function ensureLibraryServiceWorker() {
+    if (tts.swReady) return tts.swReady;
+    if (!("serviceWorker" in navigator) || !window.isSecureContext) {
+      tts.swReady = Promise.resolve();
+      return tts.swReady;
+    }
+    tts.swReady = navigator.serviceWorker.register(
+      new URL("../service-worker.js", readerAssetBase),
+      { scope: new URL("../", readerAssetBase).pathname }
+    ).then(function () {
+      return navigator.serviceWorker.ready;
+    }).then(function () {
+      if (navigator.serviceWorker.controller) return;
+      return new Promise(function (resolve) {
+        var timeout = window.setTimeout(resolve, 4000);
+        navigator.serviceWorker.addEventListener("controllerchange", function onChange() {
+          window.clearTimeout(timeout);
+          navigator.serviceWorker.removeEventListener("controllerchange", onChange);
+          resolve();
+        });
+      });
+    }).catch(function () {
+      // La voz todavía puede funcionar online aunque falle el registro.
+    });
+    return tts.swReady;
+  }
+
+  function nextTtsChunk(text, offset) {
+    var start = Math.max(0, offset || 0);
+    while (start < text.length && /\s/.test(text.charAt(start))) start++;
+    if (start >= text.length) return null;
+    var limit = Math.min(text.length, start + 650);
+    var end = limit;
+    if (limit < text.length) {
+      var slice = text.slice(start, limit);
+      var match;
+      var boundary = /[.!?;:](?:["'”’»)]*)\s+/g;
+      while ((match = boundary.exec(slice))) {
+        if (match.index > 260) end = start + match.index + match[0].length;
+      }
+      if (end === limit) {
+        var space = slice.lastIndexOf(" ");
+        if (space > 260) end = start + space + 1;
+      }
+    }
+    return { start: start, end: end, text: text.slice(start, end).trim() };
+  }
+
+  function currentTtsOffset() {
+    if (!tts.audioBuffer || !tts.source || !tts.context) return tts.chunkStart;
+    var elapsed = tts.audioOffset + Math.max(0, tts.context.currentTime - tts.audioStartedAt);
+    var ratio = Math.min(1, elapsed / Math.max(0.01, tts.audioBuffer.duration));
+    return Math.min(tts.chunkEnd, tts.chunkStart + Math.floor(tts.chunkText.length * ratio));
+  }
+
+  function saveTtsBookmark(offset) {
+    bookmark = {
+      chapter: current,
+      ttsOffset: Math.max(0, offset || 0),
+      ts: Date.now()
+    };
+    saveJSON(BM_KEY, bookmark);
+    if (tts.ui) {
+      tts.ui.bmBtn.classList.add("is-active");
+      tts.ui.bmBtn.textContent = window.VerboI18n ? window.VerboI18n.t("reader.marked") : "★ Marcado";
+    }
+  }
+
+  function stopAudioSource() {
+    if (!tts.source) return;
+    tts.source.onended = null;
+    try { tts.source.stop(); } catch (e) { /* ya finalizó */ }
+    tts.source.disconnect();
+    tts.source = null;
+  }
+
+  function playDecodedBuffer(offsetSeconds) {
+    stopAudioSource();
+    var source = tts.context.createBufferSource();
+    source.buffer = tts.audioBuffer;
+    source.connect(tts.context.destination);
+    tts.source = source;
+    tts.audioOffset = Math.max(0, offsetSeconds || 0);
+    tts.audioStartedAt = tts.context.currentTime;
+    source.onended = function () {
+      if (tts.source !== source || !tts.playing) return;
+      tts.source = null;
+      tts.audioOffset = 0;
+      speakFromOffset(tts.chunkEnd);
+    };
+    source.start(0, Math.min(tts.audioOffset, Math.max(0, tts.audioBuffer.duration - 0.01)));
+  }
+
+  function speakFromOffset(offset) {
+    if (!tts.playing) return;
+    var chunk = nextTtsChunk(tts.chapterText, offset);
+    if (!chunk) {
+      if (current < chapters.length - 1) {
+        saveTtsBookmark(0);
+        tts.continueAfterRender = true;
+        goTo(tts.ui, current + 1);
+      } else {
+        tts.playing = false;
+        saveTtsBookmark(tts.chapterText.length);
+        setTtsStatus("");
+        updateTtsButton();
+      }
+      return;
+    }
+    tts.chunkText = chunk.text;
+    tts.chunkStart = chunk.start;
+    tts.chunkEnd = chunk.end;
+    tts.audioBuffer = null;
+    tts.audioOffset = 0;
+    tts.pending = true;
+    var id = ++tts.requestId;
+    setTtsStatus(ttsLabel("loading"));
+    ensureLibraryServiceWorker().then(function () {
+      if (id !== tts.requestId || !tts.playing) return;
+      ensureTtsWorker().postMessage({ type: "synthesize", id: id, text: chunk.text });
+    });
+  }
+
+  function handleTtsMessage(event) {
+    var message = event.data || {};
+    if (message.type === "progress") {
+      var percent = message.total ? Math.round(message.loaded * 100 / message.total) : 0;
+      setTtsStatus(ttsLabel("loading") + (percent ? " " + percent + "%" : ""));
+      return;
+    }
+    if (message.type === "status") {
+      if (message.status === "synthesizing") setTtsStatus(ttsLabel("synthesizing"));
+      return;
+    }
+    if (message.id !== tts.requestId) return;
+    if (message.type === "error") {
+      tts.pending = false;
+      ttsPause(true);
+      setTtsStatus(ttsLabel("error"));
+      return;
+    }
+    if (message.type !== "audio" || !tts.playing) return;
+    tts.pending = false;
+    tts.objectLanguage = message.language;
+    tts.context.decodeAudioData(message.buffer).then(function (buffer) {
+      if (message.id !== tts.requestId || !tts.playing) return;
+      tts.audioBuffer = buffer;
+      setTtsStatus("");
+      playDecodedBuffer(0);
+    }).catch(function () {
+      ttsPause(true);
+      setTtsStatus(ttsLabel("error"));
+    });
+  }
+
+  function ttsPause(savePosition) {
+    var offset = currentTtsOffset();
+    if (tts.source && tts.context) {
+      tts.audioOffset += Math.max(0, tts.context.currentTime - tts.audioStartedAt);
+    }
+    stopAudioSource();
+    tts.playing = false;
+    tts.requestId++;
+    tts.pending = false;
+    if (savePosition) saveTtsBookmark(offset);
+    setTtsStatus("");
+    updateTtsButton();
+  }
+
+  function toggleTts() {
+    if (tts.playing) {
+      ttsPause(true);
+      return;
+    }
+    ensureAudioContext().then(function () {
+      tts.playing = true;
+      updateTtsButton();
+      if (tts.audioBuffer && tts.audioOffset < tts.audioBuffer.duration) {
+        playDecodedBuffer(tts.audioOffset);
+        return;
+      }
+      var offset = bookmark && bookmark.chapter === current ? (bookmark.ttsOffset || 0) : 0;
+      speakFromOffset(offset);
+    }).catch(function () {
+      setTtsStatus(ttsLabel("error"));
+    });
   }
 
   // Agrupa el texto continuo de una sección/capítulo en "párrafos" de
@@ -289,6 +533,16 @@
     var bmBtn = el("button", "reader-bookmark-btn", "☆ Marcar este capítulo");
     bmBtn.type = "button";
     headTop.appendChild(bmBtn);
+    var ttsWrap = el("span", "reader-tts");
+    var ttsBtn = el("button", "reader-tts-btn", "▶");
+    ttsBtn.type = "button";
+    ttsBtn.title = "Reproducir";
+    ttsBtn.setAttribute("aria-label", "Reproducir");
+    var ttsStatus = el("span", "reader-tts-status");
+    ttsStatus.hidden = true;
+    ttsWrap.appendChild(ttsBtn);
+    ttsWrap.appendChild(ttsStatus);
+    headTop.appendChild(ttsWrap);
     root.appendChild(headTop);
 
     var manualNote = el("p", "reader-manual-note");
@@ -349,6 +603,7 @@
     return {
       badge: badge, title: title, hint: hint, unitLabel: cfg.unitLabel,
       bmBtn: bmBtn, progressBar: progressBar, manualNote: manualNote,
+      ttsBtn: ttsBtn, ttsStatus: ttsStatus,
       resume: resume, resumeText: resumeText, resumeLink: resumeLink, resumeDismiss: resumeDismiss,
       prevBtn: prevBtn, select: select, nextBtn: nextBtn,
       chapterTitle: chapterTitle, content: content, foot: foot
@@ -390,6 +645,7 @@
     resolveChapterText(ch).then(function (resolved) {
       if (token !== renderToken) return; // el usuario ya navegó a otro capítulo/idioma
       translatedMode = resolved.translated;
+      tts.chapterText = resolved.text;
       ui.chapterTitle.textContent = resolved.title;
       ui.content.innerHTML = "";
       paraTexts = splitIntoParagraphs(resolved.text);
@@ -399,6 +655,10 @@
         renderParaContent(p, text, pi);
         ui.content.appendChild(p);
       });
+      if (tts.continueAfterRender && tts.playing) {
+        tts.continueAfterRender = false;
+        speakFromOffset(0);
+      }
     });
 
     ui.bmBtn.classList.toggle("is-active", !!(bookmark && bookmark.chapter === current));
@@ -425,6 +685,7 @@
     }
 
     var ui = buildSkeleton();
+    tts.ui = ui;
     buildChapterOptions(ui);
 
     var hashChapter = parseInt((window.location.hash || "").replace("#", ""), 10);
@@ -443,9 +704,10 @@
       });
     }
 
-    ui.prevBtn.addEventListener("click", function () { goTo(ui, current - 1); });
-    ui.nextBtn.addEventListener("click", function () { goTo(ui, current + 1); });
-    ui.select.addEventListener("change", function () { goTo(ui, parseInt(ui.select.value, 10)); });
+    ui.prevBtn.addEventListener("click", function () { ttsPause(false); goTo(ui, current - 1); });
+    ui.nextBtn.addEventListener("click", function () { ttsPause(false); goTo(ui, current + 1); });
+    ui.select.addEventListener("change", function () { ttsPause(false); goTo(ui, parseInt(ui.select.value, 10)); });
+    ui.ttsBtn.addEventListener("click", toggleTts);
     ui.bmBtn.addEventListener("click", function () {
       if (bookmark && bookmark.chapter === current) {
         bookmark = null;
@@ -461,6 +723,11 @@
     document.addEventListener("verbo:uilang-changed", function () {
       applyChrome(ui).then(function () { render(ui); });
     });
+    window.addEventListener("pagehide", function () {
+      if (tts.playing || tts.source) saveTtsBookmark(currentTtsOffset());
+    });
+
+    ensureLibraryServiceWorker();
 
     if (window.VerboI18n) {
       window.VerboI18n.ready().then(function () { applyChrome(ui).then(function () { render(ui); }); });

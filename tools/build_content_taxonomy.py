@@ -646,7 +646,7 @@ def generate_matthew_henry():
   <script>
     window.__LIBRERIA_BOOK__ = {json.dumps(cfg, ensure_ascii=False, indent=2)};
   </script>
-  <script src="../../assets/reader.js?v=5"></script>'''
+  <script src="../../assets/reader.js?v=7"></script>'''
         html = page_shell(
             root_rel="../../../",
             title=f"Matthew Henry — {b['name']} | Librería | Verbo",
@@ -654,7 +654,7 @@ def generate_matthew_henry():
             back_href="../",
             back_label="Matthew Henry",
             body_html=body,
-            extra_head='<link rel="stylesheet" href="../../assets/reader.css?v=5">\n',
+            extra_head='<link rel="stylesheet" href="../../assets/reader.css?v=7">\n',
             body_class="static-page recursos-page",
         )
         (d / "index.html").write_text(html, encoding="utf-8")
