@@ -190,6 +190,18 @@ Reglas: formato base y conversión de romanos; sin reescribir el inglés.
 Resultado: 2.806 entradas limpiadas en 791 archivos; comprobación final en
 cero. Estructura e identificadores: sin cambios.
 
+### Calvin
+
+Auditoría previa: 42 archivos y 10.888 entradas. Se detectaron 8.330 bloques
+de espaciado, 22.017 espacios antes de puntuación, 46.158 comillas
+tipográficas, 11.135 rayas y 6 dobles guiones; sin controles, mojibake,
+reemplazos ni ligaduras. Hay referencias y rótulos romanos, por ejemplo
+`Book II., chap. 13`. Reglas: normalizar comillas/guiones, espaciado y romanos,
+sin modernizar vocabulario ni redacción.
+
+Resultado: 9.308 entradas limpiadas en 42 archivos; comprobación final en
+cero. Estructura e identificadores: sin cambios.
+
 ### Scofield
 
 Auditoría previa: 66 archivos y 3.214 entradas. Se detectaron 176 dobles
