@@ -94,8 +94,18 @@ window.VerboBackup = (() => {
 
   function getData() { return cached; }
 
+  // No toca fecha_guardado aquí: ese campo es el reloj que sync.js usa para
+  // decidir qué dispositivo "gana" al reconciliar (último en escribir gana,
+  // sin fusión). Si persist() lo bumpeara en cada llamada, cualquier guardado
+  // sin cambios de contenido real —posición de lectura al cambiar de
+  // capítulo, o el flush de "salir" en visibilitychange/pagehide— haría que
+  // ESE dispositivo pareciera el más reciente y sobrescribiera un cambio
+  // genuino más nuevo hecho en otro dispositivo. Bug real en producción
+  // (2026-07-30): un resaltado nuevo en el celular se perdió porque la PC,
+  // solo por seguir leyendo capítulos, quedó con fecha_guardado más nueva.
+  // Los únicos que deben mover el reloj son los cambios de contenido real:
+  // setAllResaltados/setNota lo hacen explícitamente antes de llamar aquí.
   async function persist() {
-    cached.fecha_guardado = new Date().toISOString();
     await idbSet(DATA_KEY, cached);
     scheduleCapacitorWrite();
     persistSubscribers.forEach(cb => { try { cb(cached); } catch {} });
@@ -123,6 +133,7 @@ window.VerboBackup = (() => {
     cached.resaltados = Object.entries(map).map(([ref, color]) => ({
       id: ref, ubicacion: { tipo: 'biblia', ref }, color, texto: ''
     }));
+    cached.fecha_guardado = new Date().toISOString();
     persist();
   }
 
@@ -134,6 +145,7 @@ window.VerboBackup = (() => {
     const existing = cached.notas.find(n => n.ubicacion?.tipo === 'biblia' && n.ubicacion.ref === ref);
     if (existing) { existing.texto = texto; existing.fecha = new Date().toISOString(); }
     else cached.notas.push({ id: ref, ubicacion: { tipo: 'biblia', ref }, texto, fecha: new Date().toISOString() });
+    cached.fecha_guardado = new Date().toISOString();
     persist();
   }
 
