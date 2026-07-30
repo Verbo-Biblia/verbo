@@ -560,12 +560,6 @@ const VerboModules = (() => {
     const eagerPath = catalogBibles.find(b => b.manifest?.id === wantedId)?.path
       || ((registry.bibles || [])[0] ? `modules/${registry.bibles[0]}` : null);
     if (!eagerPath) throw new Error(`No hay Biblias disponibles para ${bookId} ${chapter}`);
-    const eagerResult = await (async () => {
-      try { return await loadBible(eagerPath, bookId, chapter); }
-      catch (error) { console.warn(`Biblia omitida: ${eagerPath}`, error); return null; }
-    })();
-    const bibleResults = eagerResult ? [eagerResult] : [];
-    if (!bibleResults.length) throw new Error(`No hay Biblias disponibles para ${bookId} ${chapter}`);
 
     // Se cargan los ÍNDICES livianos (id+reference, sin texto) de todos los
     // comentarios MENOS el activo, para poder indicar en cada versículo qué
@@ -574,45 +568,68 @@ const VerboModules = (() => {
     // directamente completo, con el texto — no hace falta pedirlo dos veces.
     const catalogCommentaries = registry.catalog?.commentaries || [];
     const activePath = commentaryId ? catalogCommentaries.find(c => c.manifest?.id === commentaryId)?.path : null;
-    const commentaryResults=(await Promise.all((registry.commentaries || [])
-      .map(path => `modules/${path}`)
-      .filter(path => path !== activePath)
-      .map(async path=>{
-        try { return await loadCommentaryIndex(path,bookId,chapter); }
-        catch (error) { console.warn(`Comentario omitido: ${path}`, error); return null; }
-      }))).filter(Boolean);
+
+    // Todas las fuentes de este capítulo (Biblia, índices de comentarios,
+    // comentario activo, referencias cruzadas, biblioteca, patrística) son
+    // independientes entre sí — antes se pedían en 6 fases en fila (cada una
+    // esperando a que la anterior terminara del todo), lo que sumaba sus
+    // tiempos de red uno tras otro en vez de superponerlos. Un solo
+    // Promise.all deja que el navegador las dispare todas a la vez y el
+    // tiempo total pasa a ser el de la fase más lenta, no la suma de las 6.
+    const [
+      eagerResult,
+      commentaryIndexResults,
+      activeCommentaryResult,
+      crossrefsByVerse,
+      libraryResults,
+      patristicByVerseResults
+    ] = await Promise.all([
+      (async () => {
+        try { return await loadBible(eagerPath, bookId, chapter); }
+        catch (error) { console.warn(`Biblia omitida: ${eagerPath}`, error); return null; }
+      })(),
+      Promise.all((registry.commentaries || [])
+        .map(path => `modules/${path}`)
+        .filter(path => path !== activePath)
+        .map(async path=>{
+          try { return await loadCommentaryIndex(path,bookId,chapter); }
+          catch (error) { console.warn(`Comentario omitido: ${path}`, error); return null; }
+        })).then(list => list.filter(Boolean)),
+      (async () => {
+        if (!commentaryId || !activePath) return null;
+        try { return await loadCommentary(activePath, bookId, chapter); }
+        catch (error) { console.warn(`Comentario activo omitido: ${activePath}`, error); return null; }
+      })(),
+      (registry.crossrefs || []).length
+        ? (async()=>{ try { return await loadCrossrefs(`modules/${registry.crossrefs[0]}`,bookId,chapter); } catch (error) { console.warn('Referencias cruzadas omitidas', error); return {}; } })()
+        : Promise.resolve({}),
+      // Recursos de "biblioteca" (ej. modules/library/biblioteca-verbo) que mencionan
+      // este capitulo. Es un campo aparte de "commentaries" para no tocar esa logica:
+      // solo indica cuantos articulos distintos hay por verso, el panel Biblioteca ya
+      // sabe cargar el detalle via loadLinkedEntries cuando el usuario lo abre.
+      Promise.all((registry.library || []).map(async path=>{
+        try { return await loadLinkedEntries(`modules/${path}`,bookId,chapter); }
+        catch (error) { console.warn(`Biblioteca omitida: modules/${path}`, error); return null; }
+      })).then(list => list.filter(Boolean)),
+      // Fragmentos patrísticos anclados a versículo (ver FASE 9 en PLAN.md):
+      // mismo patrón que "biblioteca", solo indica cuántos fragmentos distintos
+      // hay por verso — el panel Padres Apostólicos (modo "Por versículo") carga
+      // el detalle vía loadLinkedEntries cuando el usuario lo abre.
+      Promise.all((registry.patristicByVerse || []).map(async path=>{
+        try { return await loadLinkedEntries(`modules/${path}`,bookId,chapter); }
+        catch (error) { console.warn(`Padre apostólico omitido: modules/${path}`, error); return null; }
+      })).then(list => list.filter(Boolean))
+    ]);
+
+    const bibleResults = eagerResult ? [eagerResult] : [];
+    if (!bibleResults.length) throw new Error(`No hay Biblias disponibles para ${bookId} ${chapter}`);
+
+    const commentaryResults = commentaryIndexResults;
     const loadedCommentaries = new Set();
-    if (commentaryId) {
-      if (activePath) {
-        try {
-          const full = await loadCommentary(activePath, bookId, chapter);
-          commentaryResults.push(full);
-          loadedCommentaries.add(commentaryId);
-        } catch (error) { console.warn(`Comentario activo omitido: ${activePath}`, error); }
-      }
+    if (activeCommentaryResult) {
+      commentaryResults.push(activeCommentaryResult);
+      loadedCommentaries.add(commentaryId);
     }
-
-    const crossrefsByVerse=(registry.crossrefs || []).length
-      ? await (async()=>{ try { return await loadCrossrefs(`modules/${registry.crossrefs[0]}`,bookId,chapter); } catch (error) { console.warn('Referencias cruzadas omitidas', error); return {}; } })()
-      : {};
-
-    // Recursos de "biblioteca" (ej. modules/library/biblioteca-verbo) que mencionan
-    // este capitulo. Es un campo aparte de "commentaries" para no tocar esa logica:
-    // solo indica cuantos articulos distintos hay por verso, el panel Biblioteca ya
-    // sabe cargar el detalle via loadLinkedEntries cuando el usuario lo abre.
-    const libraryResults=(await Promise.all((registry.library || []).map(async path=>{
-      try { return await loadLinkedEntries(`modules/${path}`,bookId,chapter); }
-      catch (error) { console.warn(`Biblioteca omitida: modules/${path}`, error); return null; }
-    }))).filter(Boolean);
-
-    // Fragmentos patrísticos anclados a versículo (ver FASE 9 en PLAN.md):
-    // mismo patrón que "biblioteca", solo indica cuántos fragmentos distintos
-    // hay por verso — el panel Padres Apostólicos (modo "Por versículo") carga
-    // el detalle vía loadLinkedEntries cuando el usuario lo abre.
-    const patristicByVerseResults=(await Promise.all((registry.patristicByVerse || []).map(async path=>{
-      try { return await loadLinkedEntries(`modules/${path}`,bookId,chapter); }
-      catch (error) { console.warn(`Padre apostólico omitido: modules/${path}`, error); return null; }
-    }))).filter(Boolean);
 
     const versions={};
     bibleResults.forEach(({manifest:m})=>versions[m.id]={label:m.abbreviation,full:m.name,year:m.year,hasStrongs:Boolean(m.hasStrongs)});
