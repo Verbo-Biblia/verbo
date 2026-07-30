@@ -218,3 +218,14 @@ No se reconstruyen palabras cuando el contexto no sea inequívoco.
 Resultado: 6.604 entradas limpiadas en 27 archivos; quedaron cero controles y
 cero caracteres de reemplazo. Comprobación final en cero; estructura e
 identificadores sin cambios.
+
+### Clarke
+
+Auditoría previa: 66 archivos y 21.051 entradas. Se detectaron 1.132 espacios
+antes de puntuación, 20 rótulos narrativos, 45 referencias `cap./ch.` y otros
+candidatos romanos; sin controles, mojibake, reemplazos ni ligaduras.
+Ejemplos: `Part I`, `cap. lxiv.`, `lib. ii., cap. ix.` y `chap. xii.`.
+Reglas: formato base y conversión de romanos; sin cambios de redacción.
+
+Resultado: 1.472 entradas limpiadas en 65 archivos; comprobación final en
+cero. Estructura e identificadores: sin cambios.
