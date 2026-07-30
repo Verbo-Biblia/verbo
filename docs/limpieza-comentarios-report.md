@@ -189,3 +189,14 @@ Reglas: formato base y conversión de romanos; sin reescribir el inglés.
 
 Resultado: 2.806 entradas limpiadas en 791 archivos; comprobación final en
 cero. Estructura e identificadores: sin cambios.
+
+### Scofield
+
+Auditoría previa: 66 archivos y 3.214 entradas. Se detectaron 176 dobles
+guiones, 2.300 espacios antes de puntuación, 2 comillas tipográficas y un
+rótulo romano (`Part III`); sin controles, mojibake, reemplazos ni ligaduras.
+Reglas: formato base, comillas estándar y conversión de romanos; sin cambios
+de redacción o doctrina.
+
+Resultado: 2.303 entradas limpiadas en 66 archivos; comprobación final en
+cero. Estructura e identificadores: sin cambios.
