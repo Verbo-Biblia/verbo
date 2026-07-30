@@ -208,6 +208,18 @@ arábigos, sin reescribir el contenido.
 Resultado: las 108 entradas existentes se limpiaron en los 7 archivos;
 comprobación final en cero. Estructura e identificadores: sin cambios.
 
+## Verificación global de citas abreviadas
+
+La búsqueda transversal posterior detectó romanos residuales en referencias
+abreviadas que no repetían el nombre del libro, por ejemplo `Ps. cxxiv. 8`,
+`John ix. 5`, `Ant. xvii. 10` y `(vi. 17)`. Se añadió una regla estricta:
+convertir un token romano minúsculo únicamente cuando va seguido por
+puntuación de cita y un número o rango. Así se evitan falsos positivos en
+palabras latinas reales como `mi` y `dii`.
+
+Entradas previstas para esta segunda pasada: Matthew Henry 2.150; JFB 11; K&D
+916; Wesley 345; Scofield 18; Barnes 214; Clarke 449; Calvin 16; Cambridge 105.
+
 ### Calvin
 
 Auditoría previa: 42 archivos y 10.888 entradas. Se detectaron 8.330 bloques

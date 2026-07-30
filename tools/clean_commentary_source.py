@@ -32,6 +32,9 @@ ROMAN_CONTEXT_RE = re.compile(
     re.IGNORECASE,
 )
 ROMAN_TOKEN_RE = re.compile(r"\b[IVXLCDM]{2,}\b")
+ROMAN_CITATION_TOKEN_RE = re.compile(
+    r"\b[ivxlcdm]+\b(?=\s*[.,:]\s*(?:\d|[-–]))"
+)
 SPACE_BEFORE_PUNCTUATION_RE = re.compile(r"\s+([,.!?;:])")
 WHITESPACE_RE = re.compile(r"\s+")
 DOUBLE_HYPHEN_RE = re.compile(r"\s*--\s*")
@@ -108,6 +111,7 @@ def clean_content(content: str) -> str:
             text,
         )
         text = ROMAN_TOKEN_RE.sub(replace_roman_token, text)
+        text = ROMAN_CITATION_TOKEN_RE.sub(replace_roman_token, text)
         text = WHITESPACE_RE.sub(" ", text)
         text = SPACE_BEFORE_PUNCTUATION_RE.sub(r"\1", text)
         parts[index] = text
