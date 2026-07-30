@@ -106,7 +106,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     position: absolute;
     inset: -8%;
     background: url('assets/fondo.png') center / cover no-repeat;
-    opacity: 0.38;
+    opacity: 0.72;
     transform: translate3d(0, var(--hero-parallax, 0px), 0) scale(1.08);
     will-change: transform;
     pointer-events: none;
@@ -117,8 +117,8 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(100deg, rgba(10,16,28,0.88), rgba(10,16,28,0.62) 58%, rgba(10,16,28,0.5)),
-      linear-gradient(0deg, rgba(16,25,43,0.9) 0%, transparent 34%);
+      linear-gradient(100deg, rgba(10,16,28,0.72) 0%, rgba(10,16,28,0.38) 46%, rgba(10,16,28,0.16) 100%),
+      linear-gradient(0deg, rgba(16,25,43,0.7) 0%, transparent 42%);
     pointer-events: none;
   }
 
@@ -353,7 +353,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     }
     .hero::before {
       background-position: 58% center;
-      opacity: 0.34;
+      opacity: 0.64;
     }
     .hero-inner { text-align: center; }
     .hero h1 { margin-inline: auto; font-size: clamp(2rem, 10vw, 2.65rem); }
