@@ -220,6 +220,8 @@ def build_articulos(approx_flags):
         tipo = TIPO_OVERRIDE.get(slug)
         if tipo is None:
             tipo = "articulo"  # Apologética / Teología / Historia de la Biblia / Vida cristiana
+        elif tipo in {"devocional", "reflexion"}:
+            tipo = "devocional-reflexion"
         temas = TEMAS_OVERRIDE.get(slug)
         if temas is None:
             temas = [slugify(topic)] if topic else []
@@ -352,8 +354,8 @@ def fmt_fecha_corta(iso):
     return f"{int(d)} {MESES_LARGO[int(m)]} {y}"
 
 
-TIPO_LABEL = {"devocional": "Devocional", "articulo": "Artículo", "reflexion": "Reflexión"}
-TIPO_I18N_KEY = {"devocional": "temas.devocional", "articulo": "filtros.articulo", "reflexion": "filtros.reflexion"}
+TIPO_LABEL = {"devocional-reflexion": "Devocional y reflexión", "articulo": "Artículo"}
+TIPO_I18N_KEY = {"devocional-reflexion": "filtros.devocionalReflexion", "articulo": "filtros.articulo"}
 TEMA_LABEL = {
     "apologetica": "Apologética", "teologia": "Teología", "vida-cristiana": "Vida cristiana",
     "historia-de-la-biblia": "Historia de la Biblia", "gracia": "Gracia", "fe": "Fe",
@@ -401,9 +403,8 @@ def render_articulos_block(items):
     out.append('    <span class="r-filter-group-label" data-i18n="filtros.tipo">Tipo</span>')
     out.append('    <button type="button" class="r-filter-pill is-active" data-value="todos" data-i18n="filtros.todos">Todos</button>')
     for val, label, i18n_key in (
-        ("devocional", "Devocional", "temas.devocional"),
+        ("devocional-reflexion", "Devocional y reflexión", "filtros.devocionalReflexion"),
         ("articulo", "Artículo", "filtros.articulo"),
-        ("reflexion", "Reflexión", "filtros.reflexion"),
     ):
         out.append(f'    <button type="button" class="r-filter-pill" data-value="{val}" data-i18n="{i18n_key}">{label}</button>')
     out.append('  </div>')
@@ -706,8 +707,7 @@ def main():
 
     generate_matthew_henry()
 
-    print(f"Artículos y Reflexiones: {len(articulos)} ({sum(1 for i in articulos if i['tipo']=='devocional')} devocional, "
-          f"{sum(1 for i in articulos if i['tipo']=='reflexion')} reflexión, "
+    print(f"Artículos y Reflexiones: {len(articulos)} ({sum(1 for i in articulos if i['tipo']=='devocional-reflexion')} devocional/reflexión, "
           f"{sum(1 for i in articulos if i['tipo']=='articulo')} artículo, "
           f"{sum(1 for i in articulos if i.get('pendiente_revision'))} pendientes)")
     print(f"Escuela Dominical: {len(escuela)} lecciones")

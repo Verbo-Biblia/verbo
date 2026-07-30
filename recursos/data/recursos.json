@@ -3,7 +3,7 @@
     "id": "2corintios-5",
     "titulo": "2 Corintios 5:15-17: nueva criatura, nueva manera de ver",
     "seccion": "recursos",
-    "tipo": "devocional",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "gracia",
@@ -23,7 +23,7 @@
     "id": "aceptados-por-cristo",
     "titulo": "No aceptados porque vencimos, sino porque Cristo venció",
     "seccion": "recursos",
-    "tipo": "reflexion",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "identidad-en-cristo",
@@ -43,7 +43,7 @@
     "id": "aun-no-es-el-fin",
     "titulo": "\"Aún no es el fin\": discernir sin especular",
     "seccion": "recursos",
-    "tipo": "devocional",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "escatologia"
@@ -100,7 +100,7 @@
     "id": "cosas-mejores-vendran",
     "titulo": "El error en la frase \"cosas mejores vendrán\"",
     "seccion": "recursos",
-    "tipo": "reflexion",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "esperanza"
@@ -157,7 +157,7 @@
     "id": "desierto-eclesiastes-3",
     "titulo": "El desierto no es la excepción, es el camino",
     "seccion": "recursos",
-    "tipo": "reflexion",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "sufrimiento",
@@ -196,7 +196,7 @@
     "id": "efesios-2",
     "titulo": "Efesios 2: de extraños a familia, solo por gracia",
     "seccion": "recursos",
-    "tipo": "devocional",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "gracia",
@@ -387,7 +387,7 @@
     "id": "fe-que-no-negocia",
     "titulo": "Una fe que no negocia: Daniel, Pablo y Habacuc",
     "seccion": "recursos",
-    "tipo": "reflexion",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "fe"
@@ -406,7 +406,7 @@
     "id": "fe-y-voluntad",
     "titulo": "Cuando no es la fe la que se quiebra, sino la voluntad",
     "seccion": "recursos",
-    "tipo": "reflexion",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "fe"
@@ -444,7 +444,7 @@
     "id": "hoy-si-oyes-su-voz",
     "titulo": "Hoy, si oyes Su voz",
     "seccion": "recursos",
-    "tipo": "devocional",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "fe"
@@ -520,7 +520,7 @@
     "id": "mirada-que-nos-alcanzo",
     "titulo": "Una mirada que nos alcanzó antes de existir",
     "seccion": "recursos",
-    "tipo": "reflexion",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "gracia"
@@ -539,7 +539,7 @@
     "id": "permanece-en-la-vid",
     "titulo": "No hay victoria separados de Cristo",
     "seccion": "recursos",
-    "tipo": "devocional",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "vida-en-cristo"
@@ -558,7 +558,7 @@
     "id": "piedad-sin-condescendencia",
     "titulo": "Amabilidad no es lo mismo que condescendencia con el pecado",
     "seccion": "recursos",
-    "tipo": "reflexion",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "santidad"
@@ -634,7 +634,7 @@
     "id": "romanos-8",
     "titulo": "Romanos 8: seguridad en Cristo, no ausencia de dolor",
     "seccion": "recursos",
-    "tipo": "devocional",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "seguridad-en-cristo"
@@ -653,7 +653,7 @@
     "id": "su-fidelidad-no-la-mia",
     "titulo": "Su fidelidad, no la mía",
     "seccion": "recursos",
-    "tipo": "reflexion",
+    "tipo": "devocional-reflexion",
     "idioma": "es",
     "temas": [
       "gracia",
