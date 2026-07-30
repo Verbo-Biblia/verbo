@@ -533,7 +533,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const panelWasClosed=!els.side.classList.contains('side-panel--open');
     activeTab=tab;
     const isSheet=window.innerWidth<=760 && SHEET_TABS.includes(tab);
-    els.side.classList.toggle('side-panel--left', ['biblioteca','padres','licencias','contacto'].includes(tab));
+    els.side.classList.toggle('side-panel--left', ['biblioteca','padres','licencias'].includes(tab));
     if(isSheet){
       els.side.dataset.sheet='1';  // CSS aplica translateY(105%) inmediatamente
       els.side.offsetHeight;       // fuerza reflow para que el estado inicial esté fijo
@@ -663,27 +663,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(tab==='ajustes') renderAjustes();
     if(tab==='mapas') renderMapsPanel();
     if(tab==='licencias') renderLicensesPanel();
-    if(tab==='contacto') renderContactPanel();
     if(tab==='buscar') renderSearch();
-  }
-
-  function renderContactPanel(){
-    els.panelTitle.textContent='Contacto';
-    els.panelToolbar.innerHTML='';
-    els.panelBody.innerHTML=`
-      <section class="license-page">
-        <div class="license-page__intro">
-          <div class="license-page__seal" aria-hidden="true">V</div>
-          <div>
-            <h2>Escríbenos</h2>
-            <p>¿Preguntas, reportes de error o sugerencias sobre Verbo? Escríbenos directamente.</p>
-          </div>
-        </div>
-        <article class="license-card">
-          <h3>Soporte</h3>
-          <p><a href="mailto:soporte@verbobiblia.com">soporte@verbobiblia.com</a></p>
-        </article>
-      </section>`;
   }
 
   function renderLicensesPanel(){
