@@ -176,3 +176,16 @@ guion a formas estándar, elipsis a tres puntos y reparación puntual de
 Resultado: 7.972 entradas en la pasada principal y 12 ajustes convergentes en
 la segunda; comprobación final con cero cambios. Estructura e identificadores:
 sin cambios.
+
+### Wesley
+
+Auditoría previa: 1.156 archivos y 16.774 entradas. Se detectaron 116 bloques
+de espaciado, 3.757 espacios antes de puntuación, 5 encabezados narrativos y
+11 candidatos de cita romana; sin controles, mojibake, reemplazos, ligaduras
+ni comillas tipográficas. Ejemplos: `Chapter XC`, `Chapter CXXXVII`,
+`Matthew or Mark; and St. John`, `duty . Chapter`.
+
+Reglas: formato base y conversión de romanos; sin reescribir el inglés.
+
+Resultado: 2.806 entradas limpiadas en 791 archivos; comprobación final en
+cero. Estructura e identificadores: sin cambios.
