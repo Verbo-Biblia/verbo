@@ -13,9 +13,25 @@ from typing import Any
 
 EMPTY_PARAGRAPH_RE = re.compile(r"<p>\s*</p>", re.IGNORECASE)
 NBSP_RE = re.compile(r"&(?:nbsp|#160);", re.IGNORECASE)
-NARRATIVE_ROMAN_RE = re.compile(
-    r"\b(Book|Chapter|Part|Section|Volume|Vol\.)[ \t]+([IVXLCDM]+)\b"
+ROMAN_CONTEXT_RE = re.compile(
+    r"\b("
+    r"Book|B\.|Chapter|Chap\.|Ch\.|Cap\.|Part|Section|Sec\.|Volume|Vol\.|"
+    r"Lib\.|Epistle|Ep\.|Psalm|Ps\.|No\.|"
+    r"Genesis|Gen\.|Exodus|Exod\.|Leviticus|Lev\.|Numbers|Num\.|"
+    r"Deuteronomy|Deut\.|Joshua|Josh\.|Judges|Judg\.|Ruth|Samuel|Sam\.|"
+    r"Kings|Chronicles|Chron\.|Ezra|Nehemiah|Neh\.|Esther|Esth\.|Job|"
+    r"Psalms|Proverbs|Prov\.|Ecclesiastes|Eccl\.|Isaiah|Isa\.|Jeremiah|"
+    r"Jer\.|Lamentations|Lam\.|Ezekiel|Ezek\.|Daniel|Dan\.|Hosea|Hos\.|"
+    r"Joel|Amos|Obadiah|Obad\.|Jonah|Micah|Mic\.|Nahum|Nah\.|Habakkuk|"
+    r"Hab\.|Zephaniah|Zeph\.|Haggai|Hag\.|Zechariah|Zech\.|Malachi|Mal\.|"
+    r"Matthew|Matt\.|Mark|Luke|John|Acts|Romans|Rom\.|Corinthians|Cor\.|"
+    r"Galatians|Gal\.|Ephesians|Eph\.|Philippians|Phil\.|Colossians|Col\.|"
+    r"Thessalonians|Thess\.|Timothy|Tim\.|Titus|Philemon|Philem\.|"
+    r"Hebrews|Heb\.|James|Peter|Jude|Revelation|Rev\."
+    r")([ \t]+)([IVXLCDM]+)\b",
+    re.IGNORECASE,
 )
+ROMAN_TOKEN_RE = re.compile(r"\b[IVXLCDM]{2,}\b")
 SPACE_BEFORE_PUNCTUATION_RE = re.compile(r"\s+([,.!?;:])")
 WHITESPACE_RE = re.compile(r"\s+")
 DOUBLE_HYPHEN_RE = re.compile(r"\s*--\s*")
@@ -36,16 +52,41 @@ def roman_to_int(value: str) -> int:
     return total
 
 
+def is_canonical_roman(value: str) -> bool:
+    number = roman_to_int(value.upper())
+    remainder = number
+    canonical = ""
+    for amount, numeral in (
+        (1000, "M"), (900, "CM"), (500, "D"), (400, "CD"),
+        (100, "C"), (90, "XC"), (50, "L"), (40, "XL"),
+        (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I"),
+    ):
+        count, remainder = divmod(remainder, amount)
+        canonical += numeral * count
+    return canonical == value.upper()
+
+
+def replace_roman_token(match: re.Match[str]) -> str:
+    value = match.group(0)
+    return str(roman_to_int(value.upper())) if is_canonical_roman(value) else value
+
+
 def clean_content(content: str) -> str:
     content = EMPTY_PARAGRAPH_RE.sub("", content)
     parts = HTML_TAG_RE.split(content)
     for index in range(0, len(parts), 2):
         text = NBSP_RE.sub(" ", parts[index])
         text = DOUBLE_HYPHEN_RE.sub(" — ", text)
-        text = NARRATIVE_ROMAN_RE.sub(
-            lambda match: f"{match.group(1)} {roman_to_int(match.group(2))}",
+        text = ROMAN_CONTEXT_RE.sub(
+            lambda match: (
+                f"{match.group(1)}{match.group(2)}"
+                f"{roman_to_int(match.group(3).upper())}"
+                if is_canonical_roman(match.group(3))
+                else match.group(0)
+            ),
             text,
         )
+        text = ROMAN_TOKEN_RE.sub(replace_roman_token, text)
         text = WHITESPACE_RE.sub(" ", text)
         text = SPACE_BEFORE_PUNCTUATION_RE.sub(r"\1", text)
         parts[index] = text

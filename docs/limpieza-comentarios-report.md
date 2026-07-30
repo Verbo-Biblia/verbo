@@ -42,7 +42,7 @@ Base auditada: 66 archivos de contenido y 4.599 entradas.
 | Numerales romanos narrativos inequívocos | 1 | 1 |
 | Marca numerada posiblemente editorial | 1 | 1 |
 | Controles, mojibake, caracteres privados, reemplazos o ligaduras Unicode | 0 | 0 |
-| Candidatos a referencia bíblica en romanos | ≈29.500 | no se modifican |
+| Candidatos a referencia bíblica en romanos | ≈29.500 | convertir a arábigos por decisión editorial |
 
 ### Ejemplos antes de limpiar
 
@@ -101,10 +101,10 @@ Los 66 libros contienen en su introducción la secuencia
 #### Numerales romanos
 
 - Narrativo inequívoco: `The apocryphal Esdras (or Ezra), Book I.`
-- Referencias conservadas: `Phil. iii. 1`, `Ezra vii. 6`,
+- Referencias detectadas: `Phil. iii. 1`, `Ezra vii. 6`,
   `2 Chron. v. 9`, `Gen. xxv.`, `Rom. iv. 11, 12`,
   `Luke iii. 34-38`, `Job xli. :1`.
-- Enumeraciones y casos contextuales conservados por prudencia:
+- Enumeraciones y casos contextuales detectados:
   `I. The company...`, `II. The solemn fast...`, `CHAP. I.`.
 
 La marca `(5)` de `mh-mic-5-1` puede ser una enumeración editorial legítima y
@@ -118,9 +118,10 @@ se conserva.
    conservando todas las etiquetas HTML y sus atributos.
 4. Retirar espacios situados antes de `, . ! ? ; :`.
 5. Convertir `--` en raya tipográfica `—`, con un solo espacio a cada lado.
-6. Convertir romanos a arábigos solo tras los rótulos narrativos seguros
-   definidos arriba. No convertir `CHAP.`, `ch.`, `ver.`, nombres de libros
-   bíblicos ni enumeraciones sueltas.
+6. Convertir todos los numerales romanos reconocibles a arábigos, incluidas
+   citas bíblicas, capítulos, libros, partes y enumeraciones. No convertir la
+   letra inglesa `I` cuando funciona como pronombre ni palabras ordinarias
+   compuestas por letras que también existen en el sistema romano.
 7. No corregir ortografía, sintaxis, nombres, doctrina, citas ni palabras
    arcaicas.
 8. Aplicar las transformaciones únicamente a `content` y abortar si cambia
@@ -136,9 +137,11 @@ se conserva.
 - Se eliminaron los saltos/espacios OCR, 26.995 espacios HTML, 66 párrafos
   vacíos y 7.783 dobles guiones íntegramente contenidos en nodos de texto.
 - Se corrigieron 10 espacios antes de puntuación.
-- Se convirtió un solo romano narrativo inequívoco: `Book I` → `Book 1`.
+- En la primera pasada se convirtió `Book I` → `Book 1`; una segunda pasada
+  modificó 4.512 entradas y cubrió también las referencias y enumeraciones
+  romanas por decisión editorial.
 - Permanecen cuatro secuencias `--` que cruzan etiquetas HTML; se conservaron
   para no alterar límites de marcado.
-- Las referencias bíblicas romanas (incluidas las 4.748 coincidencias de la
-  muestra estricta y todos los demás candidatos) se conservaron.
+- Las referencias bíblicas romanas se convierten a números arábigos sin tocar
+  los campos estructurales de enlace.
 - Identificadores, referencias y campos ajenos a `content`: sin cambios.
