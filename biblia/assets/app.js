@@ -641,7 +641,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       els.panelBody.innerHTML=entries.length?entries.map(([id,n])=>{
         const cachedTranslation=needsCommentaryTranslation ? tcacheGet(translationCacheKey(id,n.body,contentLang())) : null;
         const bodyHtml=needsCommentaryTranslation
-          ? `${autoTranslationNoticeHtml()}${cachedTranslation||`<p class="note-card__translating">${t('comentario.traduciendo')}</p>`}${originalSourceDetailsHtml(n.body,commentarySourceLang)}`
+          ? `${cachedTranslation||`<p class="note-card__translating">${t('comentario.traduciendo')}</p>`}${originalSourceDetailsHtml(n.body,commentarySourceLang)}`
           : n.body;
         return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${commentCtx.data.meta.book} ${commentCtx.data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">${t('comentario.copiarComentario')}</button><div class="note-card__body">${bodyHtml}</div></div>`;
       }).join(''):emptyState('📖',t('comentario.sinComentarios'));
@@ -783,10 +783,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const label=sourceLang==='en'?t('comentario.originalIngles'):t('comentario.textoOriginal');
     return `<details class="note-card__original"><summary>${label}</summary><div class="note-card__original-body">${htmlContent}</div></details>`;
   }
-  function autoTranslationNoticeHtml(){
-    return `<p class="note-card__translation-note">${t('comentario.avisoTraduccion')}</p>`;
-  }
-
   function splitTextIntoChunks(text, maxLen=4500){
     const chunks=[];
     while(text.length>maxLen){
@@ -862,7 +858,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const translated=await translateEntry(noteId, note.body, source, target);
       if(bodyEl.dataset.translated==='pending'){
         const prevTop = noteId===focusNoteId ? card.getBoundingClientRect().top : null;
-        bodyEl.innerHTML=`${autoTranslationNoticeHtml()}${translated}${originalSourceDetailsHtml(note.body,source)}`;
+        bodyEl.innerHTML=`${translated}${originalSourceDetailsHtml(note.body,source)}`;
         bodyEl.dataset.translated=target;
         // Re-anchor scroll to keep focused card in place
         if(prevTop!==null){
