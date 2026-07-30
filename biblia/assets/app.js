@@ -1031,12 +1031,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(sermonEditor) return sermonEditor;
     if(!els.editorSurface) return null;
     try{
+      const editorLang = window.VerboI18n?.getUiLang() === 'es' ? 'es' : 'en';
       if(!window.tinymce) await loadScriptOnce('https://cdn.jsdelivr.net/npm/tinymce@7.9.3/tinymce.min.js');
+      if(editorLang === 'es') await loadScriptOnce('https://cdn.jsdelivr.net/npm/tinymce-i18n@26.7.13/langs7/es.js');
       await new Promise((resolve,reject)=>{
         window.tinymce.init({
           target: els.editorSurface,
           inline: true,
           license_key: 'gpl',
+          language: editorLang === 'es' ? 'es' : undefined,
           menubar: false,
           statusbar: false,
           branding: false,
