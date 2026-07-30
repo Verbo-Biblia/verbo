@@ -1,28 +1,18 @@
-# Estado restante — Biblia Verbo BV2026 — 2026-07-27
+# Estado restante — Biblia Verbo — 2026-07-29
 
 ## Próximo punto exacto
 
-- Auditar integralmente `1 Samuel 1–31`.
-- La revisión editorial de los 31 capítulos está terminada y el JSON es válido.
-- La versificación histórica de 23:29–24:22 ya fue corregida y coincide con la
-  división moderna.
-- Verificar estructura contra ASV, textos no vacíos, cifras, nombres, negaciones,
-  vocabulario extraño y coherencia narrativa antes de marcar el libro candidato.
-- No se hizo commit ni push al pausar.
-- Archivo: `biblia/modules/bibles/rv-verbo/books/1SA.json`.
+- Continuar con `Ester 1–10`.
+- El avance desde Génesis hasta Nehemías ya fue comiteado y publicado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/EST.json`.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 58 libros en proceso: 1 Samuel–Apocalipsis.
-- Restan 922 capítulos después de 1 Samuel.
-- Restan 23.079 versículos de los 31.102 totales según la numeración moderna,
-  una vez descontada la revisión textual completa de 1 Samuel.
-- La auditoría estructural detectó 16 versículos todavía fusionados por la
-  numeración histórica en diez capítulos: 1 Samuel 23; 2 Samuel 20;
-  2 Crónicas 33; Job 35, 38 y 40; Oseas 11; Jonás 1; Hechos 19; y
-  2 Corintios 13. Se separarán al revisar cada libro.
+- Restan 50 libros: Ester–Apocalipsis.
+- Restan 763 capítulos después de Nehemías.
+- Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
 
@@ -34,9 +24,10 @@
 - Josué: 24 capítulos y 658 versículos; candidato editorial.
 - Jueces: 21 capítulos y 618 versículos; candidato editorial.
 - Rut: 4 capítulos y 85 versículos; candidato editorial.
-- 1 Samuel: 31 capítulos y 810 versículos revisados; pendiente auditoría final.
-- Total con revisión textual terminada: 9 libros, 267 capítulos y 8.023
-  versículos.
+- 1 Samuel–2 Crónicas: 167 capítulos; candidatos editoriales publicados.
+- Esdras: 10 capítulos y 280 versículos; candidato editorial publicado.
+- Nehemías: 13 capítulos y 406 versículos; candidato editorial publicado.
+- Total terminado y publicado: 16 libros y 426 capítulos.
 
 ## Método obligatorio restante
 
@@ -52,7 +43,5 @@
 
 ## Publicación
 
-- Juan autorizó nuevamente comitear y subir los libros terminados, pero 1 Samuel
-  quedó en pausa antes de su auditoría final; no subirlo hasta completar esa
-  auditoría al reanudar.
+- Juan autorizó comitear y subir cada libro terminado.
 - La Biblia completa todavía no está terminada ni debe marcarse como oficial.
