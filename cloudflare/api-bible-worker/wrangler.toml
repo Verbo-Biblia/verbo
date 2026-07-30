@@ -9,8 +9,8 @@ ALLOWED_ORIGINS = "https://verbobiblia.com,https://www.verbobiblia.com,https://j
 APP_URL = "https://verbobiblia.com/biblia/"
 RESEND_FROM = "Verbo <no-reply@verbobiblia.com>"
 
-# Reemplaza "REEMPLAZAR_CON_ID_REAL" con el id que entrega
+# Reemplaza "a1a2e2765ff34bc7b3abd1dbd17dfb71" con el id que entrega
 # `npx wrangler kv namespace create SYNC_KV`.
 [[kv_namespaces]]
 binding = "SYNC_KV"
-id = "REEMPLAZAR_CON_ID_REAL"
+id = "a1a2e2765ff34bc7b3abd1dbd17dfb71"

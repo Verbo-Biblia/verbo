@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MODULE = ROOT / "modules/bibles/rv-verbo"
+DEFAULT_MODULE = ROOT / "biblia/modules/bibles/rv-verbo"
 
 
 def load_json(path: Path):
