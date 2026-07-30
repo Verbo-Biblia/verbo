@@ -327,10 +327,20 @@ BOOK_ROW_RE = re.compile(
 def build_libreria():
     items = []
     idx_html = (LIBRERIA / "index.html").read_text(encoding="utf-8")
+    catalog_path = LIBRERIA / "data" / "libreria.json"
+    existing_by_id = {}
+    if catalog_path.exists():
+        existing_by_id = {
+            item["id"]: item
+            for item in json.loads(catalog_path.read_text(encoding="utf-8"))
+            if item.get("id")
+        }
     for slug, titulo in BOOK_ROW_RE.findall(idx_html):
-        meta = LIBRERIA_META.get(slug, {})
+        # Preserve imported-book metadata when this taxonomy is regenerated.
+        # Curated overrides continue to take precedence for legacy titles.
+        meta = {**existing_by_id.get(slug, {}), **LIBRERIA_META.get(slug, {})}
         fecha = meta.get("fecha_agregado") or git_add_date(LIBRERIA / slug)
-        items.append({
+        item = {
             "id": slug,
             "titulo": titulo.strip(),
             "seccion": "libreria",
@@ -341,7 +351,11 @@ def build_libreria():
             "autor": meta.get("autor"),
             "url": f"/libreria/{slug}/",
             "estrategia_traduccion": estrategia_para(slug),
-        })
+        }
+        for field in ("fuente", "licencia", "traductor"):
+            if meta.get(field):
+                item[field] = meta[field]
+        items.append(item)
     return items
 
 

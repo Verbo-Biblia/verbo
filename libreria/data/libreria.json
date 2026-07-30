@@ -295,5 +295,890 @@
       "nativo_ref": "biblia/modules/commentaries/matthew-henry-en",
       "nota": "El lector de Librería ya sirve el texto inglés nativo; la traducción EN->ES para lectores hispanos usa el mecanismo existente del panel de Comentario, no está conectada todavía en el lector de Librería (gap detectado, fuera de alcance de esta tarea)."
     }
+  },
+  {
+    "id": "santidad-es",
+    "titulo": "Santidad",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/santidad-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=holis&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "los-deberes-de-los-padres-es",
+    "titulo": "Los deberes de los padres",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/los-deberes-de-los-padres-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=dopas&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "pensamientos-para-hombres-jovenes-es",
+    "titulo": "Pensamientos para hombres jóvenes",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/pensamientos-para-hombres-jovenes-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=tfyms&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "cristo-es-el-todo-es",
+    "titulo": "Cristo es el todo",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/cristo-es-el-todo-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=cials&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "santificacion-es",
+    "titulo": "Santificación",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/santificacion-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=sancs&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "vivo-o-muerto-es",
+    "titulo": "¿Vivo o muerto?",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/vivo-o-muerto-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=aodes&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "acordaos-de-la-mujer-de-lot-es",
+    "titulo": "Acordaos de la mujer de Lot",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/acordaos-de-la-mujer-de-lot-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=rlwis&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "es-usted-nacido-de-nuevo-es",
+    "titulo": "¿Es usted nacido de nuevo?",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/es-usted-nacido-de-nuevo-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=aybas&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "catecismo-de-spurgeon-es",
+    "titulo": "Catecismo de Spurgeon",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/catecismo-de-spurgeon-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=scats&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "fe-es",
+    "titulo": "Fe",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/fe-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=faits&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "la-palabra-infalible-de-dios-es",
+    "titulo": "La Palabra infalible de Dios",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/la-palabra-infalible-de-dios-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=iwogs&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "aun-hay-lugar-es",
+    "titulo": "Aún hay lugar",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/aun-hay-lugar-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=ytirs&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "el-bautismo-una-sepultura-es",
+    "titulo": "El bautismo: una sepultura",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/el-bautismo-una-sepultura-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=babus&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "la-eleccion-es",
+    "titulo": "La elección",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/la-eleccion-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=elecs&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "ganar-almas-es",
+    "titulo": "Ganar almas",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/ganar-almas-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=swins&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "la-incapacidad-humana-es",
+    "titulo": "La incapacidad humana",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/la-incapacidad-humana-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=hinas&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "el-nacimiento-de-cristo-es",
+    "titulo": "El nacimiento de Cristo",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/el-nacimiento-de-cristo-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=bochs&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "nuestro-manifiesto-es",
+    "titulo": "Nuestro manifiesto",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/nuestro-manifiesto-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=omans&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "la-oracion-de-jabes-es",
+    "titulo": "La oración de Jabes",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/la-oracion-de-jabes-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=pojas&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "la-regeneracion-bautismal-es",
+    "titulo": "La regeneración bautismal",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/la-regeneracion-bautismal-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=bregs&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "el-senor-y-el-leproso-es",
+    "titulo": "El Señor y el leproso",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/el-senor-y-el-leproso-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=latls&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "un-gran-evangelio-para-grandes-pecadores-es",
+    "titulo": "Un gran evangelio para grandes pecadores",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/un-gran-evangelio-para-grandes-pecadores-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=ggfgs&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "una-defensa-del-calvinismo-es",
+    "titulo": "Una defensa del calvinismo",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/una-defensa-del-calvinismo-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=doc2s&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "verdadera-oracion-verdadero-poder-es",
+    "titulo": "¡Verdadera oración, verdadero poder!",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/verdadera-oracion-verdadero-poder-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=tptps&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "como-debo-acercarme-a-dios-es",
+    "titulo": "¿Cómo debo acercarme a Dios?",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/como-debo-acercarme-a-dios-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=hsias&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "palabras-para-el-ganador-de-almas-es",
+    "titulo": "Palabras para el ganador de almas",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/palabras-para-el-ganador-de-almas-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=wtwos&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "adonde-adonde-es",
+    "titulo": "¿Adónde? ¿Adónde?",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/adonde-adonde-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=wwhis&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "belen-y-las-buenas-nuevas-es",
+    "titulo": "Belén y las buenas nuevas",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/belen-y-las-buenas-nuevas-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=baigs&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "como-ire-a-dios-es",
+    "titulo": "¿Cómo iré a Dios?",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/como-ire-a-dios-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=hsigs&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "cristo-murio-por-los-impios-es",
+    "titulo": "Cristo murió por los impíos",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/cristo-murio-por-los-impios-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=cdfts&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "cual-es-mi-esperanza-es",
+    "titulo": "¿Cuál es mi esperanza?",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/cual-es-mi-esperanza-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=wimhs&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "en-mi-lugar-es",
+    "titulo": "En mi lugar",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/en-mi-lugar-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=iomes&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "la-larga-eternidad-es",
+    "titulo": "La larga eternidad",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/la-larga-eternidad-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=ltims&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "el-mundo-se-acaba-es",
+    "titulo": "El mundo se acaba",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/el-mundo-se-acaba-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=wpaws&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "el-progreso-del-peregrino-para-todos-es",
+    "titulo": "El progreso del peregrino para todos",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "John Bunyan",
+    "url": "/libreria/el-progreso-del-peregrino-para-todos-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=ppfes&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "deberes-familiares-es",
+    "titulo": "Deberes familiares",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "John Bunyan",
+    "url": "/libreria/deberes-familiares-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=fduts&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "la-esclavitud-de-la-voluntad-es",
+    "titulo": "La esclavitud de la voluntad",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Martín Lutero",
+    "url": "/libreria/la-esclavitud-de-la-voluntad-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=botws&format=epub",
+    "licencia": "© 1984 Grace Publications Trust. Todos los derechos reservados. Usado con permiso. Se permite reproducir por cualquier medio sin cobrar más que el costo nominal y conservando el aviso y su texto íntegro."
+  },
+  {
+    "id": "pecadores-en-las-manos-de-un-dios-airado-es",
+    "titulo": "Pecadores en las manos de un Dios airado",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Jonathan Edwards",
+    "url": "/libreria/pecadores-en-las-manos-de-un-dios-airado-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=siths&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "el-metodo-de-la-gracia-es",
+    "titulo": "El método de la gracia",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "George Whitefield",
+    "url": "/libreria/el-metodo-de-la-gracia-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=mogrs&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "la-vida-secreta-de-oracion-es",
+    "titulo": "La vida secreta de oración",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "David MacIntyre",
+    "url": "/libreria/la-vida-secreta-de-oracion-es/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=hlops&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "holiness-en",
+    "titulo": "Holiness",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/holiness-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=holi&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "a-call-to-prayer-en",
+    "titulo": "A Call to Prayer",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/a-call-to-prayer-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=ctpr&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "the-world-en",
+    "titulo": "The World",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/the-world-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=worl&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "are-you-born-again-en",
+    "titulo": "Are You Born Again?",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "J. C. Ryle",
+    "url": "/libreria/are-you-born-again-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=ayba&format=pdf",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "night-of-weeping-morning-of-joy-en",
+    "titulo": "Night of Weeping; Morning of Joy",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/night-of-weeping-morning-of-joy-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=nowm&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "god-s-way-of-peace-en",
+    "titulo": "God's Way of Peace",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/god-s-way-of-peace-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=gwop&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "the-throne-of-grace-en",
+    "titulo": "The Throne of Grace",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Horatius Bonar",
+    "url": "/libreria/the-throne-of-grace-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=togr&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "the-atoning-sacrifice-of-christ-en",
+    "titulo": "The Atoning Sacrifice of Christ",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Arthur W. Pink",
+    "url": "/libreria/the-atoning-sacrifice-of-christ-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=asoc&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "the-bondage-of-the-will-en",
+    "titulo": "The Bondage of the Will",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Martin Luther",
+    "url": "/libreria/the-bondage-of-the-will-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=botw&format=epub",
+    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
+  },
+  {
+    "id": "first-clement-en",
+    "titulo": "First Epistle of Clement",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Clement of Rome",
+    "url": "/libreria/first-clement-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/1clement-roberts.html",
+    "licencia": "Roberts–Donaldson historical English translation; public domain."
+  },
+  {
+    "id": "second-clement-en",
+    "titulo": "Second Epistle of Clement",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Anónimo",
+    "url": "/libreria/second-clement-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/2clement-roberts.html",
+    "licencia": "Roberts–Donaldson historical English translation; public domain."
+  },
+  {
+    "id": "didache-en",
+    "titulo": "The Didache",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Anónimo",
+    "url": "/libreria/didache-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/didache-roberts.html",
+    "licencia": "Roberts–Donaldson historical English translation; public domain."
+  },
+  {
+    "id": "epistle-barnabas-en",
+    "titulo": "Epistle of Barnabas",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Anónimo",
+    "url": "/libreria/epistle-barnabas-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/barnabas-roberts.html",
+    "licencia": "Roberts–Donaldson historical English translation; public domain."
+  },
+  {
+    "id": "shepherd-hermas-en",
+    "titulo": "The Shepherd of Hermas",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Hermas",
+    "url": "/libreria/shepherd-hermas-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/shepherd.html",
+    "licencia": "Roberts–Donaldson historical English translation; public domain."
+  },
+  {
+    "id": "epistle-diognetus-en",
+    "titulo": "Epistle to Diognetus",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Anónimo (Mathetes)",
+    "url": "/libreria/epistle-diognetus-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/diognetus-roberts.html",
+    "licencia": "Roberts–Donaldson historical English translation; public domain."
+  },
+  {
+    "id": "polycarp-philippians-en",
+    "titulo": "Polycarp to the Philippians",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Polycarp of Smyrna",
+    "url": "/libreria/polycarp-philippians-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/polycarp-lightfoot.html",
+    "licencia": "J. B. Lightfoot historical English translation; public domain."
+  },
+  {
+    "id": "martyrdom-polycarp-en",
+    "titulo": "Martyrdom of Polycarp",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Iglesia de Esmirna",
+    "url": "/libreria/martyrdom-polycarp-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/martyrdompolycarp-roberts.html",
+    "licencia": "Roberts–Donaldson historical English translation; public domain."
+  },
+  {
+    "id": "ignatius-romans-en",
+    "titulo": "Ignatius to the Romans",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Ignatius of Antioch",
+    "url": "/libreria/ignatius-romans-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/ignatius-romans-roberts.html",
+    "licencia": "Roberts–Donaldson historical English translation; public domain."
+  },
+  {
+    "id": "fragments-papias-en",
+    "titulo": "Fragments of Papias",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "patristica"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Papias of Hierapolis",
+    "url": "/libreria/fragments-papias-en/",
+    "fuente": "https://www.earlychristianwritings.com/text/papias.html",
+    "licencia": "J. B. Lightfoot historical English translation; public domain."
   }
 ]
