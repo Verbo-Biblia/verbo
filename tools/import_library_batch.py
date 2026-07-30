@@ -360,8 +360,20 @@ def main():
     cards = "".join(card_html(book) for book in imported)
     if imported[0][0] not in index:
         index = index.replace(marker, cards + marker, 1)
-    index = re.sub(r'<div class="r-section-label"><h2[^>]*>\d+ libros</h2></div>',
-                   f'<div class="r-section-label"><h2 data-i18n-live>{16 + len(imported)} libros</h2></div>', index)
+    language_counts = {
+        lang: sum(item.get("idioma") == lang for item in catalog)
+        for lang in ("es", "en")
+    }
+    language_summary = (
+        f'{language_counts["es"]} en español · '
+        f'{language_counts["en"]} en inglés'
+    )
+    index = re.sub(
+        r'<div class="r-section-label"><h2[^>]*>[^<]+</h2></div>',
+        f'<div class="r-section-label"><h2 data-i18n-live>{language_summary}</h2></div>',
+        index,
+        count=1,
+    )
     index_path.write_text(index, encoding="utf-8")
 
     report = {
