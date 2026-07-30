@@ -3,7 +3,7 @@
    usuario en el Worker de Cloudflare (ver cloudflare/api-bible-worker).
    Última escritura gana, sin merge. Silenciosa tras el primer vínculo: no
    pide confirmación en cada sync, y falla en silencio si no hay conexión. */
-const VerboSync = (() => {
+window.VerboSync = (() => {
   const DEVICE_KEY = 'verbo:syncDeviceId';
   const SESSION_KEY = 'verbo:syncSession';
   const EMAIL_MASKED_KEY = 'verbo:syncEmailMasked';

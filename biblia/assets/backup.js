@@ -3,7 +3,7 @@
    permiso. Exportar/importar sigue disponible como respaldo manual explícito
    (botón en el panel de Ajustes). Sin cuentas, sin backend — todo vive en la
    máquina del usuario. */
-const VerboBackup = (() => {
+window.VerboBackup = (() => {
   const DB_NAME = 'verbo-db';
   const DB_VERSION = 1;
   const STORE = 'kv';
