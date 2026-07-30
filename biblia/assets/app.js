@@ -640,10 +640,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       const entries=Object.entries(commentCtx.data.notes).filter(([,note])=>note.commentaryId===currentCommentary);
       els.panelBody.innerHTML=entries.length?entries.map(([id,n])=>{
         const cachedTranslation=needsCommentaryTranslation ? tcacheGet(translationCacheKey(id,n.body,contentLang())) : null;
+        const cachedTitle=needsCommentaryTranslation ? tcacheGet(translationCacheKey(`${id}:title`,n.title,contentLang())) : null;
+        const cachedAuthor=needsCommentaryTranslation ? tcacheGet(translationCacheKey(`${id}:author`,n.author,contentLang())) : null;
         const bodyHtml=needsCommentaryTranslation
           ? `${cachedTranslation||`<p class="note-card__translating">${t('comentario.traduciendo')}</p>`}${originalSourceDetailsHtml(n.body,commentarySourceLang)}`
           : n.body;
-        return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${commentCtx.data.meta.book} ${commentCtx.data.meta.chapter}</div><div class="note-card__title">${n.title}</div><div class="note-card__author">${n.author}</div><button class="note-card__copy" type="button" data-copy-note="${id}">${t('comentario.copiarComentario')}</button><div class="note-card__body">${bodyHtml}</div></div>`;
+        return `<div class="note-card" data-note-id="${id}"><div class="note-card__ref">${commentCtx.data.meta.book} ${commentCtx.data.meta.chapter}</div><div class="note-card__title" data-commentary-header="title"${cachedTitle?` data-translated="${contentLang()}"`:''}>${escapeHTML(cachedTitle||n.title)}</div><div class="note-card__author" data-commentary-header="author"${cachedAuthor?` data-translated="${contentLang()}"`:''}>${escapeHTML(cachedAuthor||n.author)}</div><button class="note-card__copy" type="button" data-copy-note="${id}">${t('comentario.copiarComentario')}</button><div class="note-card__body">${bodyHtml}</div></div>`;
       }).join(''):emptyState('📖',t('comentario.sinComentarios'));
       els.panelBody.querySelectorAll('[data-copy-note]').forEach(btn=>btn.addEventListener('click',()=>{ const note=commentCtx.data.notes[btn.dataset.copyNote]; if(note) copyToClipboard(`${note.title}\n${String(note.body).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`); }));
       if(focus){ if(delayScroll) setTimeout(()=>scrollCommentToNote(focus),320); else scrollCommentToNote(focus); }
@@ -838,6 +840,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     }catch{ return htmlContent; }
   }
 
+  async function translateCommentaryHeader(noteId, field, text, sourceLang='en', targetLang='es'){
+    if(!text) return text;
+    const cacheKey=translationCacheKey(`${noteId}:${field}`,text,targetLang);
+    const cached=tcacheGet(cacheKey);
+    if(cached) return cached;
+    const translated=await googleTranslate(text,sourceLang,targetLang);
+    if(!translated) return text;
+    tcacheSet(cacheKey,translated);
+    return translated;
+  }
+
   async function applyCommentaryTranslation(focusNoteId=null, sourceLang=null){
     const manifest=catalog?.commentaries?.find(c=>c.manifest.id===currentCommentary)?.manifest;
     const source=sourceLang||manifest?.language;
@@ -852,8 +865,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       const noteId=card.dataset.noteId;
       const bodyEl=card.querySelector('.note-card__body');
       if(!bodyEl||bodyEl.dataset.translated===target) continue;
-      const note=data.notes[noteId];
+      const note=commentaryContext().data.notes[noteId];
       if(!note) continue;
+      for(const field of ['title','author']){
+        const headerEl=card.querySelector(`[data-commentary-header="${field}"]`);
+        if(!headerEl||headerEl.dataset.translated===target||!note[field]) continue;
+        headerEl.dataset.translated='pending';
+        const translatedHeader=await translateCommentaryHeader(noteId,field,note[field],source,target);
+        if(headerEl.dataset.translated==='pending'){
+          headerEl.textContent=translatedHeader;
+          headerEl.dataset.translated=target;
+        }
+      }
       bodyEl.dataset.translated='pending';
       const translated=await translateEntry(noteId, note.body, source, target);
       if(bodyEl.dataset.translated==='pending'){
