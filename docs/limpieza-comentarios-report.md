@@ -159,3 +159,20 @@ reescribir el inglés ni modificar contenido doctrinal.
 
 Resultado: 15.272 entradas limpiadas en 66 archivos; segunda comprobación con
 cero cambios. Identificadores, referencias y demás campos: sin cambios.
+
+### K&D
+
+Auditoría previa: 39 archivos y 8.806 entradas. Se detectaron 3.629 bloques de
+espaciado, 28.681 espacios antes de puntuación, 59.248 comillas tipográficas,
+137 variantes de raya, una elipsis Unicode, 2 rótulos narrativos y al menos
+36 citas/capítulos romanos. Un carácter privado OCR aparecía como
+`H \uF895 sban`; por contexto inequívoco se normaliza a `Hesban`.
+
+Ejemplos: `ch. xiii. 4`, `ch. ii. 3-7`, `Part II`, `Part I`, comillas `“...”`
+y `Seetzen ; Burckhardt`. Reglas particulares: comillas a ASCII, variantes de
+guion a formas estándar, elipsis a tres puntos y reparación puntual de
+`Hesban`; sin correcciones de redacción.
+
+Resultado: 7.972 entradas en la pasada principal y 12 ajustes convergentes en
+la segunda; comprobación final con cero cambios. Estructura e identificadores:
+sin cambios.

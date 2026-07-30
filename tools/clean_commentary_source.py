@@ -36,6 +36,15 @@ SPACE_BEFORE_PUNCTUATION_RE = re.compile(r"\s+([,.!?;:])")
 WHITESPACE_RE = re.compile(r"\s+")
 DOUBLE_HYPHEN_RE = re.compile(r"\s*--\s*")
 HTML_TAG_RE = re.compile(r"(<[^>]+>)")
+TYPOGRAPHIC_TRANSLATION = str.maketrans(
+    {
+        "‘": "'", "’": "'", "‚": "'", "‛": "'",
+        "“": '"', "”": '"', "„": '"', "‟": '"',
+        "‐": "-", "‑": "-", "‒": "–", "―": "—", "…": "...",
+        "ﬀ": "ff", "ﬁ": "fi", "ﬂ": "fl", "ﬃ": "ffi", "ﬄ": "ffl",
+        "ﬅ": "st", "ﬆ": "st",
+    }
+)
 
 
 def roman_to_int(value: str) -> int:
@@ -76,6 +85,8 @@ def clean_content(content: str) -> str:
     parts = HTML_TAG_RE.split(content)
     for index in range(0, len(parts), 2):
         text = NBSP_RE.sub(" ", parts[index])
+        text = text.translate(TYPOGRAPHIC_TRANSLATION)
+        text = text.replace("H \uf895 sban", "Hesban")
         text = DOUBLE_HYPHEN_RE.sub(" — ", text)
         text = ROMAN_CONTEXT_RE.sub(
             lambda match: (
