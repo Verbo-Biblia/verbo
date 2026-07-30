@@ -106,7 +106,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     position: absolute;
     inset: -8%;
     background: url('assets/fondo.png') center / cover no-repeat;
-    opacity: 0.22;
+    opacity: 0.38;
     transform: translate3d(0, var(--hero-parallax, 0px), 0) scale(1.08);
     will-change: transform;
     pointer-events: none;
@@ -117,8 +117,8 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(100deg, rgba(10,16,28,0.95), rgba(10,16,28,0.72) 58%, rgba(10,16,28,0.62)),
-      linear-gradient(0deg, var(--ink) 0%, transparent 32%);
+      linear-gradient(100deg, rgba(10,16,28,0.88), rgba(10,16,28,0.62) 58%, rgba(10,16,28,0.5)),
+      linear-gradient(0deg, rgba(16,25,43,0.9) 0%, transparent 34%);
     pointer-events: none;
   }
 
@@ -351,6 +351,10 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
       padding-top: clamp(1.5rem, 4vh, 2.4rem);
       padding-bottom: 1.25rem;
     }
+    .hero::before {
+      background-position: 58% center;
+      opacity: 0.34;
+    }
     .hero-inner { text-align: center; }
     .hero h1 { margin-inline: auto; font-size: clamp(2rem, 10vw, 2.65rem); }
     .hero-rule { margin-inline: auto; }
@@ -465,7 +469,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   let ticking = false;
   const updateParallax = () => {
-    document.documentElement.style.setProperty('--hero-parallax', `${Math.min(scrollY * 0.12, 36)}px`);
+    document.documentElement.style.setProperty('--hero-parallax', `${Math.min(scrollY * 0.2, 64)}px`);
     ticking = false;
   };
   addEventListener('scroll', () => {
