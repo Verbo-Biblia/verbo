@@ -1,5 +1,20 @@
 [
   {
+    "id": "reina-valera-gomez-2004",
+    "titulo": "Reina-Valera Gómez 2004",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "es",
+    "temas": [
+      "biblia"
+    ],
+    "fecha_agregado": "2026-07-30",
+    "autor": "Revisión de Humberto Gómez Caballero",
+    "url": "/libreria/reina-valera-gomez-2004/",
+    "fuente": "/biblia/modules/bibles/rvg-2004/manifest.json",
+    "licencia": "CC BY-NC-ND 4.0 — uso no comercial, con atribución y sin modificación del texto."
+  },
+  {
     "id": "evangelio-segun-jesucristo",
     "titulo": "El Evangelio según Jesucristo",
     "seccion": "libreria",

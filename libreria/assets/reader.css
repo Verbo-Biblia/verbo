@@ -44,6 +44,13 @@ body.recursos-page .reader-title {
   margin: 0 0 18px;
 }
 
+body.recursos-page .reader-license {
+  margin: -.45rem 0 1rem;
+  color: var(--muted, #675f58);
+  font-size: .82rem;
+  line-height: 1.45;
+}
+
 body.recursos-page .reader-bookmark-btn {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;

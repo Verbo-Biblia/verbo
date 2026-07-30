@@ -400,6 +400,38 @@
     });
   }
 
+  function loadBibleContent(manifestUrl) {
+    return fetch(manifestUrl)
+      .then(function (r) {
+        if (!r.ok) throw new Error("No se pudo cargar la edición bíblica.");
+        return r.json();
+      })
+      .then(function (manifest) {
+        var base = new URL(".", new URL(manifestUrl, window.location.href));
+        return Promise.all(manifest.books.map(function (book) {
+          return fetch(new URL(book.file, base))
+            .then(function (r) {
+              if (!r.ok) throw new Error("No se pudo cargar " + book.name + ".");
+              return r.json();
+            })
+            .then(function (data) {
+              return Object.keys(data.chapters).map(function (chapter) {
+                var verses = data.chapters[chapter];
+                return {
+                  n: book.number + "." + chapter,
+                  title: book.name + " " + chapter,
+                  content: Object.keys(verses).map(function (verse) {
+                    return verse + " " + verses[verse].text;
+                  }).join("\n\n")
+                };
+              });
+            });
+        })).then(function (books) {
+          return { sections: books.reduce(function (all, book) { return all.concat(book); }, []) };
+        });
+      });
+  }
+
   function el(tag, className, text) {
     var e = document.createElement(tag);
     if (className) e.className = className;
@@ -551,6 +583,11 @@
 
     var title = el("h1", "reader-title", cfg.title);
     root.appendChild(title);
+
+    if (cfg.licenseNotice) {
+      var licenseNotice = el("p", "reader-license", cfg.licenseNotice);
+      root.appendChild(licenseNotice);
+    }
 
     var progress = el("div", "reader-progress");
     var progressBar = el("div", "reader-progress-bar");
@@ -737,8 +774,10 @@
   }
 
   root.innerHTML = '<p class="reader-hint">Cargando…</p>';
-  fetch(cfg.dataUrl)
-    .then(function (r) { return r.json(); })
+  var contentPromise = cfg.bibleManifestUrl
+    ? loadBibleContent(cfg.bibleManifestUrl)
+    : fetch(cfg.dataUrl).then(function (r) { return r.json(); });
+  contentPromise
     .then(init)
     .catch(function () {
       root.innerHTML = '<p class="reader-hint">No se pudo cargar el contenido de este libro.</p>';
