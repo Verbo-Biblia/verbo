@@ -2,16 +2,16 @@
 
 ## Próximo punto exacto
 
-- Continuar con `Ester 1–10`.
-- El avance desde Génesis hasta Nehemías ya fue comiteado y publicado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/EST.json`.
+- Continuar con `Job 1–42`.
+- El avance desde Génesis hasta Ester ya fue comiteado y publicado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/JOB.json`.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 50 libros: Ester–Apocalipsis.
-- Restan 763 capítulos después de Nehemías.
+- Restan 49 libros: Job–Apocalipsis.
+- Restan 753 capítulos después de Ester.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -27,7 +27,8 @@
 - 1 Samuel–2 Crónicas: 167 capítulos; candidatos editoriales publicados.
 - Esdras: 10 capítulos y 280 versículos; candidato editorial publicado.
 - Nehemías: 13 capítulos y 406 versículos; candidato editorial publicado.
-- Total terminado y publicado: 16 libros y 426 capítulos.
+- Ester: 10 capítulos y 167 versículos; candidato editorial publicado.
+- Total terminado y publicado: 17 libros y 436 capítulos.
 
 ## Método obligatorio restante
 

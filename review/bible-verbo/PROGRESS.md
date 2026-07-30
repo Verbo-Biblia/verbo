@@ -58,16 +58,17 @@ Un libro solo puede marcarse como cerrado cuando:
 | 2 Crónicas | 36 | candidato | Revisión integral completada y publicada: 36 capítulos y 821 entradas JSON |
 | Esdras | 10 | candidato | Revisión integral completada y publicada: 10 capítulos y 280 versículos |
 | Nehemías | 13 | candidato | Revisión integral completada y publicada: 13 capítulos y 406 versículos |
-| Ester–Apocalipsis | 763 | pendiente | Restan 50 libros después de Nehemías |
+| Ester | 10 | candidato | Revisión integral completada: 10 capítulos y 167 versículos; JSON, estructura, nombres, cifras, decretos y continuidad narrativa validados |
+| Job–Apocalipsis | 753 | pendiente | Restan 49 libros después de Ester |
 
 ## Orden de trabajo
 
 Se seguirá el orden canónico, cerrando cada libro antes de declarar terminado el
 proyecto: Génesis, Éxodo, Levítico, Números, Deuteronomio y así sucesivamente
-hasta Apocalipsis. La revisión continúa desde Ester.
+hasta Apocalipsis. La revisión continúa desde Job.
 
 ## Publicación
 
 Juan autorizó expresamente subir cada libro cuando quede cerrado. La revisión
-completa continúa desde Ester; no se declarará completa ni oficial la Biblia
+completa continúa desde Job; no se declarará completa ni oficial la Biblia
 hasta cerrar los 66 libros.
