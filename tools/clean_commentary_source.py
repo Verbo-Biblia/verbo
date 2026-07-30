@@ -39,6 +39,8 @@ SPACE_BEFORE_PUNCTUATION_RE = re.compile(r"\s+([,.!?;:])")
 WHITESPACE_RE = re.compile(r"\s+")
 DOUBLE_HYPHEN_RE = re.compile(r"\s*--\s*")
 HTML_TAG_RE = re.compile(r"(<[^>]+>)")
+HTML_ANCHOR_RE = re.compile(r"(<a\b[^>]*>)(.*?)(</a>)", re.IGNORECASE)
+ROMAN_ANY_TOKEN_RE = re.compile(r"\b[ivxlcdm]+\b", re.IGNORECASE)
 TYPOGRAPHIC_TRANSLATION = str.maketrans(
     {
         "‘": "'", "’": "'", "‚": "'", "‛": "'",
@@ -83,14 +85,23 @@ def replace_roman_token(match: re.Match[str]) -> str:
     return str(roman_to_int(value.upper())) if is_canonical_roman(value) else value
 
 
+def clean_anchor_romans(match: re.Match[str]) -> str:
+    parts = HTML_TAG_RE.split(match.group(2))
+    for index in range(0, len(parts), 2):
+        parts[index] = ROMAN_ANY_TOKEN_RE.sub(replace_roman_token, parts[index])
+    return f"{match.group(1)}{''.join(parts)}{match.group(3)}"
+
+
 def clean_content(content: str) -> str:
     content = EMPTY_PARAGRAPH_RE.sub("", content)
+    content = HTML_ANCHOR_RE.sub(clean_anchor_romans, content)
     parts = HTML_TAG_RE.split(content)
     for index in range(0, len(parts), 2):
         text = NBSP_RE.sub(" ", parts[index])
         text = text.translate(TYPOGRAPHIC_TRANSLATION)
         text = text.replace("H \uf895 sban", "Hesban")
         text = text.replace("\x14", " — ").replace("\x15", "§")
+        text = re.sub(r"\blxx\b", "70", text, flags=re.IGNORECASE)
         text = text.replace("7� gallons", "7.5 gallons")
         text = re.sub(r"(?<=\d)�(?=[ '\\s])", "°", text)
         text = re.sub(r"�(?=\\s?\\d)", "£", text)

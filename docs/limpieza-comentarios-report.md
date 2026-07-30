@@ -220,6 +220,12 @@ palabras latinas reales como `mi` y `dii`.
 Entradas previstas para esta segunda pasada: Matthew Henry 2.150; JFB 11; K&D
 916; Wesley 345; Scofield 18; Barnes 214; Clarke 449; Calvin 16; Cambridge 105.
 
+Una última revisión de HTML detectó números separados de su rótulo por
+etiquetas, por ejemplo `<i>ch.</i> xxii`. Se convirtieron los romanos dentro
+de enlaces bíblicos y `LXX` se normalizó a `70`. Esta pasada adicional afectó
+3.306 entradas de Matthew Henry, 1.476 de K&D, 2 de Barnes, 9 de Clarke y 3 de
+Cambridge. Todos los módulos llegaron después a cero cambios.
+
 ### Calvin
 
 Auditoría previa: 42 archivos y 10.888 entradas. Se detectaron 8.330 bloques
