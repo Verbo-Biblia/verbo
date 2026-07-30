@@ -9,6 +9,16 @@ window.VerboSync = (() => {
   const EMAIL_MASKED_KEY = 'verbo:syncEmailMasked';
   const PULL_INTERVAL_MS = 5 * 60 * 1000;
 
+  // Resuelto relativo a la ubicación de este script (no a la página que lo
+  // incluye) — mismo motivo que assets/i18n.js: sync.js ahora también se
+  // carga desde /ajustes/, no solo desde /biblia/, y 'modules/registry.json'
+  // relativo a la página rompería fuera de /biblia/.
+  const REGISTRY_URL = (() => {
+    const src = (document.currentScript && document.currentScript.src) || '';
+    const scriptDir = src ? src.split('?')[0].replace(/[^/]+$/, '') : './';
+    return scriptDir + '../modules/registry.json';
+  })();
+
   let baseUrlPromise = null;
   let pullTimer = null;
   let pushDebounce = null;
@@ -43,7 +53,7 @@ window.VerboSync = (() => {
 
   async function baseUrl() {
     if (!baseUrlPromise) {
-      baseUrlPromise = fetch('modules/registry.json').then(r => r.json())
+      baseUrlPromise = fetch(REGISTRY_URL).then(r => r.json())
         .then(registry => String(registry.apiBible?.proxyUrl || '').trim().replace(/\/+$/, ''));
     }
     return baseUrlPromise;
