@@ -190,6 +190,24 @@ Reglas: formato base y conversión de romanos; sin reescribir el inglés.
 Resultado: 2.806 entradas limpiadas en 791 archivos; comprobación final en
 cero. Estructura e identificadores: sin cambios.
 
+### Cambridge
+
+Auditoría previa de lo actualmente publicado: 7 archivos y 108 entradas
+(Romanos, Efesios, Filipenses, Colosenses, 1–2 Tesalonicenses y Filemón).
+Se detectaron 5 dobles guiones, 16 comillas tipográficas, 2.226 rayas,
+13 rótulos narrativos, 389 referencias `ch.` y al menos 611 referencias de
+libro con numeración romana. Ejemplos: `Acts xix. 21`, `Romans i. 1-7`,
+`ch. X. 3`, `Chapter XII`, `Session VI_ ch. ix.`.
+
+No se detectaron controles, caracteres de reemplazo ni privados. Se conservan
+griego, transliteraciones y signos filológicos legítimos aunque sean poco
+comunes; corregirlos exigiría reconstrucción editorial, fuera de la limpieza
+de formato. Reglas: formato base, comillas/guiones estándar y romanos a
+arábigos, sin reescribir el contenido.
+
+Resultado: las 108 entradas existentes se limpiaron en los 7 archivos;
+comprobación final en cero. Estructura e identificadores: sin cambios.
+
 ### Calvin
 
 Auditoría previa: 42 archivos y 10.888 entradas. Se detectaron 8.330 bloques
