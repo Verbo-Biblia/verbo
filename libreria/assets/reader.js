@@ -267,18 +267,20 @@
   function toggleSpeech() {
     if (!speechSupported()) return;
     if (speech.playing) {
-      window.speechSynthesis.pause();
+      saveSpeechBookmark();
+      speech.generation++;
+      window.speechSynthesis.cancel();
+      speech.utterance = null;
       speech.playing = false;
       speech.paused = true;
-      saveSpeechBookmark();
       updateSpeechButton();
       return;
     }
-    if (speech.paused && speech.utterance) {
-      window.speechSynthesis.resume();
+    if (speech.paused) {
       speech.playing = true;
       speech.paused = false;
       updateSpeechButton();
+      speakFromOffset(speech.position);
       return;
     }
     window.speechSynthesis.cancel();
