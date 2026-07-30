@@ -226,6 +226,12 @@ de enlaces bíblicos y `LXX` se normalizó a `70`. Esta pasada adicional afectó
 3.306 entradas de Matthew Henry, 1.476 de K&D, 2 de Barnes, 9 de Clarke y 3 de
 Cambridge. Todos los módulos llegaron después a cero cambios.
 
+La regla final convierte además numerales canónicos sueltos entre 2 y 200.
+Esto cubre formas bibliográficas como `ii. p. 84`, `(lxx)` y `C. xix.` sin
+confundir palabras comunes o latinas. Entradas afectadas: Matthew Henry 54,
+JFB 2, K&D 476, Wesley 2, Barnes 85, Clarke 326, Calvin 18 y Cambridge 94;
+Scofield no necesitó cambios. Nueva comprobación: cero en los nueve módulos.
+
 ### Calvin
 
 Auditoría previa: 42 archivos y 10.888 entradas. Se detectaron 8.330 bloques

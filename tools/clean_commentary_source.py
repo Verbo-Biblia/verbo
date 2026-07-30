@@ -35,6 +35,7 @@ ROMAN_TOKEN_RE = re.compile(r"\b[IVXLCDM]{2,}\b")
 ROMAN_CITATION_TOKEN_RE = re.compile(
     r"\b[ivxlcdm]+\b(?=\s*[.,:]\s*(?:\d|[-–]))"
 )
+ROMAN_SMALL_TOKEN_RE = re.compile(r"\b[ivxlcdm]{2,}\b", re.IGNORECASE)
 SPACE_BEFORE_PUNCTUATION_RE = re.compile(r"\s+([,.!?;:])")
 WHITESPACE_RE = re.compile(r"\s+")
 DOUBLE_HYPHEN_RE = re.compile(r"\s*--\s*")
@@ -85,6 +86,12 @@ def replace_roman_token(match: re.Match[str]) -> str:
     return str(roman_to_int(value.upper())) if is_canonical_roman(value) else value
 
 
+def replace_small_roman_token(match: re.Match[str]) -> str:
+    value = match.group(0)
+    number = roman_to_int(value.upper())
+    return str(number) if number <= 200 and is_canonical_roman(value) else value
+
+
 def clean_anchor_romans(match: re.Match[str]) -> str:
     parts = HTML_TAG_RE.split(match.group(2))
     for index in range(0, len(parts), 2):
@@ -123,6 +130,7 @@ def clean_content(content: str) -> str:
         )
         text = ROMAN_TOKEN_RE.sub(replace_roman_token, text)
         text = ROMAN_CITATION_TOKEN_RE.sub(replace_roman_token, text)
+        text = ROMAN_SMALL_TOKEN_RE.sub(replace_small_roman_token, text)
         text = WHITESPACE_RE.sub(" ", text)
         text = SPACE_BEFORE_PUNCTUATION_RE.sub(r"\1", text)
         parts[index] = text
