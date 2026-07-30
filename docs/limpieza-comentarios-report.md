@@ -1,0 +1,144 @@
+# Limpieza de comentarios ingleses para traducción en vivo
+
+Fecha de inicio: 2026-07-30
+
+## Alcance e invariantes
+
+La limpieza se limita al texto de `content`. No se modifica `id` (identificador
+fuente equivalente al `rawId` en estos módulos), `reference`, títulos, autores,
+índices ni manifiestos. Antes y después de cada módulo se comparan:
+
+- cantidad de archivos y entradas;
+- secuencia completa de identificadores;
+- representación JSON exacta de cada `reference`;
+- campos ajenos a `content`.
+
+Las referencias bíblicas con capítulos en números romanos se conservan. Los
+romanos solo se convierten cuando aparecen inmediatamente después de un rótulo
+narrativo explícito y con mayúscula (`Book`, `Chapter`, `Part`, `Section`,
+`Volume` o `Vol.`), sin saltos de línea. Los casos dudosos no se tocan.
+
+## Inventario de comentarios
+
+Los comentarios ingleses activos son Matthew Henry, JFB, K&D, Scofield, Wesley,
+Barnes, Clarke, Calvin y Cambridge. Cambridge ya incluye Romanos, Efesios,
+Filipenses, Colosenses, 1–2 Tesalonicenses y Filemón. Por ampliación expresa del
+alcance, esta ejecución cubre los nueve módulos. TSK queda fuera: no es cuerpo
+de comentario traducible sino el sistema estructural de referencias cruzadas.
+
+## Fase 1 — Matthew Henry
+
+Base auditada: 66 archivos de contenido y 4.599 entradas.
+
+### Hallazgos
+
+| Tipo | Instancias aproximadas | Entradas afectadas |
+|---|---:|---:|
+| Secuencias de espacios/saltos de línea de maquetación OCR | 725.669 | 4.599 |
+| Entidades `&nbsp;` usadas como separación visual | 26.995 | 3.536 |
+| Dobles guiones usados como raya tipográfica | 7.787 | 2.522 |
+| Párrafos HTML vacíos | 66 | 66 |
+| Espacios OCR antes de puntuación | 10 | 9 |
+| Numerales romanos narrativos inequívocos | 1 | 1 |
+| Marca numerada posiblemente editorial | 1 | 1 |
+| Controles, mojibake, caracteres privados, reemplazos o ligaduras Unicode | 0 | 0 |
+| Candidatos a referencia bíblica en romanos | ≈29.500 | no se modifican |
+
+### Ejemplos antes de limpiar
+
+#### Espaciado y saltos OCR
+
+1. `GEN intro`: `<BR>\n <p>Genesis</p>\n\n ...`
+2. `GEN 1:0`: `<BR><b>G E N E S I S</b>\n <BR>\n <BR>CHAP. I.`
+3. `GEN 1:1`: `God created the\n heaven and the earth.`
+4. `GEN 1:3`: `Let there be\n light: and there was light.`
+5. `GEN 1:14`: `let there be \n lights in the firmament`
+6. `GEN 1:20`: `fowl <i>that may fly</i>\n above the earth`
+7. `GEN 1:24`: `the earth \n bring forth the living creature`
+8. `GEN 1:26`: `make man \n in our image`
+
+#### Entidades de espacio
+
+1. `1CH 1:0`: `F I R S T &nbsp; C H R O N I C L E S`
+2. `1CH 1:1`: `Adam, Sheth, Enosh, &nbsp; 2 Kenan`
+3. `GEN 1:1`: `earth. &nbsp; 2 And the earth`
+4. `GEN 1:3`: `there was light. &nbsp; 4 And God`
+5. `GEN 1:6`: `from the waters. &nbsp; 7 And God`
+6. `GEN 1:9`: `it was so. &nbsp; 10 And God`
+7. `GEN 1:14`: `and years: &nbsp; 15 And let`
+8. `GEN 1:20`: `firmament of heaven. &nbsp; 21 And God`
+
+#### Dobles guiones
+
+1. `GEN intro`: `four thousand years--the truths then revealed`
+2. `GEN 1:0`: `creation of the world--in answer`
+3. `GEN 1:1`: `four things:--`
+4. `GEN 1:3`: `dictum, factum--a word, and a world`
+5. `1CH intro`: `words of days--journals or annals`
+6. `1CH 1:5`: `vestigia nulla retrorsum--none can retrace`
+7. `1CH 2:1`: `Jacob have I loved--not of works`
+8. `1CH 7:6`: `Beriah--in trouble`
+
+#### Párrafos vacíos
+
+Los 66 libros contienen en su introducción la secuencia
+`<p>EXPOSITION,</p><p></p><p>OF THE ...</p>`. Ejemplos: `GEN intro`,
+`EXO intro`, `LEV intro`, `NUM intro`, `DEU intro`, `JOS intro`,
+`JDG intro`, `RUT intro`, `1SA intro` y `2SA intro`.
+
+#### Espacios antes de puntuación
+
+1. `ACT 13:14`: `warnings ; what we are told`
+2. `DAN 3:8`: `stand before envy ?`
+3. `DEU 30:1`: `possess it is , though`
+4. `DEU 33:2`: `mountains, but because , like`
+5. `JOB 42:0`: `which, I confess , have`
+6. `PSA 144:0`: `advancing him to the government ,`
+7. `PSA 145:0`: `(ver . 3)`
+8. `ISA 41:1`: `before the time" ;`
+9. `GEN 1:20`: `Job xli. :1`
+
+#### Numerales romanos
+
+- Narrativo inequívoco: `The apocryphal Esdras (or Ezra), Book I.`
+- Referencias conservadas: `Phil. iii. 1`, `Ezra vii. 6`,
+  `2 Chron. v. 9`, `Gen. xxv.`, `Rom. iv. 11, 12`,
+  `Luke iii. 34-38`, `Job xli. :1`.
+- Enumeraciones y casos contextuales conservados por prudencia:
+  `I. The company...`, `II. The solemn fast...`, `CHAP. I.`.
+
+La marca `(5)` de `mh-mic-5-1` puede ser una enumeración editorial legítima y
+se conserva.
+
+## Fase 2 — Reglas para Matthew Henry
+
+1. Convertir `&nbsp;` y `&#160;` en espacios normales.
+2. Eliminar párrafos que estén realmente vacíos.
+3. Colapsar espacios, tabulaciones y saltos de línea consecutivos a un espacio,
+   conservando todas las etiquetas HTML y sus atributos.
+4. Retirar espacios situados antes de `, . ! ? ; :`.
+5. Convertir `--` en raya tipográfica `—`, con un solo espacio a cada lado.
+6. Convertir romanos a arábigos solo tras los rótulos narrativos seguros
+   definidos arriba. No convertir `CHAP.`, `ch.`, `ver.`, nombres de libros
+   bíblicos ni enumeraciones sueltas.
+7. No corregir ortografía, sintaxis, nombres, doctrina, citas ni palabras
+   arcaicas.
+8. Aplicar las transformaciones únicamente a `content` y abortar si cambia
+   cualquier invariante estructural.
+
+## Resultados por módulo
+
+### Matthew Henry
+
+- Archivos: 66.
+- Entradas verificadas: 4.599.
+- Entradas con limpieza: 4.599.
+- Se eliminaron los saltos/espacios OCR, 26.995 espacios HTML, 66 párrafos
+  vacíos y 7.783 dobles guiones íntegramente contenidos en nodos de texto.
+- Se corrigieron 10 espacios antes de puntuación.
+- Se convirtió un solo romano narrativo inequívoco: `Book I` → `Book 1`.
+- Permanecen cuatro secuencias `--` que cruzan etiquetas HTML; se conservaron
+  para no alterar límites de marcado.
+- Las referencias bíblicas romanas (incluidas las 4.748 coincidencias de la
+  muestra estricta y todos los demás candidatos) se conservaron.
+- Identificadores, referencias y campos ajenos a `content`: sin cambios.
