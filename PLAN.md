@@ -94,7 +94,7 @@ Todos son **comentarios completos en inglés** de alta calidad histórica, domin
 **Cómo:**
 - Script Python: lee cada `MHC{num}{cap}.HTM`, extrae secciones por `<A NAME="SecN">`, limpia HTML
 - Verse ranges: extraídos del texto del capítulo introductorio (patrones `ver. N-M`)
-- Genera JSON con mismo esquema que `matthew-henry-es`
+- Genera JSON con el esquema estándar de comentarios
 - Módulo ID: `matthew-henry-en`, language: `"en"`
 
 **UI — Idioma automático (actualizado 2026-07-07, reemplaza el botón EN/ES original):**
