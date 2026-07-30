@@ -1,8 +1,13 @@
 {
   "requested": 69,
-  "imported": 59,
-  "chapel": 49,
+  "extracted": 59,
+  "published": 57,
+  "chapel_extracted": 49,
   "patristic": 10,
+  "drafts_license_pending": [
+    "la-esclavitud-de-la-voluntad-es",
+    "the-bondage-of-the-will-en"
+  ],
   "omitted_empty_sources": [
     "sachs",
     "sagos",
@@ -18,239 +23,298 @@
   "books": [
     {
       "id": "santidad-es",
-      "sections": 177
+      "sections": 177,
+      "status": "published"
     },
     {
       "id": "los-deberes-de-los-padres-es",
-      "sections": 20
+      "sections": 20,
+      "status": "published"
     },
     {
       "id": "pensamientos-para-hombres-jovenes-es",
-      "sections": 29
+      "sections": 29,
+      "status": "published"
     },
     {
       "id": "cristo-es-el-todo-es",
-      "sections": 11
+      "sections": 11,
+      "status": "published"
     },
     {
       "id": "santificacion-es",
-      "sections": 15
+      "sections": 15,
+      "status": "published"
     },
     {
       "id": "vivo-o-muerto-es",
-      "sections": 8
+      "sections": 8,
+      "status": "published"
     },
     {
       "id": "acordaos-de-la-mujer-de-lot-es",
-      "sections": 1
+      "sections": 1,
+      "status": "published"
     },
     {
       "id": "es-usted-nacido-de-nuevo-es",
-      "sections": 4
+      "sections": 4,
+      "status": "published"
     },
     {
       "id": "catecismo-de-spurgeon-es",
-      "sections": 3
+      "sections": 3,
+      "status": "published"
     },
     {
       "id": "fe-es",
-      "sections": 13
+      "sections": 13,
+      "status": "published"
     },
     {
       "id": "la-palabra-infalible-de-dios-es",
-      "sections": 16
+      "sections": 16,
+      "status": "published"
     },
     {
       "id": "aun-hay-lugar-es",
-      "sections": 7
+      "sections": 7,
+      "status": "published"
     },
     {
       "id": "el-bautismo-una-sepultura-es",
-      "sections": 10
+      "sections": 10,
+      "status": "published"
     },
     {
       "id": "la-eleccion-es",
-      "sections": 8
+      "sections": 8,
+      "status": "published"
     },
     {
       "id": "ganar-almas-es",
-      "sections": 4
+      "sections": 4,
+      "status": "published"
     },
     {
       "id": "la-incapacidad-humana-es",
-      "sections": 25
+      "sections": 25,
+      "status": "published"
     },
     {
       "id": "el-nacimiento-de-cristo-es",
-      "sections": 12
+      "sections": 12,
+      "status": "published"
     },
     {
       "id": "nuestro-manifiesto-es",
-      "sections": 5
+      "sections": 5,
+      "status": "published"
     },
     {
       "id": "la-oracion-de-jabes-es",
-      "sections": 8
+      "sections": 8,
+      "status": "published"
     },
     {
       "id": "la-regeneracion-bautismal-es",
-      "sections": 7
+      "sections": 7,
+      "status": "published"
     },
     {
       "id": "el-senor-y-el-leproso-es",
-      "sections": 9
+      "sections": 9,
+      "status": "published"
     },
     {
       "id": "un-gran-evangelio-para-grandes-pecadores-es",
-      "sections": 7
+      "sections": 7,
+      "status": "published"
     },
     {
       "id": "una-defensa-del-calvinismo-es",
-      "sections": 3
+      "sections": 3,
+      "status": "published"
     },
     {
       "id": "verdadera-oracion-verdadero-poder-es",
-      "sections": 7
+      "sections": 7,
+      "status": "published"
     },
     {
       "id": "como-debo-acercarme-a-dios-es",
-      "sections": 10
+      "sections": 10,
+      "status": "published"
     },
     {
       "id": "palabras-para-el-ganador-de-almas-es",
-      "sections": 43
+      "sections": 43,
+      "status": "published"
     },
     {
       "id": "adonde-adonde-es",
-      "sections": 5
+      "sections": 5,
+      "status": "published"
     },
     {
       "id": "belen-y-las-buenas-nuevas-es",
-      "sections": 3
+      "sections": 3,
+      "status": "published"
     },
     {
       "id": "como-ire-a-dios-es",
-      "sections": 5
+      "sections": 5,
+      "status": "published"
     },
     {
       "id": "cristo-murio-por-los-impios-es",
-      "sections": 2
+      "sections": 2,
+      "status": "published"
     },
     {
       "id": "cual-es-mi-esperanza-es",
-      "sections": 5
+      "sections": 5,
+      "status": "published"
     },
     {
       "id": "en-mi-lugar-es",
-      "sections": 4
+      "sections": 4,
+      "status": "published"
     },
     {
       "id": "la-larga-eternidad-es",
-      "sections": 5
+      "sections": 5,
+      "status": "published"
     },
     {
       "id": "el-mundo-se-acaba-es",
-      "sections": 6
+      "sections": 6,
+      "status": "published"
     },
     {
       "id": "el-progreso-del-peregrino-para-todos-es",
-      "sections": 41
+      "sections": 41,
+      "status": "published"
     },
     {
       "id": "deberes-familiares-es",
-      "sections": 6
+      "sections": 6,
+      "status": "published"
     },
     {
       "id": "la-esclavitud-de-la-voluntad-es",
-      "sections": 23
+      "sections": 23,
+      "status": "draft"
     },
     {
       "id": "pecadores-en-las-manos-de-un-dios-airado-es",
-      "sections": 4
+      "sections": 4,
+      "status": "published"
     },
     {
       "id": "el-metodo-de-la-gracia-es",
-      "sections": 10
+      "sections": 10,
+      "status": "published"
     },
     {
       "id": "la-vida-secreta-de-oracion-es",
-      "sections": 39
+      "sections": 39,
+      "status": "published"
     },
     {
       "id": "holiness-en",
-      "sections": 73
+      "sections": 73,
+      "status": "published"
     },
     {
       "id": "a-call-to-prayer-en",
-      "sections": 44
+      "sections": 44,
+      "status": "published"
     },
     {
       "id": "the-world-en",
-      "sections": 7
+      "sections": 7,
+      "status": "published"
     },
     {
       "id": "are-you-born-again-en",
-      "sections": 3
+      "sections": 3,
+      "status": "published"
     },
     {
       "id": "night-of-weeping-morning-of-joy-en",
-      "sections": 118
+      "sections": 118,
+      "status": "published"
     },
     {
       "id": "god-s-way-of-peace-en",
-      "sections": 61
+      "sections": 61,
+      "status": "published"
     },
     {
       "id": "the-throne-of-grace-en",
-      "sections": 35
+      "sections": 35,
+      "status": "published"
     },
     {
       "id": "the-atoning-sacrifice-of-christ-en",
-      "sections": 12
+      "sections": 12,
+      "status": "published"
     },
     {
       "id": "the-bondage-of-the-will-en",
-      "sections": 21
+      "sections": 21,
+      "status": "draft"
     },
     {
       "id": "first-clement-en",
-      "sections": 59
+      "sections": 59,
+      "status": "published"
     },
     {
       "id": "second-clement-en",
-      "sections": 20
+      "sections": 20,
+      "status": "published"
     },
     {
       "id": "didache-en",
-      "sections": 10
+      "sections": 10,
+      "status": "published"
     },
     {
       "id": "epistle-barnabas-en",
-      "sections": 21
+      "sections": 21,
+      "status": "published"
     },
     {
       "id": "shepherd-hermas-en",
-      "sections": 113
+      "sections": 113,
+      "status": "published"
     },
     {
       "id": "epistle-diognetus-en",
-      "sections": 12
+      "sections": 12,
+      "status": "published"
     },
     {
       "id": "polycarp-philippians-en",
-      "sections": 1
+      "sections": 1,
+      "status": "published"
     },
     {
       "id": "martyrdom-polycarp-en",
-      "sections": 23
+      "sections": 23,
+      "status": "published"
     },
     {
       "id": "ignatius-romans-en",
-      "sections": 11
+      "sections": 11,
+      "status": "published"
     },
     {
       "id": "fragments-papias-en",
-      "sections": 1
+      "sections": 1,
+      "status": "published"
     }
   ]
 }

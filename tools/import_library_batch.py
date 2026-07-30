@@ -18,6 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES = Path("/tmp/verbo-library-sources")
 TODAY = "2026-07-30"
+DRAFT_CODES = {"botws", "botw"}
 
 
 def slugify(value: str) -> str:
@@ -267,6 +268,7 @@ def card_html(book):
 
 def main():
     imported = []
+    extracted = []
     for code, title, author, lang in BOOKS:
         source_path, kind = source_for(code)
         sections = epub_sections(source_path, title) if kind == "epub" else pdf_sections(source_path, title)
@@ -285,12 +287,18 @@ def main():
             "metadata": {"title": title, "author": author, "language": lang, "source": source, "license": license_text},
             "sections": sections,
         }
-        data_dir = ROOT / "biblia/modules/chapel-library" / slug
+        is_draft = code in DRAFT_CODES
+        data_root = "biblia/modules/library-drafts" if is_draft else "biblia/modules/chapel-library"
+        data_dir = ROOT / data_root / slug
         data_dir.mkdir(parents=True, exist_ok=True)
         (data_dir / "sections.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        book = (slug, title, author, lang, source, license_text, len(sections))
+        extracted.append(book)
+        if is_draft:
+            continue
         page_dir = ROOT / "libreria" / slug
         page_dir.mkdir(parents=True, exist_ok=True)
-        imported.append((slug, title, author, lang, source, license_text, len(sections)))
+        imported.append(book)
         (page_dir / "index.html").write_text(
             page_html(imported[-1], f"../../biblia/modules/chapel-library/{slug}/sections.json"), encoding="utf-8"
         )
@@ -326,12 +334,15 @@ def main():
         page_dir = ROOT / "libreria" / slug
         page_dir.mkdir(parents=True, exist_ok=True)
         imported.append((slug, title, author, "en", source, license_text, len(sections)))
+        extracted.append(imported[-1])
         (page_dir / "index.html").write_text(
             page_html(imported[-1], f"../../biblia/modules/library/{slug}/sections.json"), encoding="utf-8"
         )
 
     catalog_path = ROOT / "libreria/data/libreria.json"
     catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    draft_slugs = {slugify(f"{title}-{lang}") for code, title, author, lang in BOOKS if code in DRAFT_CODES}
+    catalog = [item for item in catalog if item.get("id") not in draft_slugs]
     known = {x["id"] for x in catalog}
     for slug, title, author, lang, source, license_text, count in imported:
         if slug not in known:
@@ -354,9 +365,14 @@ def main():
     index_path.write_text(index, encoding="utf-8")
 
     report = {
-        "requested": 69, "imported": len(imported), "chapel": len(BOOKS), "patristic": len(PATRISTIC),
+        "requested": 69,
+        "extracted": len(extracted),
+        "published": len(imported),
+        "chapel_extracted": len(BOOKS),
+        "patristic": len(PATRISTIC),
+        "drafts_license_pending": sorted(draft_slugs),
         "omitted_empty_sources": ["sachs", "sagos", "salos", "sajos", "satws", "sasis", "saobs", "saprs", "sagws", "satps"],
-        "books": [{"id": x[0], "sections": x[6]} for x in imported],
+        "books": [{"id": x[0], "sections": x[6], "status": "draft" if x[0] in draft_slugs else "published"} for x in extracted],
     }
     (ROOT / "docs/library-batch-2026-07-30.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

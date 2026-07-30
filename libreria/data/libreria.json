@@ -837,21 +837,6 @@
     "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
   },
   {
-    "id": "la-esclavitud-de-la-voluntad-es",
-    "titulo": "La esclavitud de la voluntad",
-    "seccion": "libreria",
-    "tipo": "libro",
-    "idioma": "es",
-    "temas": [
-      "chapel-library"
-    ],
-    "fecha_agregado": "2026-07-30",
-    "autor": "Martín Lutero",
-    "url": "/libreria/la-esclavitud-de-la-voluntad-es/",
-    "fuente": "https://www.chapellibrary.org/api/books/download?code=botws&format=epub",
-    "licencia": "© 1984 Grace Publications Trust. Todos los derechos reservados. Usado con permiso. Se permite reproducir por cualquier medio sin cobrar más que el costo nominal y conservando el aviso y su texto íntegro."
-  },
-  {
     "id": "pecadores-en-las-manos-de-un-dios-airado-es",
     "titulo": "Pecadores en las manos de un Dios airado",
     "seccion": "libreria",
@@ -1014,21 +999,6 @@
     "autor": "Arthur W. Pink",
     "url": "/libreria/the-atoning-sacrifice-of-christ-en/",
     "fuente": "https://www.chapellibrary.org/api/books/download?code=asoc&format=epub",
-    "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
-  },
-  {
-    "id": "the-bondage-of-the-will-en",
-    "titulo": "The Bondage of the Will",
-    "seccion": "libreria",
-    "tipo": "libro",
-    "idioma": "en",
-    "temas": [
-      "chapel-library"
-    ],
-    "fecha_agregado": "2026-07-30",
-    "autor": "Martin Luther",
-    "url": "/libreria/the-bondage-of-the-will-en/",
-    "fuente": "https://www.chapellibrary.org/api/books/download?code=botw&format=epub",
     "licencia": "Permiso de reproducción de Chapel Library; conservar atribución y avisos de la edición."
   },
   {
