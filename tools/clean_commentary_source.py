@@ -87,6 +87,16 @@ def clean_content(content: str) -> str:
         text = NBSP_RE.sub(" ", parts[index])
         text = text.translate(TYPOGRAPHIC_TRANSLATION)
         text = text.replace("H \uf895 sban", "Hesban")
+        text = text.replace("\x14", " — ").replace("\x15", "§")
+        text = text.replace("7� gallons", "7.5 gallons")
+        text = re.sub(r"(?<=\d)�(?=[ '\\s])", "°", text)
+        text = re.sub(r"�(?=\\s?\\d)", "£", text)
+        text = re.sub(r"Kuin�(?:e|n)?l", "Kuinoel", text)
+        text = text.replace(" o� ", " of ").replace(" a� ", " at ")
+        text = text.replace("�rom", "from").replace("�he", "the")
+        text = text.replace('"�e are', '"We are')
+        text = text.replace("(�)", "(*)")
+        text = re.sub(r"\s*�\s*", " — ", text)
         text = DOUBLE_HYPHEN_RE.sub(" — ", text)
         text = ROMAN_CONTEXT_RE.sub(
             lambda match: (

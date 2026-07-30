@@ -200,3 +200,21 @@ de redacción o doctrina.
 
 Resultado: 2.303 entradas limpiadas en 66 archivos; comprobación final en
 cero. Estructura e identificadores: sin cambios.
+
+### Barnes
+
+Auditoría previa: 27 archivos y 7.457 entradas. Es el segundo módulo con mayor
+daño OCR: 11.680 dobles guiones, 52.856 espacios antes de puntuación, 98
+controles (`0x14`/`0x15`) y 68 caracteres de reemplazo. También hay 19
+referencias `ch./chap.` romanas y numerosos libros/capítulos romanos.
+
+Ejemplos: `chap. iv. § 5`, `book vi.`, `30� 50' north`, `�342`,
+`Kuin�el`, `occurrence o� frequent`, `�rom what he is`, `7� gallons`.
+Reglas particulares: controles a raya o signo de sección según su función;
+grados a `°`, libras a `£`, `7� gallons` a `7.5 gallons`, nombre OCR a
+`Kuinoel` y letras evidentemente perdidas (`o�` → `of`, `�rom` → `from`).
+No se reconstruyen palabras cuando el contexto no sea inequívoco.
+
+Resultado: 6.604 entradas limpiadas en 27 archivos; quedaron cero controles y
+cero caracteres de reemplazo. Comprobación final en cero; estructura e
+identificadores sin cambios.
