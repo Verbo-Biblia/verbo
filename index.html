@@ -169,7 +169,8 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
 
   .card {
     position: relative;
-    background: linear-gradient(155deg, #16223A 0%, #0F1A2E 100%);
+    background: linear-gradient(155deg, rgba(22,34,58,0.88) 0%, rgba(15,26,46,0.9) 100%);
+    backdrop-filter: blur(4px);
     border: 1px solid rgba(201, 162, 39, 0.12);
     border-radius: 12px;
     min-height: clamp(132px, 18vh, 174px);
@@ -186,7 +187,7 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
   .card:hover {
     transform: translateY(-3px);
     border-color: rgba(201, 162, 39, 0.4);
-    background: linear-gradient(155deg, #1A2740 0%, #101B30 100%);
+    background: linear-gradient(155deg, rgba(26,39,64,0.94) 0%, rgba(16,27,48,0.95) 100%);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -236,7 +237,8 @@ if (location.protocol === 'http:' && /^(www\.)?verbobiblia\.com$/i.test(location
     flex-direction: column;
     gap: 0.5rem;
     padding: 1.1rem 1.3rem;
-    background: linear-gradient(155deg, #16223A 0%, #0F1A2E 100%);
+    background: linear-gradient(155deg, rgba(22,34,58,0.88) 0%, rgba(15,26,46,0.9) 100%);
+    backdrop-filter: blur(4px);
     border: 1px solid rgba(201, 162, 39, 0.12);
     border-radius: 6px;
     transition: transform 0.15s ease, border-color 0.15s ease;
