@@ -145,3 +145,17 @@ se conserva.
 - Las referencias bíblicas romanas se convierten a números arábigos sin tocar
   los campos estructurales de enlace.
 - Identificadores, referencias y campos ajenos a `content`: sin cambios.
+
+### JFB
+
+Auditoría previa: 66 archivos y 16.945 entradas. Se detectaron 35.786 dobles
+guiones, 6.312 espacios antes de puntuación, 8 rótulos narrativos romanos y
+6 candidatos de cita romana. No aparecieron controles, mojibake, caracteres de
+reemplazo, ligaduras ni entidades de espacio. Ejemplos: `Part I`,
+`Part II begins here`, `John II`, `word--as`, `grace ; and`.
+
+Reglas: aplicar las reglas base de formato y conversión de romanos. No
+reescribir el inglés ni modificar contenido doctrinal.
+
+Resultado: 15.272 entradas limpiadas en 66 archivos; segunda comprobación con
+cero cambios. Identificadores, referencias y demás campos: sin cambios.
