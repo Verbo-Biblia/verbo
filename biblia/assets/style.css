@@ -2213,7 +2213,18 @@ body.static-page {
     line-height: 1;
   }
 }
-.static-page__main { max-width: 640px; margin: 0 auto; padding: 40px 32px 80px; }
+.static-page__main {
+  max-width: 640px; margin: 0 auto; padding: 40px 32px 80px;
+  /* width:100% + min-width:0 explícitos: body es display:flex (ver arriba,
+     layout de /biblia/), lo que convierte a este <main> en un flex item de
+     un contenedor en columna. margin:0 auto en el eje transversal desactiva
+     el stretch por defecto de flexbox, así que sin un ancho explícito el
+     elemento se ajusta a su contenido — y contenido no-partible (botones
+     con white-space:nowrap como "Vincular dispositivo") lo desborda en
+     móvil en vez de encogerse al viewport. */
+  width: 100%;
+  min-width: 0;
+}
 @media (min-width: 1024px) { .static-page__main { max-width: 720px; } }
 .static-page__main article h1 {
   font-family: var(--font-display); color: var(--wine);
