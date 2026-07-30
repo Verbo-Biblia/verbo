@@ -27,6 +27,7 @@
     chunkStart: 0,
     chunkEnd: 0,
     position: 0,
+    positionUpdatedAt: 0,
     generation: 0,
     continueAfterRender: false
   };
@@ -190,6 +191,7 @@
   }
 
   function saveSpeechBookmark() {
+    updateEstimatedSpeechPosition();
     bookmark = {
       chapter: current,
       speechOffset: Math.max(0, speech.position || speech.chunkStart || 0),
@@ -200,6 +202,16 @@
       speech.ui.bmBtn.classList.add("is-active");
       speech.ui.bmBtn.textContent = window.VerboI18n ? window.VerboI18n.t("reader.marked") : "★ Marcado";
     }
+  }
+
+  function updateEstimatedSpeechPosition() {
+    if (!speech.playing || !speech.positionUpdatedAt) return;
+    var elapsedSeconds = Math.max(0, (performance.now() - speech.positionUpdatedAt) / 1000);
+    // Respaldo para navegadores que no implementan SpeechSynthesis.onboundary.
+    // La posición de eventos reales siempre reemplaza esta estimación.
+    var estimated = speech.position + Math.floor(elapsedSeconds * 14);
+    speech.position = Math.min(speech.chunkEnd, Math.max(speech.chunkStart, estimated));
+    speech.positionUpdatedAt = performance.now();
   }
 
   function stopSpeech(savePosition) {
@@ -242,15 +254,18 @@
     speech.chunkStart = chunk.start;
     speech.chunkEnd = chunk.end;
     speech.position = chunk.start;
+    speech.positionUpdatedAt = performance.now();
     utterance.onboundary = function (event) {
       if (generation !== speech.generation) return;
       if (typeof event.charIndex === "number") {
         speech.position = Math.min(chunk.end, chunk.start + event.charIndex);
+        speech.positionUpdatedAt = performance.now();
       }
     };
     utterance.onend = function () {
       if (generation !== speech.generation || !speech.playing) return;
       speech.position = chunk.end;
+      speech.positionUpdatedAt = 0;
       speech.utterance = null;
       speakFromOffset(chunk.end);
     };
@@ -259,6 +274,7 @@
       speech.playing = false;
       speech.paused = false;
       speech.utterance = null;
+      speech.positionUpdatedAt = 0;
       updateSpeechButton();
     };
     window.speechSynthesis.speak(utterance);
