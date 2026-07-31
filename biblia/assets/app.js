@@ -693,7 +693,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <article class="license-card">
           <h3>Biblias en línea de API.Bible</h3>
-          <p>LBLA, NTV y NASB 2020 se consultan bajo demanda mediante API.Bible. Cada capítulo muestra junto al texto el aviso de copyright devuelto por el proveedor y reporta su visualización mediante FUMS.</p>
+          <p>LBLA, NTV, NASB 2020 y PDT se consultan bajo demanda mediante API.Bible. Cada capítulo muestra junto al texto el aviso de copyright devuelto por el proveedor y reporta su visualización mediante FUMS.</p>
           <a href="https://api.bible" target="_blank" rel="noopener noreferrer">Consultar API.Bible</a>
         </article>
 

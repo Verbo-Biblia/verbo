@@ -24,6 +24,13 @@
         "abbreviation": "NASB 2020",
         "name": "New American Standard Bible 2020",
         "language": "en"
+      },
+      {
+        "id": "api-pdt",
+        "bibleId": "48acedcf8595c754-01",
+        "abbreviation": "PDT",
+        "name": "Palabra de Dios para Ti",
+        "language": "es"
       }
     ]
   },
