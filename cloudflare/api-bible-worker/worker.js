@@ -2,8 +2,7 @@ const API_ROOT = 'https://api.scripture.api.bible';
 const ALLOWED_BIBLES = new Set([
   'e3f420b9665abaeb-01', // LBLA
   '826f63861180e056-01', // NTV
-  'a761ca71e0b3ddcf-01', // NASB 2020
-  '48acedcf8595c754-01'  // PDT
+  'a761ca71e0b3ddcf-01'  // NASB 2020
 ]);
 
 const LINK_TTL_SECONDS = 30 * 60; // 30 minutos, expiración del magic link
