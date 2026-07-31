@@ -11,7 +11,8 @@
     "chapterEnd": 2,
     "verseEnd": 9
    },
-   "content": "<p>Si, por tanto, hacemos justicia ante los ojos de Dios, entraremos en su reino y recibiremos las promesas que ni el oído ha oído, ni el ojo ha visto, ni han entrado en el corazón del hombre.</p>"
+   "content": "<p>Si, por tanto, hacemos justicia ante los ojos de Dios, entraremos en su reino y recibiremos las promesas que ni el oído ha oído, ni el ojo ha visto, ni han entrado en el corazón del hombre.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-2-sec12-1co-7-29",
@@ -24,7 +25,10 @@
     "chapterEnd": 7,
     "verseEnd": 29
    },
-   "content": "<p>Y el hombre, con la mujer, ni hombre ni mujer, dice Él, para que el hermano, al ver a la hermana, no piense en ella como mujer, y ella no piense en él como hombre. Si hacéis estas cosas, dice Él, vendrá el reino de mi Padre.</p>"
+   "content": "<p>Y el hombre, con la mujer, ni hombre ni mujer, dice Él, para que el hermano, al ver a la hermana, no piense en ella como mujer, y ella no piense en él como hombre. Si hacéis estas cosas, dice Él, vendrá el reino de mi Padre.</p>",
+   "connectionType": "referencial",
+   "needsSourceReview": true,
+   "reviewNote": "El dicho citado no aparece en 1 Corintios 7:29 canónico; podría ser una cita extracanónica (similar al Evangelio de los Egipcios) mal atribuida."
   },
   {
    "id": "clemente-2-sec14e-1co-2-9",
@@ -37,7 +41,8 @@
     "chapterEnd": 2,
     "verseEnd": 9
    },
-   "content": "<p>Tal es la vida y la inmortalidad que esta carne puede recibir después, con el Espíritu Santo unido a ella; y nadie puede expresar ni pronunciar las cosas que el Señor ha preparado para sus elegidos.</p>"
+   "content": "<p>Tal es la vida y la inmortalidad que esta carne puede recibir después, con el Espíritu Santo unido a ella; y nadie puede expresar ni pronunciar las cosas que el Señor ha preparado para sus elegidos.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

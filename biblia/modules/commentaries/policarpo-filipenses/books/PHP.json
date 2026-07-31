@@ -11,7 +11,8 @@
     "chapterEnd": 1,
     "verseEnd": 5
    },
-   "content": "<p>La fuerte raíz de vuestra fe, de la que se habló en días pasados, perdura hasta ahora y da fruto a nuestro Señor Jesucristo, quien por nuestros pecados sufrió hasta la muerte, a quien Dios resucitó de entre los muertos.</p>"
+   "content": "<p>La fuerte raíz de vuestra fe, de la que se habló en días pasados, perdura hasta ahora y da fruto a nuestro Señor Jesucristo, quien por nuestros pecados sufrió hasta la muerte, a quien Dios resucitó de entre los muertos.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec2e-php-2-10",
@@ -24,7 +25,8 @@
     "chapterEnd": 2,
     "verseEnd": 10
    },
-   "content": "<p>A Él todas las cosas en el cielo y en la tierra están sujetas. Todos los espíritus le sirven.</p>"
+   "content": "<p>A Él todas las cosas en el cielo y en la tierra están sujetas. Todos los espíritus le sirven.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec9a-php-2-16",
@@ -37,7 +39,8 @@
     "chapterEnd": 2,
     "verseEnd": 16
    },
-   "content": "<p>Hacedlo con la certeza de que todos ellos no han corrido en vano, sino con fe y justicia.</p>"
+   "content": "<p>Hacedlo con la certeza de que todos ellos no han corrido en vano, sino con fe y justicia.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

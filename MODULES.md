@@ -37,6 +37,32 @@ Cada entrada admite rangos de versículos:
 }
 ```
 
+## Comentario patrístico anclado a versículo (`patristicByVerse`)
+
+Mismo esquema que "Comentario propio", con un campo adicional `connectionType`
+que indica si la cita patrística comenta el pasaje en su propio sentido o solo
+lo usa como apoyo de un argumento distinto:
+
+```json
+{
+  "id":"bernabe-sec5b-gen-1-26",
+  "title":"Capítulo 5 — La nueva alianza, fundada en los sufrimientos de Cristo",
+  "author":"Epístola de Bernabé",
+  "reference":{"book":"GEN","chapterStart":1,"verseStart":26,"chapterEnd":1,"verseEnd":26},
+  "connectionType":"narrativa",
+  "content":"<p>...</p>"
+}
+```
+
+- `"narrativa"` — el texto expone/parafrasea/interpreta el sentido propio del pasaje.
+- `"referencial"` — el texto usa el pasaje como apoyo de un argumento distinto.
+- `"polemica-numerica"` — caso especial de Ireneo: cita medidas/cantidades bíblicas
+  para refutar aritméticamente la numerología gnóstica valentiniana.
+- `needsSourceReview` (booleano, opcional) + `reviewNote` — marca entradas donde el
+  contenido no corresponde claramente al versículo anclado (posible error de
+  extracción mecánica); no se elimina la cita, solo se señala para revisión manual
+  contra la fuente original en inglés.
+
 ## Diccionarios
 
 Los diccionarios grandes pueden dividir sus entradas por prefijo con `entryFiles` en el manifiesto. La app carga únicamente el archivo G o H cuando se consulta un código.

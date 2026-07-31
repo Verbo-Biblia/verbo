@@ -11,7 +11,8 @@
     "chapterEnd": 5,
     "verseEnd": 17
    },
-   "content": "<p>Enseñad a las viudas a ser discretas en lo que respecta a la fe del Señor, orando continuamente por todos.</p>"
+   "content": "<p>Enseñad a las viudas a ser discretas en lo que respecta a la fe del Señor, orando continuamente por todos.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec11a-1th-5-22",
@@ -24,7 +25,8 @@
     "chapterEnd": 5,
     "verseEnd": 22
    },
-   "content": "<p>Os exhorto, por tanto, a que os abstengáis de la codicia y seáis castos y veraces. Absteneos de toda forma de maldad.</p>"
+   "content": "<p>Os exhorto, por tanto, a que os abstengáis de la codicia y seáis castos y veraces. Absteneos de toda forma de maldad.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

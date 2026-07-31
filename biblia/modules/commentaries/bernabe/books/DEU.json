@@ -11,7 +11,8 @@
     "chapterEnd": 9,
     "verseEnd": 12
    },
-   "content": "<p>Moisés, baja rápidamente, porque el pueblo que sacaste de la tierra de Egipto ha pecado.</p>"
+   "content": "<p>Moisés, baja rápidamente, porque el pueblo que sacaste de la tierra de Egipto ha pecado.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec9f-deu-10-16",
@@ -24,7 +25,8 @@
     "chapterEnd": 10,
     "verseEnd": 16
    },
-   "content": "<p>¿Y por qué habla así: Circuncidad la dureza de vuestro corazón y no endurezcáis vuestro cuello?</p>"
+   "content": "<p>¿Y por qué habla así: Circuncidad la dureza de vuestro corazón y no endurezcáis vuestro cuello?</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec10-deu-4-1",
@@ -37,7 +39,8 @@
     "chapterEnd": 4,
     "verseEnd": 1
    },
-   "content": "<p>El Señor les dice en Deuteronomio: «Y estableceré mis ordenanzas entre este pueblo».</p>"
+   "content": "<p>El Señor les dice en Deuteronomio: «Y estableceré mis ordenanzas entre este pueblo».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec14d-deu-9-12",
@@ -50,7 +53,8 @@
     "chapterEnd": 9,
     "verseEnd": 12
    },
-   "content": "<p>El Señor dijo a Moisés: «Moisés, Moisés, baja pronto, porque tu pueblo, al que sacaste de la tierra de Egipto, ha pecado».</p>"
+   "content": "<p>El Señor dijo a Moisés: «Moisés, Moisés, baja pronto, porque tu pueblo, al que sacaste de la tierra de Egipto, ha pecado».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec15b-deu-5-12",
@@ -63,7 +67,8 @@
     "chapterEnd": 5,
     "verseEnd": 12
    },
-   "content": "<p>«Santifica el sábado del Señor con manos limpias y corazón puro».</p>"
+   "content": "<p>«Santifica el sábado del Señor con manos limpias y corazón puro».</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

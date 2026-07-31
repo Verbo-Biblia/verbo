@@ -11,7 +11,8 @@
     "chapterEnd": 6,
     "verseEnd": 10
    },
-   "content": "<p>Ni los fornicarios, ni los afeminados, ni los abusadores de sí mismos con la humanidad heredarán el reino de Dios.</p>"
+   "content": "<p>Ni los fornicarios, ni los afeminados, ni los abusadores de sí mismos con la humanidad heredarán el reino de Dios.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec11b-1co-6-2",
@@ -24,7 +25,8 @@
     "chapterEnd": 6,
     "verseEnd": 2
    },
-   "content": "<p>¿No sabemos que los santos juzgarán al mundo?</p>"
+   "content": "<p>¿No sabemos que los santos juzgarán al mundo?</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "policarpo-filipenses-sec11d-1co-12-26",
@@ -37,7 +39,8 @@
     "chapterEnd": 12,
     "verseEnd": 26
    },
-   "content": "<p>Para que podáis salvar todo vuestro cuerpo. Porque al actuar así, os edificaréis a vosotros mismos.</p>"
+   "content": "<p>Para que podáis salvar todo vuestro cuerpo. Porque al actuar así, os edificaréis a vosotros mismos.</p>",
+   "connectionType": "referencial"
   }
  ]
 }

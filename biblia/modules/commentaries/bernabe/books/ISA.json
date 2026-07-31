@@ -11,7 +11,8 @@
     "chapterEnd": 58,
     "verseEnd": 5
    },
-   "content": "<p>No he escogido este ayuno, dice el Señor, para que el hombre humille su alma. Ni aunque dobleis vuestro cuello como un anillo y os cubráis de cilicio y ceniza, lo llamaréis ayuno aceptable.</p>"
+   "content": "<p>No he escogido este ayuno, dice el Señor, para que el hombre humille su alma. Ni aunque dobleis vuestro cuello como un anillo y os cubráis de cilicio y ceniza, lo llamaréis ayuno aceptable.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec3b-isa-58-6",
@@ -24,7 +25,8 @@
     "chapterEnd": 58,
     "verseEnd": 10
    },
-   "content": "<p>He aquí, este es el ayuno que he escogido, dice el Señor: que desate toda atadura de iniquidad, alimente al hambriento con su pan, vista al desnudo cuando lo vea, traiga al desamparado a su casa.</p>"
+   "content": "<p>He aquí, este es el ayuno que he escogido, dice el Señor: que desate toda atadura de iniquidad, alimente al hambriento con su pan, vista al desnudo cuando lo vea, traiga al desamparado a su casa.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec4e-isa-5-21",
@@ -37,7 +39,8 @@
     "chapterEnd": 5,
     "verseEnd": 21
    },
-   "content": "<p>Porque la Escritura dice: «¡Ay de los que se creen sabios y prudentes a sus propios ojos!».</p>"
+   "content": "<p>Porque la Escritura dice: «¡Ay de los que se creen sabios y prudentes a sus propios ojos!».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "bernabe-sec5a-isa-53-5",
@@ -50,7 +53,8 @@
     "chapterEnd": 53,
     "verseEnd": 7
    },
-   "content": "<p>Él fue herido por nuestras transgresiones, y molido por nuestras iniquidades; por sus heridas fuimos sanados. Fue llevado como oveja al matadero, y como cordero mudo ante el que lo trasquila.</p>"
+   "content": "<p>Él fue herido por nuestras transgresiones, y molido por nuestras iniquidades; por sus heridas fuimos sanados. Fue llevado como oveja al matadero, y como cordero mudo ante el que lo trasquila.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec5d-isa-50-6",
@@ -63,7 +67,8 @@
     "chapterEnd": 50,
     "verseEnd": 7
    },
-   "content": "<p>He aquí, he puesto mi espalda a los azotes, y mis mejillas a los golpes, y he puesto mi rostro como una roca firme.</p>"
+   "content": "<p>He aquí, he puesto mi espalda a los azotes, y mis mejillas a los golpes, y he puesto mi rostro como una roca firme.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec6a-isa-50-8",
@@ -76,7 +81,8 @@
     "chapterEnd": 50,
     "verseEnd": 8
    },
-   "content": "<p>¿Quién es el que contendrá conmigo? Que se oponga a mí; o quién es el que entrará en juicio conmigo? Que se acerque al siervo del Señor.</p>"
+   "content": "<p>¿Quién es el que contendrá conmigo? Que se oponga a mí; o quién es el que entrará en juicio conmigo? Que se acerque al siervo del Señor.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec6b-isa-50-9",
@@ -89,7 +95,8 @@
     "chapterEnd": 50,
     "verseEnd": 9
    },
-   "content": "<p>¡Ay de vosotros, porque todos envejeceréis como una prenda, y la polilla os devorará!</p>"
+   "content": "<p>¡Ay de vosotros, porque todos envejeceréis como una prenda, y la polilla os devorará!</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec6c-isa-50-7",
@@ -102,7 +109,8 @@
     "chapterEnd": 50,
     "verseEnd": 7
    },
-   "content": "<p>Porque Él dice: «Y me puso como una roca firme».</p>"
+   "content": "<p>Porque Él dice: «Y me puso como una roca firme».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec6d-isa-3-9",
@@ -115,7 +123,8 @@
     "chapterEnd": 3,
     "verseEnd": 9
    },
-   "content": "<p>El profeta habla contra Israel: «Ay de sus almas, porque han tramado un mal consejo contra sí mismas», diciendo: «Atemos al justo, porque nos desagrada».</p>"
+   "content": "<p>El profeta habla contra Israel: «Ay de sus almas, porque han tramado un mal consejo contra sí mismas», diciendo: «Atemos al justo, porque nos desagrada».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec9a-isa-33-13",
@@ -128,7 +137,8 @@
     "chapterEnd": 33,
     "verseEnd": 13
    },
-   "content": "<p>El Señor dice en el profeta: «Al oír con los oídos, me obedecieron». Y vuelve a decir: «Al oír, oirán los que están lejos; sabrán lo que he hecho».</p>"
+   "content": "<p>El Señor dice en el profeta: «Al oír con los oídos, me obedecieron». Y vuelve a decir: «Al oír, oirán los que están lejos; sabrán lo que he hecho».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "bernabe-sec9d-isa-1-2",
@@ -141,7 +151,8 @@
     "chapterEnd": 1,
     "verseEnd": 2
    },
-   "content": "<p>«Escucha, cielo, y presta atención, tierra, porque Dios ha hablado».</p>"
+   "content": "<p>«Escucha, cielo, y presta atención, tierra, porque Dios ha hablado».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "bernabe-sec9e-isa-1-10",
@@ -154,20 +165,8 @@
     "chapterEnd": 1,
     "verseEnd": 10
    },
-   "content": "<p>«Oíd la palabra del Señor, gobernantes de este pueblo».</p>"
-  },
-  {
-   "id": "bernabe-sec11a-isa-16-1",
-   "title": "Capítulo 11 — El bautismo y la cruz prefigurados",
-   "author": "Epístola de Bernabé",
-   "reference": {
-    "book": "ISA",
-    "chapterStart": 16,
-    "verseStart": 1,
-    "chapterEnd": 16,
-    "verseEnd": 2
-   },
-   "content": "<p>Asómbrate, oh cielo, y tiembla, oh tierra, porque este pueblo ha cometido dos grandes males: me han abandonado a mí, fuente viva, y se han excavado cisternas rotas.</p>"
+   "content": "<p>«Oíd la palabra del Señor, gobernantes de este pueblo».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "bernabe-sec11b-isa-45-2",
@@ -180,7 +179,8 @@
     "chapterEnd": 45,
     "verseEnd": 3
    },
-   "content": "<p>Iré delante de vosotros y allanaré las montañas, y romperé las puertas de bronce, y haré pedazos las barras de hierro.</p>"
+   "content": "<p>Iré delante de vosotros y allanaré las montañas, y romperé las puertas de bronce, y haré pedazos las barras de hierro.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec11c-isa-33-16",
@@ -193,7 +193,8 @@
     "chapterEnd": 33,
     "verseEnd": 18
    },
-   "content": "<p>Su agua es segura; verás al Rey en su gloria, y tu alma meditará en el temor del Señor.</p>"
+   "content": "<p>Su agua es segura; verás al Rey en su gloria, y tu alma meditará en el temor del Señor.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec12a-isa-65-2",
@@ -206,7 +207,8 @@
     "chapterEnd": 65,
     "verseEnd": 2
    },
-   "content": "<p>Todo el día he extendido mis manos a un pueblo incrédulo, que contradice mi camino justo.</p>"
+   "content": "<p>Todo el día he extendido mis manos a un pueblo incrédulo, que contradice mi camino justo.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec12h-isa-45-1",
@@ -219,7 +221,8 @@
     "chapterEnd": 45,
     "verseEnd": 1
    },
-   "content": "<p>El Señor dijo a Cristo, mi Señor, a quien he sostenido con mi mano derecha, que las naciones le presten obediencia, y yo quebrantaré el poder de los reyes.</p>"
+   "content": "<p>El Señor dijo a Cristo, mi Señor, a quien he sostenido con mi mano derecha, que las naciones le presten obediencia, y yo quebrantaré el poder de los reyes.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec14f-isa-42-6",
@@ -232,7 +235,8 @@
     "chapterEnd": 42,
     "verseEnd": 7
    },
-   "content": "<p>Yo, el Señor tu Dios, te he llamado en justicia, y te sostendré de la mano y te fortaleceré; y te he dado por pacto al pueblo, por luz a las naciones.</p>"
+   "content": "<p>Yo, el Señor tu Dios, te he llamado en justicia, y te sostendré de la mano y te fortaleceré; y te he dado por pacto al pueblo, por luz a las naciones.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec14g-isa-61-1",
@@ -245,7 +249,8 @@
     "chapterEnd": 61,
     "verseEnd": 2
    },
-   "content": "<p>El Espíritu del Señor está sobre mí, porque me ha ungido para anunciar el evangelio a los humildes; me ha enviado a sanar a los quebrantados de corazón, a proclamar libertad a los cautivos.</p>"
+   "content": "<p>El Espíritu del Señor está sobre mí, porque me ha ungido para anunciar el evangelio a los humildes; me ha enviado a sanar a los quebrantados de corazón, a proclamar libertad a los cautivos.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec15d-isa-1-13",
@@ -258,7 +263,8 @@
     "chapterEnd": 1,
     "verseEnd": 13
    },
-   "content": "<p>«No puedo soportar vuestras lunas nuevas y vuestros sábados».</p>"
+   "content": "<p>«No puedo soportar vuestras lunas nuevas y vuestros sábados».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec16a-isa-40-12",
@@ -271,7 +277,8 @@
     "chapterEnd": 40,
     "verseEnd": 12
    },
-   "content": "<p>¿Quién ha medido el cielo con un palmo y la tierra con su palma? ¿No soy yo?</p>"
+   "content": "<p>¿Quién ha medido el cielo con un palmo y la tierra con su palma? ¿No soy yo?</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec16b-isa-66-1",
@@ -284,7 +291,8 @@
     "chapterEnd": 66,
     "verseEnd": 1
    },
-   "content": "<p>El cielo es mi trono y la tierra el estrado de mis pies; ¿qué casa me construiréis, o cuál será el lugar de mi reposo?</p>"
+   "content": "<p>El cielo es mi trono y la tierra el estrado de mis pies; ¿qué casa me construiréis, o cuál será el lugar de mi reposo?</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

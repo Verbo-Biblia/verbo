@@ -11,7 +11,8 @@
     "chapterEnd": 21,
     "verseEnd": 9
    },
-   "content": "<p>Puesto que Eva cometió la transgresión por medio de la serpiente, hizo que todo [tipo de] serpientes los mordieran y murieran, para convencerlos de que, a causa de su transgresión, habían sido entregados a las angustias de la muerte.</p>"
+   "content": "<p>Puesto que Eva cometió la transgresión por medio de la serpiente, hizo que todo [tipo de] serpientes los mordieran y murieran, para convencerlos de que, a causa de su transgresión, habían sido entregados a las angustias de la muerte.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec12d-num-21-9",
@@ -24,7 +25,8 @@
     "chapterEnd": 21,
     "verseEnd": 9
    },
-   "content": "<p>Cuando alguno de vosotros sea mordido, que venga a la serpiente colocada en la asta, y que tenga esperanza y crea que, aunque esté muerta, es capaz de darle vida.</p>"
+   "content": "<p>Cuando alguno de vosotros sea mordido, que venga a la serpiente colocada en la asta, y que tenga esperanza y crea que, aunque esté muerta, es capaz de darle vida.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

@@ -11,7 +11,8 @@
     "chapterEnd": 2,
     "verseEnd": 7
    },
-   "content": "<p>Que enriqueces y empobreces.</p>"
+   "content": "<p>Que enriqueces y empobreces.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

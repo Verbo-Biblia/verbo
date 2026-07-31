@@ -11,7 +11,8 @@
     "chapterEnd": 18,
     "verseEnd": 14
    },
-   "content": "<p>No te exaltarás a ti mismo, ni darás un exceso de confianza a tu alma. Tu alma no se unirá con los altivos, sino que tendrá su relación con los justos y humildes.</p>"
+   "content": "<p>No te exaltarás a ti mismo, ni darás un exceso de confianza a tu alma. Tu alma no se unirá con los altivos, sino que tendrá su relación con los justos y humildes.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec13b-luk-10-7",
@@ -24,7 +25,8 @@
     "chapterEnd": 10,
     "verseEnd": 7
    },
-   "content": "<p>Pero todo profeta verdadero que quiera permanecer entre vosotros es digno de su sustento. Así también, un maestro verdadero es digno, como trabajador, de su sustento.</p>"
+   "content": "<p>Pero todo profeta verdadero que quiera permanecer entre vosotros es digno de su sustento. Así también, un maestro verdadero es digno, como trabajador, de su sustento.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

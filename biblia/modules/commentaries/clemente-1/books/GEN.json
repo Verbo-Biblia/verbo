@@ -11,7 +11,8 @@
     "chapterEnd": 2,
     "verseEnd": 23
    },
-   "content": "<p>La envidia ha alejado a las esposas de sus maridos y ha cambiado la frase de nuestro padre Adán: «Esta es ahora hueso de mis huesos y carne de mi carne».</p>"
+   "content": "<p>La envidia ha alejado a las esposas de sus maridos y ha cambiado la frase de nuestro padre Adán: «Esta es ahora hueso de mis huesos y carne de mi carne».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec10a-gen-12-1",
@@ -24,7 +25,8 @@
     "chapterEnd": 12,
     "verseEnd": 3
    },
-   "content": "<p>«Sal de tu tierra, de entre tus parientes y de la casa de tu padre, y ve a la tierra que te mostraré. Haré de ti una gran nación, te bendeciré y engrandeceré tu nombre».</p>"
+   "content": "<p>«Sal de tu tierra, de entre tus parientes y de la casa de tu padre, y ve a la tierra que te mostraré. Haré de ti una gran nación, te bendeciré y engrandeceré tu nombre».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec10b-gen-13-14",
@@ -37,7 +39,8 @@
     "chapterEnd": 13,
     "verseEnd": 16
    },
-   "content": "<p>«Alza tus ojos y mira desde el lugar donde estás... toda la tierra que ves te la daré a ti y a tu descendencia para siempre».</p>"
+   "content": "<p>«Alza tus ojos y mira desde el lugar donde estás... toda la tierra que ves te la daré a ti y a tu descendencia para siempre».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec17b-gen-18-27",
@@ -50,7 +53,8 @@
     "chapterEnd": 18,
     "verseEnd": 27
    },
-   "content": "<p>Abraham fue especialmente honrado y llamado amigo de Dios; sin embargo, considerando con seriedad la gloria de Dios, declaró humildemente: «No soy más que polvo y ceniza».</p>"
+   "content": "<p>Abraham fue especialmente honrado y llamado amigo de Dios; sin embargo, considerando con seriedad la gloria de Dios, declaró humildemente: «No soy más que polvo y ceniza».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec31-gen-22-6",
@@ -63,7 +67,8 @@
     "chapterEnd": 22,
     "verseEnd": 10
    },
-   "content": "<p>Isaac, con perfecta confianza, como si supiera lo que iba a suceder, se entregó alegremente como sacrificio.</p>"
+   "content": "<p>Isaac, con perfecta confianza, como si supiera lo que iba a suceder, se entregó alegremente como sacrificio.</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec33a-gen-1-26",
@@ -76,7 +81,8 @@
     "chapterEnd": 1,
     "verseEnd": 27
    },
-   "content": "<p>Porque así dice Dios: Hagamos al hombre a nuestra imagen y semejanza. Y Dios creó al hombre; varón y hembra los creó.</p>"
+   "content": "<p>Porque así dice Dios: Hagamos al hombre a nuestra imagen y semejanza. Y Dios creó al hombre; varón y hembra los creó.</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec33b-gen-1-28",
@@ -89,7 +95,8 @@
     "chapterEnd": 1,
     "verseEnd": 28
    },
-   "content": "<p>Habiendo terminado todas estas cosas, las aprobó, las bendijo y dijo: «Creced y multiplicaos».</p>"
+   "content": "<p>Habiendo terminado todas estas cosas, las aprobó, las bendijo y dijo: «Creced y multiplicaos».</p>",
+   "connectionType": "referencial"
   }
  ]
 }

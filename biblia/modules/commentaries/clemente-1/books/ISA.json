@@ -11,7 +11,8 @@
     "chapterEnd": 1,
     "verseEnd": 18
    },
-   "content": "<p>«Aunque vuestros pecados alcancen desde la tierra hasta el cielo, y aunque sean más rojos que la grana, y más negros que el cilicio, si os volvéis a mí con todo vuestro corazón... os escucharé».</p>"
+   "content": "<p>«Aunque vuestros pecados alcancen desde la tierra hasta el cielo, y aunque sean más rojos que la grana, y más negros que el cilicio, si os volvéis a mí con todo vuestro corazón... os escucharé».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec8d-isa-1-16",
@@ -24,7 +25,8 @@
     "chapterEnd": 1,
     "verseEnd": 20
    },
-   "content": "<p>«Lavaos y quedaos limpios; quitad de delante de mis ojos la maldad de vuestras almas; dejad vuestros malos caminos y aprended a hacer el bien... aunque vuestros pecados sean como carmesí, yo los haré blancos como la nieve».</p>"
+   "content": "<p>«Lavaos y quedaos limpios; quitad de delante de mis ojos la maldad de vuestras almas; dejad vuestros malos caminos y aprended a hacer el bien... aunque vuestros pecados sean como carmesí, yo los haré blancos como la nieve».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec13-isa-66-2",
@@ -37,7 +39,8 @@
     "chapterEnd": 66,
     "verseEnd": 2
    },
-   "content": "<p>«¿A quién miraré, sino al que es manso y pacífico, y que tiembla ante mis palabras?».</p>"
+   "content": "<p>«¿A quién miraré, sino al que es manso y pacífico, y que tiembla ante mis palabras?».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec34b-isa-6-3",
@@ -50,7 +53,8 @@
     "chapterEnd": 6,
     "verseEnd": 3
    },
-   "content": "<p>Clamaban: Santo, santo, santo, [es] el Señor de Sabaoth; toda la creación está llena de su gloria.</p>"
+   "content": "<p>Clamaban: Santo, santo, santo, [es] el Señor de Sabaoth; toda la creación está llena de su gloria.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec50-isa-26-20",
@@ -63,7 +67,8 @@
     "chapterEnd": 26,
     "verseEnd": 20
    },
-   "content": "<p>«Entrad en vuestras cámaras secretas por un poco de tiempo, hasta que pase mi ira y mi furor; y me acordaré del día propicio, y os levantaré de vuestras tumbas».</p>"
+   "content": "<p>«Entrad en vuestras cámaras secretas por un poco de tiempo, hasta que pase mi ira y mi furor; y me acordaré del día propicio, y os levantaré de vuestras tumbas».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec59a-isa-57-15",
@@ -76,7 +81,8 @@
     "chapterEnd": 57,
     "verseEnd": 15
    },
-   "content": "<p>Que solo descansas en lo más alto entre los más altos, santo entre los santos.</p>"
+   "content": "<p>Que solo descansas en lo más alto entre los más altos, santo entre los santos.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec59b-isa-13-11",
@@ -89,7 +95,8 @@
     "chapterEnd": 13,
     "verseEnd": 11
    },
-   "content": "<p>Que humillas la insolencia de los altivos.</p>"
+   "content": "<p>Que humillas la insolencia de los altivos.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

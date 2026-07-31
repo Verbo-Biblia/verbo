@@ -11,7 +11,8 @@
     "chapterEnd": 11,
     "verseEnd": 37
    },
-   "content": "<p>Seamos también imitadores de aquellos que, vestidos con pieles de cabra y de oveja, anunciaban la venida de Cristo; me refiero a Elías, Eliseo y Ezequiel entre los profetas.</p>"
+   "content": "<p>Seamos también imitadores de aquellos que, vestidos con pieles de cabra y de oveja, anunciaban la venida de Cristo; me refiero a Elías, Eliseo y Ezequiel entre los profetas.</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec36-heb-1-3",
@@ -24,7 +25,8 @@
     "chapterEnd": 1,
     "verseEnd": 4
    },
-   "content": "<p>Quien, siendo el resplandor de Su majestad, es tanto más grande que los ángeles, ya que ha obtenido por herencia un nombre más excelente que ellos.</p>"
+   "content": "<p>Quien, siendo el resplandor de Su majestad, es tanto más grande que los ángeles, ya que ha obtenido por herencia un nombre más excelente que ellos.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

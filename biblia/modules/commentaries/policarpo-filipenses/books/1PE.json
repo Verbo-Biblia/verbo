@@ -11,7 +11,8 @@
     "chapterEnd": 1,
     "verseEnd": 8
    },
-   "content": "<p>En él, aunque ahora no lo veis, creéis, y creyendo, os regocijáis con gozo inefable y glorioso.</p>"
+   "content": "<p>En él, aunque ahora no lo veis, creéis, y creyendo, os regocijáis con gozo inefable y glorioso.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec2a-1pe-1-13",
@@ -24,7 +25,8 @@
     "chapterEnd": 1,
     "verseEnd": 13
    },
-   "content": "<p>Ceñíos los lomos, servid al Señor con temor y verdad, como aquellos que han abandonado las vanas y vacías palabras y los errores de la multitud.</p>"
+   "content": "<p>Ceñíos los lomos, servid al Señor con temor y verdad, como aquellos que han abandonado las vanas y vacías palabras y los errores de la multitud.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec2c-1pe-1-21",
@@ -37,7 +39,8 @@
     "chapterEnd": 1,
     "verseEnd": 21
    },
-   "content": "<p>Han creído en Aquel que resucitó a nuestro Señor Jesucristo de entre los muertos, y le dio gloria, y un trono a su diestra.</p>"
+   "content": "<p>Han creído en Aquel que resucitó a nuestro Señor Jesucristo de entre los muertos, y le dio gloria, y un trono a su diestra.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec2d-1pe-3-22",
@@ -50,7 +53,8 @@
     "chapterEnd": 3,
     "verseEnd": 22
    },
-   "content": "<p>A Él todas las cosas en el cielo y en la tierra están sujetas. Todos los espíritus le sirven.</p>"
+   "content": "<p>A Él todas las cosas en el cielo y en la tierra están sujetas. Todos los espíritus le sirven.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec2g-1pe-3-9",
@@ -63,7 +67,8 @@
     "chapterEnd": 3,
     "verseEnd": 9
    },
-   "content": "<p>No devolviendo mal por mal, ni insulto por insulto, ni golpe por golpe, ni maldición por maldición.</p>"
+   "content": "<p>No devolviendo mal por mal, ni insulto por insulto, ni golpe por golpe, ni maldición por maldición.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec5e-1pe-2-11",
@@ -76,7 +81,8 @@
     "chapterEnd": 2,
     "verseEnd": 11
    },
-   "content": "<p>Es bueno que se apartan de los deseos que hay en el mundo, ya que todo deseo lucha contra el espíritu.</p>"
+   "content": "<p>Es bueno que se apartan de los deseos que hay en el mundo, ya que todo deseo lucha contra el espíritu.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec7b-1pe-4-7",
@@ -89,7 +95,8 @@
     "chapterEnd": 4,
     "verseEnd": 7
    },
-   "content": "<p>Volvamos a la palabra que nos ha sido transmitida desde el principio; velando en oración, y perseverando en el ayuno.</p>"
+   "content": "<p>Volvamos a la palabra que nos ha sido transmitida desde el principio; velando en oración, y perseverando en el ayuno.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec8a-1pe-2-24",
@@ -102,7 +109,8 @@
     "chapterEnd": 2,
     "verseEnd": 24
    },
-   "content": "<p>Quien llevó nuestros pecados en su propio cuerpo sobre el madero.</p>"
+   "content": "<p>Quien llevó nuestros pecados en su propio cuerpo sobre el madero.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec8b-1pe-2-22",
@@ -115,7 +123,8 @@
     "chapterEnd": 2,
     "verseEnd": 22
    },
-   "content": "<p>Quien no cometió pecado, ni se halló engaño en su boca.</p>"
+   "content": "<p>Quien no cometió pecado, ni se halló engaño en su boca.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec8e-1pe-4-16",
@@ -128,7 +137,8 @@
     "chapterEnd": 4,
     "verseEnd": 16
    },
-   "content": "<p>Seamos, pues, imitadores de su paciencia; y si sufrimos por su nombre, glorifiquémosle.</p>"
+   "content": "<p>Seamos, pues, imitadores de su paciencia; y si sufrimos por su nombre, glorifiquémosle.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec8f-1pe-2-21",
@@ -141,7 +151,8 @@
     "chapterEnd": 2,
     "verseEnd": 21
    },
-   "content": "<p>Porque él nos ha dado este ejemplo en sí mismo, y hemos creído que así es.</p>"
+   "content": "<p>Porque él nos ha dado este ejemplo en sí mismo, y hemos creído que así es.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec10a-1pe-2-17",
@@ -154,7 +165,8 @@
     "chapterEnd": 2,
     "verseEnd": 17
    },
-   "content": "<p>Manteneos firmes en estas cosas y seguid el ejemplo del Señor, siendo firmes e inquebrantables en la fe, amando a la hermandad.</p>"
+   "content": "<p>Manteneos firmes en estas cosas y seguid el ejemplo del Señor, siendo firmes e inquebrantables en la fe, amando a la hermandad.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec10b-1pe-5-5",
@@ -167,7 +179,8 @@
     "chapterEnd": 5,
     "verseEnd": 5
    },
-   "content": "<p>Someteos unos a otros y sed irreprochables entre los gentiles.</p>"
+   "content": "<p>Someteos unos a otros y sed irreprochables entre los gentiles.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec10c-1pe-2-12",
@@ -180,7 +193,8 @@
     "chapterEnd": 2,
     "verseEnd": 12
    },
-   "content": "<p>Someteos unos a otros y sed irreprochables entre los gentiles, para que, por vuestras buenas obras, seáis alabados.</p>"
+   "content": "<p>Someteos unos a otros y sed irreprochables entre los gentiles, para que, por vuestras buenas obras, seáis alabados.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

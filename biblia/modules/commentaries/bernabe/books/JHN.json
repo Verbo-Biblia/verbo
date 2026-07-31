@@ -11,7 +11,10 @@
     "chapterEnd": 3,
     "verseEnd": 18
    },
-   "content": "<p>Hizo que todo [tipo de] serpientes los mordieran y murieran, para convencerlos de que, a causa de su transgresión, habían sido entregados a las angustias de la muerte.</p>"
+   "content": "<p>Hizo que todo [tipo de] serpientes los mordieran y murieran, para convencerlos de que, a causa de su transgresión, habían sido entregados a las angustias de la muerte.</p>",
+   "connectionType": "referencial",
+   "needsSourceReview": true,
+   "reviewNote": "El contenido duplica el de bernabe-sec12b-num-21-6 (serpiente de bronce); no corresponde al contenido propio de Juan 3:14-18, posible anclaje duplicado por error de extracción."
   }
  ]
 }

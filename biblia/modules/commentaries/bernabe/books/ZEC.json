@@ -11,7 +11,8 @@
     "chapterEnd": 8,
     "verseEnd": 17
    },
-   "content": "<p>Que ninguno de vosotros guarde en su corazón maldad contra su prójimo, y que no ame el juramento falso.</p>"
+   "content": "<p>Que ninguno de vosotros guarde en su corazón maldad contra su prójimo, y que no ame el juramento falso.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec5c-zec-13-7",
@@ -24,7 +25,8 @@
     "chapterEnd": 13,
     "verseEnd": 7
    },
-   "content": "<p>El golpe de su carne proviene de ellos; y cuando yo hiera al Pastor, entonces las ovejas del rebaño se dispersarán.</p>"
+   "content": "<p>El golpe de su carne proviene de ellos; y cuando yo hiera al Pastor, entonces las ovejas del rebaño se dispersarán.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

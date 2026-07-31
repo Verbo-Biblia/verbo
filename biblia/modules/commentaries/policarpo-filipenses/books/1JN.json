@@ -11,7 +11,8 @@
     "chapterEnd": 4,
     "verseEnd": 3
    },
-   "content": "<p>Todo aquel que no confiesa que Jesucristo ha venido en carne, es anticristo.</p>"
+   "content": "<p>Todo aquel que no confiesa que Jesucristo ha venido en carne, es anticristo.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec8c-1jn-4-9",
@@ -24,7 +25,8 @@
     "chapterEnd": 4,
     "verseEnd": 9
    },
-   "content": "<p>Sino que padeció todo por nosotros, para que nosotros viviésemos en él.</p>"
+   "content": "<p>Sino que padeció todo por nosotros, para que nosotros viviésemos en él.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

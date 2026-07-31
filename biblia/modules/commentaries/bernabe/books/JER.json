@@ -11,7 +11,10 @@
     "chapterEnd": 7,
     "verseEnd": 22
    },
-   "content": "<p>Más bien les mandé: Que ninguno de vosotros guarde en su corazón maldad contra su prójimo, y que no ame el juramento falso.</p>"
+   "content": "<p>Más bien les mandé: Que ninguno de vosotros guarde en su corazón maldad contra su prójimo, y que no ame el juramento falso.</p>",
+   "connectionType": "referencial",
+   "needsSourceReview": true,
+   "reviewNote": "El contenido coincide con Zacarías 8:17 (ver bernabe-sec2b-zec-8-17), no con Jeremías 7:22; posible anclaje duplicado, referencia correcta en Jeremías sin confirmar."
   },
   {
    "id": "bernabe-sec9b-jer-4-4",
@@ -24,7 +27,8 @@
     "chapterEnd": 4,
     "verseEnd": 4
    },
-   "content": "<p>«Circuncidad vuestros corazones, dice el Señor».</p>"
+   "content": "<p>«Circuncidad vuestros corazones, dice el Señor».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec9c-jer-7-2",
@@ -37,7 +41,8 @@
     "chapterEnd": 7,
     "verseEnd": 2
    },
-   "content": "<p>«Escucha, Israel, porque estas cosas dice el Señor tu Dios».</p>"
+   "content": "<p>«Escucha, Israel, porque estas cosas dice el Señor tu Dios».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "bernabe-sec9g-jer-9-25",
@@ -50,7 +55,8 @@
     "chapterEnd": 9,
     "verseEnd": 26
    },
-   "content": "<p>He aquí, dice el Señor, que todas las naciones son incircuncisas en la carne, pero este pueblo es incircunciso en el corazón.</p>"
+   "content": "<p>He aquí, dice el Señor, que todas las naciones son incircuncisas en la carne, pero este pueblo es incircunciso en el corazón.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec15c-jer-17-24",
@@ -63,7 +69,22 @@
     "chapterEnd": 17,
     "verseEnd": 25
    },
-   "content": "<p>«Si mis hijos guardan el sábado, entonces haré reposar mi misericordia sobre ellos».</p>"
+   "content": "<p>«Si mis hijos guardan el sábado, entonces haré reposar mi misericordia sobre ellos».</p>",
+   "connectionType": "narrativa"
+  },
+  {
+   "id": "bernabe-sec11a-jer-2-12",
+   "title": "Capítulo 11 — El bautismo y la cruz prefigurados",
+   "author": "Epístola de Bernabé",
+   "reference": {
+    "book": "JER",
+    "chapterStart": 2,
+    "verseStart": 12,
+    "chapterEnd": 2,
+    "verseEnd": 13
+   },
+   "content": "<p>Asómbrate, oh cielo, y tiembla, oh tierra, porque este pueblo ha cometido dos grandes males: me han abandonado a mí, fuente viva, y se han excavado cisternas rotas.</p>",
+   "connectionType": "referencial"
   }
  ]
 }

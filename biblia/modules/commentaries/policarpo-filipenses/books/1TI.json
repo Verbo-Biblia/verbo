@@ -11,7 +11,8 @@
     "chapterEnd": 6,
     "verseEnd": 10
    },
-   "content": "<p>Pero el amor al dinero es la raíz de todos los males.</p>"
+   "content": "<p>Pero el amor al dinero es la raíz de todos los males.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec4b-1ti-6-7",
@@ -24,7 +25,8 @@
     "chapterEnd": 6,
     "verseEnd": 7
    },
-   "content": "<p>Sabiendo, pues, que nada hemos traído al mundo, tampoco podemos llevar nada fuera de él.</p>"
+   "content": "<p>Sabiendo, pues, que nada hemos traído al mundo, tampoco podemos llevar nada fuera de él.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec5b-1ti-3-8",
@@ -37,7 +39,8 @@
     "chapterEnd": 3,
     "verseEnd": 8
    },
-   "content": "<p>Los diáconos deben ser irreprochables ante la justicia de Dios, como siervos de Dios y de Cristo, y no de los hombres. No deben ser calumniadores, de doble lengua.</p>"
+   "content": "<p>Los diáconos deben ser irreprochables ante la justicia de Dios, como siervos de Dios y de Cristo, y no de los hombres. No deben ser calumniadores, de doble lengua.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec12c-1ti-2-2",
@@ -50,7 +53,8 @@
     "chapterEnd": 2,
     "verseEnd": 2
    },
-   "content": "<p>Oren también por los reyes, y los potentados, y los príncipes.</p>"
+   "content": "<p>Oren también por los reyes, y los potentados, y los príncipes.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

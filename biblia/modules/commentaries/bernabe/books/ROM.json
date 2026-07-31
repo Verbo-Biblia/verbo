@@ -11,7 +11,10 @@
     "chapterEnd": 8,
     "verseEnd": 30
    },
-   "content": "<p>Porque Él vino a llamar a los hombres no según su apariencia exterior, sino según el Espíritu los había preparado.</p>"
+   "content": "<p>Porque Él vino a llamar a los hombres no según su apariencia exterior, sino según el Espíritu los había preparado.</p>",
+   "connectionType": "narrativa",
+   "needsSourceReview": true,
+   "reviewNote": "El contenido ('llamó no según la apariencia exterior') no corresponde a Romanos 8:29-30 (predestinación); referencia correcta sin confirmar."
   }
  ]
 }

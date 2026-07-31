@@ -11,7 +11,10 @@
     "chapterEnd": 12,
     "verseEnd": 7
    },
-   "content": "<p>Sobre uno están los ángeles de Dios que traen la luz, pero sobre el otro están los ángeles de Satanás.</p>"
+   "content": "<p>Sobre uno están los ángeles de Dios que traen la luz, pero sobre el otro están los ángeles de Satanás.</p>",
+   "connectionType": "referencial",
+   "needsSourceReview": true,
+   "reviewNote": "El contenido (doctrina de los dos caminos, ángeles de luz/Satanás) no corresponde a 2 Corintios 12:7; posible extracción incorrecta, no se identificó el pasaje correcto."
   }
  ]
 }

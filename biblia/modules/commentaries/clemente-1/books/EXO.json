@@ -11,7 +11,8 @@
     "chapterEnd": 2,
     "verseEnd": 14
    },
-   "content": "<p>La envidia obligó a Moisés a huir de la presencia del faraón, rey de Egipto, cuando oyó estas palabras de su compatriota: «¿Quién te ha puesto por juez o por gobernante sobre nosotros?».</p>"
+   "content": "<p>La envidia obligó a Moisés a huir de la presencia del faraón, rey de Egipto, cuando oyó estas palabras de su compatriota: «¿Quién te ha puesto por juez o por gobernante sobre nosotros?».</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec53-exo-32-32",
@@ -24,7 +25,8 @@
     "chapterEnd": 32,
     "verseEnd": 32
    },
-   "content": "<p>Moisés dijo: «Lejos esté eso de ti, Señor; perdona el pecado de este pueblo; si no, borra también mi nombre del libro de los vivientes».</p>"
+   "content": "<p>Moisés dijo: «Lejos esté eso de ti, Señor; perdona el pecado de este pueblo; si no, borra también mi nombre del libro de los vivientes».</p>",
+   "connectionType": "referencial"
   }
  ]
 }

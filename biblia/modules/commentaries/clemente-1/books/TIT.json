@@ -11,7 +11,8 @@
     "chapterEnd": 3,
     "verseEnd": 1
    },
-   "content": "<p>Nunca renegasteis de ningún acto de bondad, estando dispuestos a toda buena obra.</p>"
+   "content": "<p>Nunca renegasteis de ningún acto de bondad, estando dispuestos a toda buena obra.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec64-tit-2-14",
@@ -24,7 +25,8 @@
     "chapterEnd": 2,
     "verseEnd": 14
    },
-   "content": "<p>Que Dios... que escogió a nuestro Señor Jesucristo y a nosotros por medio de Él para ser un pueblo peculiar.</p>"
+   "content": "<p>Que Dios... que escogió a nuestro Señor Jesucristo y a nosotros por medio de Él para ser un pueblo peculiar.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

@@ -11,7 +11,8 @@
     "chapterEnd": 6,
     "verseEnd": 4
    },
-   "content": "<p>No apartarás tu mano de tu hijo ni de tu hija, sino que desde su juventud les enseñarás el temor de Dios.</p>"
+   "content": "<p>No apartarás tu mano de tu hijo ni de tu hija, sino que desde su juventud les enseñarás el temor de Dios.</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "didache-sec4b-eph-6-9",
@@ -24,7 +25,8 @@
     "chapterEnd": 6,
     "verseEnd": 9
    },
-   "content": "<p>No impondrás nada con amargura a tu siervo o sierva, que esperan en el mismo Dios, no sea que dejen de temer a Dios, que está sobre ambos.</p>"
+   "content": "<p>No impondrás nada con amargura a tu siervo o sierva, que esperan en el mismo Dios, no sea que dejen de temer a Dios, que está sobre ambos.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec4d-eph-6-5",
@@ -37,7 +39,8 @@
     "chapterEnd": 6,
     "verseEnd": 5
    },
-   "content": "<p>Y vosotros, siervos, estad sujetos a vuestros amos como a Dios, con modestia y temor.</p>"
+   "content": "<p>Y vosotros, siervos, estad sujetos a vuestros amos como a Dios, con modestia y temor.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

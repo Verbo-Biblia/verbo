@@ -11,7 +11,8 @@
     "chapterEnd": 33,
     "verseEnd": 11
    },
-   "content": "<p>«Vivo yo, dice el Señor, que no deseo la muerte del pecador, sino su arrepentimiento».</p>"
+   "content": "<p>«Vivo yo, dice el Señor, que no deseo la muerte del pecador, sino su arrepentimiento».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec8b-ezk-18-30",
@@ -24,7 +25,8 @@
     "chapterEnd": 18,
     "verseEnd": 30
    },
-   "content": "<p>«Arrepentíos, casa de Israel, de vuestra iniquidad».</p>"
+   "content": "<p>«Arrepentíos, casa de Israel, de vuestra iniquidad».</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

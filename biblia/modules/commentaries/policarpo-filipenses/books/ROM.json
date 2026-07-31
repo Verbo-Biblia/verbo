@@ -11,7 +11,8 @@
     "chapterEnd": 12,
     "verseEnd": 17
    },
-   "content": "<p>Procurando siempre lo que es conveniente a los ojos de Dios y de los hombres.</p>"
+   "content": "<p>Procurando siempre lo que es conveniente a los ojos de Dios y de los hombres.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec6d-rom-14-10",
@@ -24,7 +25,8 @@
     "chapterEnd": 14,
     "verseEnd": 12
    },
-   "content": "<p>Todos debemos comparecer ante el tribunal de Cristo, y cada uno debe dar cuenta de sí mismo.</p>"
+   "content": "<p>Todos debemos comparecer ante el tribunal de Cristo, y cada uno debe dar cuenta de sí mismo.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

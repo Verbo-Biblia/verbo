@@ -11,7 +11,8 @@
     "chapterEnd": 17,
     "verseEnd": 31
    },
-   "content": "<p>Él viene como Juez de los vivos y de los muertos. Dios exigirá su sangre a aquellos que no creen en Él.</p>"
+   "content": "<p>Él viene como Juez de los vivos y de los muertos. Dios exigirá su sangre a aquellos que no creen en Él.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec8d-act-5-41",
@@ -24,7 +25,8 @@
     "chapterEnd": 5,
     "verseEnd": 41
    },
-   "content": "<p>Seamos, pues, imitadores de su paciencia; y si sufrimos por su nombre, glorifiquémosle.</p>"
+   "content": "<p>Seamos, pues, imitadores de su paciencia; y si sufrimos por su nombre, glorifiquémosle.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

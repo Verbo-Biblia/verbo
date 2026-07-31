@@ -11,7 +11,8 @@
     "chapterEnd": 9,
     "verseEnd": 5
    },
-   "content": "<p>De él también [descendió] nuestro Señor Jesucristo según la carne.</p>"
+   "content": "<p>De él también [descendió] nuestro Señor Jesucristo según la carne.</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec35-rom-1-32",
@@ -24,7 +25,8 @@
     "chapterEnd": 1,
     "verseEnd": 32
    },
-   "content": "<p>Porque los que hacen tales cosas son aborrecibles a Dios; y no solo los que las hacen, sino también los que se complacen en los que las hacen.</p>"
+   "content": "<p>Porque los que hacen tales cosas son aborrecibles a Dios; y no solo los que las hacen, sino también los que se complacen en los que las hacen.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec46b-rom-12-5",
@@ -37,7 +39,8 @@
     "chapterEnd": 12,
     "verseEnd": 5
    },
-   "content": "<p>¿Por qué dividimos y desgarramos a los miembros de Cristo, y levantamos contiendas contra nuestro propio cuerpo, y hemos llegado a tal grado de locura que olvidamos que somos miembros los unos de los otros?</p>"
+   "content": "<p>¿Por qué dividimos y desgarramos a los miembros de Cristo, y levantamos contiendas contra nuestro propio cuerpo, y hemos llegado a tal grado de locura que olvidamos que somos miembros los unos de los otros?</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

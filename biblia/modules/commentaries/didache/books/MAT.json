@@ -11,7 +11,8 @@
     "chapterEnd": 5,
     "verseEnd": 26
    },
-   "content": "<p>Ay del que recibe, porque si el que tiene necesidad recibe, es inocente; pero el que recibe sin tener necesidad pagará la pena por lo que recibió y por qué lo recibió, y no escapará de allí hasta que pague hasta el último centavo.</p>"
+   "content": "<p>Ay del que recibe, porque si el que tiene necesidad recibe, es inocente; pero el que recibe sin tener necesidad pagará la pena por lo que recibió y por qué lo recibió, y no escapará de allí hasta que pague hasta el último centavo.</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "didache-sec2d-mat-5-34",
@@ -24,7 +25,10 @@
     "chapterEnd": 5,
     "verseEnd": 34
    },
-   "content": "<p>No codiciarás las cosas de tu prójimo; no jurarás en falso; no darás falso testimonio; no hablarás mal, no guardarás rencor.</p>"
+   "content": "<p>No codiciarás las cosas de tu prójimo; no jurarás en falso; no darás falso testimonio; no hablarás mal, no guardarás rencor.</p>",
+   "connectionType": "referencial",
+   "needsSourceReview": true,
+   "reviewNote": "El contenido es idéntico a didache-sec2c-exo-20-17 (Decálogo); no corresponde a la enseñanza de Mateo 5:34 sobre no jurar en ninguna manera; posible anclaje duplicado."
   },
   {
    "id": "didache-sec3a-mat-5-5",
@@ -37,7 +41,8 @@
     "chapterEnd": 5,
     "verseEnd": 5
    },
-   "content": "<p>Sé manso, pues los mansos heredarán la tierra. Sé paciente y compasivo, sincero y amable, bueno y siempre tembloroso ante las palabras que has oído.</p>"
+   "content": "<p>Sé manso, pues los mansos heredarán la tierra. Sé paciente y compasivo, sincero y amable, bueno y siempre tembloroso ante las palabras que has oído.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec7-mat-28-19",
@@ -50,7 +55,8 @@
     "chapterEnd": 28,
     "verseEnd": 19
    },
-   "content": "<p>Y en cuanto al bautismo, bautiza de esta manera: después de haber dicho todas estas cosas, bautiza en el nombre del Padre, del Hijo y del Espíritu Santo, en agua viva.</p>"
+   "content": "<p>Y en cuanto al bautismo, bautiza de esta manera: después de haber dicho todas estas cosas, bautiza en el nombre del Padre, del Hijo y del Espíritu Santo, en agua viva.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec8-mat-6-16",
@@ -63,7 +69,8 @@
     "chapterEnd": 6,
     "verseEnd": 16
    },
-   "content": "<p>Pero no hagáis vuestros ayunos como los hipócritas; porque ellos ayunan el segundo y el quinto día de la semana; pero ayunad el cuarto día y el día de la Preparación (viernes).</p>"
+   "content": "<p>Pero no hagáis vuestros ayunos como los hipócritas; porque ellos ayunan el segundo y el quinto día de la semana; pero ayunad el cuarto día y el día de la Preparación (viernes).</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec9-mat-7-6",
@@ -76,7 +83,8 @@
     "chapterEnd": 7,
     "verseEnd": 6
    },
-   "content": "<p>Pero que nadie coma ni beba de vuestra Acción de Gracias (Eucaristía), salvo aquellos que han sido bautizados en el nombre del Señor; porque también sobre esto ha dicho el Señor: No deis lo santo a los perros.</p>"
+   "content": "<p>Pero que nadie coma ni beba de vuestra Acción de Gracias (Eucaristía), salvo aquellos que han sido bautizados en el nombre del Señor; porque también sobre esto ha dicho el Señor: No deis lo santo a los perros.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec13a-mat-10-10",
@@ -89,7 +97,8 @@
     "chapterEnd": 10,
     "verseEnd": 10
    },
-   "content": "<p>Pero todo profeta verdadero que quiera permanecer entre vosotros es digno de su sustento. Así también, un maestro verdadero es digno, como trabajador, de su sustento.</p>"
+   "content": "<p>Pero todo profeta verdadero que quiera permanecer entre vosotros es digno de su sustento. Así también, un maestro verdadero es digno, como trabajador, de su sustento.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec15b-mat-18-15",
@@ -102,7 +111,8 @@
     "chapterEnd": 18,
     "verseEnd": 17
    },
-   "content": "<p>Y reprendedos unos a otros, no con ira, sino con paz, como tenéis en el Evangelio; pero a todo el que actúe mal contra otro, que nadie le hable, ni le deis oído hasta que se arrepienta.</p>"
+   "content": "<p>Y reprendedos unos a otros, no con ira, sino con paz, como tenéis en el Evangelio; pero a todo el que actúe mal contra otro, que nadie le hable, ni le deis oído hasta que se arrepienta.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec16a-mat-24-42",
@@ -115,7 +125,8 @@
     "chapterEnd": 24,
     "verseEnd": 42
    },
-   "content": "<p>Velad por vuestra vida. No dejéis que se apaguen vuestras lámparas, ni que se aflojen vuestros lomos; estad preparados, porque no sabéis la hora en que vendrá nuestro Señor.</p>"
+   "content": "<p>Velad por vuestra vida. No dejéis que se apaguen vuestras lámparas, ni que se aflojen vuestros lomos; estad preparados, porque no sabéis la hora en que vendrá nuestro Señor.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec16b-mat-24-11",
@@ -128,7 +139,8 @@
     "chapterEnd": 24,
     "verseEnd": 12
    },
-   "content": "<p>Porque en los últimos días se multiplicarán los falsos profetas y los corruptores, y las ovejas se convertirán en lobos, y el amor se convertirá en odio.</p>"
+   "content": "<p>Porque en los últimos días se multiplicarán los falsos profetas y los corruptores, y las ovejas se convertirán en lobos, y el amor se convertirá en odio.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "didache-sec16c-mat-24-10",
@@ -141,7 +153,8 @@
     "chapterEnd": 24,
     "verseEnd": 10
    },
-   "content": "<p>Porque cuando aumente la iniquidad, se odiarán, se perseguirán y se traicionarán unos a otros, y entonces aparecerá el engañador del mundo como Hijo de Dios.</p>"
+   "content": "<p>Porque cuando aumente la iniquidad, se odiarán, se perseguirán y se traicionarán unos a otros, y entonces aparecerá el engañador del mundo como Hijo de Dios.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

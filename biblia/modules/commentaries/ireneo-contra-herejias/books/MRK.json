@@ -11,7 +11,8 @@
     "chapterEnd": 14,
     "verseEnd": 21
    },
-   "content": "<p>Además, el Señor también declaró con respecto a él: «Ay del hombre por quien el Hijo del hombre será traicionado» (Mateo 26:24) y «Mejor le hubiera sido no haber nacido» (Marcos 14:21), y fue llamado por Él «el hijo de la perdición» (Juan 17:12).</p>"
+   "content": "<p>Además, el Señor también declaró con respecto a él: «Ay del hombre por quien el Hijo del hombre será traicionado» (Mateo 26:24) y «Mejor le hubiera sido no haber nacido» (Marcos 14:21), y fue llamado por Él «el hijo de la perdición» (Juan 17:12).</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "ireneo-doctrina-sec64-mrk-9-44",
@@ -24,7 +25,8 @@
     "chapterEnd": 9,
     "verseEnd": 44
    },
-   "content": "<p>Mateo 25:41; Marcos 9:44 2.</p>"
+   "content": "<p>Mateo 25:41; Marcos 9:44 2.</p>",
+   "connectionType": "referencial"
   }
  ]
 }

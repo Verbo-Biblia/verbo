@@ -11,7 +11,8 @@
     "chapterEnd": 4,
     "verseEnd": 27
    },
-   "content": "<p>Isaías 54:1; Gálatas 4:27 Porque en referencia a estos puntos, y otros de naturaleza similar, el apóstol exclama: ¡Oh profundidad de las riquezas de la sabiduría y del conocimiento de Dios! ¡Cuán insondables son sus juicios e inescrutables sus caminos! Romanos 11:33 Pero</p>"
+   "content": "<p>Isaías 54:1; Gálatas 4:27 Porque en referencia a estos puntos, y otros de naturaleza similar, el apóstol exclama: ¡Oh profundidad de las riquezas de la sabiduría y del conocimiento de Dios! ¡Cuán insondables son sus juicios e inescrutables sus caminos! Romanos 11:33 Pero</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "ireneo-doctrina-sec41-gal-4-8",
@@ -24,7 +25,8 @@
     "chapterEnd": 4,
     "verseEnd": 8
    },
-   "content": "<p>Porque los primeros sirven a la criatura más que al Creador, Romanos 1:25, y a los que no son dioses, Gálatas 4:8, a pesar de que atribuyen el primer lugar en la Deidad al Dios que fue el Creador de este universo.</p>"
+   "content": "<p>Porque los primeros sirven a la criatura más que al Creador, Romanos 1:25, y a los que no son dioses, Gálatas 4:8, a pesar de que atribuyen el primer lugar en la Deidad al Dios que fue el Creador de este universo.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

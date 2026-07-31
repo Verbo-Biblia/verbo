@@ -11,7 +11,10 @@
     "chapterEnd": 4,
     "verseEnd": 26
    },
-   "content": "<p>Os escribió una carta que, si la estudiáis con atención, veréis que es el medio para edificaros en la fe que se os ha dado.</p>"
+   "content": "<p>Os escribió una carta que, si la estudiáis con atención, veréis que es el medio para edificaros en la fe que se os ha dado.</p>",
+   "connectionType": "referencial",
+   "needsSourceReview": true,
+   "reviewNote": "El contenido es una mención genérica a 'una carta que os escribió' y no corresponde al contenido propio de Gálatas 4:26."
   },
   {
    "id": "policarpo-filipenses-sec5a-gal-6-7",
@@ -24,7 +27,8 @@
     "chapterEnd": 6,
     "verseEnd": 7
    },
-   "content": "<p>Sabiendo, pues, que Dios no puede ser burlado, debemos andar dignamente conforme a su mandamiento y gloria.</p>"
+   "content": "<p>Sabiendo, pues, que Dios no puede ser burlado, debemos andar dignamente conforme a su mandamiento y gloria.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec9b-gal-2-2",
@@ -37,7 +41,8 @@
     "chapterEnd": 2,
     "verseEnd": 2
    },
-   "content": "<p>Hacedlo con la certeza de que todos ellos no han corrido en vano, sino con fe y justicia.</p>"
+   "content": "<p>Hacedlo con la certeza de que todos ellos no han corrido en vano, sino con fe y justicia.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec12b-gal-1-1",
@@ -50,7 +55,10 @@
     "chapterEnd": 1,
     "verseEnd": 1
    },
-   "content": "<p>Que os conceda una parte entre sus santos, y a nosotros con vosotros, y a todos los que están bajo el cielo, que creen en nuestro Señor Jesucristo y en su Padre, que le resucitó de entre los muertos.</p>"
+   "content": "<p>Que os conceda una parte entre sus santos, y a nosotros con vosotros, y a todos los que están bajo el cielo, que creen en nuestro Señor Jesucristo y en su Padre, que le resucitó de entre los muertos.</p>",
+   "connectionType": "referencial",
+   "needsSourceReview": true,
+   "reviewNote": "El contenido es una bendición final genérica y no corresponde al saludo apostólico de Gálatas 1:1."
   }
  ]
 }

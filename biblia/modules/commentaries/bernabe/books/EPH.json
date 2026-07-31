@@ -11,7 +11,8 @@
     "chapterEnd": 2,
     "verseEnd": 21
    },
-   "content": "<p>Porque, hermanos míos, la morada de nuestro corazón es un templo santo para el Señor.</p>"
+   "content": "<p>Porque, hermanos míos, la morada de nuestro corazón es un templo santo para el Señor.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec19b-eph-6-9",
@@ -24,7 +25,8 @@
     "chapterEnd": 6,
     "verseEnd": 9
    },
-   "content": "<p>No darás órdenes con amargura a tu sierva o a tu siervo, que confían en el mismo [Dios], no sea que no reverencies a ese Dios que está por encima de ambos.</p>"
+   "content": "<p>No darás órdenes con amargura a tu sierva o a tu siervo, que confían en el mismo [Dios], no sea que no reverencies a ese Dios que está por encima de ambos.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

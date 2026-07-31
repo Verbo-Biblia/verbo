@@ -11,7 +11,8 @@
     "chapterEnd": 32,
     "verseEnd": 15
    },
-   "content": "<p>«Mi amado comía y bebía, y se engordó y se hizo gordo, y dio una patada». De ahí surgieron la emulación y la envidia, la contienda y la sedición, la persecución y el desorden.</p>"
+   "content": "<p>«Mi amado comía y bebía, y se engordó y se hizo gordo, y dio una patada». De ahí surgieron la emulación y la envidia, la contienda y la sedición, la persecución y el desorden.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec29-deu-32-8",
@@ -24,7 +25,8 @@
     "chapterEnd": 32,
     "verseEnd": 9
    },
-   "content": "<p>«Cuando el Altísimo dividió las naciones, cuando dispersó a los hijos de Adán, fijó los límites de las naciones según el número de los ángeles de Dios». Su pueblo Jacob se convirtió en la porción del Señor.</p>"
+   "content": "<p>«Cuando el Altísimo dividió las naciones, cuando dispersó a los hijos de Adán, fijó los límites de las naciones según el número de los ángeles de Dios». Su pueblo Jacob se convirtió en la porción del Señor.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "clemente-1-sec59d-deu-32-39",
@@ -37,7 +39,8 @@
     "chapterEnd": 32,
     "verseEnd": 39
    },
-   "content": "<p>Que matas y das vida.</p>"
+   "content": "<p>Que matas y das vida.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

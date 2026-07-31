@@ -11,7 +11,8 @@
     "chapterEnd": 31,
     "verseEnd": 18
    },
-   "content": "<p>Y Moisés ayunó en el monte cuarenta días y cuarenta noches, y recibió el pacto del Señor, tablas de piedra escritas con el dedo de la mano del Señor.</p>"
+   "content": "<p>Y Moisés ayunó en el monte cuarenta días y cuarenta noches, y recibió el pacto del Señor, tablas de piedra escritas con el dedo de la mano del Señor.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec4b-exo-34-28",
@@ -24,7 +25,8 @@
     "chapterEnd": 34,
     "verseEnd": 28
    },
-   "content": "<p>Y Moisés ayunó en el monte cuarenta días y cuarenta noches, y recibió el pacto del Señor, tablas de piedra escritas con el dedo de la mano del Señor.</p>"
+   "content": "<p>Y Moisés ayunó en el monte cuarenta días y cuarenta noches, y recibió el pacto del Señor, tablas de piedra escritas con el dedo de la mano del Señor.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec4c-exo-32-7",
@@ -37,7 +39,8 @@
     "chapterEnd": 32,
     "verseEnd": 7
    },
-   "content": "<p>Moisés, baja rápidamente, porque el pueblo que sacaste de la tierra de Egipto ha pecado.</p>"
+   "content": "<p>Moisés, baja rápidamente, porque el pueblo que sacaste de la tierra de Egipto ha pecado.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec6e-exo-33-1",
@@ -50,7 +53,8 @@
     "chapterEnd": 33,
     "verseEnd": 1
    },
-   "content": "<p>Mirad estas cosas, dice el Señor Dios: Entrad en la buena tierra que el Señor juró [dar] a Abraham, a Isaac y a Jacob, y heredadla, tierra que mana leche y miel.</p>"
+   "content": "<p>Mirad estas cosas, dice el Señor Dios: Entrad en la buena tierra que el Señor juró [dar] a Abraham, a Isaac y a Jacob, y heredadla, tierra que mana leche y miel.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec6i-exo-33-3",
@@ -63,7 +67,8 @@
     "chapterEnd": 33,
     "verseEnd": 3
    },
-   "content": "<p>El profeta proclamó: «Entrad en la tierra que mana leche y miel, y dominadla».</p>"
+   "content": "<p>El profeta proclamó: «Entrad en la tierra que mana leche y miel, y dominadla».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec12f-exo-17-14",
@@ -76,7 +81,8 @@
     "chapterEnd": 17,
     "verseEnd": 14
    },
-   "content": "<p>Toma un libro en tus manos y escribe lo que el Señor declara, que el Hijo de Dios en los últimos días cortará de raíz toda la casa de Amalec.</p>"
+   "content": "<p>Toma un libro en tus manos y escribe lo que el Señor declara, que el Hijo de Dios en los últimos días cortará de raíz toda la casa de Amalec.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec14a-exo-24-18",
@@ -89,7 +95,8 @@
     "chapterEnd": 24,
     "verseEnd": 18
    },
-   "content": "<p>Moisés ayunó cuarenta días y cuarenta noches en el monte Sinaí, para recibir el testamento del Señor para el pueblo.</p>"
+   "content": "<p>Moisés ayunó cuarenta días y cuarenta noches en el monte Sinaí, para recibir el testamento del Señor para el pueblo.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec14b-exo-31-18",
@@ -102,7 +109,8 @@
     "chapterEnd": 31,
     "verseEnd": 18
    },
-   "content": "<p>Recibió del Señor dos tablas, escritas en el espíritu por el dedo de la mano del Señor.</p>"
+   "content": "<p>Recibió del Señor dos tablas, escritas en el espíritu por el dedo de la mano del Señor.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec14c-exo-32-7",
@@ -115,7 +123,8 @@
     "chapterEnd": 32,
     "verseEnd": 7
    },
-   "content": "<p>El Señor dijo a Moisés: «Moisés, Moisés, baja pronto, porque tu pueblo, al que sacaste de la tierra de Egipto, ha pecado».</p>"
+   "content": "<p>El Señor dijo a Moisés: «Moisés, Moisés, baja pronto, porque tu pueblo, al que sacaste de la tierra de Egipto, ha pecado».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "bernabe-sec15a-exo-20-8",
@@ -128,7 +137,8 @@
     "chapterEnd": 20,
     "verseEnd": 8
    },
-   "content": "<p>«Santifica el sábado del Señor con manos limpias y corazón puro».</p>"
+   "content": "<p>«Santifica el sábado del Señor con manos limpias y corazón puro».</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

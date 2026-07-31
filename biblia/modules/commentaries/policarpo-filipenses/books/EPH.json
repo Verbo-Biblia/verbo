@@ -11,7 +11,8 @@
     "chapterEnd": 2,
     "verseEnd": 9
    },
-   "content": "<p>En el cual muchos desean entrar, sabiendo que por gracia sois salvos, no por obras, sino por la voluntad de Dios por medio de Jesucristo.</p>"
+   "content": "<p>En el cual muchos desean entrar, sabiendo que por gracia sois salvos, no por obras, sino por la voluntad de Dios por medio de Jesucristo.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec2b-eph-6-14",
@@ -24,7 +25,8 @@
     "chapterEnd": 6,
     "verseEnd": 14
    },
-   "content": "<p>Ceñíos los lomos, servid al Señor con temor y verdad, como aquellos que han abandonado las vanas y vacías palabras y los errores de la multitud.</p>"
+   "content": "<p>Ceñíos los lomos, servid al Señor con temor y verdad, como aquellos que han abandonado las vanas y vacías palabras y los errores de la multitud.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec4c-eph-6-11",
@@ -37,7 +39,8 @@
     "chapterEnd": 6,
     "verseEnd": 11
    },
-   "content": "<p>Armémonos con la armadura de la justicia; y enseñémonos, ante todo, a nosotros mismos a andar en los mandamientos del Señor.</p>"
+   "content": "<p>Armémonos con la armadura de la justicia; y enseñémonos, ante todo, a nosotros mismos a andar en los mandamientos del Señor.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec12a-eph-4-26",
@@ -50,7 +53,8 @@
     "chapterEnd": 4,
     "verseEnd": 26
    },
-   "content": "<p>«Iraos, pero no pequéis; y no se ponga el sol sobre vuestro enojo».</p>"
+   "content": "<p>«Iraos, pero no pequéis; y no se ponga el sol sobre vuestro enojo».</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

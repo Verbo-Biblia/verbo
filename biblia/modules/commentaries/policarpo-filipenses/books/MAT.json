@@ -11,7 +11,8 @@
     "chapterEnd": 7,
     "verseEnd": 1
    },
-   "content": "<p>No juzguéis, para que no seáis juzgados.</p>"
+   "content": "<p>No juzguéis, para que no seáis juzgados.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec2j-mat-7-2",
@@ -24,7 +25,8 @@
     "chapterEnd": 7,
     "verseEnd": 2
    },
-   "content": "<p>Con la medida con que midáis, se os medirá a vosotros.</p>"
+   "content": "<p>Con la medida con que midáis, se os medirá a vosotros.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec5c-mat-20-28",
@@ -37,7 +39,8 @@
     "chapterEnd": 20,
     "verseEnd": 28
    },
-   "content": "<p>Moderados en todo, compasivos, diligentes, andando según la verdad del Señor, que fue siervo de todos.</p>"
+   "content": "<p>Moderados en todo, compasivos, diligentes, andando según la verdad del Señor, que fue siervo de todos.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec6c-mat-6-12",
@@ -50,7 +53,8 @@
     "chapterEnd": 6,
     "verseEnd": 14
    },
-   "content": "<p>Si entonces suplicamos al Señor que nos perdone, también nosotros debemos perdonar.</p>"
+   "content": "<p>Si entonces suplicamos al Señor que nos perdone, también nosotros debemos perdonar.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec7c-mat-6-13",
@@ -63,7 +67,8 @@
     "chapterEnd": 6,
     "verseEnd": 13
    },
-   "content": "<p>Suplicando en nuestras oraciones al Dios que todo lo ve que no nos lleve a la tentación.</p>"
+   "content": "<p>Suplicando en nuestras oraciones al Dios que todo lo ve que no nos lleve a la tentación.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec7d-mat-26-41",
@@ -76,7 +81,8 @@
     "chapterEnd": 26,
     "verseEnd": 41
    },
-   "content": "<p>Suplicando en nuestras oraciones al Dios que todo lo ve que no nos lleve a la tentación, como ha dicho el Señor: El espíritu está dispuesto, pero la carne es débil.</p>"
+   "content": "<p>Suplicando en nuestras oraciones al Dios que todo lo ve que no nos lleve a la tentación, como ha dicho el Señor: El espíritu está dispuesto, pero la carne es débil.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-filipenses-sec12d-mat-5-44",
@@ -89,7 +95,8 @@
     "chapterEnd": 5,
     "verseEnd": 44
    },
-   "content": "<p>Y por los que los persiguen y los odian, y por los enemigos de la cruz, para que su fruto sea manifiesto a todos.</p>"
+   "content": "<p>Y por los que los persiguen y los odian, y por los enemigos de la cruz, para que su fruto sea manifiesto a todos.</p>",
+   "connectionType": "narrativa"
   }
  ]
 }

@@ -11,7 +11,8 @@
     "chapterEnd": 12,
     "verseEnd": 15
    },
-   "content": "<p>Por causa de la envidia, Aarón y Miriam tuvieron que establecerse fuera del campamento.</p>"
+   "content": "<p>Por causa de la envidia, Aarón y Miriam tuvieron que establecerse fuera del campamento.</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "clemente-1-sec4c-num-16-33",
@@ -24,7 +25,8 @@
     "chapterEnd": 16,
     "verseEnd": 33
    },
-   "content": "<p>La envidia llevó a Datán y Abiram vivos al Hades, a causa de la sedición que provocaron contra Moisés, siervo de Dios.</p>"
+   "content": "<p>La envidia llevó a Datán y Abiram vivos al Hades, a causa de la sedición que provocaron contra Moisés, siervo de Dios.</p>",
+   "connectionType": "referencial"
   }
  ]
 }

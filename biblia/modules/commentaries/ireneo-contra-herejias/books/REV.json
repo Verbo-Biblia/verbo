@@ -11,7 +11,8 @@
     "chapterEnd": 2,
     "verseEnd": 6
    },
-   "content": "<p>El carácter de estos hombres se señala muy claramente en el Apocalipsis de Juan, cuando se les representa como enseñan que es indiferente cometer adulterio y comer cosas sacrificadas a los ídolos. Por lo cual la Palabra también ha hablado así de ellos: «Pero esto tienes, que aborreces las obras de los nicolaítas, que yo también aborrezco».</p>"
+   "content": "<p>El carácter de estos hombres se señala muy claramente en el Apocalipsis de Juan, cuando se les representa como enseñan que es indiferente cometer adulterio y comer cosas sacrificadas a los ídolos. Por lo cual la Palabra también ha hablado así de ellos: «Pero esto tienes, que aborreces las obras de los nicolaítas, que yo también aborrezco».</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "ireneo-doctrina-sec63-rev-12-14",
@@ -24,7 +25,8 @@
     "chapterEnd": 12,
     "verseEnd": 14
    },
-   "content": "<p>Pero están completamente llenos de todo tipo de engaños, inspiración apóstata, obras demoníacas y fantasmas de idolatría, y son en realidad los predecesores de ese dragón de Apocalipsis 12:14 que, mediante un engaño del mismo tipo, hará caer con su cola a una tercera parte de las estrellas de su lugar y las arrojará a la tierra.</p>"
+   "content": "<p>Pero están completamente llenos de todo tipo de engaños, inspiración apóstata, obras demoníacas y fantasmas de idolatría, y son en realidad los predecesores de ese dragón de Apocalipsis 12:14 que, mediante un engaño del mismo tipo, hará caer con su cola a una tercera parte de las estrellas de su lugar y las arrojará a la tierra.</p>",
+   "connectionType": "referencial"
   }
  ]
 }

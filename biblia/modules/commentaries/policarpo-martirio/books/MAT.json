@@ -11,7 +11,8 @@
     "chapterEnd": 10,
     "verseEnd": 23
    },
-   "content": "<p>El procónsul, tras muchas súplicas, lo persuadió para que jurara y ofreciera sacrificios. Por lo tanto, hermanos, no alabamos a los que se entregan [al sufrimiento], ya que el Evangelio no enseña a hacerlo.</p>"
+   "content": "<p>El procónsul, tras muchas súplicas, lo persuadió para que jurara y ofreciera sacrificios. Por lo tanto, hermanos, no alabamos a los que se entregan [al sufrimiento], ya que el Evangelio no enseña a hacerlo.</p>",
+   "connectionType": "narrativa"
   },
   {
    "id": "policarpo-martirio-mat-26-55",
@@ -24,7 +25,8 @@
     "chapterEnd": 26,
     "verseEnd": 55
    },
-   "content": "<p>Sus perseguidores, junto con jinetes, y llevando consigo al joven, salieron a la hora de la cena del día de la preparación con sus armas habituales, como si fueran a enfrentarse a un ladrón.</p>"
+   "content": "<p>Sus perseguidores, junto con jinetes, y llevando consigo al joven, salieron a la hora de la cena del día de la preparación con sus armas habituales, como si fueran a enfrentarse a un ladrón.</p>",
+   "connectionType": "referencial"
   },
   {
    "id": "policarpo-martirio-mat-6-10",
@@ -37,7 +39,8 @@
     "chapterEnd": 6,
     "verseEnd": 10
    },
-   "content": "<p>Al llegar la noche [al lugar donde se encontraba], lo encontraron acostado en la habitación superior de una pequeña casa, desde donde podría haber escapado a otro lugar; pero él se negó, diciendo: «Que se haga la voluntad de Dios».</p>"
+   "content": "<p>Al llegar la noche [al lugar donde se encontraba], lo encontraron acostado en la habitación superior de una pequeña casa, desde donde podría haber escapado a otro lugar; pero él se negó, diciendo: «Que se haga la voluntad de Dios».</p>",
+   "connectionType": "referencial"
   }
  ]
 }
