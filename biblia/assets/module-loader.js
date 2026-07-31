@@ -159,6 +159,22 @@ const VerboModules = (() => {
       };
     }).filter(item => item.bookId && item.chapter && item.verse);
   }
+  // Algunas Biblias (ej. kjv/manifest.json) no traen su propio arreglo
+  // "books" — apuntan a otro manifiesto vía "dataManifest" (ver loadBible)
+  // para no duplicar la lista de libros con la variante +Strong. Sin esto,
+  // el desplegable de libros no puede leer el nombre correcto (ej.
+  // "Revelation") de esas Biblias y cae de vuelta al nombre de la Biblia
+  // por defecto.
+  async function resolveBibleBooks(entry) {
+    if (Array.isArray(entry?.manifest?.books)) return entry.manifest.books;
+    if (entry?.manifest?.dataManifest && entry.path) {
+      try {
+        const dataManifest = await getJSON(resolveFromManifest(entry.path, entry.manifest.dataManifest));
+        return dataManifest.books || null;
+      } catch { return null; }
+    }
+    return null;
+  }
   async function getBookInfo(bookId) {
     const catalog = await getCatalog();
     const info = catalog.primary.manifest.books.find(b => b.id === bookId);
@@ -782,5 +798,5 @@ const VerboModules = (() => {
     return null;
   }
 
-  return { getCatalog,getBookInfo,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadCommentaryIndex,loadLinkedEntries,loadLinkedArticle,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible };
+  return { getCatalog,getBookInfo,resolveBibleBooks,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadCommentaryIndex,loadLinkedEntries,loadLinkedArticle,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible };
 })();

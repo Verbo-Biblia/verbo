@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const preferred = bySameLang || fallback;
       if (preferred) currentVersion = preferred.id;
     }
-    populateBooks();
+    await populateBooks();
     if (!commentaryCatalog().some(c => c.id === currentCommentary)) currentCommentary = commentaryCatalog()[0]?.id || null;
     if (!dictionaryCatalog().some(c => c.id === currentDictionary)) currentDictionary = dictionaryCatalog()[0]?.id || null;
     if (!exegesisCatalog().some(c => c.id === currentExegesis)) currentExegesis = exegesisCatalog()[0]?.id || null;
@@ -164,8 +164,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  function populateBooks() {
-    els.book.innerHTML = catalog.books.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+  async function populateBooks() {
+    // catalog.books es la lista canónica de IDs/orden (fija a la Biblia por
+    // defecto) — el NOMBRE mostrado debe venir del manifiesto de la Biblia
+    // activa (ej. ASV/KJV listan "Revelation", no "Apocalipsis"), si no,
+    // el desplegable siempre muestra los nombres en español sin importar
+    // qué versión esté seleccionada. Algunas Biblias (ej. kjv/manifest.json)
+    // no listan "books" directamente, sino vía "dataManifest" — ver
+    // VerboModules.resolveBibleBooks.
+    const activeEntry = catalog.bibles.find(b => b.manifest.id === currentVersion);
+    const activeManifestBooks = activeEntry ? await VerboModules.resolveBibleBooks(activeEntry) : null;
+    const nameById = Array.isArray(activeManifestBooks)
+      ? new Map(activeManifestBooks.map(b => [b.id, b.name]))
+      : null;
+    els.book.innerHTML = catalog.books.map(b => `<option value="${b.id}">${escapeHTML(nameById?.get(b.id) || b.name)}</option>`).join('');
   }
 
   async function refreshChapters() {
@@ -338,6 +350,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       localStorage.setItem('verbo:lastVersion', currentVersion);
       if (compareVersion === currentVersion) compareVersion = bibleCatalog().find(x => x.id !== currentVersion)?.id || currentVersion;
       populateVersions();
+      await populateBooks();
+      els.book.value = currentBook;
       renderChapter(v);
       if (activeTab === 'comparar') await renderCompare(v);
       if (activeTab === 'comentario') renderPanel('comentario');
@@ -778,6 +792,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     return chunks;
   }
 
+  // Google traduce "Apocalipsis" (ES) literalmente como "Apocalypse" en vez
+  // del nombre canónico del libro bíblico en inglés, "Revelation" — corrección
+  // puntual aplicada a toda traducción ES→EN (comentarios, diccionario,
+  // Padres Apostólicos comparten este mismo punto de entrada).
+  const ES_EN_BOOK_NAME_FIXES=[[/\bApocalypse\b/g,'Revelation']];
+  function fixKnownBookNameMistranslations(text, targetLang){
+    if(targetLang!=='en' || !text) return text;
+    return ES_EN_BOOK_NAME_FIXES.reduce((acc,[pattern,replacement])=>acc.replace(pattern,replacement), text);
+  }
+
   async function googleTranslate(text, sourceLang='en', targetLang='es'){
     async function fetchTranslate(chunk){
       try{
@@ -789,7 +813,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         return json[0].map(p=>p?.[0]||'').join('');
       }catch{ return null; }
     }
-    if(text.length<=4500) return fetchTranslate(text);
+    if(text.length<=4500){
+      const result=await fetchTranslate(text);
+      return fixKnownBookNameMistranslations(result, targetLang);
+    }
     // Long text: translate in chunks sequentially to avoid URL limits
     const chunks=splitTextIntoChunks(text);
     const parts=[];
@@ -798,7 +825,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if(r===null) return null;
       parts.push(r);
     }
-    return parts.join(' ');
+    return fixKnownBookNameMistranslations(parts.join(' '), targetLang);
   }
 
   async function translateEntry(noteId, htmlContent, sourceLang='en', targetLang='es'){
@@ -1492,13 +1519,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         : '';
       return `<div class="note-card${active}" data-linked-id="${escapeHTML(id)}" data-linked-index="${index}">
         <div class="note-card__ref">${escapeHTML(data.meta.book)} ${data.meta.chapter}${entry.reference?.verseStart ? ':'+escapeHTML(entry.reference.verseStart) : ''}</div>
-        <div class="note-card__title">${escapeHTML(title)}</div>
-        <div class="note-card__author">${escapeHTML(entry.author || resource.manifest.name)}</div>
+        <div class="note-card__title" data-linked-title="${index}">${escapeHTML(title)}</div>
+        <div class="note-card__author" data-linked-author="${index}">${escapeHTML(entry.author || resource.manifest.name)}</div>
         <button class="note-card__copy" type="button" data-copy-linked="${index}">${t('linked.copiar')}</button>
         ${readFullBtn}
         <div class="note-card__body" data-linked-body="${index}">${body}</div>
       </div>`;
     }).join('');
+    translateLinkedResourceEntries(resource, entries, focus);
     els.panelBody.querySelectorAll('[data-copy-linked]').forEach(btn=>btn.addEventListener('click',()=>{
       const entry=entries[Number(btn.dataset.copyLinked)];
       if(!entry) return;
@@ -1529,6 +1557,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(focus){
       const target=[...els.panelBody.querySelectorAll('[data-linked-index]')].find(card=>referenceCoversVerse(entries[Number(card.dataset.linkedIndex)], focus));
       target?.scrollIntoView({block:'start'});
+    }
+  }
+
+  // Traducción automática de recursos "enlazados por versículo" (Padres
+  // Apostólicos en modo fragmento, Biblioteca, Exégesis) — antes solo el
+  // panel "Comentario" y "Padres Apostólicos" en modo documento traducían
+  // automáticamente; esta vista compartida se había quedado siempre en el
+  // idioma original de la fuente (normalmente español) sin importar la
+  // Biblia activa. Mismo patrón que applyCommentaryTranslation/
+  // applyPatristicTranslation: título/autor vía translateCommentaryHeader,
+  // cuerpo vía translateEntry, con caché en localStorage.
+  async function translateLinkedResourceEntries(resource, entries, focus=null){
+    const source=resource.manifest.language;
+    const target=contentLang();
+    if(!source || source===target) return;
+    const focusIndex=focus ? entries.findIndex(entry=>referenceCoversVerse(entry, focus)) : -1;
+    const order=[...entries.keys()].sort((a,b)=>(a===focusIndex?-1:0)-(b===focusIndex?-1:0));
+    for(const index of order){
+      const entry=entries[index];
+      const id=entry.id || `${resource.manifest.id}-${currentBook}-${currentChapter}-${index}`;
+      const titleEl=els.panelBody.querySelector(`[data-linked-title="${index}"]`);
+      if(titleEl && titleEl.dataset.translated!==target && entry.title){
+        titleEl.dataset.translated='pending';
+        const translatedTitle=await translateCommentaryHeader(id,'title',entry.title,source,target);
+        if(titleEl.dataset.translated==='pending'){ titleEl.textContent=translatedTitle; titleEl.dataset.translated=target; }
+      }
+      const authorEl=els.panelBody.querySelector(`[data-linked-author="${index}"]`);
+      if(authorEl && authorEl.dataset.translated!==target && entry.author){
+        authorEl.dataset.translated='pending';
+        const translatedAuthor=await translateCommentaryHeader(id,'author',entry.author,source,target);
+        if(authorEl.dataset.translated==='pending'){ authorEl.textContent=translatedAuthor; authorEl.dataset.translated=target; }
+      }
+      const bodyEl=els.panelBody.querySelector(`[data-linked-body="${index}"]`);
+      const body=entry.content || entry.excerpt || entry.html || entry.definition || entry.data || '';
+      if(bodyEl && bodyEl.dataset.translated!==target && body){
+        bodyEl.dataset.translated='pending';
+        const translatedBody=await translateEntry(id, body, source, target);
+        if(bodyEl.dataset.translated==='pending'){
+          bodyEl.innerHTML=`${translatedBody}${originalSourceDetailsHtml(body,source)}`;
+          bodyEl.dataset.translated=target;
+        }
+      }
     }
   }
 
@@ -2114,12 +2184,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     wirePatristicModeToggle();
     els.panelBody.innerHTML=`<div class="dictionary-library">${patristicCatalog.map(d=>`
       <button type="button" class="dictionary-library__item" data-patristic-doc="${d.id}">
-        <span>${escapeHTML(d.full)}</span>
+        <span data-patristic-doc-name="${d.id}">${escapeHTML(d.full)}</span>
         <small>${escapeHTML(d.manifest.year||'')}</small>
       </button>`).join('')}</div>`;
     document.querySelectorAll('[data-patristic-doc]').forEach(btn=>{
       btn.addEventListener('click',()=>{ patristicOpenDoc=btn.dataset.patristicDoc; renderPadresPanel(); els.panelBody.scrollTop=0; });
     });
+    translatePatristicDocNames();
+  }
+
+  // Traduce los nombres de los documentos patrísticos de nivel 1 (ej. "Epístola
+  // de Bernabé") — antes solo el cuerpo de cada sección se traducía; el nombre
+  // del documento se quedaba siempre en su idioma original. Se agrupa por
+  // idioma fuente y se traduce en un solo request por grupo (documentos
+  // suficientemente pocos y cortos para no necesitar troceo).
+  async function translatePatristicDocNames(){
+    const target=contentLang();
+    const pending=patristicCatalog.filter(d=>(d.manifest.language||'es')!==target);
+    if(!pending.length) return;
+    const bySource=new Map();
+    pending.forEach(d=>{
+      const source=d.manifest.language||'es';
+      if(!bySource.has(source)) bySource.set(source,[]);
+      bySource.get(source).push(d);
+    });
+    const DELIM='\n@@@\n';
+    for(const [source,docs] of bySource){
+      const cacheKey=translationCacheKey(`patristic-doclist:${source}`, docs.map(d=>d.full).join(DELIM), target);
+      let translatedNames=tcacheGet(cacheKey);
+      if(!translatedNames){
+        const translated=await googleTranslate(docs.map(d=>d.full).join(DELIM), source, target);
+        if(!translated) continue;
+        const parts=translated.split(/\s*@@@\s*/).map(x=>x.trim());
+        if(parts.length!==docs.length) continue; // el delimitador se rompió en la traducción; no aplicar nada
+        translatedNames=parts;
+        tcacheSet(cacheKey, translatedNames);
+      }
+      docs.forEach((d,i)=>{
+        const el=els.panelBody.querySelector(`[data-patristic-doc-name="${d.id}"]`);
+        if(el){ el.textContent=translatedNames[i]; el.dataset.translated=target; }
+      });
+    }
   }
 
   let patristicDocData=null;
@@ -2142,12 +2247,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const list=patristicDocData.sections.map(s=>`
       <button type="button" class="dictionary-library__item" data-patristic-section="${s.n}">
-        <span>${escapeHTML(s.title)}</span>
+        <span data-patristic-section-title="${s.n}">${escapeHTML(s.title)}</span>
       </button>`).join('');
 
     els.panelBody.innerHTML=`${statusBanner}<div class="dictionary-library"><div class="dictionary-library__count">${t('padres.seccionesCount',{count:patristicDocData.sections.length})}</div><div>${list}</div></div>`;
     document.querySelectorAll('[data-patristic-section]').forEach(btn=>{
       btn.addEventListener('click',()=>{ patristicOpenSection=Number(btn.dataset.patristicSection); renderPadresPanel(); els.panelBody.scrollTop=0; });
+    });
+    translatePatristicSectionTitles(patristicDocData);
+  }
+
+  // Traduce los títulos de sección del índice de nivel 2 (ej. "Capítulo 5 — La
+  // nueva alianza..."). Un solo request para todo el índice (join con
+  // delimitador) en vez de uno por sección — documentos como Ireneo tienen
+  // decenas de secciones.
+  async function translatePatristicSectionTitles(docData){
+    const source=docData.manifest.language||'es';
+    const target=contentLang();
+    if(source===target) return;
+    const DELIM='\n@@@\n';
+    const cacheKey=translationCacheKey(`patristic-index:${docData.manifest.id}`, docData.sections.map(s=>s.title).join(DELIM), target);
+    let translatedTitles=tcacheGet(cacheKey);
+    if(!translatedTitles){
+      const translated=await googleTranslate(docData.sections.map(s=>s.title).join(DELIM), source, target);
+      if(!translated) return;
+      const parts=translated.split(/\s*@@@\s*/).map(x=>x.trim());
+      if(parts.length!==docData.sections.length) return; // el delimitador se rompió en la traducción; no aplicar nada
+      translatedTitles=parts;
+      tcacheSet(cacheKey, translatedTitles);
+    }
+    docData.sections.forEach((s,i)=>{
+      const el=els.panelBody.querySelector(`[data-patristic-section-title="${s.n}"]`);
+      if(el){ el.textContent=translatedTitles[i]; el.dataset.translated=target; }
     });
   }
 
@@ -2169,8 +2300,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       ? `<p class="note-card__translation-note">${t('padres.traduccionAuto',{source:source.toUpperCase(),target:target.toUpperCase()})}</p>`
       : '';
     els.panelBody.innerHTML=`<article class="dict-entry">
-      <div class="dict-entry__term">${escapeHTML(section.title)}</div>
-      <div class="dict-entry__source">${escapeHTML(patristicDocData.manifest.name)}</div>
+      <div class="dict-entry__term" data-patristic-title="1">${escapeHTML(section.title)}</div>
+      <div class="dict-entry__source" data-patristic-docname="1">${escapeHTML(patristicDocData.manifest.name)}</div>
       ${translationNote}
       <div class="dict-entry__def" data-patristic-body="1">${bodyHtml}</div>
     </article>`;
@@ -2182,6 +2313,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function applyPatristicTranslation(section, sourceLang, targetLang){
+    const titleEl=els.panelBody.querySelector('[data-patristic-title]');
+    if(titleEl && titleEl.dataset.translated!==targetLang){
+      titleEl.dataset.translated='pending';
+      const translatedTitle=await translateCommentaryHeader(`patristic-title:${patristicOpenDoc}:${section.n}`,'title',section.title,sourceLang,targetLang);
+      if(titleEl.dataset.translated==='pending'){ titleEl.textContent=translatedTitle; titleEl.dataset.translated=targetLang; }
+    }
+    const docNameEl=els.panelBody.querySelector('[data-patristic-docname]');
+    if(docNameEl && docNameEl.dataset.translated!==targetLang){
+      docNameEl.dataset.translated='pending';
+      const translatedName=await translateCommentaryHeader(`patristic-docname:${patristicOpenDoc}`,'name',patristicDocData.manifest.name,sourceLang,targetLang);
+      if(docNameEl.dataset.translated==='pending'){ docNameEl.textContent=translatedName; docNameEl.dataset.translated=targetLang; }
+    }
     const bodyEl=els.panelBody.querySelector('[data-patristic-body]');
     if(!bodyEl || bodyEl.dataset.translated===targetLang) return;
     bodyEl.dataset.translated='pending';
