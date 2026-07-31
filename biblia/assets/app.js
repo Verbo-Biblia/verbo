@@ -1625,7 +1625,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
   // ── Historia de la Iglesia (buscador independiente, sin ancla a versículo) ──
-  let churchHistoryEntries=null, churchHistoryQuery='', churchHistoryOpenId=null;
+  let churchHistoryEntries=null, churchHistoryQuery='', churchHistoryOpenId=null, churchHistoryResultsToken=0;
+  let churchHistoryTranslatedQuery='', churchHistoryQueryToken=0, churchHistoryQueryDebounce=null;
 
   function normalizeSearchText(value){
     return String(value||'').toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
@@ -1648,8 +1649,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Coincidencia por texto (ver churchHistorySearchText) o por año/rango numérico
   // contra anioInicio/anioFin — cualquiera de los dos que matchee incluye la
   // entrada, no hace falta que el usuario indique qué tipo de dato está buscando.
-  function churchHistorySearch(entries, query){
-    const raw=String(query||'').trim();
+  // El texto fuente (título/cuerpo) está en inglés — un hispanohablante que
+  // busque "persecución" no encontraría nada aunque el capítulo hable del tema
+  // en inglés. `extraQuery` es la traducción al inglés de la búsqueda (ver
+  // scheduleChurchHistoryQueryTranslation) y se combina con la búsqueda literal
+  // para cubrir ambos casos sin tener que traducir las 581 entradas de antemano.
+  function churchHistorySearchMatches(entries, rawQuery){
+    const raw=String(rawQuery||'').trim();
     const q=normalizeSearchText(raw);
     if(!q) return [];
     const rangeMatch=raw.match(/^(\d{1,4})\s*-\s*(\d{1,4})$/);
@@ -1666,6 +1672,34 @@ document.addEventListener('DOMContentLoaded', async () => {
       return false;
     });
   }
+  function churchHistorySearch(entries, query, extraQuery=''){
+    const primary=churchHistorySearchMatches(entries, query);
+    if(!extraQuery || normalizeSearchText(extraQuery)===normalizeSearchText(query)) return primary;
+    const extra=churchHistorySearchMatches(entries, extraQuery);
+    if(!extra.length) return primary;
+    const seen=new Set(primary.map(e=>e.id));
+    return [...primary, ...extra.filter(e=>!seen.has(e.id))];
+  }
+  // Traduce la búsqueda ES→EN (con debounce, para no llamar a Google Translate
+  // en cada tecla) y vuelve a renderizar cuando resuelve — así una búsqueda en
+  // español encuentra coincidencias en el texto fuente en inglés. Se salta
+  // números/rangos de año (no tiene sentido traducirlos) y consultas muy
+  // cortas. Un token descarta traducciones de búsquedas ya obsoletas.
+  function scheduleChurchHistoryQueryTranslation(query){
+    clearTimeout(churchHistoryQueryDebounce);
+    const token=++churchHistoryQueryToken;
+    const trimmed=String(query||'').trim();
+    if(contentLang()!=='es' || trimmed.length<3 || /^\d{1,4}(\s*-\s*\d{1,4})?$/.test(trimmed)){
+      churchHistoryTranslatedQuery='';
+      return;
+    }
+    churchHistoryQueryDebounce=setTimeout(async ()=>{
+      const translated=await translateCommentaryHeader('historia:searchQuery','q',trimmed,'es','en');
+      if(token!==churchHistoryQueryToken) return;
+      churchHistoryTranslatedQuery=translated||'';
+      if(!churchHistoryOpenId) renderChurchHistoryBody();
+    }, 400);
+  }
 
   async function renderChurchHistoryPanel(){
     els.panelTitle.textContent=t('historia.title');
@@ -1674,7 +1708,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     </form>`;
     const input=document.getElementById('churchHistorySearchInput');
     document.getElementById('churchHistorySearchForm')?.addEventListener('submit',e=>e.preventDefault());
-    input?.addEventListener('input',()=>{ churchHistoryQuery=input.value; renderChurchHistoryBody(); });
+    input?.addEventListener('input',()=>{
+      churchHistoryQuery=input.value;
+      churchHistoryTranslatedQuery='';
+      renderChurchHistoryBody();
+      scheduleChurchHistoryQueryTranslation(churchHistoryQuery);
+    });
 
     if(!churchHistoryEntries){
       els.panelBody.innerHTML=emptyState('⌛',t('historia.cargando'));
@@ -1689,14 +1728,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(churchHistoryOpenId){ renderChurchHistoryEntry(churchHistoryOpenId); return; }
     if(!churchHistoryEntries.length){ els.panelBody.innerHTML=emptyState('⛪',t('historia.sinContenido')); return; }
     if(!churchHistoryQuery.trim()){ els.panelBody.innerHTML=emptyState('🔎',t('historia.intro')); return; }
-    const results=churchHistorySearch(churchHistoryEntries, churchHistoryQuery);
+    const results=churchHistorySearch(churchHistoryEntries, churchHistoryQuery, churchHistoryTranslatedQuery);
     if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',t('historia.sinResultados',{query:escapeHTML(churchHistoryQuery)})); return; }
     els.panelBody.innerHTML=`<div class="search-results-list">${results.map(e=>{
       const years=e.anioInicio!=null?` · ${e.anioInicio}${e.anioFin && e.anioFin!==e.anioInicio?'–'+e.anioFin:''}`:'';
       const excerptText=htmlToPlainText(e.excerpt||e.content||'').slice(0,180);
       return `<button type="button" class="search-result" data-history-id="${escapeHTML(e.id)}">
-        <span class="search-result__ref">${escapeHTML(e.title)}${years}</span>
-        <span class="search-result__text">${escapeHTML(excerptText)}</span>
+        <span class="search-result__ref"><span data-history-title="${escapeHTML(e.id)}">${escapeHTML(e.title)}</span>${escapeHTML(years)}</span>
+        <span class="search-result__text" data-history-excerpt="${escapeHTML(e.id)}">${escapeHTML(excerptText)}</span>
       </button>`;
     }).join('')}</div>`;
     els.panelBody.querySelectorAll('[data-history-id]').forEach(btn=>btn.addEventListener('click',()=>{
@@ -1704,6 +1743,44 @@ document.addEventListener('DOMContentLoaded', async () => {
       renderChurchHistoryBody();
       els.panelBody.scrollTop=0;
     }));
+    applyChurchHistoryResultsTranslation(results);
+  }
+
+  // Traduce título + extracto de cada resultado de la lista de búsqueda (antes
+  // solo se traducía la entrada ya abierta, ver applyChurchHistoryTranslation).
+  // Reutiliza el mismo noteId/caché ("historia:<id>") para que abrir la entrada
+  // después no tenga que volver a traducir el título. Concurrencia limitada
+  // para no disparar decenas de peticiones simultáneas con búsquedas amplias;
+  // un token por render aborta el trabajo de búsquedas ya obsoletas (el usuario
+  // sigue escribiendo y cada tecla vuelve a llamar a esta función).
+  async function applyChurchHistoryResultsTranslation(results){
+    const target=contentLang();
+    const token=++churchHistoryResultsToken;
+    let index=0;
+    async function worker(){
+      while(index<results.length){
+        if(token!==churchHistoryResultsToken) return;
+        const entry=results[index++];
+        const source=entry.sourceLang||'en';
+        if(!source||source===target) continue;
+        const titleEl=els.panelBody.querySelector(`[data-history-title="${CSS.escape(entry.id)}"]`);
+        const excerptEl=els.panelBody.querySelector(`[data-history-excerpt="${CSS.escape(entry.id)}"]`);
+        if(titleEl && titleEl.dataset.translated!==target){
+          const translatedTitle=await translateCommentaryHeader(`historia:${entry.id}`,'title',entry.title,source,target);
+          if(token!==churchHistoryResultsToken) return;
+          titleEl.textContent=translatedTitle;
+          titleEl.dataset.translated=target;
+        }
+        if(excerptEl && excerptEl.dataset.translated!==target){
+          const originalExcerpt=excerptEl.textContent;
+          const translatedExcerpt=await translateCommentaryHeader(`historia:${entry.id}`,'excerpt',originalExcerpt,source,target);
+          if(token!==churchHistoryResultsToken) return;
+          excerptEl.textContent=translatedExcerpt;
+          excerptEl.dataset.translated=target;
+        }
+      }
+    }
+    await Promise.all(Array.from({length:Math.min(4,results.length)},worker));
   }
 
   function renderChurchHistoryEntry(id){
