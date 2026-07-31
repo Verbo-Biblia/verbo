@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 2,
+  "id": "eusebio-vida-constantino",
+  "type": "churchHistory",
+  "name": "Eusebius of Caesarea — Life of Constantine / Oration in Praise of Constantine",
+  "abbreviation": "Eusebio, Vida de Constantino",
+  "language": "en",
+  "author": "Eusebius of Caesarea (c. 260–339); one included oration by Constantine the Great",
+  "translator": "Ernest Cushing Richardson",
+  "year": 337,
+  "description": "Vida de Constantino (4 libros) y la Oración de Eusebio en alabanza de Constantino, ambas de Eusebio de Cesarea; incluye también la Oración de Constantino \"A la Asamblea de los Santos\" (obra del propio emperador, preservada/traducida por Eusebio — se distingue correctamente su autoría en cada entrada). Traducción al inglés de Ernest Cushing Richardson, edición de Philip Schaff — Nicene and Post-Nicene Fathers, Second Series, Vol. 1 (NPNF2-01). Fuente: Christian Classics Ethereal Library (ccel.org), texto marcado explícitamente como 'Rights: Public Domain'. Se muestra en inglés y se traduce automáticamente al español en tiempo de lectura.",
+  "license": "Dominio público (traducción de 1890, CCEL).",
+  "sourceUrl": "https://www.ccel.org/ccel/schaff/npnf201.html",
+  "entriesFile": "entries.json",
+  "totalEntries": 317
+}
