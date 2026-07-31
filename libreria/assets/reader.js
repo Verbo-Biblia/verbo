@@ -20,16 +20,12 @@
   var paraTexts = []; // texto plano de cada párrafo del capítulo actual
   var speech = {
     ui: null,
-    utterance: null,
     playing: false,
-    paused: false,
-    chapterText: "",
-    chunkStart: 0,
-    chunkEnd: 0,
-    position: 0,
-    positionUpdatedAt: 0,
+    loading: false,
     generation: 0,
-    continueAfterRender: false
+    continueAfterRender: false,
+    currentChapterForAudio: -1,
+    lastBookmarkSave: 0
   };
 
   // ---------- traducción ES->EN on-demand (estrategia_traduccion) ----------
@@ -123,78 +119,92 @@
     }
   }
 
-  // Retiro de Piper (2026-07): limpia el Service Worker y los modelos que
-  // hayan quedado almacenados en dispositivos que probaron el TTS anterior.
-  function cleanupLegacyPiper() {
-    if ("caches" in window) {
-      window.caches.keys().then(function (keys) {
-        return Promise.all(keys.filter(function (key) {
-          return key.indexOf("verbo-libreria-tts-") === 0;
-        }).map(function (key) {
-          return window.caches.delete(key);
-        }));
-      }).catch(function () {});
-    }
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function (registrations) {
-        registrations.forEach(function (registration) {
-          var worker = registration.active || registration.waiting || registration.installing;
-          if (worker && new URL(worker.scriptURL).pathname === "/libreria/service-worker.js") {
-            registration.unregister();
-          }
-        });
-      }).catch(function () {});
-    }
+  // Retiro de Piper (2026-07): limpia los modelos que hayan quedado
+  // cacheados en dispositivos que probaron el TTS anterior a Web Speech.
+  // Ya NO desregistra el Service Worker de /libreria/ — ese path ahora aloja
+  // uno legítimo (libreria/service-worker.js, cachea audiolibros pregenerados).
+  function cleanupLegacyPiperCache() {
+    if (!("caches" in window)) return;
+    window.caches.keys().then(function (keys) {
+      return Promise.all(keys.filter(function (key) {
+        return key.indexOf("verbo-libreria-tts-") === 0;
+      }).map(function (key) {
+        return window.caches.delete(key);
+      }));
+    }).catch(function () {});
   }
 
-  cleanupLegacyPiper();
-
-  // ---------- lectura nativa (Web Speech API) ----------
-
-  function speechSupported() {
-    return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  function registerAudioServiceWorker() {
+    if (!("serviceWorker" in navigator)) return;
+    navigator.serviceWorker.register("/libreria/service-worker.js").catch(function () {});
   }
 
-  function speechLanguage() {
-    if (translatedMode) return currentLang() === "en" ? "en-US" : "es-ES";
-    if (cfg.language) return cfg.language;
-    return strategy === "native" || /(?:-en$|^matthew-henry-)/.test(cfg.id) ? "en-US" : "es-ES";
+  cleanupLegacyPiperCache();
+  registerAudioServiceWorker();
+
+  // ---------- audiolibro pregenerado (Google Cloud TTS vía Worker + R2) ----------
+  // Piper y Web Speech API (voz nativa del dispositivo) quedaron archivados
+  // como referencia en reader-speech-legacy.js — no se cargan aquí. El
+  // idioma de la voz se toma SIEMPRE de cfg.language (metadata explícita del
+  // libro, ver tools/import_library_batch.py), nunca de detección automática
+  // de texto ni de convenciones de id — así se evita el error de leer un
+  // libro en el idioma equivocado.
+  var audioEl = (typeof Audio !== "undefined") ? new Audio() : null;
+  var ttsBaseUrlPromise = null;
+
+  function audioSupported() {
+    return !!audioEl;
+  }
+
+  function resolveTtsBaseUrl() {
+    if (!ttsBaseUrlPromise) {
+      ttsBaseUrlPromise = fetch("/biblia/modules/registry.json")
+        .then(function (r) { return r.json(); })
+        .then(function (registry) {
+          return String((registry.apiBible && registry.apiBible.proxyUrl) || "").replace(/\/+$/, "");
+        })
+        .catch(function () { return ""; });
+    }
+    return ttsBaseUrlPromise;
+  }
+
+  function ttsLang() {
+    return cfg.language === "en" ? "en" : "es";
+  }
+
+  function chapterAudioKey(index) {
+    var ch = chapters[index];
+    return ch ? String(ch.n) : String(index + 1);
   }
 
   function updateSpeechButton() {
     if (!speech.ui) return;
-    speech.ui.speechBtn.textContent = speech.playing ? "❚❚" : "▶";
-    speech.ui.speechBtn.title = speech.playing ? "Pausar" : "Reproducir";
-    speech.ui.speechBtn.setAttribute("aria-label", speech.ui.speechBtn.title);
-    speech.ui.speechBtn.classList.toggle("is-active", speech.playing);
-  }
-
-  function nextSpeechChunk(text, offset) {
-    var start = Math.max(0, offset || 0);
-    while (start < text.length && /\s/.test(text.charAt(start))) start++;
-    if (start >= text.length) return null;
-    var limit = Math.min(text.length, start + 650);
-    var end = limit;
-    if (limit < text.length) {
-      var slice = text.slice(start, limit);
-      var match;
-      var boundary = /[.!?;:](?:["'”’»)]*)\s+/g;
-      while ((match = boundary.exec(slice))) {
-        if (match.index > 260) end = start + match.index + match[0].length;
-      }
-      if (end === limit) {
-        var space = slice.lastIndexOf(" ");
-        if (space > 260) end = start + space + 1;
-      }
+    var btn = speech.ui.speechBtn;
+    btn.classList.toggle("is-active", speech.playing);
+    btn.classList.toggle("is-loading", speech.loading);
+    if (speech.loading) {
+      btn.textContent = "…";
+      btn.title = "Generando audio…";
+    } else {
+      btn.textContent = speech.playing ? "❚❚" : "▶";
+      btn.title = speech.playing ? "Pausar" : "Reproducir";
     }
-    return { start: start, end: end, text: text.slice(start, end).trim() };
+    btn.setAttribute("aria-label", btn.title);
   }
 
-  function saveSpeechBookmark() {
-    updateEstimatedSpeechPosition();
+  function showSpeechError() {
+    if (!speech.ui || !speech.ui.speechError) return;
+    var t = window.VerboI18n ? window.VerboI18n.t : function (k) { return k; };
+    speech.ui.speechError.textContent = t("reader.audioError");
+    speech.ui.speechError.hidden = false;
+    window.setTimeout(function () { if (speech.ui) speech.ui.speechError.hidden = true; }, 4000);
+  }
+
+  function saveAudioBookmark() {
+    if (!audioEl) return;
     bookmark = {
       chapter: current,
-      speechOffset: Math.max(0, speech.position || speech.chunkStart || 0),
+      audioTime: Math.max(0, audioEl.currentTime || 0),
       ts: Date.now()
     };
     saveJSON(BM_KEY, bookmark);
@@ -204,107 +214,111 @@
     }
   }
 
-  function updateEstimatedSpeechPosition() {
-    if (!speech.playing || !speech.positionUpdatedAt) return;
-    var elapsedSeconds = Math.max(0, (performance.now() - speech.positionUpdatedAt) / 1000);
-    // Respaldo para navegadores que no implementan SpeechSynthesis.onboundary.
-    // La posición de eventos reales siempre reemplaza esta estimación.
-    var estimated = speech.position + Math.floor(elapsedSeconds * 14);
-    speech.position = Math.min(speech.chunkEnd, Math.max(speech.chunkStart, estimated));
-    speech.positionUpdatedAt = performance.now();
-  }
-
   function stopSpeech(savePosition) {
-    if (!speechSupported()) return;
-    if (savePosition && (speech.playing || speech.paused || speech.utterance)) {
-      saveSpeechBookmark();
-    }
+    if (!audioEl) return;
+    if (savePosition && (speech.playing || speech.loading)) saveAudioBookmark();
     speech.generation++;
-    window.speechSynthesis.cancel();
-    speech.utterance = null;
+    audioEl.pause();
     speech.playing = false;
-    speech.paused = false;
+    speech.loading = false;
     updateSpeechButton();
   }
 
-  function speakFromOffset(offset) {
-    if (!speech.playing || !speechSupported()) return;
-    var chunk = nextSpeechChunk(speech.chapterText, offset);
-    if (!chunk) {
+  function loadAndPlayChapterAudio(index, startAt) {
+    if (!audioEl) return;
+    var generation = ++speech.generation;
+    speech.loading = true;
+    speech.playing = false;
+    updateSpeechButton();
+
+    resolveTtsBaseUrl().then(function (base) {
+      if (generation !== speech.generation) return null;
+      if (!base) throw new Error("tts-no-base-url");
+      var ch = chapters[index];
+      var endpoint = base + "/v1/tts/" + encodeURIComponent(cfg.id) + "/" + encodeURIComponent(chapterAudioKey(index));
+      return fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: ch.text, lang: ttsLang() })
+      });
+    }).then(function (response) {
+      if (generation !== speech.generation || !response) return null;
+      if (!response.ok) throw new Error("tts-fetch-failed");
+      return response.blob();
+    }).then(function (blob) {
+      if (generation !== speech.generation || !blob) return;
+      audioEl.src = URL.createObjectURL(blob);
+      audioEl.currentTime = startAt || 0;
+      speech.loading = false;
+      speech.playing = true;
+      speech.currentChapterForAudio = index;
+      updateSpeechButton();
+      audioEl.play().catch(function () {
+        if (generation !== speech.generation) return;
+        speech.playing = false;
+        updateSpeechButton();
+      });
+    }).catch(function () {
+      if (generation !== speech.generation) return;
+      speech.loading = false;
+      speech.playing = false;
+      updateSpeechButton();
+      showSpeechError();
+    });
+  }
+
+  function toggleSpeech() {
+    if (!audioEl || speech.loading) return;
+    if (speech.playing) {
+      saveAudioBookmark();
+      audioEl.pause();
+      speech.playing = false;
+      updateSpeechButton();
+      return;
+    }
+    if (audioEl.src && speech.currentChapterForAudio === current && !audioEl.ended) {
+      speech.generation++;
+      speech.playing = true;
+      updateSpeechButton();
+      audioEl.play().catch(function () {
+        speech.playing = false;
+        updateSpeechButton();
+      });
+      return;
+    }
+    var startAt = bookmark && bookmark.chapter === current ? (bookmark.audioTime || 0) : 0;
+    loadAndPlayChapterAudio(current, startAt);
+  }
+
+  if (audioEl) {
+    audioEl.addEventListener("ended", function () {
+      if (!speech.playing) return;
+      speech.playing = false;
       if (current < chapters.length - 1) {
-        bookmark = { chapter: current + 1, speechOffset: 0, ts: Date.now() };
+        bookmark = { chapter: current + 1, audioTime: 0, ts: Date.now() };
         saveJSON(BM_KEY, bookmark);
         speech.continueAfterRender = true;
         goTo(speech.ui, current + 1);
       } else {
-        speech.position = speech.chapterText.length;
-        saveSpeechBookmark();
-        speech.playing = false;
-        speech.paused = false;
-        speech.utterance = null;
+        bookmark = { chapter: current, audioTime: 0, ts: Date.now() };
+        saveJSON(BM_KEY, bookmark);
         updateSpeechButton();
       }
-      return;
-    }
-
-    var generation = ++speech.generation;
-    var utterance = new SpeechSynthesisUtterance(chunk.text);
-    utterance.lang = speechLanguage();
-    speech.utterance = utterance;
-    speech.chunkStart = chunk.start;
-    speech.chunkEnd = chunk.end;
-    speech.position = chunk.start;
-    speech.positionUpdatedAt = performance.now();
-    utterance.onboundary = function (event) {
-      if (generation !== speech.generation) return;
-      if (typeof event.charIndex === "number") {
-        speech.position = Math.min(chunk.end, chunk.start + event.charIndex);
-        speech.positionUpdatedAt = performance.now();
+    });
+    audioEl.addEventListener("timeupdate", function () {
+      if (!speech.playing) return;
+      var now = Date.now();
+      if (now - speech.lastBookmarkSave > 5000) {
+        speech.lastBookmarkSave = now;
+        saveAudioBookmark();
       }
-    };
-    utterance.onend = function () {
-      if (generation !== speech.generation || !speech.playing) return;
-      speech.position = chunk.end;
-      speech.positionUpdatedAt = 0;
-      speech.utterance = null;
-      speakFromOffset(chunk.end);
-    };
-    utterance.onerror = function (event) {
-      if (generation !== speech.generation || event.error === "canceled" || event.error === "interrupted") return;
+    });
+    audioEl.addEventListener("error", function () {
+      if (!speech.loading && !speech.playing) return;
+      speech.loading = false;
       speech.playing = false;
-      speech.paused = false;
-      speech.utterance = null;
-      speech.positionUpdatedAt = 0;
       updateSpeechButton();
-    };
-    window.speechSynthesis.speak(utterance);
-  }
-
-  function toggleSpeech() {
-    if (!speechSupported()) return;
-    if (speech.playing) {
-      saveSpeechBookmark();
-      speech.generation++;
-      window.speechSynthesis.cancel();
-      speech.utterance = null;
-      speech.playing = false;
-      speech.paused = true;
-      updateSpeechButton();
-      return;
-    }
-    if (speech.paused) {
-      speech.playing = true;
-      speech.paused = false;
-      updateSpeechButton();
-      speakFromOffset(speech.position);
-      return;
-    }
-    window.speechSynthesis.cancel();
-    speech.playing = true;
-    speech.paused = false;
-    updateSpeechButton();
-    var offset = bookmark && bookmark.chapter === current ? (bookmark.speechOffset || 0) : 0;
-    speakFromOffset(offset);
+    });
   }
 
   // Agrupa el texto continuo de una sección/capítulo en "párrafos" de
@@ -522,8 +536,11 @@
     speechBtn.type = "button";
     speechBtn.title = "Reproducir";
     speechBtn.setAttribute("aria-label", "Reproducir");
-    speechBtn.hidden = !speechSupported();
+    speechBtn.hidden = !audioSupported();
     headTop.appendChild(speechBtn);
+    var speechError = el("span", "reader-speech-error");
+    speechError.hidden = true;
+    headTop.appendChild(speechError);
     root.appendChild(headTop);
 
     var manualNote = el("p", "reader-manual-note");
@@ -588,7 +605,7 @@
 
     return {
       badge: badge, title: title, hint: hint, unitLabel: cfg.unitLabel,
-      bmBtn: bmBtn, speechBtn: speechBtn, progressBar: progressBar, manualNote: manualNote,
+      bmBtn: bmBtn, speechBtn: speechBtn, speechError: speechError, progressBar: progressBar, manualNote: manualNote,
       resume: resume, resumeText: resumeText, resumeLink: resumeLink, resumeDismiss: resumeDismiss,
       prevBtn: prevBtn, select: select, nextBtn: nextBtn,
       chapterTitle: chapterTitle, content: content, foot: foot
@@ -630,7 +647,6 @@
     resolveChapterText(ch).then(function (resolved) {
       if (token !== renderToken) return; // el usuario ya navegó a otro capítulo/idioma
       translatedMode = resolved.translated;
-      speech.chapterText = resolved.text;
       ui.chapterTitle.textContent = resolved.title;
       ui.content.innerHTML = "";
       paraTexts = splitIntoParagraphs(resolved.text);
@@ -640,21 +656,9 @@
         renderParaContent(p, text, pi);
         ui.content.appendChild(p);
       });
-      // Punto de integración neutral para un futuro motor de audio.
-      // El lector no conoce ni descarga ningún proveedor TTS.
-      window.dispatchEvent(new CustomEvent("verbo:libreria-reader-state", {
-        detail: {
-          bookId: cfg.id,
-          chapterIndex: current,
-          chapterNumber: current + 1,
-          title: resolved.title,
-          text: resolved.text,
-          language: speechLanguage()
-        }
-      }));
-      if (speech.continueAfterRender && speech.playing) {
+      if (speech.continueAfterRender) {
         speech.continueAfterRender = false;
-        speakFromOffset(0);
+        loadAndPlayChapterAudio(current, 0);
       }
     });
 
@@ -722,7 +726,7 @@
       applyChrome(ui).then(function () { render(ui); });
     });
     window.addEventListener("pagehide", function () {
-      if (speech.playing || speech.paused || speech.utterance) saveSpeechBookmark();
+      if (speech.playing || speech.loading) saveAudioBookmark();
     });
     if (window.VerboI18n) {
       window.VerboI18n.ready().then(function () { applyChrome(ui).then(function () { render(ui); }); });

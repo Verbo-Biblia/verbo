@@ -129,6 +129,38 @@ body.recursos-page .static-page__main .i18n-manual-note {
   color: var(--r-ink-soft);
 }
 body.recursos-page .static-page__main .i18n-manual-note[hidden] { display: none; }
+body.recursos-page .static-page__main .article-audio-btn {
+  display: inline-block;
+  margin: 10px 0 4px;
+  padding: 6px 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .02em;
+  color: var(--accent, #7f2d35);
+  background: transparent;
+  border: 1px solid rgba(127, 45, 53, .38);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+body.recursos-page .static-page__main .article-audio-btn:hover {
+  border-color: var(--r-gold);
+}
+body.recursos-page .static-page__main .article-audio-btn.is-active {
+  color: #fff;
+  background: var(--accent, #7f2d35);
+}
+body.recursos-page .static-page__main .article-audio-btn.is-loading {
+  cursor: wait;
+  opacity: .65;
+}
+body.recursos-page .static-page__main .article-audio-error {
+  display: block;
+  margin: 0 0 4px;
+  font-size: .78rem;
+  color: #a6323c;
+}
+body.recursos-page .static-page__main .article-audio-error[hidden] { display: none; }
 body.recursos-page .static-page__main article h1 {
   font-family: 'Fraunces', serif;
   font-weight: 600;

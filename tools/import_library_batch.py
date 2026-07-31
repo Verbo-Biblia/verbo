@@ -213,6 +213,7 @@ def page_html(book, data_url):
         "id": slug,
         "title": title,
         "author": author,
+        "language": lang,
         "dataUrl": data_url,
         "dataKey": "sections",
         "textField": "content",
@@ -234,7 +235,7 @@ def page_html(book, data_url):
 <meta name="theme-color" content="#7f2d35">
 <link rel="stylesheet" href="../../biblia/assets/style.css?v=20260730-rail-center">
 <link rel="stylesheet" href="../../recursos/assets/recursos.css?v=20260728-taxonomia">
-<link rel="stylesheet" href="../assets/reader.css?v=7">
+<link rel="stylesheet" href="../assets/reader.css?v=12">
 </head>
 <body class="static-page recursos-page">
 <header class="static-page__header"><a class="static-page__brand" href="../../">Verbo</a><a class="static-page__back" href="../">← Librería</a></header>
@@ -243,7 +244,7 @@ def page_html(book, data_url):
 <script src="../../biblia/assets/i18n.js?v=20260729-shared-dict2"></script>
 <script src="../../biblia/assets/site-translate.js?v=20260729-2"></script>
 <script src="../../biblia/assets/site-chrome.js?v=20260729-1"></script>
-<script src="../assets/reader.js?v=7"></script>
+<script src="../assets/reader.js?v=14"></script>
 </body></html>
 """
 

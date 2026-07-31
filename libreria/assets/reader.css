@@ -339,3 +339,14 @@ body.recursos-page .r-book-meta {
   color: #fff;
   background: var(--accent, #7f2d35);
 }
+
+.reader-speech-btn.is-loading {
+  cursor: wait;
+  opacity: .65;
+}
+
+.reader-speech-error {
+  margin-left: 8px;
+  font-size: .78rem;
+  color: #a6323c;
+}

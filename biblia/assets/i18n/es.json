@@ -222,7 +222,8 @@
     "resumeBookmark": "Tienes un marcador en {{unit}} {{n}}.",
     "continue": "Continuar →",
     "discard": "Descartar",
-    "footOf": "{{unit}} {{current}} de {{total}}"
+    "footOf": "{{unit}} {{current}} de {{total}}",
+    "audioError": "No se pudo cargar el audio. Intenta de nuevo."
   },
   "filtros": {
     "idioma": "Idioma",
