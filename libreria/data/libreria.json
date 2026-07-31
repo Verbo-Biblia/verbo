@@ -293,25 +293,6 @@
     }
   },
   {
-    "id": "matthew-henry",
-    "titulo": "Comentario Bíblico de Matthew Henry",
-    "seccion": "libreria",
-    "tipo": "libro",
-    "idioma": "en",
-    "temas": [
-      "comentario-biblico",
-      "teologia"
-    ],
-    "fecha_agregado": "2026-07-28",
-    "autor": "Matthew Henry (1662–1714)",
-    "url": "/libreria/matthew-henry/",
-    "estrategia_traduccion": {
-      "modo": "nativo_disponible",
-      "nativo_ref": "biblia/modules/commentaries/matthew-henry-en",
-      "nota": "El lector de Librería ya sirve el texto inglés nativo; la traducción EN->ES para lectores hispanos usa el mecanismo existente del panel de Comentario, no está conectada todavía en el lector de Librería (gap detectado, fuera de alcance de esta tarea)."
-    }
-  },
-  {
     "id": "santidad-es",
     "titulo": "Santidad",
     "seccion": "libreria",
