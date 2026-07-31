@@ -15,7 +15,7 @@
     "uiLangAria": "Idioma de la interfaz"
   },
   "rail": {
-    "biblioteca": "Biblioteca",
+    "historia": "Historia de la Iglesia",
     "padres": "Padres Apostólicos",
     "fundador": "Sobre el fundador",
     "mision": "Nuestra misión",
@@ -32,7 +32,7 @@
     "mapas": "Mapas",
     "mapasBiblicos": "Mapas bíblicos",
     "ajustes": "Ajustes",
-    "biblioteca": "Biblioteca",
+    "historia": "Historia de la Iglesia",
     "padres": "Padres Apostólicos",
     "licencias": "Fuentes y licencias",
     "fundador": "Sobre el fundador",
@@ -41,6 +41,20 @@
   "panel": {
     "defaultTitle": "Panel",
     "closeAria": "Cerrar panel"
+  },
+  "historia": {
+    "title": "Historia de la Iglesia",
+    "buscarPlaceholder": "Buscar por personaje, evento, época o año…",
+    "cargando": "Cargando Historia de la Iglesia…",
+    "intro": "Busca por personaje (ej. Constantino), evento (ej. Concilio de Nicea), época (ej. reforma) o año.",
+    "sinContenido": "Historia de la Iglesia está lista. Aquí aparecerán personajes, eventos y épocas para explorar.",
+    "sinResultados": "No se encontraron resultados para “{{query}}”.",
+    "entradaNoEncontrada": "No se encontró esta entrada.",
+    "volverResultados": "Volver a resultados",
+    "personajes": "Personajes",
+    "eventos": "Eventos",
+    "periodo": "Periodo",
+    "anio": "Año"
   },
   "verseAction": {
     "amarillo": "Amarillo",

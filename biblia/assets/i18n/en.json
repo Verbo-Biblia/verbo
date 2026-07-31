@@ -15,7 +15,7 @@
     "uiLangAria": "Interface language"
   },
   "rail": {
-    "biblioteca": "Library",
+    "historia": "Church History",
     "padres": "Apostolic Fathers",
     "fundador": "About the founder",
     "mision": "Our mission",
@@ -32,7 +32,7 @@
     "mapas": "Maps",
     "mapasBiblicos": "Bible maps",
     "ajustes": "Settings",
-    "biblioteca": "Library",
+    "historia": "Church History",
     "padres": "Apostolic Fathers",
     "licencias": "Sources & licenses",
     "fundador": "About the founder",
@@ -41,6 +41,20 @@
   "panel": {
     "defaultTitle": "Panel",
     "closeAria": "Close panel"
+  },
+  "historia": {
+    "title": "Church History",
+    "buscarPlaceholder": "Search by person, event, era, or year…",
+    "cargando": "Loading Church History…",
+    "intro": "Search by person (e.g. Constantine), event (e.g. Council of Nicaea), era (e.g. Reformation), or year.",
+    "sinContenido": "Church History is ready. People, events, and eras will appear here to explore.",
+    "sinResultados": "No results found for “{{query}}”.",
+    "entradaNoEncontrada": "This entry could not be found.",
+    "volverResultados": "Back to results",
+    "personajes": "People",
+    "eventos": "Events",
+    "periodo": "Era",
+    "anio": "Year"
   },
   "verseAction": {
     "amarillo": "Yellow",

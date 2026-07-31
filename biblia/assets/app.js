@@ -100,9 +100,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Léxico Strong: módulos numéricos (G1234 / H1234) consultados al tocar una etiqueta Strong en el texto.
   const isStrongLexicon = item => Boolean(item.manifest.strong);
   const dictionaryCatalog = () => (catalog.dictionaries || []).filter(isStrongLexicon).map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, manifest:item.manifest, linked:Boolean(item.manifest.books?.length) }));
-  // Biblioteca: todo lo demás — recursos de consulta libre por palabra/tema, sin ancla a versículo
-  // (ej. Diccionario Nelson), más Padres Apostólicos y libros adicionales.
-  const libraryCatalog = () => [ ...(catalog.library || []), ...(catalog.dictionaries || []).filter(item => !isStrongLexicon(item)) ].map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, manifest:item.manifest, linked:Boolean(item.manifest.books?.length), type:item.manifest.type || 'resource' }));
   const exegesisCatalog = () => (catalog.exegesis || []).map(item => ({ id:item.manifest.id, label:item.manifest.abbreviation || item.manifest.name, full:item.manifest.name, path:item.path, manifest:item.manifest }));
   const bookAbbr = { GEN:'Gn', EXO:'Ex', LEV:'Lv', NUM:'Nm', DEU:'Dt', JOS:'Jos', JDG:'Jue', RUT:'Rt', '1SA':'1 S', '2SA':'2 S', '1KI':'1 R', '2KI':'2 R', '1CH':'1 Cr', '2CH':'2 Cr', EZR:'Esd', NEH:'Neh', EST:'Est', JOB:'Job', PSA:'Sal', PRO:'Pr', ECC:'Ec', SNG:'Cnt', ISA:'Is', JER:'Jer', LAM:'Lm', EZK:'Ez', DAN:'Dn', HOS:'Os', JOL:'Jl', AMO:'Am', OBA:'Abd', JON:'Jon', MIC:'Mi', NAM:'Nah', HAB:'Hab', ZEP:'Sof', HAG:'Hag', ZEC:'Zac', MAL:'Mal', MAT:'Mt', MRK:'Mc', LUK:'Lc', JHN:'Jn', ACT:'Hch', ROM:'Ro', '1CO':'1 Cor', '2CO':'2 Cor', GAL:'Gá', EPH:'Ef', PHP:'Fil', COL:'Col', '1TH':'1 Tes', '2TH':'2 Tes', '1TI':'1 Ti', '2TI':'2 Ti', TIT:'Tit', PHM:'Flm', HEB:'Heb', JAS:'Stg', '1PE':'1 P', '2PE':'2 P', '1JN':'1 Jn', '2JN':'2 Jn', '3JN':'3 Jn', JUD:'Jud', REV:'Ap' };
   const compactRef = (bookId=currentBook, chapter=currentChapter, verses=[]) => {
@@ -409,22 +406,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         indicatorButtons.push(indicator);
       }
-      if(v.libraryCount>0){
-        const libIndicator=document.createElement('button');
-        libIndicator.type='button';
-        libIndicator.className='verse__comment-indicator verse__comment-indicator--library';
-        libIndicator.innerHTML=`<span class="verse__comment-indicator__icon" aria-hidden="true">📚</span><span class="verse__comment-indicator__count">${v.libraryCount}</span>`;
-        const libPlural=t(v.libraryCount===1?'biblia.articuloSingular':'biblia.articuloPlural');
-        libIndicator.title=t('biblia.verBibliotecaTitle',{count:v.libraryCount,plural:libPlural});
-        libIndicator.setAttribute('aria-label',t('biblia.verBibliotecaAria',{count:v.libraryCount,plural:libPlural,ref:`${data.meta.book} ${data.meta.chapter}:${v.n}`}));
-        libIndicator.addEventListener('click',(e)=>{
-          e.stopPropagation();
-          document.querySelectorAll('.verse--active').forEach(x=>x.classList.remove('verse--active'));
-          row.classList.add('verse--active');
-          openPanel('biblioteca', v.n);
-        });
-        indicatorButtons.push(libIndicator);
-      }
       if(v.patristicCount>0){
         const patristicIndicator=document.createElement('button');
         patristicIndicator.type='button';
@@ -500,7 +481,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (activeTab === 'comparar') renderCompare(verse.n);
     if (activeTab === 'diccionario') renderPanel('diccionario', verse.n);
     if (activeTab === 'exegesis') renderPanel('exegesis', verse.n);
-    if (activeTab === 'biblioteca') renderPanel('biblioteca', verse.n);
     if (activeTab === 'padres') renderPanel('padres', verse.n);
   }
 
@@ -547,7 +527,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const panelWasClosed=!els.side.classList.contains('side-panel--open');
     activeTab=tab;
     const isSheet=window.innerWidth<=760 && SHEET_TABS.includes(tab);
-    els.side.classList.toggle('side-panel--left', ['biblioteca','padres','licencias'].includes(tab));
+    els.side.classList.toggle('side-panel--left', ['historia','padres','licencias'].includes(tab));
     if(isSheet){
       els.side.dataset.sheet='1';  // CSS aplica translateY(105%) inmediatamente
       els.side.offsetHeight;       // fuerza reflow para que el estado inicial esté fijo
@@ -670,7 +650,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       else { els.panelTitle.textContent='Comparar versiones'; renderCompare(focus||activeVerse()); }
     }
     if(tab==='diccionario') renderDictionaryPanel(focus || activeVerse());
-    if(tab==='biblioteca') renderLibraryPanel(focus || activeVerse());
+    if(tab==='historia') renderChurchHistoryPanel();
     if(tab==='padres') renderPadresPanel(focus || activeVerse());
     if(tab==='notas') renderNotes();
     if(tab==='exegesis') renderExegesis(focus || activeVerse());
@@ -1103,7 +1083,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function sermonFileSlug(title){
-    return title.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^\w]+/g,'_').replace(/^_+|_+$/g,'') || 'bosquejo';
+    return title.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w]+/g,'_').replace(/^_+|_+$/g,'') || 'bosquejo';
   }
 
   function exportSermonToWord(){
@@ -1632,45 +1612,96 @@ document.addEventListener('DOMContentLoaded', async () => {
       a.addEventListener('click',async e=>{e.preventDefault();const ref=parseBibleReference(a.textContent);if(ref)await goToBibleReference(ref);else toast(t('toast.refNoReconocida'));});
     });
   }
-  function dictionaryEntryTitle(code,entry){
-    const html=entry.html||entry.definition||entry.content||'';
-    const box=document.createElement('div'); box.innerHTML=html;
-    const first=box.querySelector('strong')?.textContent||box.textContent||code;
-    return first.replace(/super\s*\d+/gi,'').replace(/\b[GH]?\d{2,5}\b/g,'').replace(/\\u\w+/g,'').replace(/\s+/g,' ').trim()||code;
-  }
-  async function renderDictionaryLibrary(selected){
-    els.panelBody.innerHTML=emptyState('⌛','Cargando índice del diccionario…');
-    try{
-      const resource=await VerboModules.loadDictionaryIndex(selected.id);
-      if(!resource){els.panelBody.innerHTML=emptyState('⚠️','No se pudo cargar este diccionario.');return;}
-      const items=Object.entries(resource.entries).map(([code,entry])=>({code,entry,title:dictionaryEntryTitle(code,entry)})).sort((a,b)=>a.title.localeCompare(b.title,'es'));
-      els.panelBody.innerHTML=`<div class="dictionary-library"><input class="dictionary-library__search" id="dictionaryLibrarySearch" type="search" placeholder="Buscar palabra o tema…"><div class="dictionary-library__count">${items.length} estudios disponibles</div><div id="dictionaryLibraryList"></div></div>`;
-      const list=document.getElementById('dictionaryLibraryList');
-      const draw=(query='')=>{
-        const q=normalizeBibleName(query);
-        const filtered=!q?items:items.filter(x=>normalizeBibleName(x.title).includes(q));
-        list.innerHTML=filtered.map(x=>`<button type="button" class="dictionary-library__item" data-dict-code="${escapeHTML(x.code)}"><span>${escapeHTML(x.title)}</span><small>${escapeHTML(x.code)}</small></button>`).join('')||emptyState('🔎','No hay resultados.');
-        list.querySelectorAll('[data-dict-code]').forEach(btn=>btn.addEventListener('click',()=>openLibraryDictionaryEntry(selected, btn.dataset.dictCode)));
-      };
-      draw(); document.getElementById('dictionaryLibrarySearch')?.addEventListener('input',e=>draw(e.target.value));
-    }catch(error){console.error(error);els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir el índice del diccionario.');}
+  // ── Historia de la Iglesia (buscador independiente, sin ancla a versículo) ──
+  let churchHistoryEntries=null, churchHistoryQuery='', churchHistoryOpenId=null;
+
+  function normalizeSearchText(value){
+    return String(value||'').toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
   }
 
+  // Coincidencia contra los 4 campos a la vez (personas/eventos/periodo como texto
+  // normalizado, año o rango como número) — cualquiera de los 4 que matchee incluye
+  // la entrada, no hace falta que el usuario indique qué tipo de dato está buscando.
+  function churchHistorySearch(entries, query){
+    const raw=String(query||'').trim();
+    const q=normalizeSearchText(raw);
+    if(!q) return [];
+    const rangeMatch=raw.match(/^(\d{1,4})\s*-\s*(\d{1,4})$/);
+    const yearMatch=raw.match(/^(\d{1,4})$/);
+    let yearLo=null, yearHi=null;
+    if(rangeMatch){ yearLo=Math.min(+rangeMatch[1],+rangeMatch[2]); yearHi=Math.max(+rangeMatch[1],+rangeMatch[2]); }
+    else if(yearMatch){ yearLo=yearHi=+yearMatch[1]; }
+    return entries.filter(e=>{
+      const textHaystacks=[...(e.personas||[]),...(e.eventos||[]),e.periodo||''].map(normalizeSearchText);
+      if(textHaystacks.some(h=>h.includes(q))) return true;
+      if(yearLo!=null){
+        const eLo=e.anioInicio ?? e.anioFin, eHi=e.anioFin ?? e.anioInicio;
+        if(eLo!=null && eHi!=null && eHi>=yearLo && eLo<=yearHi) return true;
+      }
+      return false;
+    });
+  }
 
-  async function openLibraryDictionaryEntry(selected, code){
-    els.panelTitle.textContent=`Biblioteca · ${selected.label}`;
-    els.panelToolbar.innerHTML=`<button class="note-card__copy" id="backToLibraryIndex" type="button">← Índice</button>`;
-    document.getElementById('backToLibraryIndex')?.addEventListener('click',()=>renderLibraryPanel(activeVerse()));
-    els.panelBody.innerHTML=emptyState('⌛','Abriendo entrada de biblioteca…');
-    try{
-      const result=await VerboModules.getDictionaryEntry(code, selected.id);
-      if(!result){ els.panelBody.innerHTML=emptyState('🔎',`No se encontró esta entrada en ${selected.label}.`); return; }
-      const html=result.entry.html||result.entry.definition||result.entry.content||'';
-      const title=dictionaryEntryTitle(result.code,result.entry);
-      els.panelBody.innerHTML=`<article class="dict-entry"><div class="dict-entry__term">${escapeHTML(title)}</div><div class="dict-entry__source">${escapeHTML(result.manifest.name)}</div><button class="note-card__copy" id="copyLibraryEntry" type="button">Copiar entrada</button><div class="dict-entry__def">${html}</div></article>`;
-      document.getElementById('copyLibraryEntry')?.addEventListener('click',()=>copyToClipboard(`${title}\n${String(html).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}`));
-      wireDictionaryLinks(els.panelBody);
-    }catch(error){console.error(error);els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir esta entrada de biblioteca.');}
+  async function renderChurchHistoryPanel(){
+    els.panelTitle.textContent=t('historia.title');
+    els.panelToolbar.innerHTML=`<form class="search-panel-form" id="churchHistorySearchForm">
+      <input id="churchHistorySearchInput" class="search-panel-input" type="search" placeholder="${t('historia.buscarPlaceholder')}" autocomplete="off" value="${escapeHTML(churchHistoryQuery)}">
+    </form>`;
+    const input=document.getElementById('churchHistorySearchInput');
+    document.getElementById('churchHistorySearchForm')?.addEventListener('submit',e=>e.preventDefault());
+    input?.addEventListener('input',()=>{ churchHistoryQuery=input.value; renderChurchHistoryBody(); });
+
+    if(!churchHistoryEntries){
+      els.panelBody.innerHTML=emptyState('⌛',t('historia.cargando'));
+      try{ churchHistoryEntries=await VerboModules.loadChurchHistory(); }
+      catch(error){ console.error(error); churchHistoryEntries=[]; }
+    }
+    renderChurchHistoryBody();
+    if(!churchHistoryOpenId) setTimeout(()=>input?.focus(),0);
+  }
+
+  function renderChurchHistoryBody(){
+    if(churchHistoryOpenId){ renderChurchHistoryEntry(churchHistoryOpenId); return; }
+    if(!churchHistoryEntries.length){ els.panelBody.innerHTML=emptyState('⛪',t('historia.sinContenido')); return; }
+    if(!churchHistoryQuery.trim()){ els.panelBody.innerHTML=emptyState('🔎',t('historia.intro')); return; }
+    const results=churchHistorySearch(churchHistoryEntries, churchHistoryQuery);
+    if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',t('historia.sinResultados',{query:escapeHTML(churchHistoryQuery)})); return; }
+    els.panelBody.innerHTML=`<div class="search-results-list">${results.map(e=>{
+      const years=e.anioInicio!=null?` · ${e.anioInicio}${e.anioFin && e.anioFin!==e.anioInicio?'–'+e.anioFin:''}`:'';
+      const excerptText=htmlToPlainText(e.excerpt||e.content||'').slice(0,180);
+      return `<button type="button" class="search-result" data-history-id="${escapeHTML(e.id)}">
+        <span class="search-result__ref">${escapeHTML(e.title)}${years}</span>
+        <span class="search-result__text">${escapeHTML(excerptText)}</span>
+      </button>`;
+    }).join('')}</div>`;
+    els.panelBody.querySelectorAll('[data-history-id]').forEach(btn=>btn.addEventListener('click',()=>{
+      churchHistoryOpenId=btn.dataset.historyId;
+      renderChurchHistoryBody();
+      els.panelBody.scrollTop=0;
+    }));
+  }
+
+  function renderChurchHistoryEntry(id){
+    const entry=churchHistoryEntries.find(e=>e.id===id);
+    if(!entry){ churchHistoryOpenId=null; els.panelBody.innerHTML=emptyState('⚠️',t('historia.entradaNoEncontrada')); return; }
+    const metaParts=[
+      entry.personas?.length?`${t('historia.personajes')}: ${entry.personas.map(escapeHTML).join(', ')}`:null,
+      entry.eventos?.length?`${t('historia.eventos')}: ${entry.eventos.map(escapeHTML).join(', ')}`:null,
+      entry.periodo?`${t('historia.periodo')}: ${escapeHTML(entry.periodo)}`:null,
+      entry.anioInicio!=null?`${t('historia.anio')}: ${entry.anioInicio}${entry.anioFin && entry.anioFin!==entry.anioInicio?'–'+entry.anioFin:''}`:null,
+    ].filter(Boolean).join(' · ');
+    els.panelBody.innerHTML=`<article class="dict-entry">
+      <div class="dict-entry__term">${escapeHTML(entry.title)}</div>
+      <div class="dict-entry__source">${escapeHTML(entry.sourceLabel||'')}</div>
+      ${metaParts?`<p class="note-card__translation-note">${metaParts}</p>`:''}
+      <button class="note-card__copy" id="backToChurchHistoryResults" type="button">← ${t('historia.volverResultados')}</button>
+      <div class="dict-entry__def">${entry.content||entry.excerpt||''}</div>
+    </article>`;
+    document.getElementById('backToChurchHistoryResults')?.addEventListener('click',()=>{
+      churchHistoryOpenId=null;
+      renderChurchHistoryBody();
+      els.panelBody.scrollTop=0;
+    });
   }
 
   function getStrongDictionary(code=null){
@@ -1707,41 +1738,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
 
-
-  async function renderLibraryPanel(focus=null){
-    els.panelTitle.textContent='Biblioteca';
-    const installed=libraryCatalog();
-    if(!installed.length){
-      els.panelToolbar.innerHTML='';
-      els.panelBody.innerHTML=emptyState('📚','La Biblioteca está lista. Aquí aparecerán diccionarios de referencia, Padres Apostólicos y libros adicionales.');
-      return;
-    }
-    let currentLibrary=localStorage.getItem('verbo:lastLibrary');
-    if(!installed.some(x=>x.id===currentLibrary)) currentLibrary=installed[0].id;
-    const selected=installed.find(x=>x.id===currentLibrary) || installed[0];
-    const options=installed.map(x=>`<option value="${x.id}" ${x.id===currentLibrary?'selected':''}>${escapeHTML(x.label)}</option>`).join('');
-    els.panelToolbar.innerHTML=`<div class="compare-toolbar"><span class="compare-toolbar__label">Recurso</span><select class="compare-toolbar__select" id="librarySelect">${options}</select></div>`;
-    document.getElementById('librarySelect')?.addEventListener('change', e=>{
-      localStorage.setItem('verbo:lastLibrary', e.target.value);
-      renderLibraryPanel(activeVerse());
-    });
-
-    if(selected.linked){
-      els.panelBody.innerHTML=emptyState('⌛','Cargando recurso del pasaje…');
-      try{
-        const resource=await VerboModules.loadLinkedEntries(selected.path,currentBook,currentChapter);
-        renderLinkedResourceEntries(resource, resource.entries, focus, '📚', 'Este capítulo no tiene entradas en este recurso.', selected.path);
-      }catch(error){ console.error(error); els.panelBody.innerHTML=emptyState('⚠️','No se pudo abrir este recurso.'); }
-      return;
-    }
-
-    if(selected.manifest.entriesFile || selected.manifest.entryFiles){
-      await renderDictionaryLibrary(selected);
-      return;
-    }
-
-    els.panelBody.innerHTML=emptyState('📚','Este recurso está registrado, pero aún no tiene índice compatible.');
-  }
 
   async function renderGospelPanel(){
     els.panelTitle.textContent='Evangelio cronológico de Jesús';

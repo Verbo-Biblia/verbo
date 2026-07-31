@@ -54,6 +54,7 @@
   ],
   "exegesis": [],
   "library": [],
+  "churchHistory": [],
   "gospel": [
     "gospel/evangelio-uf/manifest.json"
   ],
@@ -5837,6 +5838,7 @@
     ],
     "exegesis": [],
     "library": [],
+    "churchHistory": [],
     "gospel": [
       {
         "path": "modules/gospel/evangelio-uf/manifest.json",

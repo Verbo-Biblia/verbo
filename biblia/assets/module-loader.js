@@ -351,6 +351,27 @@ const VerboModules = (() => {
     return await getJSON(articlePath);
   }
 
+  // Historia de la Iglesia: buscador independiente, sin ancla a versículo (ver
+  // registry.churchHistory). A diferencia de patristic/patristicByVerse, no se
+  // carga en getCatalog() porque no alimenta ningún indicador por versículo —
+  // se pide bajo demanda al abrir el panel. Cada módulo trae un array plano de
+  // entradas (manifest.entriesFile); esta función las concatena todas.
+  async function loadChurchHistory() {
+    const registry = await getJSON('modules/registry.json');
+    const modules = await loadModuleList(registry.churchHistory || []);
+    const results = await Promise.all(modules.map(async ({ path, manifest }) => {
+      if (!manifest.entriesFile) return [];
+      try {
+        const data = await getJSON(resolveFromManifest(path, manifest.entriesFile));
+        return (data.entries || []).map(entry => ({ sourceLabel: manifest.name, ...entry }));
+      } catch (error) {
+        console.warn(`Historia de la Iglesia: módulo omitido ${path}`, error);
+        return [];
+      }
+    }));
+    return results.flat();
+  }
+
   // Quita tildes/diacríticos y normaliza espacios/puntuación, para que la
   // búsqueda no falle por variantes de acentuación entre versiones (ej.
   // "así"/"asi") ni por puntuación pegada a la palabra.
@@ -798,5 +819,5 @@ const VerboModules = (() => {
     return null;
   }
 
-  return { getCatalog,getBookInfo,resolveBibleBooks,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadCommentaryIndex,loadLinkedEntries,loadLinkedArticle,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible };
+  return { getCatalog,getBookInfo,resolveBibleBooks,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadCommentaryIndex,loadLinkedEntries,loadLinkedArticle,loadChurchHistory,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible };
 })();
