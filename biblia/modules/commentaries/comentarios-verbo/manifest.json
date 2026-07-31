@@ -20,6 +20,12 @@
       "name": "1 Juan",
       "file": "books/1JN.json",
       "indexFile": "books/1JN.index.json"
+    },
+    {
+      "id": "JUD",
+      "name": "Judas",
+      "file": "books/JUD.json",
+      "indexFile": "books/JUD.index.json"
     }
   ]
 }
