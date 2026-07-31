@@ -19,6 +19,13 @@
     article.querySelectorAll('h1,h2,h3,p,li').forEach(function (el) {
       if (skipClasses.some(function (c) { return el.classList.contains(c); })) return;
       if (!el.textContent || !el.textContent.trim()) return;
+      // Listas de enlaces (ej. índice de lecciones): tagear el <a>, no el
+      // <li>, para no perder el elemento al reemplazar textContent.
+      if (el.tagName === 'LI' && el.children.length === 1 && el.firstElementChild.tagName === 'A' &&
+          el.firstElementChild.textContent.trim() === el.textContent.trim()) {
+        el.firstElementChild.setAttribute('data-i18n-live', 'content:' + location.pathname + ':' + (i++));
+        return;
+      }
       el.setAttribute('data-i18n-live', 'content:' + location.pathname + ':' + (i++));
     });
     article.dataset.i18nTagged = '1';
