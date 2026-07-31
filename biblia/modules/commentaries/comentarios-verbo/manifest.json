@@ -26,6 +26,12 @@
       "name": "Judas",
       "file": "books/JUD.json",
       "indexFile": "books/JUD.index.json"
+    },
+    {
+      "id": "PHP",
+      "name": "Filipenses",
+      "file": "books/PHP.json",
+      "indexFile": "books/PHP.index.json"
     }
   ]
 }
