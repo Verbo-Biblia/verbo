@@ -783,7 +783,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function googleTranslate(text, sourceLang='en', targetLang='es'){
-    async function fetchTranslate(chunk){
+    // El endpoint publico de Google Translate a veces falla o tarda de forma
+    // transitoria (visto en Historia de la Iglesia: la misma entrada traduce
+    // bien en un intento y falla en el siguiente) — reintenta un par de veces
+    // con espera breve antes de rendirse y mostrar el original sin traducir.
+    async function fetchTranslateOnce(chunk){
       try{
         const url=`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(chunk)}`;
         const resp=await fetch(url);
@@ -792,6 +796,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(!Array.isArray(json?.[0])) return null;
         return json[0].map(p=>p?.[0]||'').join('');
       }catch{ return null; }
+    }
+    async function fetchTranslate(chunk, attempts=3){
+      for(let i=0;i<attempts;i++){
+        const result=await fetchTranslateOnce(chunk);
+        if(result!==null) return result;
+        if(i<attempts-1) await new Promise(resolve=>setTimeout(resolve,300*(i+1)));
+      }
+      return null;
     }
     if(text.length<=4500){
       const result=await fetchTranslate(text);
