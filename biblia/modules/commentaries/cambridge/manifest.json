@@ -6,7 +6,7 @@
   "abbreviation": "Cambridge",
   "language": "en",
   "author": "Various Cambridge scholars",
-  "description": "Formal public-domain commentary series published by Cambridge University Press, 1878-1918. Provisional OCR-based integration; currently includes Romans, Ephesians, Philippians, Colossians, 1-2 Thessalonians, and Philemon. Ephesians 6:10-20 is omitted because the OCR source is missing those pages.",
+  "description": "Formal public-domain commentary series published by Cambridge University Press, 1878-1918. Provisional OCR-based integration; currently includes Romans, Ephesians, Philippians, Colossians, 1-2 Thessalonians, Philemon, and Hebrews. Ephesians 6:10-20 is omitted because the OCR source is missing those pages.",
   "license": "Public Domain",
   "books": [
     {
@@ -50,6 +50,12 @@
       "name": "Philemon",
       "file": "books/PHM.json",
       "indexFile": "books/PHM.index.json"
+    },
+    {
+      "id": "HEB",
+      "name": "Hebrews",
+      "file": "books/HEB.json",
+      "indexFile": "books/HEB.index.json"
     }
   ]
 }
