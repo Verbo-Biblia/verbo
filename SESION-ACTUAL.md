@@ -1,17 +1,18 @@
-# Estado restante — Biblia Verbo — 2026-07-29
+# Estado restante — Biblia Verbo — 2026-07-31
 
 ## Próximo punto exacto
 
-- Continuar con `Salmos 1–150`.
-- El avance desde Génesis hasta Job ya fue comiteado y publicado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/PSA.json`.
+- Continuar con `Proverbios 1–31`.
+- El avance desde Génesis hasta Salmos ya fue revisado, validado y publicado.
+- Archivo en revisión: `biblia/modules/bibles/rv-verbo/books/PRO.json`.
+- El próximo punto exacto es Proverbios 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 48 libros: Salmos–Apocalipsis.
-- Restan 711 capítulos después de Job.
+- Restan 47 libros: Proverbios–Apocalipsis.
+- Restan 561 capítulos desde Proverbios 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados

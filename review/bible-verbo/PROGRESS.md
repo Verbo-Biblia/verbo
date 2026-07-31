@@ -60,16 +60,19 @@ Un libro solo puede marcarse como cerrado cuando:
 | Nehemías | 13 | candidato | Revisión integral completada y publicada: 13 capítulos y 406 versículos |
 | Ester | 10 | candidato | Revisión integral completada: 10 capítulos y 167 versículos; JSON, estructura, nombres, cifras, decretos y continuidad narrativa validados |
 | Job | 42 | candidato | Revisión integral completada: 42 capítulos y 1.070 versículos; JSON, estructura moderna, nombres, cifras, discursos, poesía y epílogo validados |
-| Salmos–Apocalipsis | 711 | pendiente | Restan 48 libros después de Job |
+| Salmos | 150 | candidato | Revisión integral completada y publicada: 150 capítulos y 2.461 versículos; JSON, numeración continua, textos no vacíos, conteos por capítulo y estructura integral validados |
+| Proverbios–Apocalipsis | 561 | pendiente | Restan 47 libros |
 
 ## Orden de trabajo
 
 Se seguirá el orden canónico, cerrando cada libro antes de declarar terminado el
 proyecto: Génesis, Éxodo, Levítico, Números, Deuteronomio y así sucesivamente
-hasta Apocalipsis. La revisión continúa desde Salmos.
+hasta Apocalipsis. Salmos quedó completamente revisado; la próxima sesión debe
+reanudar en Proverbios 1.
 
 ## Publicación
 
-Juan autorizó expresamente subir cada libro cuando quede cerrado. La revisión
-completa continúa desde Salmos; no se declarará completa ni oficial la Biblia
-hasta cerrar los 66 libros.
+Juan autorizó expresamente subir cada libro cuando quede cerrado. Salmos quedó
+completamente revisado, validado y publicado. La revisión continúa desde
+Proverbios 1. No se declarará completa ni oficial la Biblia hasta cerrar los 66
+libros.
