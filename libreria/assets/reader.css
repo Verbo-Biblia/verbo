@@ -239,12 +239,15 @@ body.recursos-page .r-book-row {
 }
 
 body.recursos-page .book-cover {
+  --book-cover-color: #3f5b46;
+  --book-cover-shade: #1d2d22;
+  --book-cover-accent: #d2b35e;
   position: relative;
   aspect-ratio: 3 / 4.3;
   border-radius: 5px;
   background:
-    radial-gradient(140% 90% at 8% 0%, rgba(201,162,39,.16), transparent 55%),
-    linear-gradient(165deg, #4E3320 0%, #20130B 100%);
+    radial-gradient(140% 90% at 8% 0%, color-mix(in srgb, var(--book-cover-accent) 18%, transparent), transparent 55%),
+    linear-gradient(165deg, var(--book-cover-color) 0%, var(--book-cover-shade) 100%);
   border: 1px solid rgba(0,0,0,.4);
   padding: 16px 15px 14px;
   display: flex;
@@ -259,7 +262,7 @@ body.recursos-page .book-cover::before {
   content: "";
   position: absolute;
   inset: 10px;
-  border: 1px solid rgba(201,162,39,.5);
+  border: 1px solid color-mix(in srgb, var(--book-cover-accent) 58%, transparent);
   border-radius: 2px;
   pointer-events: none;
 }
@@ -269,11 +272,11 @@ body.recursos-page .r-book-row:hover .book-cover {
   box-shadow: 0 22px 34px -18px rgba(var(--r-shadow), .55);
 }
 body.recursos-page .r-book-row:hover .book-cover::before {
-  border-color: rgba(201,162,39,.8);
+  border-color: color-mix(in srgb, var(--book-cover-accent) 85%, transparent);
 }
 body.recursos-page .book-cover-icon {
   width: 22px; height: 22px;
-  color: #C9A227;
+  color: var(--book-cover-accent);
   margin-bottom: 14px;
   flex-shrink: 0;
 }
@@ -282,7 +285,7 @@ body.recursos-page .book-cover-era {
   font-size: 9.5px;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: #C9A227;
+  color: var(--book-cover-accent);
   margin-bottom: auto;
 }
 body.recursos-page .book-cover-title {
@@ -295,7 +298,7 @@ body.recursos-page .book-cover-title {
 }
 body.recursos-page .book-cover-rule {
   width: 22px; height: 1px;
-  background: rgba(201,162,39,.5);
+  background: color-mix(in srgb, var(--book-cover-accent) 58%, transparent);
   margin-bottom: 8px;
 }
 body.recursos-page .book-cover-author {
@@ -304,6 +307,93 @@ body.recursos-page .book-cover-author {
   font-size: .74rem;
   color: #C4AF92;
   line-height: 1.35;
+}
+
+/* ---------- familias visuales de portadas ----------
+   Las etiquetas siguen admitiendo cruces temáticos; la portada expresa una
+   sola familia dominante para que la estantería pueda leerse de un vistazo. */
+body.recursos-page .r-book-row[data-tema*="biblia"] .book-cover,
+body.recursos-page .r-book-row[data-tema*="evangelios"] .book-cover {
+  --book-cover-color: #4e3320;
+  --book-cover-shade: #20130b;
+}
+
+/* Padres Apostólicos y patrística: color elegido para toda la colección. */
+body.recursos-page .r-book-row[data-tema*="patristica"] .book-cover {
+  --book-cover-color: #7d6b57;
+  --book-cover-shade: #40362c;
+  --book-cover-accent: #ead29a;
+}
+
+/* Teología y doctrina. */
+body.recursos-page .r-book-row[data-tema*="teologia"] .book-cover,
+body.recursos-page .r-book-row[href="catecismo-de-spurgeon-es/"] .book-cover,
+body.recursos-page .r-book-row[href="la-palabra-infalible-de-dios-es/"] .book-cover,
+body.recursos-page .r-book-row[href="el-bautismo-una-sepultura-es/"] .book-cover,
+body.recursos-page .r-book-row[href="la-eleccion-es/"] .book-cover,
+body.recursos-page .r-book-row[href="la-incapacidad-humana-es/"] .book-cover,
+body.recursos-page .r-book-row[href="nuestro-manifiesto-es/"] .book-cover,
+body.recursos-page .r-book-row[href="la-regeneracion-bautismal-es/"] .book-cover,
+body.recursos-page .r-book-row[href="una-defensa-del-calvinismo-es/"] .book-cover,
+body.recursos-page .r-book-row[href="the-atoning-sacrifice-of-christ-en/"] .book-cover {
+  --book-cover-color: #28445c;
+  --book-cover-shade: #142634;
+  --book-cover-accent: #d7bd77;
+}
+
+/* Familia y formación del hogar. */
+body.recursos-page .r-book-row[data-tema*="familia"] .book-cover,
+body.recursos-page .r-book-row[href="los-deberes-de-los-padres-es/"] .book-cover,
+body.recursos-page .r-book-row[href="pensamientos-para-hombres-jovenes-es/"] .book-cover,
+body.recursos-page .r-book-row[href="deberes-familiares-es/"] .book-cover {
+  --book-cover-color: #8a4f3d;
+  --book-cover-shade: #48271e;
+  --book-cover-accent: #e4bf7e;
+}
+
+/* Gracia y evangelismo. */
+body.recursos-page .r-book-row[data-tema*="gracia"] .book-cover,
+body.recursos-page .r-book-row[data-tema*="evangelismo"] .book-cover,
+body.recursos-page .r-book-row[href="es-usted-nacido-de-nuevo-es/"] .book-cover,
+body.recursos-page .r-book-row[href="aun-hay-lugar-es/"] .book-cover,
+body.recursos-page .r-book-row[href="ganar-almas-es/"] .book-cover,
+body.recursos-page .r-book-row[href="un-gran-evangelio-para-grandes-pecadores-es/"] .book-cover,
+body.recursos-page .r-book-row[href="palabras-para-el-ganador-de-almas-es/"] .book-cover,
+body.recursos-page .r-book-row[href="adonde-adonde-es/"] .book-cover,
+body.recursos-page .r-book-row[href="como-ire-a-dios-es/"] .book-cover,
+body.recursos-page .r-book-row[href="cristo-murio-por-los-impios-es/"] .book-cover,
+body.recursos-page .r-book-row[href="en-mi-lugar-es/"] .book-cover,
+body.recursos-page .r-book-row[href="el-metodo-de-la-gracia-es/"] .book-cover,
+body.recursos-page .r-book-row[href="are-you-born-again-en/"] .book-cover,
+body.recursos-page .r-book-row[href="god-s-way-of-peace-en/"] .book-cover {
+  --book-cover-color: #7a3038;
+  --book-cover-shade: #3b171c;
+  --book-cover-accent: #e3bd76;
+}
+
+/* Consuelo, aflicción y seguridad. */
+body.recursos-page .r-book-row[data-tema*="consuelo"] .book-cover,
+body.recursos-page .r-book-row[data-tema*="seguridad"] .book-cover,
+body.recursos-page .r-book-row[href="cual-es-mi-esperanza-es/"] .book-cover,
+body.recursos-page .r-book-row[href="night-of-weeping-morning-of-joy-en/"] .book-cover {
+  --book-cover-color: #536b78;
+  --book-cover-shade: #293943;
+  --book-cover-accent: #e2c98d;
+}
+
+/* Narrativa y biografía espiritual. */
+body.recursos-page .r-book-row[data-tema*="narrativa"] .book-cover,
+body.recursos-page .r-book-row[href="el-progreso-del-peregrino-para-todos-es/"] .book-cover {
+  --book-cover-color: #8a6428;
+  --book-cover-shade: #493514;
+  --book-cover-accent: #ead08b;
+}
+
+/* En cruces temáticos explícitos, prevalece la decisión editorial principal. */
+body.recursos-page .r-book-row[href="mans-will-free-yet-bound-en/"] .book-cover {
+  --book-cover-color: #28445c;
+  --book-cover-shade: #142634;
+  --book-cover-accent: #d7bd77;
 }
 
 body.recursos-page .r-book-title {
@@ -319,4 +409,3 @@ body.recursos-page .r-book-meta {
   font-size: 10.5px;
   color: var(--r-ink-soft);
 }
-
