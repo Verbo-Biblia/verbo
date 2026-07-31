@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 2,
+  "id": "comentarios-verbo",
+  "type": "commentary",
+  "name": "Comentarios Verbo",
+  "abbreviation": "Verbo",
+  "language": "es",
+  "author": "Juan Venegas",
+  "description": "Comentarios bíblicos originales de Juan Venegas para Verbo.",
+  "license": "Todos los derechos reservados por el autor.",
+  "books": [
+    {
+      "id": "GEN",
+      "name": "Génesis",
+      "file": "books/GEN.json",
+      "indexFile": "books/GEN.index.json"
+    }
+  ]
+}
