@@ -1146,5 +1146,175 @@
     "url": "/libreria/fragments-papias-en/",
     "fuente": "https://www.earlychristianwritings.com/text/papias.html",
     "licencia": "J. B. Lightfoot historical English translation; public domain."
+  },
+  {
+    "id": "the-covenants-of-works-and-of-grace-en",
+    "titulo": "The Covenants of Works and of Grace",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "teologia",
+      "pactos"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "Walter J. Chantry",
+    "url": "/libreria/the-covenants-of-works-and-of-grace-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=cove&format=epub",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
+  },
+  {
+    "id": "the-scriptures-and-good-works-en",
+    "titulo": "The Scriptures and Good Works",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "vida-cristiana",
+      "santificacion"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "Arthur W. Pink",
+    "url": "/libreria/the-scriptures-and-good-works-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=sagw&format=epub",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
+  },
+  {
+    "id": "encouragement-for-christian-mothers-en",
+    "titulo": "Encouragement for Christian Mothers",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "familia",
+      "vida-cristiana"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "James Cameron",
+    "url": "/libreria/encouragement-for-christian-mothers-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=efcm&format=epub",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
+  },
+  {
+    "id": "the-scriptures-and-sin-en",
+    "titulo": "The Scriptures and Sin",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "vida-cristiana",
+      "santificacion"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "Arthur W. Pink",
+    "url": "/libreria/the-scriptures-and-sin-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=sasi&format=epub",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
+  },
+  {
+    "id": "christs-love-for-the-sick-en",
+    "titulo": "Christ’s Love for the Sick",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "consuelo",
+      "vida-cristiana"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/christs-love-for-the-sick-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=clft&format=epub",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
+  },
+  {
+    "id": "the-young-cottager-en",
+    "titulo": "The Young Cottager",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "narrativa",
+      "vida-cristiana"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "Legh Richmond",
+    "url": "/libreria/the-young-cottager-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=ycot&format=epub",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
+  },
+  {
+    "id": "sins-of-the-saints-en",
+    "titulo": "Sins of the Saints",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "santificacion",
+      "teologia"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "Arthur W. Pink",
+    "url": "/libreria/sins-of-the-saints-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=sosa&format=epub",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
+  },
+  {
+    "id": "am-i-really-a-christian-en",
+    "titulo": "Am I Really a Christian?",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "seguridad",
+      "vida-cristiana"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "Thomas Boston",
+    "url": "/libreria/am-i-really-a-christian-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=aira&format=epub",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
+  },
+  {
+    "id": "humility-micahs-message-for-today-en",
+    "titulo": "Humility: Micah’s Message for Today",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "humildad",
+      "vida-cristiana"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "Charles H. Spurgeon",
+    "url": "/libreria/humility-micahs-message-for-today-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=hmmf&format=epub",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
+  },
+  {
+    "id": "mans-will-free-yet-bound-en",
+    "titulo": "Man’s Will—Free Yet Bound",
+    "seccion": "libreria",
+    "tipo": "libro",
+    "idioma": "en",
+    "temas": [
+      "chapel-library",
+      "teologia",
+      "gracia"
+    ],
+    "fecha_agregado": "2026-07-31",
+    "autor": "Walter J. Chantry",
+    "url": "/libreria/mans-will-free-yet-bound-en/",
+    "fuente": "https://www.chapellibrary.org/api/books/download?code=mwfy&format=pdf",
+    "licencia": "Chapel Library expressly permits reproduction by any means when no charge beyond nominal duplication cost is made and the copyright notice and its complete page are included."
   }
 ]

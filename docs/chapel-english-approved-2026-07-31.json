@@ -1,0 +1,46 @@
+{
+  "date": "2026-07-31",
+  "published": 10,
+  "books": [
+    {
+      "id": "the-covenants-of-works-and-of-grace-en",
+      "sections": 16
+    },
+    {
+      "id": "the-scriptures-and-good-works-en",
+      "sections": 13
+    },
+    {
+      "id": "encouragement-for-christian-mothers-en",
+      "sections": 4
+    },
+    {
+      "id": "the-scriptures-and-sin-en",
+      "sections": 11
+    },
+    {
+      "id": "christs-love-for-the-sick-en",
+      "sections": 6
+    },
+    {
+      "id": "the-young-cottager-en",
+      "sections": 9
+    },
+    {
+      "id": "sins-of-the-saints-en",
+      "sections": 26
+    },
+    {
+      "id": "am-i-really-a-christian-en",
+      "sections": 14
+    },
+    {
+      "id": "humility-micahs-message-for-today-en",
+      "sections": 11
+    },
+    {
+      "id": "mans-will-free-yet-bound-en",
+      "sections": 6
+    }
+  ]
+}
