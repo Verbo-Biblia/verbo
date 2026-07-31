@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 2,
+  "id": "eusebio-historia-eclesiastica",
+  "type": "churchHistory",
+  "name": "Eusebius of Caesarea — Church History (incl. Martyrs of Palestine)",
+  "abbreviation": "Eusebio, Historia Eclesiástica",
+  "language": "en",
+  "author": "Eusebius of Caesarea (c. 260–339)",
+  "translator": "Arthur Cushman McGiffert",
+  "year": 325,
+  "description": "Historia Eclesiástica completa de Eusebio de Cesarea (los 10 libros) más el Martirio de los mártires de Palestina, en la traducción al inglés de Arthur Cushman McGiffert (1890), edición de Philip Schaff — Nicene and Post-Nicene Fathers, Second Series, Vol. 1 (NPNF2-01). Fuente: Christian Classics Ethereal Library (ccel.org), texto marcado explícitamente como 'Rights: Public Domain'. El texto se muestra en inglés y se traduce automáticamente al español en tiempo de lectura (igual que Matthew Henry).",
+  "license": "Dominio público (traducción de 1890, CCEL).",
+  "sourceUrl": "https://www.ccel.org/ccel/schaff/npnf201.html",
+  "entriesFile": "entries.json",
+  "totalEntries": 264
+}

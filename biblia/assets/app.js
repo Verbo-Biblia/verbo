@@ -1619,9 +1619,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     return String(value||'').toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
   }
 
-  // Coincidencia contra los 4 campos a la vez (personas/eventos/periodo como texto
-  // normalizado, año o rango como número) — cualquiera de los 4 que matchee incluye
-  // la entrada, no hace falta que el usuario indique qué tipo de dato está buscando.
+  // Texto de búsqueda de una entrada: personaje(s)/evento(s)/periodo (metadata
+  // editorial) + título + cuerpo completo (texto real de la fuente) — así el
+  // buscador funciona como texto completo real aunque personas/eventos no estén
+  // poblados para una entrada (evita depender de una extracción automática de
+  // entidades que podría etiquetar mal un lugar como persona, por ejemplo).
+  // Se cachea en el propio objeto (calculado una sola vez por entrada).
+  function churchHistorySearchText(e){
+    if(e._searchText==null){
+      const parts=[...(e.personas||[]),...(e.eventos||[]),e.periodo||'',e.title||'',htmlToPlainText(e.content||e.excerpt||'')];
+      e._searchText=normalizeSearchText(parts.join(' '));
+    }
+    return e._searchText;
+  }
+
+  // Coincidencia por texto (ver churchHistorySearchText) o por año/rango numérico
+  // contra anioInicio/anioFin — cualquiera de los dos que matchee incluye la
+  // entrada, no hace falta que el usuario indique qué tipo de dato está buscando.
   function churchHistorySearch(entries, query){
     const raw=String(query||'').trim();
     const q=normalizeSearchText(raw);
@@ -1632,8 +1646,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(rangeMatch){ yearLo=Math.min(+rangeMatch[1],+rangeMatch[2]); yearHi=Math.max(+rangeMatch[1],+rangeMatch[2]); }
     else if(yearMatch){ yearLo=yearHi=+yearMatch[1]; }
     return entries.filter(e=>{
-      const textHaystacks=[...(e.personas||[]),...(e.eventos||[]),e.periodo||''].map(normalizeSearchText);
-      if(textHaystacks.some(h=>h.includes(q))) return true;
+      if(churchHistorySearchText(e).includes(q)) return true;
       if(yearLo!=null){
         const eLo=e.anioInicio ?? e.anioFin, eHi=e.anioFin ?? e.anioInicio;
         if(eLo!=null && eHi!=null && eHi>=yearLo && eLo<=yearHi) return true;
@@ -1691,17 +1704,46 @@ document.addEventListener('DOMContentLoaded', async () => {
       entry.anioInicio!=null?`${t('historia.anio')}: ${entry.anioInicio}${entry.anioFin && entry.anioFin!==entry.anioInicio?'–'+entry.anioFin:''}`:null,
     ].filter(Boolean).join(' · ');
     els.panelBody.innerHTML=`<article class="dict-entry">
-      <div class="dict-entry__term">${escapeHTML(entry.title)}</div>
+      <div class="dict-entry__term" data-entry-id="${escapeHTML(entry.id)}">${escapeHTML(entry.title)}</div>
       <div class="dict-entry__source">${escapeHTML(entry.sourceLabel||'')}</div>
       ${metaParts?`<p class="note-card__translation-note">${metaParts}</p>`:''}
       <button class="note-card__copy" id="backToChurchHistoryResults" type="button">← ${t('historia.volverResultados')}</button>
-      <div class="dict-entry__def">${entry.content||entry.excerpt||''}</div>
+      <div class="dict-entry__def" data-entry-id="${escapeHTML(entry.id)}">${entry.content||entry.excerpt||''}</div>
     </article>`;
     document.getElementById('backToChurchHistoryResults')?.addEventListener('click',()=>{
       churchHistoryOpenId=null;
       renderChurchHistoryBody();
       els.panelBody.scrollTop=0;
     });
+    applyChurchHistoryTranslation(entry);
+  }
+
+  // Traduce título+cuerpo de una entrada de Historia de la Iglesia reusando el
+  // mismo motor de traducción de Comentario (translateEntry/translateCommentaryHeader),
+  // así el resultado de traducción automática tiene la misma calidad/caché. Solo
+  // corre si el idioma de la entrada (normalmente inglés, ver manifest.language)
+  // difiere del idioma de la Biblia activa.
+  async function applyChurchHistoryTranslation(entry){
+    const source=entry.sourceLang||'en';
+    const target=contentLang();
+    if(!source || source===target) return;
+    const termEl=els.panelBody.querySelector(`.dict-entry__term[data-entry-id="${CSS.escape(entry.id)}"]`);
+    const defEl=els.panelBody.querySelector(`.dict-entry__def[data-entry-id="${CSS.escape(entry.id)}"]`);
+    if(!termEl||!defEl) return;
+    if(termEl.dataset.translated!==target){
+      termEl.dataset.translated='pending';
+      const translatedTitle=await translateCommentaryHeader(`historia:${entry.id}`,'title',entry.title,source,target);
+      if(termEl.dataset.translated==='pending'){ termEl.textContent=translatedTitle; termEl.dataset.translated=target; }
+    }
+    if(defEl.dataset.translated!==target){
+      defEl.dataset.translated='pending';
+      const original=entry.content||entry.excerpt||'';
+      const translated=await translateEntry(`historia:${entry.id}`, original, source, target);
+      if(defEl.dataset.translated==='pending'){
+        defEl.innerHTML=`${translated}${originalSourceDetailsHtml(original,source)}`;
+        defEl.dataset.translated=target;
+      }
+    }
   }
 
   function getStrongDictionary(code=null){

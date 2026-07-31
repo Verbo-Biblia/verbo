@@ -363,7 +363,7 @@ const VerboModules = (() => {
       if (!manifest.entriesFile) return [];
       try {
         const data = await getJSON(resolveFromManifest(path, manifest.entriesFile));
-        return (data.entries || []).map(entry => ({ sourceLabel: manifest.name, ...entry }));
+        return (data.entries || []).map(entry => ({ sourceLabel: manifest.name, sourceLang: manifest.language, ...entry }));
       } catch (error) {
         console.warn(`Historia de la Iglesia: módulo omitido ${path}`, error);
         return [];
