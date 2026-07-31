@@ -222,8 +222,7 @@
     "resumeBookmark": "You have a bookmark at {{unit}} {{n}}.",
     "continue": "Continue →",
     "discard": "Discard",
-    "footOf": "{{unit}} {{current}} of {{total}}",
-    "audioError": "Couldn't load the audio. Please try again."
+    "footOf": "{{unit}} {{current}} of {{total}}"
   },
   "filtros": {
     "idioma": "Language",

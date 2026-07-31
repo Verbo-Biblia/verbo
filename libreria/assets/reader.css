@@ -320,33 +320,3 @@ body.recursos-page .r-book-meta {
   color: var(--r-ink-soft);
 }
 
-.reader-speech-btn {
-  display: inline-grid;
-  place-items: center;
-  width: 2.35rem;
-  height: 2.35rem;
-  margin-left: auto;
-  padding: 0;
-  border: 1px solid rgba(127, 45, 53, .38);
-  border-radius: 50%;
-  background: transparent;
-  color: var(--accent, #7f2d35);
-  cursor: pointer;
-  font-size: .9rem;
-}
-
-.reader-speech-btn.is-active {
-  color: #fff;
-  background: var(--accent, #7f2d35);
-}
-
-.reader-speech-btn.is-loading {
-  cursor: wait;
-  opacity: .65;
-}
-
-.reader-speech-error {
-  margin-left: 8px;
-  font-size: .78rem;
-  color: #a6323c;
-}

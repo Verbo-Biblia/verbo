@@ -14,10 +14,3 @@ RESEND_FROM = "Verbo <no-reply@verbobiblia.com>"
 [[kv_namespaces]]
 binding = "SYNC_KV"
 id = "a1a2e2765ff34bc7b3abd1dbd17dfb71"
-
-# Bucket R2 donde se guardan permanentemente los .mp3 de audiolibros
-# generados con Google Cloud TTS. Créalo antes de desplegar:
-# `npx wrangler r2 bucket create verbo-tts-audio`.
-[[r2_buckets]]
-binding = "TTS_AUDIO"
-bucket_name = "verbo-tts-audio"

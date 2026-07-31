@@ -18,15 +18,6 @@
   var highlights = loadJSON(HL_KEY, {});
   var bookmark = loadJSON(BM_KEY, null);
   var paraTexts = []; // texto plano de cada párrafo del capítulo actual
-  var speech = {
-    ui: null,
-    playing: false,
-    loading: false,
-    generation: 0,
-    continueAfterRender: false,
-    currentChapterForAudio: -1,
-    lastBookmarkSave: 0
-  };
 
   // ---------- traducción ES->EN on-demand (estrategia_traduccion) ----------
   // "auto" (default): se traduce el capítulo completo vía el mismo
@@ -117,208 +108,6 @@
     } catch (e) {
       /* almacenamiento no disponible, se ignora silenciosamente */
     }
-  }
-
-  // Retiro de Piper (2026-07): limpia los modelos que hayan quedado
-  // cacheados en dispositivos que probaron el TTS anterior a Web Speech.
-  // Ya NO desregistra el Service Worker de /libreria/ — ese path ahora aloja
-  // uno legítimo (libreria/service-worker.js, cachea audiolibros pregenerados).
-  function cleanupLegacyPiperCache() {
-    if (!("caches" in window)) return;
-    window.caches.keys().then(function (keys) {
-      return Promise.all(keys.filter(function (key) {
-        return key.indexOf("verbo-libreria-tts-") === 0;
-      }).map(function (key) {
-        return window.caches.delete(key);
-      }));
-    }).catch(function () {});
-  }
-
-  function registerAudioServiceWorker() {
-    if (!("serviceWorker" in navigator)) return;
-    navigator.serviceWorker.register("/libreria/service-worker.js").catch(function () {});
-  }
-
-  cleanupLegacyPiperCache();
-  registerAudioServiceWorker();
-
-  // ---------- audiolibro pregenerado (Google Cloud TTS vía Worker + R2) ----------
-  // Piper y Web Speech API (voz nativa del dispositivo) quedaron archivados
-  // como referencia en reader-speech-legacy.js — no se cargan aquí. El
-  // idioma de la voz se toma SIEMPRE de cfg.language (metadata explícita del
-  // libro, ver tools/import_library_batch.py), nunca de detección automática
-  // de texto ni de convenciones de id — así se evita el error de leer un
-  // libro en el idioma equivocado.
-  var audioEl = (typeof Audio !== "undefined") ? new Audio() : null;
-  var ttsBaseUrlPromise = null;
-
-  function audioSupported() {
-    return !!audioEl;
-  }
-
-  function resolveTtsBaseUrl() {
-    if (!ttsBaseUrlPromise) {
-      ttsBaseUrlPromise = fetch("/biblia/modules/registry.json")
-        .then(function (r) { return r.json(); })
-        .then(function (registry) {
-          return String((registry.apiBible && registry.apiBible.proxyUrl) || "").replace(/\/+$/, "");
-        })
-        .catch(function () { return ""; });
-    }
-    return ttsBaseUrlPromise;
-  }
-
-  function ttsLang() {
-    return cfg.language === "en" ? "en" : "es";
-  }
-
-  function chapterAudioKey(index) {
-    var ch = chapters[index];
-    return ch ? String(ch.n) : String(index + 1);
-  }
-
-  function updateSpeechButton() {
-    if (!speech.ui) return;
-    var btn = speech.ui.speechBtn;
-    btn.classList.toggle("is-active", speech.playing);
-    btn.classList.toggle("is-loading", speech.loading);
-    if (speech.loading) {
-      btn.textContent = "…";
-      btn.title = "Generando audio…";
-    } else {
-      btn.textContent = speech.playing ? "❚❚" : "▶";
-      btn.title = speech.playing ? "Pausar" : "Reproducir";
-    }
-    btn.setAttribute("aria-label", btn.title);
-  }
-
-  function showSpeechError() {
-    if (!speech.ui || !speech.ui.speechError) return;
-    var t = window.VerboI18n ? window.VerboI18n.t : function (k) { return k; };
-    speech.ui.speechError.textContent = t("reader.audioError");
-    speech.ui.speechError.hidden = false;
-    window.setTimeout(function () { if (speech.ui) speech.ui.speechError.hidden = true; }, 4000);
-  }
-
-  function saveAudioBookmark() {
-    if (!audioEl) return;
-    bookmark = {
-      chapter: current,
-      audioTime: Math.max(0, audioEl.currentTime || 0),
-      ts: Date.now()
-    };
-    saveJSON(BM_KEY, bookmark);
-    if (speech.ui) {
-      speech.ui.bmBtn.classList.add("is-active");
-      speech.ui.bmBtn.textContent = window.VerboI18n ? window.VerboI18n.t("reader.marked") : "★ Marcado";
-    }
-  }
-
-  function stopSpeech(savePosition) {
-    if (!audioEl) return;
-    if (savePosition && (speech.playing || speech.loading)) saveAudioBookmark();
-    speech.generation++;
-    audioEl.pause();
-    speech.playing = false;
-    speech.loading = false;
-    updateSpeechButton();
-  }
-
-  function loadAndPlayChapterAudio(index, startAt) {
-    if (!audioEl) return;
-    var generation = ++speech.generation;
-    speech.loading = true;
-    speech.playing = false;
-    updateSpeechButton();
-
-    resolveTtsBaseUrl().then(function (base) {
-      if (generation !== speech.generation) return null;
-      if (!base) throw new Error("tts-no-base-url");
-      var ch = chapters[index];
-      var endpoint = base + "/v1/tts/" + encodeURIComponent(cfg.id) + "/" + encodeURIComponent(chapterAudioKey(index));
-      return fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: ch.text, lang: ttsLang() })
-      });
-    }).then(function (response) {
-      if (generation !== speech.generation || !response) return null;
-      if (!response.ok) throw new Error("tts-fetch-failed");
-      return response.blob();
-    }).then(function (blob) {
-      if (generation !== speech.generation || !blob) return;
-      audioEl.src = URL.createObjectURL(blob);
-      audioEl.currentTime = startAt || 0;
-      speech.loading = false;
-      speech.playing = true;
-      speech.currentChapterForAudio = index;
-      updateSpeechButton();
-      audioEl.play().catch(function () {
-        if (generation !== speech.generation) return;
-        speech.playing = false;
-        updateSpeechButton();
-      });
-    }).catch(function () {
-      if (generation !== speech.generation) return;
-      speech.loading = false;
-      speech.playing = false;
-      updateSpeechButton();
-      showSpeechError();
-    });
-  }
-
-  function toggleSpeech() {
-    if (!audioEl || speech.loading) return;
-    if (speech.playing) {
-      saveAudioBookmark();
-      audioEl.pause();
-      speech.playing = false;
-      updateSpeechButton();
-      return;
-    }
-    if (audioEl.src && speech.currentChapterForAudio === current && !audioEl.ended) {
-      speech.generation++;
-      speech.playing = true;
-      updateSpeechButton();
-      audioEl.play().catch(function () {
-        speech.playing = false;
-        updateSpeechButton();
-      });
-      return;
-    }
-    var startAt = bookmark && bookmark.chapter === current ? (bookmark.audioTime || 0) : 0;
-    loadAndPlayChapterAudio(current, startAt);
-  }
-
-  if (audioEl) {
-    audioEl.addEventListener("ended", function () {
-      if (!speech.playing) return;
-      speech.playing = false;
-      if (current < chapters.length - 1) {
-        bookmark = { chapter: current + 1, audioTime: 0, ts: Date.now() };
-        saveJSON(BM_KEY, bookmark);
-        speech.continueAfterRender = true;
-        goTo(speech.ui, current + 1);
-      } else {
-        bookmark = { chapter: current, audioTime: 0, ts: Date.now() };
-        saveJSON(BM_KEY, bookmark);
-        updateSpeechButton();
-      }
-    });
-    audioEl.addEventListener("timeupdate", function () {
-      if (!speech.playing) return;
-      var now = Date.now();
-      if (now - speech.lastBookmarkSave > 5000) {
-        speech.lastBookmarkSave = now;
-        saveAudioBookmark();
-      }
-    });
-    audioEl.addEventListener("error", function () {
-      if (!speech.loading && !speech.playing) return;
-      speech.loading = false;
-      speech.playing = false;
-      updateSpeechButton();
-    });
   }
 
   // Agrupa el texto continuo de una sección/capítulo en "párrafos" de
@@ -532,15 +321,6 @@
     var bmBtn = el("button", "reader-bookmark-btn", "☆ Marcar este capítulo");
     bmBtn.type = "button";
     headTop.appendChild(bmBtn);
-    var speechBtn = el("button", "reader-speech-btn", "▶");
-    speechBtn.type = "button";
-    speechBtn.title = "Reproducir";
-    speechBtn.setAttribute("aria-label", "Reproducir");
-    speechBtn.hidden = !audioSupported();
-    headTop.appendChild(speechBtn);
-    var speechError = el("span", "reader-speech-error");
-    speechError.hidden = true;
-    headTop.appendChild(speechError);
     root.appendChild(headTop);
 
     var manualNote = el("p", "reader-manual-note");
@@ -605,7 +385,7 @@
 
     return {
       badge: badge, title: title, hint: hint, unitLabel: cfg.unitLabel,
-      bmBtn: bmBtn, speechBtn: speechBtn, speechError: speechError, progressBar: progressBar, manualNote: manualNote,
+      bmBtn: bmBtn, progressBar: progressBar, manualNote: manualNote,
       resume: resume, resumeText: resumeText, resumeLink: resumeLink, resumeDismiss: resumeDismiss,
       prevBtn: prevBtn, select: select, nextBtn: nextBtn,
       chapterTitle: chapterTitle, content: content, foot: foot
@@ -656,10 +436,6 @@
         renderParaContent(p, text, pi);
         ui.content.appendChild(p);
       });
-      if (speech.continueAfterRender) {
-        speech.continueAfterRender = false;
-        loadAndPlayChapterAudio(current, 0);
-      }
     });
 
     ui.bmBtn.classList.toggle("is-active", !!(bookmark && bookmark.chapter === current));
@@ -686,7 +462,6 @@
     }
 
     var ui = buildSkeleton();
-    speech.ui = ui;
     buildChapterOptions(ui);
 
     var hashChapter = parseInt((window.location.hash || "").replace("#", ""), 10);
@@ -705,10 +480,9 @@
       });
     }
 
-    ui.prevBtn.addEventListener("click", function () { stopSpeech(true); goTo(ui, current - 1); });
-    ui.nextBtn.addEventListener("click", function () { stopSpeech(true); goTo(ui, current + 1); });
-    ui.select.addEventListener("change", function () { stopSpeech(true); goTo(ui, parseInt(ui.select.value, 10)); });
-    ui.speechBtn.addEventListener("click", toggleSpeech);
+    ui.prevBtn.addEventListener("click", function () { goTo(ui, current - 1); });
+    ui.nextBtn.addEventListener("click", function () { goTo(ui, current + 1); });
+    ui.select.addEventListener("change", function () { goTo(ui, parseInt(ui.select.value, 10)); });
     ui.bmBtn.addEventListener("click", function () {
       if (bookmark && bookmark.chapter === current) {
         bookmark = null;
@@ -722,11 +496,7 @@
     });
 
     document.addEventListener("verbo:uilang-changed", function () {
-      stopSpeech(true);
       applyChrome(ui).then(function () { render(ui); });
-    });
-    window.addEventListener("pagehide", function () {
-      if (speech.playing || speech.loading) saveAudioBookmark();
     });
     if (window.VerboI18n) {
       window.VerboI18n.ready().then(function () { applyChrome(ui).then(function () { render(ui); }); });

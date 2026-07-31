@@ -8,13 +8,6 @@ const ALLOWED_BIBLES = new Set([
 const LINK_TTL_SECONDS = 30 * 60; // 30 minutos, expiración del magic link
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 365; // 1 año, sesión de dispositivo vinculado
 
-const TTS_VOICES = {
-  es: { languageCode: 'es-US', name: 'es-US-Wavenet-A' },
-  en: { languageCode: 'en-US', name: 'en-US-Wavenet-F' }
-};
-const TTS_MAX_TEXT_CHARS = 20000; // tope de abuso, generoso para cualquier capítulo real
-const TTS_CHUNK_MAX_BYTES = 4500; // margen bajo el límite de ~5000 bytes/petición de Google TTS
-
 const SYNC_EMAIL = {
   es: {
     subject: 'Confirma tu correo para sincronizar Verbo',
@@ -98,123 +91,6 @@ async function handleApiBible(request, url, env, headers) {
   return new Response(body, {
     status:response.status,
     headers:{ ...headers, 'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store' }
-  });
-}
-
-function byteLength(str) {
-  return new TextEncoder().encode(str).length;
-}
-
-// Trocea el texto en fragmentos que no excedan el límite por request de
-// Google TTS, cortando en límites de oración cuando es posible para evitar
-// audios que corten una frase a la mitad.
-function chunkTextForTts(text) {
-  var sentences = text.match(/[^.!?\n]+[.!?]+(?:\s+|$)|[^.!?\n]+$|\n+/g) || [text];
-  var chunks = [];
-  var buf = '';
-  for (var i = 0; i < sentences.length; i++) {
-    var piece = sentences[i];
-    if (byteLength(buf + piece) > TTS_CHUNK_MAX_BYTES) {
-      if (buf.trim()) chunks.push(buf.trim());
-      buf = byteLength(piece) > TTS_CHUNK_MAX_BYTES ? piece.slice(0, 1500) : piece;
-    } else {
-      buf += piece;
-    }
-  }
-  if (buf.trim()) chunks.push(buf.trim());
-  return chunks.length ? chunks : [text.slice(0, 1500)];
-}
-
-async function synthesizeChunk(chunk, voice, apiKey) {
-  const upstream = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`;
-  const response = await fetch(upstream, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      input: { text: chunk },
-      voice: { languageCode: voice.languageCode, name: voice.name },
-      audioConfig: { audioEncoding: 'MP3' }
-    })
-  });
-  if (!response.ok) {
-    const detail = await response.text().catch(() => '');
-    throw new Error(`Google TTS ${response.status}: ${detail.slice(0, 300)}`);
-  }
-  const data = await response.json();
-  if (!data.audioContent) throw new Error('Google TTS no devolvió audio');
-  const binary = atob(data.audioContent);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return bytes;
-}
-
-function concatBuffers(buffers) {
-  const total = buffers.reduce((sum, b) => sum + b.length, 0);
-  const out = new Uint8Array(total);
-  let offset = 0;
-  for (const b of buffers) {
-    out.set(b, offset);
-    offset += b.length;
-  }
-  return out;
-}
-
-async function handleTts(request, url, env, headers) {
-  if (request.method !== 'POST') return jsonError('Método no permitido', 405, headers);
-  if (!env.TTS_AUDIO) return jsonError('El almacenamiento de audio no está configurado', 500, headers);
-
-  const match = url.pathname.match(/^\/v1\/tts\/([a-z0-9-]+)\/([a-z0-9.-]+)$/);
-  if (!match) return jsonError('Ruta de audio inválida', 400, headers);
-  const [, bookId, chapterId] = match;
-  const key = `${bookId}/${chapterId}.mp3`;
-
-  const cached = await env.TTS_AUDIO.get(key);
-  if (cached) {
-    return new Response(cached.body, {
-      status: 200,
-      headers: {
-        ...headers,
-        'Content-Type': 'audio/mpeg',
-        'Cache-Control': 'public, max-age=31536000, immutable',
-        'X-Verbo-TTS-Cache': 'hit'
-      }
-    });
-  }
-
-  if (!env.GOOGLE_TTS_API_KEY) return jsonError('GOOGLE_TTS_API_KEY no está configurada', 500, headers);
-
-  const body = await readJson(request);
-  const text = String(body?.text || '').trim();
-  const lang = body?.lang === 'en' ? 'en' : 'es';
-  if (!text) return jsonError('Falta el texto del capítulo', 400, headers);
-  if (text.length > TTS_MAX_TEXT_CHARS) return jsonError('Texto demasiado largo', 413, headers);
-
-  const voice = TTS_VOICES[lang];
-  const chunks = chunkTextForTts(text);
-
-  let buffers;
-  try {
-    buffers = [];
-    for (const chunk of chunks) {
-      buffers.push(await synthesizeChunk(chunk, voice, env.GOOGLE_TTS_API_KEY));
-    }
-  } catch (err) {
-    return jsonError(`No se pudo generar el audio: ${err.message}`, 502, headers);
-  }
-
-  const audio = concatBuffers(buffers);
-  console.log(`[tts] ${bookId}/${chapterId} chars=${text.length} chunks=${chunks.length} bytes=${audio.length}`);
-
-  await env.TTS_AUDIO.put(key, audio, { httpMetadata: { contentType: 'audio/mpeg' } });
-
-  return new Response(audio, {
-    status: 200,
-    headers: {
-      ...headers,
-      'Content-Type': 'audio/mpeg',
-      'Cache-Control': 'public, max-age=31536000, immutable',
-      'X-Verbo-TTS-Cache': 'miss'
-    }
   });
 }
 
@@ -357,7 +233,6 @@ export default {
     if (!headers['Access-Control-Allow-Origin']) return jsonError('Origen no autorizado', 403, headers);
 
     if (url.pathname.startsWith('/v1/sync/')) return handleSync(request, url, env, headers);
-    if (url.pathname.startsWith('/v1/tts/')) return handleTts(request, url, env, headers);
     return handleApiBible(request, url, env, headers);
   }
 };
