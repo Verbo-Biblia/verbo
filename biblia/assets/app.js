@@ -1833,15 +1833,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     return String(value||'').toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
   }
 
+  // Las 6 épocas de "Historia de la Iglesia" (taxonomía confirmada por Juan,
+  // 2026-08-01) — id interno (usado en entries.json) → etiqueta corta ES,
+  // en el mismo orden cronológico que CHURCH_HISTORY_EPOCA_ORDER.
+  const CHURCH_HISTORY_EPOCA_LABELS={
+    iglesia_primitiva: 'Iglesia primitiva',
+    era_patristica: 'Era patrística',
+    edad_media: 'Edad Media',
+    reforma: 'Reforma',
+    puritanos_post_reforma: 'Puritanos y post-Reforma',
+    iglesia_moderna: 'Iglesia moderna',
+  };
+
   // Texto de búsqueda de una entrada: personaje(s)/evento(s)/periodo (metadata
-  // editorial) + título + cuerpo completo (texto real de la fuente) — así el
-  // buscador funciona como texto completo real aunque personas/eventos no estén
-  // poblados para una entrada (evita depender de una extracción automática de
-  // entidades que podría etiquetar mal un lugar como persona, por ejemplo).
+  // editorial) + etiqueta de época + título + cuerpo completo (texto real de
+  // la fuente) — así el buscador funciona como texto completo real aunque
+  // personas/eventos no estén poblados para una entrada (evita depender de
+  // una extracción automática de entidades que podría etiquetar mal un lugar
+  // como persona, por ejemplo), y un chip de época encuentra TODAS las
+  // entradas de esa época (la etiqueta queda embebida en cada una).
   // Se cachea en el propio objeto (calculado una sola vez por entrada).
   function churchHistorySearchText(e){
     if(e._searchText==null){
-      const parts=[...(e.personas||[]),...(e.eventos||[]),e.periodo||'',e.title||'',htmlToPlainText(e.content||e.excerpt||'')];
+      const parts=[...(e.personas||[]),...(e.eventos||[]),e.periodo||'',CHURCH_HISTORY_EPOCA_LABELS[e.epoca]||'',e.title||'',htmlToPlainText(e.content||e.excerpt||'')];
       e._searchText=normalizeSearchText(parts.join(' '));
     }
     return e._searchText;
@@ -1902,46 +1916,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 400);
   }
 
-  // ---- Chips de sugerencia del panel vacío: 1-2 destacadas (personaje o
-  // evento, ver e.personas/e.eventos) por cada "epoca" presente en el índice,
-  // hasta un máximo de 8, tomadas al azar de un pool más amplio por época
-  // (rotan cada vez que se abre el panel). Nunca se inventa texto: el chip
-  // usa literalmente el mismo string que ya está indexado en personas/eventos,
-  // así la búsqueda que dispara siempre encuentra al menos esa entrada. Solo
-  // aparecen las épocas que de verdad tienen contenido curado — sin chips
-  // rotos ni vacíos. ----
+  // ---- Chips de sugerencia del panel vacío: una por cada una de las 6
+  // épocas que tenga al menos una entrada real en el índice (orden
+  // cronológico fijo, no aleatorio — a diferencia de la primera versión de
+  // este feature, que sorteaba personajes/eventos puntuales; Juan pidió
+  // "más amplitud", así que el chip ahora es la época completa). Clic en un
+  // chip busca la etiqueta de la época, que ya está embebida en el texto de
+  // búsqueda de cada entrada de esa época (ver churchHistorySearchText) —
+  // el resultado es la lista completa de esa época, no un solo capítulo. ----
   const CHURCH_HISTORY_EPOCA_ORDER=['iglesia_primitiva','era_patristica','edad_media','reforma','puritanos_post_reforma','iglesia_moderna'];
   let churchHistorySuggestions=[];
-  function churchHistorySuggestionPool(entries){
-    const byEpoca={};
-    entries.forEach(e=>{
-      const label=(e.personas&&e.personas[0])||(e.eventos&&e.eventos[0]);
-      if(!label||!e.epoca) return;
-      (byEpoca[e.epoca]||(byEpoca[e.epoca]=[])).push(label);
-    });
-    return byEpoca;
-  }
-  function pickRandom(arr,n){
-    const pool=[...arr], picked=[];
-    while(pool.length&&picked.length<n) picked.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
-    return picked;
-  }
-  // Reparte el cupo de 8 chips entre las épocas que de verdad tienen
-  // contenido curado hoy: con pocas épocas activas (ej. las 2 de Eusebio),
-  // cada una aporta más chips (hasta llenar el cupo) en vez de dejar el
-  // panel casi vacío con el mínimo de 1-2 por época — a medida que se sumen
-  // más épocas el reparto baja solo, sin tocar este código.
   function churchHistorySuggestionChips(entries){
-    const byEpoca=churchHistorySuggestionPool(entries);
-    const activeEpocas=CHURCH_HISTORY_EPOCA_ORDER.filter(ep=>byEpoca[ep]&&byEpoca[ep].length);
-    if(!activeEpocas.length) return [];
-    const perEpoca=Math.max(2,Math.floor(8/activeEpocas.length));
-    const chips=[];
-    activeEpocas.forEach(epoca=>{
-      const pool=byEpoca[epoca];
-      pickRandom(pool,Math.min(perEpoca,pool.length)).forEach(label=>{ if(!chips.includes(label)) chips.push(label); });
-    });
-    return chips.slice(0,8);
+    const activeEpocas=new Set(entries.map(e=>e.epoca).filter(Boolean));
+    return CHURCH_HISTORY_EPOCA_ORDER.filter(ep=>activeEpocas.has(ep)).map(ep=>CHURCH_HISTORY_EPOCA_LABELS[ep]);
   }
 
   async function renderChurchHistoryPanel(){
@@ -1963,7 +1950,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       try{ churchHistoryEntries=await VerboModules.loadChurchHistory(); }
       catch(error){ console.error(error); churchHistoryEntries=[]; }
     }
-    // Un solo sorteo por apertura del panel, no en cada tecla/render.
     churchHistorySuggestions=churchHistoryEntries.length?churchHistorySuggestionChips(churchHistoryEntries):[];
     renderChurchHistoryBody();
     if(!churchHistoryOpenId) setTimeout(()=>input?.focus(),0);
