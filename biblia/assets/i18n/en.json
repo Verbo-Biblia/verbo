@@ -75,6 +75,11 @@
     "ref": "Ref.",
     "cerrarAria": "Close"
   },
+  "app": {
+    "updateAvailableMsg": "A new version of Verbo is available.",
+    "updateAvailableBtn": "Update now",
+    "updateAvailableDismissAria": "Later"
+  },
   "toast": {
     "copiado": "Copied",
     "noBibleOnline": "Couldn't load this Bible online",

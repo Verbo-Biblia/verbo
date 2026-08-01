@@ -37,6 +37,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const backupData = await VerboBackup.init();
 
+  // Contenedor común para avisos discretos apilables (ver .app-banner-stack
+  // en style.css) — evita que el recordatorio de exportación y el aviso de
+  // actualización disponible se dibujen encima uno del otro si coinciden.
+  function getBannerStack() {
+    let stack = document.getElementById('appBannerStack');
+    if (!stack) {
+      stack = document.createElement('div');
+      stack.id = 'appBannerStack';
+      stack.className = 'app-banner-stack';
+      document.body.appendChild(stack);
+    }
+    return stack;
+  }
+
   // ---- Recordatorio de exportación mensual (red de seguridad aparte de la
   // sincronización en la nube). "Descartado" solo dura esta carga de página
   // (variable en memoria, no localStorage/sessionStorage): si sigue vencido,
@@ -60,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <button type="button" class="export-reminder__close" aria-label="${t('ajustes.exportReminderDismissAria')}">&times;</button>
       </div>
       <button type="button" class="export-reminder__btn">${t('ajustes.exportReminderBtn')}</button>`;
-    document.body.appendChild(el);
+    getBannerStack().appendChild(el);
     el.querySelector('.export-reminder__close').addEventListener('click', () => {
       exportReminderDismissed = true;
       el.remove();
@@ -73,6 +87,60 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
   if (!exportReminderDismissed && isExportOverdue(backupData)) renderExportReminderBanner();
+
+  // ---- Service Worker: shell offline real + aviso de actualización no
+  // intrusivo. El nuevo SW se queda "esperando" a propósito (no hay
+  // skipWaiting() automático en service-worker.js) hasta que el usuario
+  // acepta desde este aviso — así nunca se le cambia la app debajo de los
+  // pies mientras escribe una prédica sin guardar. Si lo descarta, sigue
+  // trabajando con la versión actual; el aviso vuelve a aparecer en la
+  // próxima carga si la actualización sigue pendiente. ----
+  if ('serviceWorker' in navigator) {
+    let swReloadingForUpdate = false;
+    function renderUpdateBanner(registration) {
+      if (document.getElementById('swUpdateBanner')) return;
+      const el = document.createElement('div');
+      el.id = 'swUpdateBanner';
+      el.className = 'export-reminder';
+      el.innerHTML = `
+        <div class="export-reminder__row">
+          <p class="export-reminder__msg">${t('app.updateAvailableMsg')}</p>
+          <button type="button" class="export-reminder__close" aria-label="${t('app.updateAvailableDismissAria')}">&times;</button>
+        </div>
+        <button type="button" class="export-reminder__btn">${t('app.updateAvailableBtn')}</button>`;
+      getBannerStack().appendChild(el);
+      el.querySelector('.export-reminder__close').addEventListener('click', () => el.remove());
+      el.querySelector('.export-reminder__btn').addEventListener('click', () => {
+        // Recién aquí, con un clic explícito del usuario, se le pide al SW en
+        // espera que tome control — controllerchange (abajo) es lo único que
+        // dispara el reload, y solo si esta bandera está en true.
+        swReloadingForUpdate = true;
+        registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+        el.remove();
+      });
+    }
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!swReloadingForUpdate) return;
+      swReloadingForUpdate = false;
+      location.reload();
+    });
+    window.addEventListener('load', async () => {
+      try {
+        const registration = await navigator.serviceWorker.register('service-worker.js');
+        const checkWaiting = () => {
+          if (registration.waiting && navigator.serviceWorker.controller) renderUpdateBanner(registration);
+        };
+        checkWaiting();
+        registration.addEventListener('updatefound', () => {
+          const installing = registration.installing;
+          if (!installing) return;
+          installing.addEventListener('statechange', () => {
+            if (installing.state === 'installed' && navigator.serviceWorker.controller) checkWaiting();
+          });
+        });
+      } catch {}
+    });
+  }
 
   if (window.VerboSync) {
     VerboSync.on('data-updated', () => location.reload());

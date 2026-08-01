@@ -75,6 +75,11 @@
     "ref": "Ref.",
     "cerrarAria": "Cerrar"
   },
+  "app": {
+    "updateAvailableMsg": "Hay una actualización de Verbo disponible.",
+    "updateAvailableBtn": "Actualizar ahora",
+    "updateAvailableDismissAria": "Más tarde"
+  },
   "toast": {
     "copiado": "Copiado",
     "noBibleOnline": "No se pudo cargar la Biblia en línea",

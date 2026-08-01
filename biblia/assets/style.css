@@ -1371,10 +1371,29 @@ body[data-theme="rosewood"] {
   transform: translate(-50%, 0);
 }
 
-.export-reminder {
+/* Contenedor común para avisos discretos apilables (recordatorio de
+   exportación, aviso de actualización disponible, etc.) — evita que dos
+   banners independientes se dibujen encima uno del otro si coinciden. */
+.app-banner-stack {
   position: fixed;
   right: 18px;
   bottom: 22px;
+  z-index: 1500;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  align-items: flex-end;
+}
+@media (max-width: 760px) {
+  .app-banner-stack {
+    left: 12px;
+    right: 12px;
+    bottom: calc(var(--mobile-dock-height, 76px) + 12px + env(safe-area-inset-bottom, 0px));
+    align-items: stretch;
+  }
+}
+
+.export-reminder {
   max-width: 320px;
   background: var(--paper-raised);
   border: 1px solid var(--rule-strong);
@@ -1384,7 +1403,6 @@ body[data-theme="rosewood"] {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 1500;
   font-size: .88rem;
   color: var(--ink);
 }
@@ -1417,12 +1435,7 @@ body[data-theme="rosewood"] {
 }
 .export-reminder__btn:hover { background: var(--wine-soft); }
 @media (max-width: 760px) {
-  .export-reminder {
-    left: 12px;
-    right: 12px;
-    max-width: none;
-    bottom: calc(var(--mobile-dock-height, 76px) + 12px + env(safe-area-inset-bottom, 0px));
-  }
+  .export-reminder { max-width: none; }
 }
 @media (max-width: 760px) {
   .verse-action-bar {
