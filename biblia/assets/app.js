@@ -1401,11 +1401,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function renderSermonBiblePanel(focusVerse=null){
     els.panelTitle.textContent='Biblia';
     initSermonBibleState();
+    // Se recalcula SIEMPRE que haga falta (no solo cuando cambia de capítulo):
+    // una referencia cruzada al mismo capítulo pone chapterCount en null sin
+    // que needsLoad se active, y si esto quedara adentro del "if(needsLoad)"
+    // el selector de capítulo del toolbar se queda con un solo option falso.
+    if(sermonBible.chapterCount==null || sermonBible.data?.meta?.bookId!==sermonBible.book) await sermonRefreshChapterCount();
     const needsLoad = !sermonBible.data || sermonBible.data.meta.bookId!==sermonBible.book || sermonBible.data.meta.chapter!==sermonBible.chapter;
     if(needsLoad){
       selectedVerses.clear();
       updateActionBar();
-      if(sermonBible.chapterCount==null || sermonBible.data?.meta?.bookId!==sermonBible.book) await sermonRefreshChapterCount();
       els.panelToolbar.innerHTML=sermonBibleToolbarHtml();
       wireSermonBibleToolbar();
       els.panelBody.innerHTML=emptyState('⌛','Cargando pasaje…');
@@ -1463,8 +1467,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(focusVerse) container.querySelector(`[data-verse-n="${focusVerse}"]`)?.scrollIntoView({block:'center'});
   }
 
+  // Guarda también el versículo activo de origen (no solo libro/capítulo/versión):
+  // una referencia cruzada frecuentemente apunta al MISMO capítulo (ej. Mt 18:21→Mt
+  // 18:15) — sin el versículo, "volver" no tenía nada que restaurar y parecía no
+  // responder aunque el historial sí se movía internamente.
   function sermonPushHistory(){
-    sermonBible.history.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version});
+    sermonBible.history.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version, verse:sermonBible.activeVerse});
     if(sermonBible.history.length>10) sermonBible.history.shift();
     sermonBible.future=[];
   }
@@ -1477,20 +1485,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function sermonGoBack(){
     if(!sermonBible.history.length) return;
-    sermonBible.future.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version});
+    sermonBible.future.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version, verse:sermonBible.activeVerse});
     if(sermonBible.future.length>10) sermonBible.future.shift();
-    Object.assign(sermonBible, sermonBible.history.pop());
+    const prev=sermonBible.history.pop();
+    sermonBible.book=prev.book; sermonBible.chapter=prev.chapter; sermonBible.version=prev.version;
     sermonBible.chapterCount=null; sermonBible.activeVerse=null;
-    await renderSermonBiblePanel();
+    await renderSermonBiblePanel(prev.verse);
   }
 
   async function sermonGoForward(){
     if(!sermonBible.future.length) return;
-    sermonBible.history.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version});
+    sermonBible.history.push({book:sermonBible.book, chapter:sermonBible.chapter, version:sermonBible.version, verse:sermonBible.activeVerse});
     if(sermonBible.history.length>10) sermonBible.history.shift();
-    Object.assign(sermonBible, sermonBible.future.pop());
+    const next=sermonBible.future.pop();
+    sermonBible.book=next.book; sermonBible.chapter=next.chapter; sermonBible.version=next.version;
     sermonBible.chapterCount=null; sermonBible.activeVerse=null;
-    await renderSermonBiblePanel();
+    await renderSermonBiblePanel(next.verse);
   }
 
   async function openSearchResult(r, versionId){
