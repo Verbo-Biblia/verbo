@@ -8,7 +8,7 @@
 // "?v=" en las etiquetas <script>/<link> — ver CLAUDE.md, "Cache-busting de
 // assets"). Sin ese bump, index.html cacheado puede quedar pegado a una
 // versión vieja hasta el siguiente deploy de este archivo.
-const CACHE_VERSION = 'verbo-biblia-v11-filipenses-verbo';
+const CACHE_VERSION = 'verbo-biblia-v12-predicas-guardar';
 
 const APP_SHELL = [
   './',
