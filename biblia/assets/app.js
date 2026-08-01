@@ -1183,6 +1183,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Editor de texto (TinyMCE autoalojado, cargado vía CDN) ─────────────────
 
+  // El toolbar de TinyMCE puede envolverse en varias filas según el ancho
+  // disponible; medimos su alto real para que la barra de Guardar/Exportar
+  // (sticky) se pegue justo debajo sin taparlo ni dejar hueco.
+  if(els.editorToolbar && els.editorPane){
+    const syncToolbarHeight = ()=>{
+      els.editorPane.style.setProperty('--editor-toolbar-h', els.editorToolbar.offsetHeight + 'px');
+    };
+    new ResizeObserver(syncToolbarHeight).observe(els.editorToolbar);
+    syncToolbarHeight();
+  }
+
   function loadScriptOnce(src){
     return new Promise((resolve,reject)=>{
       const existing=document.querySelector(`script[data-src="${src}"]`);

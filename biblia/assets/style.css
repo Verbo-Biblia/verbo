@@ -2044,7 +2044,7 @@ body.map-viewer-fullscreen-active { overflow: hidden; }
 .editor-pane__toolbar {
   position: sticky;
   top: 0;
-  z-index: 5;
+  z-index: 6;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -2055,6 +2055,9 @@ body.map-viewer-fullscreen-active { overflow: hidden; }
 }
 
 .editor-pane__actions {
+  position: sticky;
+  top: var(--editor-toolbar-h, 49px);
+  z-index: 5;
   display: flex;
   align-items: center;
   justify-content: space-between;
