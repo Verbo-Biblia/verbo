@@ -126,7 +126,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     window.addEventListener('load', async () => {
       try {
-        const registration = await navigator.serviceWorker.register('service-worker.js');
+        // updateViaCache: 'none' es necesario porque GitHub Pages sirve
+        // service-worker.js con Cache-Control: max-age=600 y no hay forma
+        // de cambiar ese header ahí (sin backend/CDN propio) — sin esto, el
+        // navegador podía comparar contra una copia de HASTA 10 minutos de
+        // antigüedad guardada en su caché HTTP normal en vez de ir a la red.
+        const registration = await navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });
         const checkWaiting = () => {
           if (registration.waiting && navigator.serviceWorker.controller) renderUpdateBanner(registration);
         };
@@ -138,6 +143,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (installing.state === 'installed' && navigator.serviceWorker.controller) checkWaiting();
           });
         });
+        // En Android, al reabrir la app instalada (TWA) desde segundo plano,
+        // Chrome muchas veces reanuda la página congelada en vez de
+        // recargarla — no dispara 'load' de nuevo, así que sin esto la app
+        // podía quedar pegada en una versión vieja por días aunque el
+        // usuario la reabriera seguido (solo borrar los datos de la app
+        // forzaba una carga 100% desde cero y arreglaba el problema). Con
+        // esto, cada vez que la app vuelve a primer plano se pregunta
+        // activamente si hay una versión nueva.
+        // Debounce: 'visibilitychange' y 'focus' suelen dispararse juntos en
+        // un mismo resume, y cambiar de app varias veces seguidas (ej. al
+        // revisar notificaciones) puede disparar el evento muchas veces en
+        // segundos — sin este mínimo, cada una lanzaría su propia petición
+        // de red redundante.
+        const RECHECK_MIN_INTERVAL_MS = 60000;
+        let lastRecheckAt = 0;
+        const recheckOnResume = () => {
+          if (document.visibilityState !== 'visible') return;
+          const now = Date.now();
+          if (now - lastRecheckAt < RECHECK_MIN_INTERVAL_MS) return;
+          lastRecheckAt = now;
+          registration.update().then(checkWaiting).catch(() => {});
+        };
+        document.addEventListener('visibilitychange', recheckOnResume);
+        window.addEventListener('pageshow', recheckOnResume);
+        window.addEventListener('focus', recheckOnResume);
       } catch {}
     });
   }
