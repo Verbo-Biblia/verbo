@@ -685,6 +685,31 @@ body {
   line-height: 1.6;
 }
 
+.history-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  max-width: 320px;
+}
+.history-suggestions__chip {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-raised);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 6px 13px;
+  font-size: 12.5px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.history-suggestions__chip:hover {
+  border-color: var(--wine-soft);
+  color: var(--wine);
+  background: var(--chrome);
+}
+
 /* Diccionario */
 
 .dict-entry__term {

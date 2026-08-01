@@ -1902,6 +1902,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 400);
   }
 
+  // ---- Chips de sugerencia del panel vacío: 1-2 destacadas (personaje o
+  // evento, ver e.personas/e.eventos) por cada "epoca" presente en el índice,
+  // hasta un máximo de 8, tomadas al azar de un pool más amplio por época
+  // (rotan cada vez que se abre el panel). Nunca se inventa texto: el chip
+  // usa literalmente el mismo string que ya está indexado en personas/eventos,
+  // así la búsqueda que dispara siempre encuentra al menos esa entrada. Solo
+  // aparecen las épocas que de verdad tienen contenido curado — sin chips
+  // rotos ni vacíos. ----
+  const CHURCH_HISTORY_EPOCA_ORDER=['iglesia_primitiva','era_patristica','edad_media','reforma','puritanos_post_reforma','iglesia_moderna'];
+  let churchHistorySuggestions=[];
+  function churchHistorySuggestionPool(entries){
+    const byEpoca={};
+    entries.forEach(e=>{
+      const label=(e.personas&&e.personas[0])||(e.eventos&&e.eventos[0]);
+      if(!label||!e.epoca) return;
+      (byEpoca[e.epoca]||(byEpoca[e.epoca]=[])).push(label);
+    });
+    return byEpoca;
+  }
+  function pickRandom(arr,n){
+    const pool=[...arr], picked=[];
+    while(pool.length&&picked.length<n) picked.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+    return picked;
+  }
+  // Reparte el cupo de 8 chips entre las épocas que de verdad tienen
+  // contenido curado hoy: con pocas épocas activas (ej. las 2 de Eusebio),
+  // cada una aporta más chips (hasta llenar el cupo) en vez de dejar el
+  // panel casi vacío con el mínimo de 1-2 por época — a medida que se sumen
+  // más épocas el reparto baja solo, sin tocar este código.
+  function churchHistorySuggestionChips(entries){
+    const byEpoca=churchHistorySuggestionPool(entries);
+    const activeEpocas=CHURCH_HISTORY_EPOCA_ORDER.filter(ep=>byEpoca[ep]&&byEpoca[ep].length);
+    if(!activeEpocas.length) return [];
+    const perEpoca=Math.max(2,Math.floor(8/activeEpocas.length));
+    const chips=[];
+    activeEpocas.forEach(epoca=>{
+      const pool=byEpoca[epoca];
+      pickRandom(pool,Math.min(perEpoca,pool.length)).forEach(label=>{ if(!chips.includes(label)) chips.push(label); });
+    });
+    return chips.slice(0,8);
+  }
+
   async function renderChurchHistoryPanel(){
     els.panelTitle.textContent=t('historia.title');
     els.panelToolbar.innerHTML=`<form class="search-panel-form" id="churchHistorySearchForm">
@@ -1921,14 +1963,38 @@ document.addEventListener('DOMContentLoaded', async () => {
       try{ churchHistoryEntries=await VerboModules.loadChurchHistory(); }
       catch(error){ console.error(error); churchHistoryEntries=[]; }
     }
+    // Un solo sorteo por apertura del panel, no en cada tecla/render.
+    churchHistorySuggestions=churchHistoryEntries.length?churchHistorySuggestionChips(churchHistoryEntries):[];
     renderChurchHistoryBody();
     if(!churchHistoryOpenId) setTimeout(()=>input?.focus(),0);
+  }
+
+  function renderChurchHistorySuggestionChips(){
+    if(!churchHistorySuggestions.length) return '';
+    return `<div class="history-suggestions">${churchHistorySuggestions.map(label=>
+      `<button type="button" class="history-suggestions__chip" data-history-suggestion="${escapeHTML(label)}">${escapeHTML(label)}</button>`
+    ).join('')}</div>`;
+  }
+  function wireChurchHistorySuggestionChips(){
+    els.panelBody.querySelectorAll('[data-history-suggestion]').forEach(btn=>btn.addEventListener('click',()=>{
+      const term=btn.dataset.historySuggestion;
+      churchHistoryQuery=term;
+      churchHistoryTranslatedQuery='';
+      const input=document.getElementById('churchHistorySearchInput');
+      if(input) input.value=term;
+      renderChurchHistoryBody();
+      scheduleChurchHistoryQueryTranslation(term);
+    }));
   }
 
   function renderChurchHistoryBody(){
     if(churchHistoryOpenId){ renderChurchHistoryEntry(churchHistoryOpenId); return; }
     if(!churchHistoryEntries.length){ els.panelBody.innerHTML=emptyState('⛪',t('historia.sinContenido')); return; }
-    if(!churchHistoryQuery.trim()){ els.panelBody.innerHTML=emptyState('🔎',t('historia.intro')); return; }
+    if(!churchHistoryQuery.trim()){
+      els.panelBody.innerHTML=`<div class="panel-empty"><div class="panel-empty__icon">🔎</div><div class="panel-empty__text">${t('historia.intro')}</div>${renderChurchHistorySuggestionChips()}</div>`;
+      wireChurchHistorySuggestionChips();
+      return;
+    }
     const results=churchHistorySearch(churchHistoryEntries, churchHistoryQuery, churchHistoryTranslatedQuery);
     if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',t('historia.sinResultados',{query:escapeHTML(churchHistoryQuery)})); return; }
     els.panelBody.innerHTML=`<div class="search-results-list">${results.map(e=>{
