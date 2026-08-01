@@ -45,7 +45,7 @@ window.VerboBackup = (() => {
   }
 
   function emptyData() {
-    return { version: '1.0', fecha_guardado: null, notas: [], resaltados: [], marcadores: [], posicion_lectura: {} };
+    return { version: '1.0', fecha_guardado: null, notas: [], resaltados: [], marcadores: [], posicion_lectura: {}, ultima_exportacion: null, predicas: [] };
   }
 
   // Migración única desde el localStorage disperso que ya existía antes de
@@ -71,6 +71,11 @@ window.VerboBackup = (() => {
     const libro = localStorage.getItem('verbo:lastBook');
     const capitulo = localStorage.getItem('verbo:lastChapter');
     if (libro) data.posicion_lectura.biblia = { libro, capitulo: capitulo ? Number(capitulo) : 1 };
+    // Si de verdad se migró contenido real (resaltados/notas de antes de que
+    // existiera este sistema), hay que sellar fecha_guardado: si se deja en
+    // null, sync.js (push()) lo trata como "dispositivo sin datos todavía" y
+    // nunca lo sube. Sin contenido real, se deja null a propósito.
+    if (data.resaltados.length || data.notas.length) data.fecha_guardado = new Date().toISOString();
     return data;
   }
 
@@ -87,7 +92,7 @@ window.VerboBackup = (() => {
       cached = migrateFromLocalStorage();
       await idbSet(DATA_KEY, cached);
     }
-    for (const campo of ['notas', 'resaltados', 'marcadores']) if (!Array.isArray(cached[campo])) cached[campo] = [];
+    for (const campo of ['notas', 'resaltados', 'marcadores', 'predicas']) if (!Array.isArray(cached[campo])) cached[campo] = [];
     if (!cached.posicion_lectura) cached.posicion_lectura = {};
     return cached;
   }
@@ -116,7 +121,7 @@ window.VerboBackup = (() => {
   // red, no de un cambio local que haya que reenviar.
   async function replaceData(newData) {
     cached = { ...emptyData(), ...newData };
-    for (const campo of ['notas', 'resaltados', 'marcadores']) if (!Array.isArray(cached[campo])) cached[campo] = [];
+    for (const campo of ['notas', 'resaltados', 'marcadores', 'predicas']) if (!Array.isArray(cached[campo])) cached[campo] = [];
     if (!cached.posicion_lectura) cached.posicion_lectura = {};
     await idbSet(DATA_KEY, cached);
     scheduleCapacitorWrite();
@@ -145,6 +150,55 @@ window.VerboBackup = (() => {
     const existing = cached.notas.find(n => n.ubicacion?.tipo === 'biblia' && n.ubicacion.ref === ref);
     if (existing) { existing.texto = texto; existing.fecha = new Date().toISOString(); }
     else cached.notas.push({ id: ref, ubicacion: { tipo: 'biblia', ref }, texto, fecha: new Date().toISOString() });
+    cached.fecha_guardado = new Date().toISOString();
+    persist();
+  }
+
+  // ---- Prédicas (modo Preparación de Bosquejo/Estudio) ----
+  function firstLineFromHtml(html) {
+    const text = String(html || '')
+      .replace(/<\/(p|h1|h2|h3|h4|h5|h6|li|div)>/gi, '\n')
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&nbsp;/gi, ' ');
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    return lines[0] || '';
+  }
+  function defaultPredicaTitulo(contenido) {
+    const first = firstLineFromHtml(contenido);
+    if (first) return first.slice(0, 120);
+    const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    return `Prédica sin título — ${fecha}`;
+  }
+  function getPredicas() {
+    return [...cached.predicas].sort((a, b) => (b.fecha_edicion || '').localeCompare(a.fecha_edicion || ''));
+  }
+  function getPredica(id) {
+    return cached.predicas.find(p => p.id === id) || null;
+  }
+  // Upsert: si viene id y existe, actualiza esa entrada; si no, crea una nueva.
+  // Es la única vía de escritura para prédicas — la llama el botón "Guardar"
+  // explícito del modo sermón, nunca un autoguardado (no existe todavía).
+  function savePredica({ id, titulo, contenido, pasaje_base }) {
+    const now = new Date().toISOString();
+    let entry = id ? cached.predicas.find(p => p.id === id) : null;
+    if (!entry) {
+      entry = {
+        id: id || (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`),
+        fecha_creacion: now
+      };
+      cached.predicas.push(entry);
+    }
+    entry.contenido = contenido || '';
+    entry.pasaje_base = pasaje_base || '';
+    entry.titulo = (titulo && String(titulo).trim()) || defaultPredicaTitulo(entry.contenido);
+    entry.fecha_edicion = now;
+    cached.fecha_guardado = now;
+    persist();
+    return entry;
+  }
+  function deletePredica(id) {
+    cached.predicas = cached.predicas.filter(p => p.id !== id);
     cached.fecha_guardado = new Date().toISOString();
     persist();
   }
@@ -193,19 +247,25 @@ window.VerboBackup = (() => {
 
   // ---- Exportar / Importar (respaldo manual explícito, universal) ----
   function exportDownload() {
+    // Se sella ANTES de armar el blob para que el propio archivo descargado
+    // quede con su fecha de exportación correcta (útil si luego se importa
+    // en otro dispositivo). No mueve fecha_guardado: exportar no es una
+    // edición de contenido, mismo criterio que posicion_lectura.
+    cached.ultima_exportacion = new Date().toISOString();
     const blob = new Blob([JSON.stringify(cached, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = FILE_NAME;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+    persist();
   }
 
   async function importFromFile(file) {
     const text = await file.text();
     const parsed = JSON.parse(text);
     cached = { ...emptyData(), ...parsed };
-    for (const campo of ['notas', 'resaltados', 'marcadores']) if (!Array.isArray(cached[campo])) cached[campo] = [];
+    for (const campo of ['notas', 'resaltados', 'marcadores', 'predicas']) if (!Array.isArray(cached[campo])) cached[campo] = [];
     await idbSet(DATA_KEY, cached);
     return cached;
   }
@@ -214,6 +274,7 @@ window.VerboBackup = (() => {
     init, getData, saveNow,
     getResaltadosMap, setAllResaltados,
     getNota, setNota,
+    getPredicas, getPredica, savePredica, deletePredica,
     getPosicionBiblia, setPosicionBiblia,
     exportDownload, importFromFile,
     isCapacitorNative,

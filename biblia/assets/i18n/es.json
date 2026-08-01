@@ -36,7 +36,8 @@
     "padres": "Padres Apostólicos",
     "licencias": "Fuentes y licencias",
     "fundador": "Sobre el fundador",
-    "mision": "Nuestra misión"
+    "mision": "Nuestra misión",
+    "predicas": "Mis prédicas"
   },
   "panel": {
     "defaultTitle": "Panel",
@@ -91,7 +92,10 @@
     "syncBtn": "Vincular dispositivo",
     "syncPendingMsg": "Revisa tu correo y abre el enlace para confirmar el vínculo. El enlace expira en 30 minutos.",
     "syncLinkedMsg": "Vinculado a {{email}}. Tus datos se sincronizan solos entre tus dispositivos.",
-    "syncUnlinkBtn": "Desvincular este dispositivo"
+    "syncUnlinkBtn": "Desvincular este dispositivo",
+    "exportReminderMsg": "Hace un tiempo que no exportas tus datos como respaldo — tómate un momento.",
+    "exportReminderBtn": "Exportar ahora",
+    "exportReminderDismissAria": "Cerrar aviso"
   },
   "biblia": {
     "loadError": "No se pudo cargar este pasaje.",
@@ -156,6 +160,14 @@
     "placeholder": "Escribe aquí tu observación...",
     "escribiendo": "Escribiendo…",
     "guardado": "Guardado"
+  },
+  "predicas": {
+    "title": "Mis prédicas",
+    "nuevaBtn": "Nueva prédica",
+    "abrirBtn": "Abrir",
+    "eliminarBtn": "Eliminar",
+    "eliminarConfirm": "¿Eliminar esta prédica? No se puede deshacer.",
+    "vacio": "Todavía no has guardado ninguna prédica."
   },
   "padres": {
     "title": "Padres Apostólicos",

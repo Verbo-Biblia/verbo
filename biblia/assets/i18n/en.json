@@ -36,7 +36,8 @@
     "padres": "Apostolic Fathers",
     "licencias": "Sources & licenses",
     "fundador": "About the founder",
-    "mision": "Our mission"
+    "mision": "Our mission",
+    "predicas": "My sermons"
   },
   "panel": {
     "defaultTitle": "Panel",
@@ -91,7 +92,10 @@
     "syncBtn": "Link device",
     "syncPendingMsg": "Check your email and open the link to confirm. The link expires in 30 minutes.",
     "syncLinkedMsg": "Linked to {{email}}. Your data syncs automatically across your devices.",
-    "syncUnlinkBtn": "Unlink this device"
+    "syncUnlinkBtn": "Unlink this device",
+    "exportReminderMsg": "It's been a while since you backed up your data — take a moment for that.",
+    "exportReminderBtn": "Export now",
+    "exportReminderDismissAria": "Dismiss notice"
   },
   "biblia": {
     "loadError": "Couldn't load this passage.",
@@ -156,6 +160,14 @@
     "placeholder": "Write your observation here...",
     "escribiendo": "Writing…",
     "guardado": "Saved"
+  },
+  "predicas": {
+    "title": "My sermons",
+    "nuevaBtn": "New sermon",
+    "abrirBtn": "Open",
+    "eliminarBtn": "Delete",
+    "eliminarConfirm": "Delete this sermon? This can't be undone.",
+    "vacio": "You haven't saved any sermons yet."
   },
   "padres": {
     "title": "Apostolic Fathers",

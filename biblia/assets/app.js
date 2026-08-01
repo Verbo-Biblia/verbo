@@ -36,6 +36,44 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   const backupData = await VerboBackup.init();
+
+  // ---- Recordatorio de exportación mensual (red de seguridad aparte de la
+  // sincronización en la nube). "Descartado" solo dura esta carga de página
+  // (variable en memoria, no localStorage/sessionStorage): si sigue vencido,
+  // vuelve a aparecer en la siguiente carga. ----
+  let exportReminderDismissed = false;
+  const EXPORT_REMINDER_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+  function isExportOverdue(data) {
+    const last = data?.ultima_exportacion;
+    if (!last) return true;
+    const elapsed = Date.now() - Date.parse(last);
+    return !(elapsed < EXPORT_REMINDER_DAYS_MS);
+  }
+  function renderExportReminderBanner() {
+    if (document.getElementById('exportReminder')) return;
+    const el = document.createElement('div');
+    el.id = 'exportReminder';
+    el.className = 'export-reminder';
+    el.innerHTML = `
+      <div class="export-reminder__row">
+        <p class="export-reminder__msg">${t('ajustes.exportReminderMsg')}</p>
+        <button type="button" class="export-reminder__close" aria-label="${t('ajustes.exportReminderDismissAria')}">&times;</button>
+      </div>
+      <button type="button" class="export-reminder__btn">${t('ajustes.exportReminderBtn')}</button>`;
+    document.body.appendChild(el);
+    el.querySelector('.export-reminder__close').addEventListener('click', () => {
+      exportReminderDismissed = true;
+      el.remove();
+    });
+    el.querySelector('.export-reminder__btn').addEventListener('click', () => {
+      VerboBackup.exportDownload();
+      toast(t('toast.descargando'));
+      exportReminderDismissed = true;
+      el.remove();
+    });
+  }
+  if (!exportReminderDismissed && isExportOverdue(backupData)) renderExportReminderBanner();
+
   if (window.VerboSync) {
     VerboSync.on('data-updated', () => location.reload());
     VerboSync.on('linked', () => { syncPending = false; if (activeTab === 'ajustes') renderAjustes(); });
@@ -50,6 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let sermonEditor = null;
   let sermonEditorContent = null;
   let sermonBible = null;
+  let currentPredicaId = null;
   let selectedVerses = new Set();
   let highlights = VerboBackup.getResaltadosMap();
   let suppressCommentSync = false;
@@ -653,6 +692,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(tab==='historia') renderChurchHistoryPanel();
     if(tab==='padres') renderPadresPanel(focus || activeVerse());
     if(tab==='notas') renderNotes();
+    if(tab==='predicas') renderPredicasPanel();
     if(tab==='exegesis') renderExegesis(focus || activeVerse());
     if(tab==='ajustes') renderAjustes();
     if(tab==='mapas') renderMapsPanel();
@@ -1133,6 +1173,99 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   els.editorPane?.querySelector('#exportWordBtn')?.addEventListener('click', exportSermonToWord);
   els.editorPane?.querySelector('#exportPdfBtn')?.addEventListener('click', exportSermonToPDF);
+
+  // ── Guardar (persistencia real de la prédica: local + push inmediato) ─────
+  // Única vía de guardado hoy: no hay autoguardado por inactividad ni botón
+  // "Salir" todavía (confirmado con Juan 2026-08-01) — mientras tanto, si el
+  // pastor recarga sin haber tocado "Guardar", el contenido en el editor se
+  // pierde (sermonEditorContent es solo memoria volátil).
+  function setSermonSaveBtnState(state){
+    const btn = document.getElementById('guardarSermonBtn');
+    if(!btn) return;
+    const labels = { idle:'Guardar', saving:'Guardando…', syncing:'Sincronizando…', saved:'Guardado ✓' };
+    btn.textContent = labels[state] || labels.idle;
+    btn.disabled = state==='saving' || state==='syncing';
+  }
+  async function handleSaveSermon(){
+    const btn = document.getElementById('guardarSermonBtn');
+    if(!sermonEditor || btn?.disabled) return;
+    setSermonSaveBtnState('saving');
+    try{
+      const contenido = sermonEditor.getContent();
+      const tituloInput = document.getElementById('predicaTituloInput');
+      const saved = VerboBackup.savePredica({ id: currentPredicaId, titulo: tituloInput?.value || '', contenido, pasaje_base: '' });
+      currentPredicaId = saved.id;
+      if(tituloInput && !tituloInput.value) tituloInput.value = saved.titulo;
+      if(window.VerboSync?.isLinked?.()){
+        const result = await VerboSync.forcePush().catch(error=>{ console.warn('[sermon] no se pudo forzar la sincronización', error); return { synced:false, reason:'error' }; });
+        if(result?.reason === 'pending-initial-pull'){
+          setSermonSaveBtnState('syncing');
+          await new Promise(resolve=>setTimeout(resolve, 900));
+        }
+      }
+    } finally {
+      setSermonSaveBtnState('saved');
+      setTimeout(()=>setSermonSaveBtnState('idle'), 1500);
+      if(activeTab==='predicas') renderPredicasPanel();
+    }
+  }
+  els.editorPane?.querySelector('#guardarSermonBtn')?.addEventListener('click', handleSaveSermon);
+
+  // ── Panel "Mis prédicas" (guardar/abrir/eliminar, modo sermón) ─────────────
+
+  function newPredica(){
+    if(!sermonEditor) return;
+    currentPredicaId = null;
+    sermonEditorContent = '';
+    sermonEditor.setContent('');
+    const tituloInput = document.getElementById('predicaTituloInput');
+    if(tituloInput) tituloInput.value = '';
+    closePanel();
+  }
+
+  function openPredica(id){
+    const p = VerboBackup.getPredica(id);
+    if(!p || !sermonEditor) return;
+    currentPredicaId = p.id;
+    sermonEditorContent = p.contenido || '';
+    sermonEditor.setContent(sermonEditorContent);
+    const tituloInput = document.getElementById('predicaTituloInput');
+    if(tituloInput) tituloInput.value = p.titulo || '';
+    closePanel();
+  }
+
+  function deletePredicaWithConfirm(id){
+    const p = VerboBackup.getPredica(id);
+    if(!p) return;
+    if(!window.confirm(t('predicas.eliminarConfirm'))) return;
+    VerboBackup.deletePredica(id);
+    if(currentPredicaId === id) currentPredicaId = null;
+    renderPredicasPanel();
+  }
+
+  function renderPredicasPanel(){
+    els.panelTitle.textContent = t('predicas.title');
+    const list = VerboBackup.getPredicas();
+    const locale = window.VerboI18n?.getUiLang() === 'en' ? 'en-US' : 'es-ES';
+    const fmtDate = (iso) => { try{ return iso ? new Date(iso).toLocaleDateString(locale, {day:'numeric',month:'short',year:'numeric'}) : ''; } catch { return ''; } };
+    els.panelBody.innerHTML = `
+      <button type="button" class="predicas-panel__new" id="predicasNewBtn">${t('predicas.nuevaBtn')}</button>
+      ${list.length ? list.map(p=>`
+        <div class="predicas-list__item" data-predica-id="${p.id}">
+          <div class="predicas-list__info">
+            <p class="predicas-list__title">${escapeHTML(p.titulo || '')}</p>
+            <span class="predicas-list__date">${fmtDate(p.fecha_edicion)}</span>
+          </div>
+          <div class="predicas-list__actions">
+            <button type="button" class="predicas-list__btn" data-open-predica="${p.id}">${t('predicas.abrirBtn')}</button>
+            <button type="button" class="predicas-list__btn predicas-list__btn--danger" data-delete-predica="${p.id}">${t('predicas.eliminarBtn')}</button>
+          </div>
+        </div>`).join('') : emptyState('📝', t('predicas.vacio'))}
+    `;
+    document.getElementById('predicasNewBtn')?.addEventListener('click', newPredica);
+    els.panelBody.querySelectorAll('[data-open-predica]').forEach(btn=>btn.addEventListener('click', ()=>openPredica(btn.dataset.openPredica)));
+    els.panelBody.querySelectorAll('[data-delete-predica]').forEach(btn=>btn.addEventListener('click', ()=>deletePredicaWithConfirm(btn.dataset.deletePredica)));
+  }
 
   // ── Panel lateral "Biblia" del modo sermón (con historial de referencias) ──
 

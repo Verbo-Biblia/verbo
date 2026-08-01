@@ -1370,6 +1370,60 @@ body[data-theme="rosewood"] {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+
+.export-reminder {
+  position: fixed;
+  right: 18px;
+  bottom: 22px;
+  max-width: 320px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-strong);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.16);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1500;
+  font-size: .88rem;
+  color: var(--ink);
+}
+.export-reminder__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.export-reminder__msg { margin: 0; line-height: 1.4; }
+.export-reminder__close {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+.export-reminder__btn {
+  align-self: flex-start;
+  background: var(--wine);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: .85rem;
+  cursor: pointer;
+}
+.export-reminder__btn:hover { background: var(--wine-soft); }
+@media (max-width: 760px) {
+  .export-reminder {
+    left: 12px;
+    right: 12px;
+    max-width: none;
+    bottom: calc(var(--mobile-dock-height, 76px) + 12px + env(safe-area-inset-bottom, 0px));
+  }
+}
 @media (max-width: 760px) {
   .verse-action-bar {
     bottom: calc(var(--mobile-dock-height, 76px) + 10px + env(safe-area-inset-bottom, 0px));
@@ -1964,12 +2018,29 @@ body.map-viewer-fullscreen-active { overflow: hidden; }
 
 .editor-pane__actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
   padding: 8px 24px;
   background: var(--paper-raised);
   border-bottom: 1px solid var(--rule);
 }
+
+.editor-pane__title-input {
+  flex: 1;
+  min-width: 120px;
+  max-width: 420px;
+  border: 1px solid var(--rule-strong);
+  background: var(--chrome);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+.editor-pane__title-input:focus { outline: none; border-color: var(--wine-soft); }
+
+.editor-pane__actions-buttons { display: flex; gap: 8px; flex-shrink: 0; }
 
 .editor-pane__export-btn {
   border: 1px solid var(--rule-strong);
@@ -1987,6 +2058,27 @@ body.map-viewer-fullscreen-active { overflow: hidden; }
 .editor-pane__export-btn:hover {
   border-color: var(--wine-soft);
   color: var(--wine);
+}
+
+.editor-pane__save-btn {
+  border: 1px solid var(--wine);
+  background: var(--wine);
+  color: #fff;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  min-width: 84px;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.editor-pane__save-btn:hover { background: var(--wine-soft); border-color: var(--wine-soft); }
+.editor-pane__save-btn:disabled { opacity: 0.75; cursor: default; }
+
+@media (max-width: 760px) {
+  .editor-pane__actions { flex-wrap: wrap; }
+  .editor-pane__title-input { flex-basis: 100%; max-width: none; order: -1; }
 }
 
 .editor-pane__inner {
@@ -2097,6 +2189,57 @@ body.sermon-mode .verse-action-bar .verse-swatch,
 body.sermon-mode .verse-action-bar .verse-action-bar__sep:first-of-type {
   display: none;
 }
+
+/* ---------- Mis prédicas (solo visible en modo sermón) ---------- */
+.tab-rail__btn[data-tab="predicas"] { display: none; }
+body.sermon-mode .tab-rail__btn[data-tab="predicas"] { display: flex; }
+
+.predicas-panel__new {
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--wine);
+  color: #fff;
+  font: inherit;
+  font-size: .9rem;
+  cursor: pointer;
+}
+.predicas-panel__new:hover { background: var(--wine-soft); }
+
+.predicas-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--rule);
+}
+.predicas-list__item:last-child { border-bottom: none; }
+.predicas-list__info { min-width: 0; }
+.predicas-list__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0 0 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.predicas-list__date { font-size: 12px; color: var(--ink-soft); }
+.predicas-list__actions { display: flex; gap: 6px; flex-shrink: 0; }
+.predicas-list__btn {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-raised);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: .78rem;
+  cursor: pointer;
+}
+.predicas-list__btn:hover { background: var(--rule); }
+.predicas-list__btn--danger { color: var(--wine); }
 
 /* ---------- Ajustes (Sincronizar / Tema / Exportar-Importar) ---------- */
 .ajustes-panel { padding: 2px 0 10px; }
