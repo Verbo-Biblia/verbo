@@ -196,13 +196,41 @@ async function handleDataGet(request, env, headers) {
   return jsonOk({ data: stored.data, updatedAt: stored.updatedAt }, headers);
 }
 
+// Mismo shape que emptyData() en biblia/assets/backup.js: sin fecha_guardado
+// y sin ningún arreglo de contenido real. Se usa como última línea de
+// defensa (CAPA 3) contra cualquier bug futuro del cliente que intente subir
+// un blob vacío/por defecto encima de datos reales ya guardados.
+function isEmptyBlob(data) {
+  if (!data || typeof data !== 'object') return true;
+  if (data.fecha_guardado) return false;
+  const notas = Array.isArray(data.notas) ? data.notas.length : 0;
+  const resaltados = Array.isArray(data.resaltados) ? data.resaltados.length : 0;
+  const marcadores = Array.isArray(data.marcadores) ? data.marcadores.length : 0;
+  return notas === 0 && resaltados === 0 && marcadores === 0;
+}
+
 async function handleDataPut(request, env, headers) {
   if (!env.SYNC_KV) return jsonError('Sincronización no está configurada', 500, headers);
   const session = await requireSession(request, env, headers);
   if (session.error) return session.error;
   const body = await readJson(request);
   if (!body || typeof body.data !== 'object') return jsonError('Datos inválidos', 400, headers);
-  const updatedAt = String(body.updatedAt || new Date().toISOString());
+  if (!body.updatedAt) return jsonError('Falta updatedAt', 400, headers);
+  const updatedAt = String(body.updatedAt);
+
+  const existingRaw = await env.SYNC_KV.get(`blob:${session.emailHash}`);
+  if (existingRaw) {
+    const existing = JSON.parse(existingRaw);
+    const incomingTime = Date.parse(updatedAt) || 0;
+    const existingTime = Date.parse(existing.updatedAt) || 0;
+    if (incomingTime < existingTime) {
+      return jsonError('El dato remoto guardado es más nuevo que el enviado', 409, headers);
+    }
+    if (isEmptyBlob(body.data) && !isEmptyBlob(existing.data)) {
+      return jsonError('Se rechazó sobrescribir datos existentes con un blob vacío', 409, headers);
+    }
+  }
+
   await env.SYNC_KV.put(`blob:${session.emailHash}`, JSON.stringify({ data: body.data, updatedAt }));
   return jsonOk({ ok:true, updatedAt }, headers);
 }

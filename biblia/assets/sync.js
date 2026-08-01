@@ -24,6 +24,23 @@ window.VerboSync = (() => {
   let pushDebounce = null;
   let listeners = [];
 
+  // Protección contra la carrera pull-vs-push al vincular un dispositivo
+  // nuevo: mientras no sepamos qué hay en el servidor (primer pull exitoso
+  // de esta sesión de página), ningún push puede salir todavía — se encola
+  // y se dispara en cuanto el pull inicial termine. Ver reconcile() y
+  // schedulePush() más abajo.
+  let syncInitialPullDone = false;
+  let pushPendingAfterInitialPull = false;
+
+  function markInitialPullDone() {
+    if (syncInitialPullDone) return;
+    syncInitialPullDone = true;
+    if (pushPendingAfterInitialPull) {
+      pushPendingAfterInitialPull = false;
+      push().catch(err => console.warn('[sync] push (encolado tras pull inicial) falló', err));
+    }
+  }
+
   function on(event, cb) { listeners.push({ event, cb }); }
   function emit(event, payload) {
     listeners.filter(l => l.event === event).forEach(l => { try { l.cb(payload); } catch {} });
@@ -96,6 +113,9 @@ window.VerboSync = (() => {
     const token = getSession();
     clearLinked();
     stopBackgroundSync();
+    syncInitialPullDone = false;
+    pushPendingAfterInitialPull = false;
+    clearTimeout(pushDebounce);
     if (token) {
       try { await requestJSON('/v1/sync/unlink', { method: 'POST', headers: { Authorization: `Bearer ${token}` } }); }
       catch {}
@@ -114,10 +134,16 @@ window.VerboSync = (() => {
     if (!token) return;
     const data = window.VerboBackup?.getData?.();
     if (!data) return;
+    // fecha_guardado nulo = todavía no hay ninguna edición real de contenido
+    // en este dispositivo (ver comentario en backup.js sobre qué mueve el
+    // reloj). Nunca se sustituye por la hora actual: eso convertiría un
+    // dato vacío/por defecto en el "más nuevo" y sobrescribiría datos reales
+    // en el servidor. Sin fecha_guardado, simplemente no hay nada que subir.
+    if (!data.fecha_guardado) return;
     await requestJSON('/v1/sync/data', {
       method: 'PUT',
       headers: { Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ data, updatedAt: data.fecha_guardado || new Date().toISOString() })
+      body: JSON.stringify({ data, updatedAt: data.fecha_guardado })
     });
   }
 
@@ -128,6 +154,7 @@ window.VerboSync = (() => {
     if (!isLinked() || !navigator.onLine) return;
     try {
       const remote = await pull();
+      markInitialPullDone();
       const local = window.VerboBackup?.getData?.();
       if (!remote?.updatedAt) {
         if (forcePushIfNoRemote && local) await push();
@@ -144,8 +171,30 @@ window.VerboSync = (() => {
     } catch (error) { console.warn('[sync] reconcile falló (probablemente sin conexión)', error); }
   }
 
+  // Push inmediato (sin esperar el debounce de 1500ms), para acciones
+  // explícitas del usuario como el botón "Guardar" de una prédica. Reutiliza
+  // push() y las mismas banderas de la CAPA 1: si el pull inicial de esta
+  // sesión todavía no terminó, encola la intención (se disparará sola en
+  // cuanto termine, vía markInitialPullDone) en vez de fallar en silencio.
+  async function forcePush() {
+    if (!isLinked()) return { synced: false, reason: 'not-linked' };
+    if (!syncInitialPullDone) {
+      pushPendingAfterInitialPull = true;
+      return { synced: false, reason: 'pending-initial-pull' };
+    }
+    clearTimeout(pushDebounce);
+    try {
+      await push();
+      return { synced: true };
+    } catch (error) {
+      console.warn('[sync] forcePush falló', error);
+      return { synced: false, reason: 'error' };
+    }
+  }
+
   function schedulePush() {
     if (!isLinked()) return;
+    if (!syncInitialPullDone) { pushPendingAfterInitialPull = true; return; }
     clearTimeout(pushDebounce);
     pushDebounce = setTimeout(() => { push().catch(err => console.warn('[sync] push falló', err)); }, 1500);
   }
@@ -182,6 +231,7 @@ window.VerboSync = (() => {
   return {
     init, on,
     isLinked, getEmailMasked,
-    requestLink, unlink
+    requestLink, unlink,
+    forcePush
   };
 })();
