@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       swReloadingForUpdate = false;
       location.reload();
     });
-    window.addEventListener('load', async () => {
+    const setupServiceWorker = async () => {
       try {
         // updateViaCache: 'none' es necesario porque GitHub Pages sirve
         // service-worker.js con Cache-Control: max-age=600 y no hay forma
@@ -169,7 +169,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.addEventListener('pageshow', recheckOnResume);
         window.addEventListener('focus', recheckOnResume);
       } catch {}
-    });
+    };
+    // 'load' puede haber disparado YA para cuando llegamos hasta acá — este
+    // código corre dentro de un handler de DOMContentLoaded con varios
+    // await (i18n, backup) antes de este punto, y en la práctica esa espera
+    // alcanza para que 'load' ya haya pasado (confirmado: en una carga real,
+    // domContentLoadedEventEnd y loadEventEnd quedaron a menos de 150ms de
+    // diferencia). Un listener agregado a un evento que ya ocurrió nunca se
+    // ejecuta, así que todo este bloque —incluido el aviso de actualización—
+    // podía quedar como código muerto en cada carga. Por eso se corre de
+    // inmediato si el documento ya terminó de cargar.
+    if (document.readyState === 'complete') setupServiceWorker();
+    else window.addEventListener('load', setupServiceWorker, { once: true });
   }
 
   if (window.VerboSync) {
