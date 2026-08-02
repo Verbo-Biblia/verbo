@@ -72,20 +72,21 @@ Un libro solo puede marcarse como cerrado cuando:
 | Oseas | 14 | candidato | Revisión integral completada: 14 capítulos y 197 versículos; corregida la versificación moderna de 11:12–12:14; JSON, estructura, conteos frente a BSB y ASV, nombres, profecías e imágenes validados |
 | Joel | 3 | candidato | Revisión integral completada: 3 capítulos y 73 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, imágenes de la plaga y profecías validados |
 | Amós | 9 | candidato | Revisión integral completada: 9 capítulos y 146 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, oráculos, visiones e imágenes validados |
-| Abdías–Apocalipsis | 301 | pendiente | Restan 36 libros después de Amós |
+| Abdías | 1 | candidato | Revisión integral completada: 1 capítulo y 21 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, oráculo contra Edom y restauración validados |
+| Jonás–Apocalipsis | 300 | pendiente | Restan 35 libros después de Abdías |
 
 ## Orden de trabajo
 
 Se seguirá el orden canónico, cerrando cada libro antes de declarar terminado el
 proyecto: Génesis, Éxodo, Levítico, Números, Deuteronomio y así sucesivamente
-hasta Apocalipsis. Amós quedó completamente revisado; el próximo punto exacto
-es Abdías 1.
+hasta Apocalipsis. Abdías quedó completamente revisado; el próximo punto exacto
+es Jonás 1.
 
 ## Publicación
 
 Juan autorizó expresamente subir cada libro cuando quede cerrado. Jeremías,
 Lamentaciones y Ezequiel quedaron completamente revisados, validados y publicados.
-Daniel, Oseas, Joel y Amós quedaron completamente revisados, validados y
-publicados; la revisión continúa desde Abdías 1.
+Daniel, Oseas, Joel, Amós y Abdías quedaron completamente revisados, validados y
+publicados; la revisión continúa desde Jonás 1.
 No se declarará completa ni oficial la Biblia hasta cerrar los 66
 libros.

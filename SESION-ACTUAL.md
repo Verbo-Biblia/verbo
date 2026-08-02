@@ -2,17 +2,17 @@
 
 ## Próximo punto exacto
 
-- Continuar con `Abdías 1`.
-- El avance desde Génesis hasta Amós ya fue revisado y validado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/OBA.json`.
-- Amós quedó completamente revisado; el próximo punto exacto es Abdías 1.
+- Continuar con `Jonás 1–4`.
+- El avance desde Génesis hasta Abdías ya fue revisado y validado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/JON.json`.
+- Abdías quedó completamente revisado; el próximo punto exacto es Jonás 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 36 libros: Abdías–Apocalipsis.
-- Restan 301 capítulos desde Abdías 1 hasta Apocalipsis.
+- Restan 35 libros: Jonás–Apocalipsis.
+- Restan 300 capítulos desde Jonás 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -40,7 +40,8 @@
 - Oseas: 14 capítulos y 197 versículos; candidato editorial publicado.
 - Joel: 3 capítulos y 73 versículos; candidato editorial publicado.
 - Amós: 9 capítulos y 146 versículos; candidato editorial publicado.
-- Total terminado: 29 libros y 840 capítulos.
+- Abdías: 1 capítulo y 21 versículos; candidato editorial publicado.
+- Total terminado: 30 libros y 841 capítulos.
 
 ## Método obligatorio restante
 
