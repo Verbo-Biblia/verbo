@@ -2038,8 +2038,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ---- Exploración del panel vacío en dimensiones separadas. ----
   const CHURCH_HISTORY_EPOCA_ORDER=['iglesia_primitiva','era_patristica','edad_media','reforma','puritanos_post_reforma','iglesia_moderna'];
   const CHURCH_HISTORY_TOPIC_ORDER=['persecucion_martirio','concilios_doctrina','herejias_apologetica','iglesia_gobierno','biblia_canon','culto_sacramentos','mision_expansion','iglesia_estado','personajes_biografias','unidad_divisiones','disciplina_vida','milagros_providencia'];
-  let churchHistorySuggestions={epocas:[],libros:[],temas:[]};
-  let churchHistoryTopicsExpanded=false;
+  const CHURCH_HISTORY_FEATURED_YEARS=[64,250,303,313,325,381,431,451];
+  const CHURCH_HISTORY_FEATURED_NAMES=['Jesucristo','Pedro','Pablo','Constantino el Grande','Eusebio de Cesarea','Arrio','Atanasio','Cipriano de Cartago'];
+  let churchHistorySuggestions={anios:[],temas:[],nombres:[]};
   let churchHistoryPredictiveCandidates=[];
   function romanNumeral(value){
     const table=[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
@@ -2053,38 +2054,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     return clean==='Cánones Apostólicos'?`⚖ ${clean}`:clean;
   }
   function churchHistorySuggestionGroups(entries){
-    const activeEpocas=[...new Set(entries.map(e=>e.epoca).filter(Boolean))];
-    activeEpocas.sort((a,b)=>{
-      const ai=CHURCH_HISTORY_EPOCA_ORDER.indexOf(a), bi=CHURCH_HISTORY_EPOCA_ORDER.indexOf(b);
-      if(ai!==-1 || bi!==-1) return (ai===-1?999:ai)-(bi===-1?999:bi);
-      const ay=Math.min(...entries.filter(e=>e.epoca===a).map(e=>e.anioInicio??9999));
-      const by=Math.min(...entries.filter(e=>e.epoca===b).map(e=>e.anioInicio??9999));
-      return ay-by;
-    });
-    const epocas=[];
-    activeEpocas.forEach(epoca=>{
-      epocas.push({label:CHURCH_HISTORY_EPOCA_LABELS[epoca]||epoca,type:'epoca',value:epoca});
-      const centuries=new Map();
-      entries.filter(e=>e.epoca===epoca).forEach(e=>{
-        const year=e.anioInicio??e.anioFin;
-        if(year!=null){ const century=Math.max(1,Math.ceil(year/100)); centuries.set(century,(centuries.get(century)||0)+1); }
-      });
-      const representative=[...centuries].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0]?.[0];
-      if(representative) epocas.push({label:`Siglo ${romanNumeral(representative)}`,type:'siglo',value:String(representative)});
-    });
-    const uniqueEpocas=[];
-    epocas.forEach(item=>{ if(!uniqueEpocas.some(x=>x.label===item.label)) uniqueEpocas.push(item); });
-    const libros=[...new Set(entries.map(churchHistoryBookKey).filter(Boolean))]
-      .map(value=>({label:churchHistoryBookLabel(value),type:'libro',value}));
+    const anios=CHURCH_HISTORY_FEATURED_YEARS.filter(year=>entries.some(entry=>{
+      const lo=entry.anioInicio??entry.anioFin, hi=entry.anioFin??entry.anioInicio;
+      return lo!=null&&hi!=null&&year>=lo&&year<=hi;
+    })).map(year=>({label:String(year),type:'anio',value:String(year)}));
     const activeTopics=new Set(entries.flatMap(entry=>entry.temas||[]));
-    const temas=CHURCH_HISTORY_TOPIC_ORDER.filter(value=>activeTopics.has(value))
+    const temas=CHURCH_HISTORY_TOPIC_ORDER.slice(0,8).filter(value=>activeTopics.has(value))
       .map(value=>({label:t(`historia.temas.${value}`),type:'tema',value}));
-    return {epocas:uniqueEpocas.slice(0,8),libros,temas};
+    const nombres=CHURCH_HISTORY_FEATURED_NAMES.map(value=>({label:value,type:'query',value}));
+    return {anios,temas,nombres};
   }
   function churchHistoryFilterEntries(entries, filter){
     if(!filter) return entries;
     if(filter.type==='epoca') return entries.filter(e=>e.epoca===filter.value);
     if(filter.type==='libro') return entries.filter(e=>churchHistoryBookKey(e)===filter.value);
+    if(filter.type==='anio'){
+      const year=Number(filter.value);
+      return entries.filter(e=>{
+        const lo=e.anioInicio??e.anioFin, hi=e.anioFin??e.anioInicio;
+        return lo!=null&&hi!=null&&year>=lo&&year<=hi;
+      });
+    }
     if(filter.type==='siglo'){
       const century=Number(filter.value), lo=(century-1)*100+1, hi=century*100;
       return entries.filter(e=>{
@@ -2165,7 +2155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       try{ churchHistoryEntries=await VerboModules.loadChurchHistory(); }
       catch(error){ console.error(error); churchHistoryEntries=[]; }
     }
-    churchHistorySuggestions=churchHistoryEntries.length?churchHistorySuggestionGroups(churchHistoryEntries):{epocas:[],libros:[],temas:[]};
+    churchHistorySuggestions=churchHistoryEntries.length?churchHistorySuggestionGroups(churchHistoryEntries):{anios:[],temas:[],nombres:[]};
     buildChurchHistoryPredictiveCandidates(churchHistoryEntries);
     renderChurchHistoryPredictions(churchHistoryQuery);
     renderChurchHistoryBody();
@@ -2179,32 +2169,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         `<button type="button" class="history-suggestions__chip" data-history-filter-type="${escapeHTML(item.type)}" data-history-filter-value="${escapeHTML(item.value)}" data-history-filter-label="${escapeHTML(item.label)}">${escapeHTML(item.label)}</button>`
       ).join('')}</div>`:''}
     </section>`;
-    const visibleTopics=churchHistoryTopicsExpanded?churchHistorySuggestions.temas:churchHistorySuggestions.temas.slice(0,8);
-    const topicToggle=churchHistorySuggestions.temas.length>8
-      ?`<button type="button" class="history-suggestions__more" id="churchHistoryTopicsToggle">${churchHistoryTopicsExpanded?t('historia.verMenos'):t('historia.verTodos')}</button>`:'';
     return `<div class="history-suggestions">
-      ${group(t('historia.porEpoca'),churchHistorySuggestions.epocas)}
-      ${group(t('historia.porLibro'),churchHistorySuggestions.libros)}
-      ${group(t('historia.porTema'),visibleTopics)}${topicToggle}
+      ${group(t('historia.porAnio'),churchHistorySuggestions.anios)}
+      ${group(t('historia.porTema'),churchHistorySuggestions.temas)}
+      ${group(t('historia.nombresDestacados'),churchHistorySuggestions.nombres)}
     </div>`;
   }
   function wireChurchHistorySuggestionChips(){
-    document.getElementById('churchHistoryTopicsToggle')?.addEventListener('click',()=>{
-      churchHistoryTopicsExpanded=!churchHistoryTopicsExpanded;
-      renderChurchHistoryBody();
-    });
     els.panelBody.querySelectorAll('[data-history-filter-type]').forEach(btn=>btn.addEventListener('click',()=>{
       const label=btn.dataset.historyFilterLabel||btn.textContent.trim();
       clearTimeout(churchHistorySemanticDebounce);
       churchHistorySemanticToken++;
       churchHistorySemanticResults=[];
       churchHistorySemanticQuery='';
-      churchHistoryActiveFilter={type:btn.dataset.historyFilterType,value:btn.dataset.historyFilterValue,label};
+      const filterType=btn.dataset.historyFilterType;
+      churchHistoryActiveFilter=filterType==='query'?null:{type:filterType,value:btn.dataset.historyFilterValue,label};
       churchHistoryQuery=label;
       churchHistoryTranslatedQuery='';
       const input=document.getElementById('churchHistorySearchInput');
       if(input) input.value=label;
       renderChurchHistoryBody();
+      if(filterType==='query'){
+        scheduleChurchHistoryQueryTranslation(label);
+        scheduleChurchHistorySemanticSearch(label);
+      }
     }));
   }
 
@@ -2212,7 +2200,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(churchHistoryOpenId){ renderChurchHistoryEntry(churchHistoryOpenId); return; }
     if(!churchHistoryEntries.length){ els.panelBody.innerHTML=emptyState('⛪',t('historia.sinContenido')); return; }
     if(!churchHistoryQuery.trim()){
-      els.panelBody.innerHTML=`<div class="panel-empty"><div class="panel-empty__icon">🔎</div><div class="panel-empty__text">${t('historia.intro')}</div></div>`;
+      els.panelBody.innerHTML=`<div class="panel-empty"><div class="panel-empty__icon">🔎</div><div class="panel-empty__text">${t('historia.intro')}</div>${renderChurchHistorySuggestionChips()}</div>`;
+      wireChurchHistorySuggestionChips();
       return;
     }
     const semanticReady=!churchHistoryActiveFilter
