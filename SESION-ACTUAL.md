@@ -5,14 +5,14 @@
 - Continuar con `Eclesiastés 1–12`.
 - El avance desde Génesis hasta Proverbios ya fue revisado, validado y publicado.
 - Archivo en revisión: `biblia/modules/bibles/rv-verbo/books/ECC.json`.
-- El próximo punto exacto es Eclesiastés 1.
+- Eclesiastés 1 quedó revisado y guardado localmente; el próximo punto exacto es Eclesiastés 2.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
 - Restan 46 libros: Eclesiastés–Apocalipsis.
-- Restan 530 capítulos desde Eclesiastés 1 hasta Apocalipsis.
+- Restan 529 capítulos desde Eclesiastés 2 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
