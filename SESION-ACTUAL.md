@@ -2,17 +2,17 @@
 
 ## Próximo punto exacto
 
-- Continuar con `Cantares 1–8`.
-- El avance desde Génesis hasta Eclesiastés ya fue revisado y validado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/SNG.json`.
-- Eclesiastés quedó cerrado; el próximo punto exacto es Cantares 1.
+- Continuar con `Isaías 1–66`.
+- El avance desde Génesis hasta Cantares ya fue revisado y validado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/ISA.json`.
+- Cantares quedó cerrado; el próximo punto exacto es Isaías 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 45 libros: Cantares–Apocalipsis.
-- Restan 518 capítulos desde Cantares 1 hasta Apocalipsis.
+- Restan 44 libros: Isaías–Apocalipsis.
+- Restan 510 capítulos desde Isaías 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -31,8 +31,9 @@
 - Ester: 10 capítulos y 167 versículos; candidato editorial publicado.
 - Job: 42 capítulos y 1.070 versículos; candidato editorial publicado.
 - Proverbios: 31 capítulos y 915 versículos; candidato editorial publicado.
-- Eclesiastés: 12 capítulos y 222 versículos; candidato editorial pendiente de publicación.
-- Total terminado: 20 libros y 521 capítulos.
+- Eclesiastés: 12 capítulos y 222 versículos; candidato editorial publicado.
+- Cantares: 8 capítulos y 117 versículos; candidato editorial pendiente de publicación.
+- Total terminado: 21 libros y 529 capítulos.
 
 ## Método obligatorio restante
 
