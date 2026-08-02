@@ -10,9 +10,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BIBLES = ROOT / "modules" / "bibles"
-COMMENTARIES = ROOT / "modules" / "commentaries"
-REGISTRY = ROOT / "modules" / "registry.json"
+CONTENT_ROOT = ROOT / "biblia" if (ROOT / "biblia" / "modules").is_dir() else ROOT
+BIBLES = CONTENT_ROOT / "modules" / "bibles"
+COMMENTARIES = CONTENT_ROOT / "modules" / "commentaries"
+REGISTRY = CONTENT_ROOT / "modules" / "registry.json"
 
 EXPECTED_GENERATED_ENTRIES = {
     "jfb": 16_945,
@@ -34,6 +35,16 @@ FORBIDDEN_RV_VERBO = {
     "formas con mayúscula interna": re.compile(r"\b[A-Za-záéíóúñü]+[a-záéíóúñü]A[n-z]*\b"),
 }
 
+# Estos capítulos fueron corregidos deliberadamente de la numeración histórica
+# de RV1909 a la versificación moderna que usa el lector.
+MODERN_VERSE_CHAPTERS = {
+    ("NUM", "12"),
+    ("NUM", "29"),
+    ("JOB", "35"),
+    ("JOB", "38"),
+    ("JOB", "40"),
+}
+
 
 def load_json(path: Path):
     try:
@@ -52,6 +63,7 @@ def bible_chapters(module_id: str) -> dict[str, dict[str, dict[str, str]]]:
 def audit_bible(errors: list[str]) -> None:
     source = bible_chapters("rva-1909")
     target = bible_chapters("rv-verbo")
+    modern = bible_chapters("asv-1901")
     if set(source) != set(target):
         errors.append("RV-Verbo no contiene exactamente los mismos libros que RVA 1909")
 
@@ -63,8 +75,14 @@ def audit_bible(errors: list[str]) -> None:
             continue
         for chapter, source_verses in source_chapters.items():
             target_verses = target_chapters[chapter]
-            if set(source_verses) != set(target_verses):
-                errors.append(f"{book} {chapter}: versículos distintos de RVA 1909")
+            expected_verses = (
+                modern.get(book, {}).get(chapter, {})
+                if (book, chapter) in MODERN_VERSE_CHAPTERS
+                else source_verses
+            )
+            if set(expected_verses) != set(target_verses):
+                expected_name = "versificación moderna" if (book, chapter) in MODERN_VERSE_CHAPTERS else "RVA 1909"
+                errors.append(f"{book} {chapter}: versículos distintos de {expected_name}")
                 continue
             for verse, text in target_verses.items():
                 ref = f"{book} {chapter}:{verse}"
@@ -147,7 +165,7 @@ def audit_commentaries(errors: list[str]) -> None:
     seen_modules = set()
 
     for relative_manifest in active_paths:
-        manifest_path = ROOT / "modules" / relative_manifest
+        manifest_path = CONTENT_ROOT / "modules" / relative_manifest
         manifest = load_json(manifest_path)
         module_id = manifest.get("id")
         if not isinstance(module_id, str) or not module_id:
@@ -168,6 +186,8 @@ def audit_commentaries(errors: list[str]) -> None:
         entry_count = 0
 
         for path in sorted((module_root / "books").rglob("*.json")):
+            if path.name.endswith(".index.json"):
+                continue
             relative = path.relative_to(module_root / "books")
             container_book = relative.parts[0].removesuffix(".json")
             actual_books.add(container_book)

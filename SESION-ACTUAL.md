@@ -1,18 +1,18 @@
-# Estado restante — Biblia Verbo — 2026-07-31
+# Estado restante — Biblia Verbo — 2026-08-01
 
 ## Próximo punto exacto
 
-- Continuar con `Proverbios 1–31`.
-- El avance desde Génesis hasta Salmos ya fue revisado, validado y publicado.
-- Archivo en revisión: `biblia/modules/bibles/rv-verbo/books/PRO.json`.
-- El próximo punto exacto es Proverbios 1.
+- Continuar con `Eclesiastés 1–12`.
+- El avance desde Génesis hasta Proverbios ya fue revisado, validado y publicado.
+- Archivo en revisión: `biblia/modules/bibles/rv-verbo/books/ECC.json`.
+- El próximo punto exacto es Eclesiastés 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 47 libros: Proverbios–Apocalipsis.
-- Restan 561 capítulos desde Proverbios 1 hasta Apocalipsis.
+- Restan 46 libros: Eclesiastés–Apocalipsis.
+- Restan 530 capítulos desde Eclesiastés 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -30,7 +30,8 @@
 - Nehemías: 13 capítulos y 406 versículos; candidato editorial publicado.
 - Ester: 10 capítulos y 167 versículos; candidato editorial publicado.
 - Job: 42 capítulos y 1.070 versículos; candidato editorial publicado.
-- Total terminado y publicado: 18 libros y 478 capítulos.
+- Proverbios: 31 capítulos y 915 versículos; candidato editorial publicado.
+- Total terminado y publicado: 19 libros y 509 capítulos.
 
 ## Método obligatorio restante
 
