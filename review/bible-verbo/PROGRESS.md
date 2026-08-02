@@ -75,20 +75,21 @@ Un libro solo puede marcarse como cerrado cuando:
 | Abdías | 1 | candidato | Revisión integral completada: 1 capítulo y 21 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, oráculo contra Edom y restauración validados |
 | Jonás | 4 | candidato | Revisión integral completada: 4 capítulos y 48 versículos; corregida la versificación moderna de 1:17–2:10; JSON, estructura, conteos frente a BSB y ASV, nombres, oración y continuidad narrativa validados |
 | Miqueas | 7 | candidato | Revisión integral completada: 7 capítulos y 105 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, poesía profética, oráculos y restauración validados |
-| Nahúm–Apocalipsis | 289 | pendiente | Restan 33 libros después de Miqueas |
+| Nahúm | 3 | candidato | Revisión integral completada: 3 capítulos y 47 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, poesía, imágenes bélicas y oráculo contra Nínive validados |
+| Habacuc–Apocalipsis | 286 | pendiente | Restan 32 libros después de Nahúm |
 
 ## Orden de trabajo
 
 Se seguirá el orden canónico, cerrando cada libro antes de declarar terminado el
 proyecto: Génesis, Éxodo, Levítico, Números, Deuteronomio y así sucesivamente
-hasta Apocalipsis. Miqueas quedó completamente revisado; el próximo punto exacto
-es Nahúm 1.
+hasta Apocalipsis. Nahúm quedó completamente revisado; el próximo punto exacto
+es Habacuc 1.
 
 ## Publicación
 
 Juan autorizó expresamente subir cada libro cuando quede cerrado. Jeremías,
 Lamentaciones y Ezequiel quedaron completamente revisados, validados y publicados.
-Daniel, Oseas, Joel, Amós, Abdías, Jonás y Miqueas quedaron completamente
-revisados, validados y publicados; la revisión continúa desde Nahúm 1.
+Daniel, Oseas, Joel, Amós, Abdías, Jonás, Miqueas y Nahúm quedaron completamente
+revisados, validados y publicados; la revisión continúa desde Habacuc 1.
 No se declarará completa ni oficial la Biblia hasta cerrar los 66
 libros.

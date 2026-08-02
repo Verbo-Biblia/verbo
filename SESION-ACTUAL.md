@@ -2,17 +2,17 @@
 
 ## Próximo punto exacto
 
-- Continuar con `Nahúm 1–3`.
-- El avance desde Génesis hasta Miqueas ya fue revisado y validado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/NAH.json`.
-- Miqueas quedó completamente revisado; el próximo punto exacto es Nahúm 1.
+- Continuar con `Habacuc 1–3`.
+- El avance desde Génesis hasta Nahúm ya fue revisado y validado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/HAB.json`.
+- Nahúm quedó completamente revisado; el próximo punto exacto es Habacuc 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 33 libros: Nahúm–Apocalipsis.
-- Restan 289 capítulos desde Nahúm 1 hasta Apocalipsis.
+- Restan 32 libros: Habacuc–Apocalipsis.
+- Restan 286 capítulos desde Habacuc 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -43,7 +43,8 @@
 - Abdías: 1 capítulo y 21 versículos; candidato editorial publicado.
 - Jonás: 4 capítulos y 48 versículos; candidato editorial publicado.
 - Miqueas: 7 capítulos y 105 versículos; candidato editorial publicado.
-- Total terminado: 32 libros y 852 capítulos.
+- Nahúm: 3 capítulos y 47 versículos; candidato editorial publicado.
+- Total terminado: 33 libros y 855 capítulos.
 
 ## Método obligatorio restante
 
