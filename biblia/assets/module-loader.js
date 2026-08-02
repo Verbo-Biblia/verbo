@@ -3,6 +3,7 @@ const VerboModules = (() => {
   const cache = new Map();
   const semanticSearch = {
     basePath: 'modules/semantic-search/bible-rv-verbo',
+    churchHistoryBasePath: 'modules/semantic-search/church-history',
     model: 'Xenova/paraphrase-multilingual-MiniLM-L12-v2',
     transformerUrl: 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/+esm',
     indexes: new Map(),
@@ -363,7 +364,13 @@ const VerboModules = (() => {
       if (!manifest.entriesFile) return [];
       try {
         const data = await getJSON(resolveFromManifest(path, manifest.entriesFile));
-        return (data.entries || []).map(entry => ({ sourceLabel: manifest.name, sourceLang: manifest.language, ...entry }));
+        return (data.entries || []).map(entry => ({
+          ...entry,
+          sourceLabel: manifest.abbreviation || manifest.name,
+          sourceCollectionLabel: manifest.abbreviation || manifest.name,
+          sourceName: manifest.name,
+          sourceLang: manifest.language,
+        }));
       } catch (error) {
         console.warn(`Historia de la Iglesia: módulo omitido ${path}`, error);
         return [];
@@ -519,7 +526,7 @@ const VerboModules = (() => {
 
   function semanticLexicalBoost(record, tokens) {
     if (!tokens.length) return 0;
-    const haystack = ` ${normalizeSemanticText(`${record.label} ${record.text}`)} `;
+    const haystack = ` ${normalizeSemanticText(`${record.label || record.title || ''} ${record.text}`)} `;
     let hits = 0;
     let strongHits = 0;
     tokens.forEach(token => {
@@ -580,6 +587,42 @@ const VerboModules = (() => {
     }
     results.sort((a,b)=>b.score-a.score);
     return results.slice(0, limit);
+  }
+
+  async function loadChurchHistorySemanticIndex() {
+    const key='church-history';
+    if(semanticSearch.indexes.has(key)) return semanticSearch.indexes.get(key);
+    const meta=await getJSON(`${semanticSearch.churchHistoryBasePath}/entries.meta.json`);
+    const buffer=await getArrayBuffer(`${semanticSearch.churchHistoryBasePath}/${meta.vectorFile}`);
+    const index={meta,vectors:new Int8Array(buffer)};
+    semanticSearch.indexes.set(key,index);
+    return index;
+  }
+
+  async function searchSemanticChurchHistory(query, { limit=100, filters={}, onProgress=null }={}) {
+    const clean=String(query||'').trim();
+    if(clean.length<2) return [];
+    onProgress?.({stage:'index'});
+    const index=await loadChurchHistorySemanticIndex();
+    onProgress?.({stage:'model'});
+    const extractor=await getSemanticExtractor();
+    onProgress?.({stage:'embedding'});
+    const output=await extractor(clean,{pooling:'mean',normalize:true});
+    const queryVector=semanticTensorVector(output), dimensions=Number(index.meta.dimensions);
+    const records=(index.meta.records||[]).filter(record=>Object.entries(filters).every(([key,value])=>{
+      if(value==null || value==='') return true;
+      return Array.isArray(value) ? value.includes(record[key]) : record[key]===value;
+    }));
+    const tokens=semanticTokens(clean), results=[];
+    onProgress?.({stage:'ranking'});
+    records.forEach(record=>{
+      let score=0;
+      for(let dim=0;dim<dimensions;dim++) score+=queryVector[dim]*(index.vectors[record.offset+dim]/127);
+      score+=semanticLexicalBoost(record,tokens);
+      results.push({...record,score,semantic:true});
+    });
+    results.sort((a,b)=>b.score-a.score);
+    return results.slice(0,limit);
   }
 
   // Solo se carga de entrada la Biblia activa (bibleId), no las ~7 registradas:
@@ -819,5 +862,5 @@ const VerboModules = (() => {
     return null;
   }
 
-  return { getCatalog,getBookInfo,resolveBibleBooks,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadCommentaryIndex,loadLinkedEntries,loadLinkedArticle,loadChurchHistory,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible };
+  return { getCatalog,getBookInfo,resolveBibleBooks,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadCommentaryIndex,loadLinkedEntries,loadLinkedArticle,loadChurchHistory,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible,searchSemanticChurchHistory };
 })();
