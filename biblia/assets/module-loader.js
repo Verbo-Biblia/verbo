@@ -3,6 +3,7 @@ const VerboModules = (() => {
   const cache = new Map();
   const semanticSearch = {
     basePath: 'modules/semantic-search/bible-rv-verbo',
+    churchHistoryBasePath: 'modules/semantic-search/church-history',
     model: 'Xenova/paraphrase-multilingual-MiniLM-L12-v2',
     transformerUrl: 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/+esm',
     indexes: new Map(),
@@ -356,6 +357,37 @@ const VerboModules = (() => {
   // carga en getCatalog() porque no alimenta ningún indicador por versículo —
   // se pide bajo demanda al abrir el panel. Cada módulo trae un array plano de
   // entradas (manifest.entriesFile); esta función las concatena todas.
+  const CHURCH_HISTORY_TOPIC_RULES = {
+    persecucion_martirio: ['martyr','martirio','persecution','persecucion','confessor','torture','tortura'],
+    concilios_doctrina: ['council','concilio','creed','credo','doctrine','doctrina','dogma','nicea','nicaea','constantinople','calcedonia','chalcedon','ephesus','efeso'],
+    herejias_apologetica: ['heresy','herejia','heretic','heretico','apolog','arian','arrio','gnostic','manichae','nestorian','monophys'],
+    iglesia_gobierno: ['bishop','obispo','presbyter','presbiter','deacon','diacono','episcop','succession','sucesion','patriarch','patriarca'],
+    biblia_canon: ['scripture','escritura','gospel','evangelio','canon','testament','manuscript','manuscrito','translation','traduccion'],
+    culto_sacramentos: ['baptis','bautis','eucharist','eucarist','communion','comunion','litur','worship','culto','prayer','oracion','sacrament'],
+    mision_expansion: ['mission','mision','evangeli','preach','predic','apostle','apostol','conversion','conversion','spread of the faith'],
+    iglesia_estado: ['emperor','emperador','constantine','constantino','imperial','empire','imperio','civil ruler','magistrate','magistrado','edict','edicto'],
+    personajes_biografias: ['life of','vida de','biograph','biograf','birth','nacimiento','death of','muerte de'],
+    unidad_divisiones: ['schism','cisma','unity','unidad','division','reconciliation','reconciliacion','excommunicat','excomun','controversy','controversia'],
+    disciplina_vida: ['canon ','canones','discipline','disciplina','penance','penitencia','moral','conduct','conducta','fasting','ayuno','marriage','matrimonio'],
+    milagros_providencia: ['miracle','milagro','healing','sanidad','vision','providen','divine sign','senal divina','wonder','prodigio'],
+  };
+
+  function classifyChurchHistoryTopics(entry, manifest) {
+    if (Array.isArray(entry.temas) && entry.temas.length) return entry.temas;
+    const text = normalizeSearchText([
+      entry.title, entry.periodo, entry.concilio, entry.tipo,
+      ...(entry.personas || []), ...(entry.eventos || []),
+      entry.excerpt, entry.content?.replace(/<[^>]+>/g, ' '),
+      manifest.name, manifest.description,
+    ].filter(Boolean).join(' '));
+    const topics = Object.entries(CHURCH_HISTORY_TOPIC_RULES)
+      .filter(([, terms]) => terms.some(term => text.includes(normalizeSearchText(term))))
+      .map(([id]) => id);
+    if (entry.concilio && !topics.includes('concilios_doctrina')) topics.push('concilios_doctrina');
+    if ((entry.tipo === 'canon' || entry.tipo === 'canon_apostolico') && !topics.includes('disciplina_vida')) topics.push('disciplina_vida');
+    return topics;
+  }
+
   async function loadChurchHistory() {
     const registry = await getJSON('modules/registry.json');
     const modules = await loadModuleList(registry.churchHistory || []);
@@ -363,7 +395,14 @@ const VerboModules = (() => {
       if (!manifest.entriesFile) return [];
       try {
         const data = await getJSON(resolveFromManifest(path, manifest.entriesFile));
-        return (data.entries || []).map(entry => ({ sourceLabel: manifest.name, sourceLang: manifest.language, ...entry }));
+        return (data.entries || []).map(entry => ({
+          ...entry,
+          sourceLabel: manifest.abbreviation || manifest.name,
+          sourceCollectionLabel: manifest.abbreviation || manifest.name,
+          sourceName: manifest.name,
+          sourceLang: manifest.language,
+          temas: classifyChurchHistoryTopics(entry, manifest),
+        }));
       } catch (error) {
         console.warn(`Historia de la Iglesia: módulo omitido ${path}`, error);
         return [];
@@ -519,7 +558,7 @@ const VerboModules = (() => {
 
   function semanticLexicalBoost(record, tokens) {
     if (!tokens.length) return 0;
-    const haystack = ` ${normalizeSemanticText(`${record.label} ${record.text}`)} `;
+    const haystack = ` ${normalizeSemanticText(`${record.label || record.title || ''} ${record.text}`)} `;
     let hits = 0;
     let strongHits = 0;
     tokens.forEach(token => {
@@ -580,6 +619,42 @@ const VerboModules = (() => {
     }
     results.sort((a,b)=>b.score-a.score);
     return results.slice(0, limit);
+  }
+
+  async function loadChurchHistorySemanticIndex() {
+    const key='church-history';
+    if(semanticSearch.indexes.has(key)) return semanticSearch.indexes.get(key);
+    const meta=await getJSON(`${semanticSearch.churchHistoryBasePath}/entries.meta.json`);
+    const buffer=await getArrayBuffer(`${semanticSearch.churchHistoryBasePath}/${meta.vectorFile}`);
+    const index={meta,vectors:new Int8Array(buffer)};
+    semanticSearch.indexes.set(key,index);
+    return index;
+  }
+
+  async function searchSemanticChurchHistory(query, { limit=100, filters={}, onProgress=null }={}) {
+    const clean=String(query||'').trim();
+    if(clean.length<2) return [];
+    onProgress?.({stage:'index'});
+    const index=await loadChurchHistorySemanticIndex();
+    onProgress?.({stage:'model'});
+    const extractor=await getSemanticExtractor();
+    onProgress?.({stage:'embedding'});
+    const output=await extractor(clean,{pooling:'mean',normalize:true});
+    const queryVector=semanticTensorVector(output), dimensions=Number(index.meta.dimensions);
+    const records=(index.meta.records||[]).filter(record=>Object.entries(filters).every(([key,value])=>{
+      if(value==null || value==='') return true;
+      return Array.isArray(value) ? value.includes(record[key]) : record[key]===value;
+    }));
+    const tokens=semanticTokens(clean), results=[];
+    onProgress?.({stage:'ranking'});
+    records.forEach(record=>{
+      let score=0;
+      for(let dim=0;dim<dimensions;dim++) score+=queryVector[dim]*(index.vectors[record.offset+dim]/127);
+      score+=semanticLexicalBoost(record,tokens);
+      results.push({...record,score,semantic:true});
+    });
+    results.sort((a,b)=>b.score-a.score);
+    return results.slice(0,limit);
   }
 
   // Solo se carga de entrada la Biblia activa (bibleId), no las ~7 registradas:
@@ -819,5 +894,5 @@ const VerboModules = (() => {
     return null;
   }
 
-  return { getCatalog,getBookInfo,resolveBibleBooks,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadCommentaryIndex,loadLinkedEntries,loadLinkedArticle,loadChurchHistory,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible };
+  return { getCatalog,getBookInfo,resolveBibleBooks,buildChapterData,loadBible,loadRemoteBible,loadCommentary,loadCommentaryIndex,loadLinkedEntries,loadLinkedArticle,loadChurchHistory,getDictionaryEntry,loadDictionaryEntries,loadDictionaryIndex,loadGospel,loadPatristic,searchBible,searchRemoteBible,searchSemanticBible,searchSemanticChurchHistory };
 })();

@@ -674,6 +674,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function openPanel(tab, focus=null, verseCommentaries=null) {
     const panelWasClosed=!els.side.classList.contains('side-panel--open');
     activeTab=tab;
+    if(tab!=='historia') els.side.classList.remove('side-panel--history-expanded');
     const isSheet=window.innerWidth<=760 && SHEET_TABS.includes(tab);
     els.side.classList.toggle('side-panel--left', ['historia','padres','licencias'].includes(tab));
     if(isSheet){
@@ -696,7 +697,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // forzar la limpieza aquí o el mapa queda "pegado" cubriendo la pantalla.
     document.getElementById('mapViewer')?.classList.remove('map-viewer--fullscreen');
     document.body.classList.remove('map-viewer-fullscreen-active');
-    els.side.classList.remove('side-panel--open','side-panel--left'); // CSS: translateY(105%) para sheets
+    els.side.classList.remove('side-panel--open','side-panel--left','side-panel--history-expanded'); // CSS: translateY(105%) para sheets
     els.backdrop?.classList.remove('sheet-backdrop--visible');
     els.tabs.forEach(b=>b.classList.remove('tab-rail__btn--active'));
     if(wasSheet){
@@ -1889,10 +1890,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   // ── Historia de la Iglesia (buscador independiente, sin ancla a versículo) ──
   let churchHistoryEntries=null, churchHistoryQuery='', churchHistoryOpenId=null, churchHistoryResultsToken=0;
+  let churchHistoryActiveFilter=null;
   let churchHistoryTranslatedQuery='', churchHistoryQueryToken=0, churchHistoryQueryDebounce=null;
+  let churchHistorySemanticResults=[], churchHistorySemanticQuery='', churchHistorySemanticToken=0, churchHistorySemanticDebounce=null;
 
   function normalizeSearchText(value){
     return String(value||'').toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+  }
+  function churchHistoryEditDistance(a,b){
+    const previous=Array.from({length:b.length+1},(_,i)=>i);
+    for(let i=1;i<=a.length;i++){
+      let diagonal=previous[0]; previous[0]=i;
+      for(let j=1;j<=b.length;j++){
+        const above=previous[j];
+        previous[j]=Math.min(previous[j]+1,previous[j-1]+1,diagonal+(a[i-1]===b[j-1]?0:1));
+        diagonal=above;
+      }
+    }
+    return previous[b.length];
+  }
+  function churchHistoryTokenMatches(token,words){
+    if(words.some(word=>word.includes(token)||(word.length>=3&&token.includes(word)))) return true;
+    if(token.length<4) return false;
+    const tolerance=1;
+    return words.some(word=>Math.abs(word.length-token.length)<=tolerance&&churchHistoryEditDistance(token,word)<=tolerance);
   }
 
   // Las 6 épocas de "Historia de la Iglesia" (taxonomía confirmada por Juan,
@@ -1917,7 +1938,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Se cachea en el propio objeto (calculado una sola vez por entrada).
   function churchHistorySearchText(e){
     if(e._searchText==null){
-      const parts=[...(e.personas||[]),...(e.eventos||[]),e.periodo||'',CHURCH_HISTORY_EPOCA_LABELS[e.epoca]||'',e.title||'',htmlToPlainText(e.content||e.excerpt||'')];
+      const parts=[...(e.personas||[]),...(e.eventos||[]),e.periodo||'',CHURCH_HISTORY_EPOCA_LABELS[e.epoca]||e.epoca||'',e.sourceLabel||'',e.sourceName||'',e.concilio||'',e.tipo||'',e.numero||'',e.title||'',htmlToPlainText(e.content||e.excerpt||'')];
       e._searchText=normalizeSearchText(parts.join(' '));
     }
     return e._searchText;
@@ -1935,19 +1956,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     const raw=String(rawQuery||'').trim();
     const q=normalizeSearchText(raw);
     if(!q) return [];
+    const stopwords=new Set(['a','al','de','del','el','en','la','las','los','of','the','to']);
+    const queryTokens=q.split(' ').filter(token=>token.length>1&&!stopwords.has(token));
     const rangeMatch=raw.match(/^(\d{1,4})\s*-\s*(\d{1,4})$/);
     const yearMatch=raw.match(/^(\d{1,4})$/);
     let yearLo=null, yearHi=null;
     if(rangeMatch){ yearLo=Math.min(+rangeMatch[1],+rangeMatch[2]); yearHi=Math.max(+rangeMatch[1],+rangeMatch[2]); }
     else if(yearMatch){ yearLo=yearHi=+yearMatch[1]; }
-    return entries.filter(e=>{
-      if(churchHistorySearchText(e).includes(q)) return true;
+    return entries.map((e,index)=>{
+      const searchText=churchHistorySearchText(e);
+      const metadataText=normalizeSearchText([...(e.personas||[]),...(e.eventos||[]),e.periodo||'',CHURCH_HISTORY_EPOCA_LABELS[e.epoca]||e.epoca||'',e.sourceLabel||'',e.sourceName||'',e.concilio||'',e.tipo||'',e.numero||'',e.title||''].join(' '));
+      const titleText=normalizeSearchText(e.title||'');
+      const exactMatch=searchText.includes(q);
+      const metadataWords=metadataText.split(' ');
+      const tokenMatch=queryTokens.length>1 && queryTokens.every(token=>searchText.includes(token)||churchHistoryTokenMatches(token,metadataWords));
+      let yearMatches=false;
       if(yearLo!=null){
         const eLo=e.anioInicio ?? e.anioFin, eHi=e.anioFin ?? e.anioInicio;
-        if(eLo!=null && eHi!=null && eHi>=yearLo && eLo<=yearHi) return true;
+        yearMatches=eLo!=null && eHi!=null && eHi>=yearLo && eLo<=yearHi;
       }
-      return false;
-    });
+      if(!exactMatch&&!tokenMatch&&!yearMatches) return null;
+      let score=exactMatch?20:0;
+      queryTokens.forEach(token=>{
+        if(searchText.includes(token)) score+=1;
+        if(metadataText.includes(token)) score+=6;
+        if(titleText.includes(token)) score+=8;
+      });
+      if(yearMatches) score+=30;
+      return {entry:e,score,index};
+    }).filter(Boolean).sort((a,b)=>b.score-a.score||a.index-b.index).map(result=>result.entry);
   }
   function churchHistorySearch(entries, query, extraQuery=''){
     const primary=churchHistorySearchMatches(entries, query);
@@ -1978,60 +2015,184 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 400);
   }
 
-  // ---- Chips de sugerencia del panel vacío: una por cada una de las 6
-  // épocas que tenga al menos una entrada real en el índice (orden
-  // cronológico fijo, no aleatorio — a diferencia de la primera versión de
-  // este feature, que sorteaba personajes/eventos puntuales; Juan pidió
-  // "más amplitud", así que el chip ahora es la época completa). Clic en un
-  // chip busca la etiqueta de la época, que ya está embebida en el texto de
-  // búsqueda de cada entrada de esa época (ver churchHistorySearchText) —
-  // el resultado es la lista completa de esa época, no un solo capítulo. ----
+  function scheduleChurchHistorySemanticSearch(query){
+    clearTimeout(churchHistorySemanticDebounce);
+    const token=++churchHistorySemanticToken;
+    const trimmed=String(query||'').trim();
+    churchHistorySemanticResults=[];
+    churchHistorySemanticQuery='';
+    if(trimmed.length<3 || /^\d{1,4}(\s*-\s*\d{1,4})?$/.test(trimmed)) return;
+    churchHistorySemanticDebounce=setTimeout(async()=>{
+      try{
+        const ranked=await VerboModules.searchSemanticChurchHistory(trimmed,{limit:100});
+        if(token!==churchHistorySemanticToken || churchHistoryActiveFilter) return;
+        churchHistorySemanticResults=ranked;
+        churchHistorySemanticQuery=trimmed;
+        if(!churchHistoryOpenId) renderChurchHistoryBody();
+      }catch(error){
+        if(token===churchHistorySemanticToken) console.warn('Búsqueda semántica de Historia no disponible; se conserva la búsqueda textual.',error);
+      }
+    },350);
+  }
+
+  // ---- Exploración del panel vacío en dimensiones separadas. ----
   const CHURCH_HISTORY_EPOCA_ORDER=['iglesia_primitiva','era_patristica','edad_media','reforma','puritanos_post_reforma','iglesia_moderna'];
-  let churchHistorySuggestions=[];
-  function churchHistorySuggestionChips(entries){
-    const activeEpocas=new Set(entries.map(e=>e.epoca).filter(Boolean));
-    return CHURCH_HISTORY_EPOCA_ORDER.filter(ep=>activeEpocas.has(ep)).map(ep=>CHURCH_HISTORY_EPOCA_LABELS[ep]);
+  const CHURCH_HISTORY_TOPIC_ORDER=['persecucion_martirio','concilios_doctrina','herejias_apologetica','iglesia_gobierno','biblia_canon','culto_sacramentos','mision_expansion','iglesia_estado','personajes_biografias','unidad_divisiones','disciplina_vida','milagros_providencia'];
+  const CHURCH_HISTORY_FEATURED_YEARS=[64,250,303,313,325,381,431,451];
+  const CHURCH_HISTORY_FEATURED_NAMES=['Jesucristo','Pedro','Pablo','Constantino el Grande','Eusebio de Cesarea','Arrio','Atanasio','Cipriano de Cartago'];
+  let churchHistorySuggestions={anios:[],temas:[],nombres:[]};
+  let churchHistoryPredictiveCandidates=[];
+  function romanNumeral(value){
+    const table=[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+    let n=value, result='';
+    table.forEach(([amount,symbol])=>{ while(n>=amount){ result+=symbol; n-=amount; } });
+    return result;
+  }
+  function churchHistoryBookKey(entry){ return entry.concilio || entry.sourceCollectionLabel || entry.sourceLabel || entry.sourceName || ''; }
+  function churchHistoryBookLabel(value){
+    const clean=String(value||'').replace(/^Eusebio,\s*/,'');
+    return clean==='Cánones Apostólicos'?`⚖ ${clean}`:clean;
+  }
+  function churchHistorySuggestionGroups(entries){
+    const anios=CHURCH_HISTORY_FEATURED_YEARS.filter(year=>entries.some(entry=>{
+      const lo=entry.anioInicio??entry.anioFin, hi=entry.anioFin??entry.anioInicio;
+      return lo!=null&&hi!=null&&year>=lo&&year<=hi;
+    })).map(year=>({label:String(year),type:'anio',value:String(year)}));
+    const activeTopics=new Set(entries.flatMap(entry=>entry.temas||[]));
+    const temas=CHURCH_HISTORY_TOPIC_ORDER.slice(0,8).filter(value=>activeTopics.has(value))
+      .map(value=>({label:t(`historia.temas.${value}`),type:'tema',value}));
+    const nombres=CHURCH_HISTORY_FEATURED_NAMES.map(value=>({label:value,type:'query',value}));
+    return {anios,temas,nombres};
+  }
+  function churchHistoryFilterEntries(entries, filter){
+    if(!filter) return entries;
+    if(filter.type==='epoca') return entries.filter(e=>e.epoca===filter.value);
+    if(filter.type==='libro') return entries.filter(e=>churchHistoryBookKey(e)===filter.value);
+    if(filter.type==='anio'){
+      const year=Number(filter.value);
+      return entries.filter(e=>{
+        const lo=e.anioInicio??e.anioFin, hi=e.anioFin??e.anioInicio;
+        return lo!=null&&hi!=null&&year>=lo&&year<=hi;
+      });
+    }
+    if(filter.type==='siglo'){
+      const century=Number(filter.value), lo=(century-1)*100+1, hi=century*100;
+      return entries.filter(e=>{
+        const eLo=e.anioInicio??e.anioFin, eHi=e.anioFin??e.anioInicio;
+        return eLo!=null && eHi!=null && eHi>=lo && eLo<=hi;
+      });
+    }
+    if(filter.type==='tema') return entries.filter(e=>(e.temas||[]).includes(filter.value));
+    return entries;
+  }
+
+  function buildChurchHistoryPredictiveCandidates(entries){
+    const labels=[];
+    entries.forEach(entry=>{
+      if(entry.concilio) labels.push(`Concilio de ${entry.concilio}`);
+      labels.push(...(entry.eventos||[]),...(entry.personas||[]));
+    });
+    CHURCH_HISTORY_TOPIC_ORDER.forEach(topic=>labels.push(t(`historia.temas.${topic}`)));
+    const unique=new Map();
+    labels.filter(Boolean).forEach(label=>unique.set(normalizeSearchText(label),label));
+    churchHistoryPredictiveCandidates=[...unique.values()];
+  }
+  function churchHistoryPredictions(query){
+    const normalized=normalizeSearchText(query);
+    if(normalized.length<2) return [];
+    const queryWords=normalized.split(/\s+/).filter(word=>!['a','al','de','del','el','en','la','las','los','of','the','to'].includes(word));
+    return churchHistoryPredictiveCandidates.map((label,index)=>{
+      const candidate=normalizeSearchText(label),words=candidate.split(/\s+/);
+      if(!queryWords.every(word=>churchHistoryTokenMatches(word,words))) return null;
+      const score=candidate.startsWith(normalized)?0:words.some(word=>word.startsWith(normalized))?1:candidate.includes(normalized)?2:3;
+      return {label,score,index};
+    }).filter(Boolean).sort((a,b)=>a.score-b.score||a.index-b.index).slice(0,6);
+  }
+  function renderChurchHistoryPredictions(query){
+    const box=document.getElementById('churchHistoryPredictions');
+    if(!box) return;
+    const predictions=churchHistoryPredictions(query);
+    box.innerHTML=predictions.map(item=>`<button type="button" class="history-prediction" data-history-prediction="${escapeHTML(item.label)}">${escapeHTML(item.label)}</button>`).join('');
+    box.classList.toggle('history-predictions--visible',predictions.length>0);
+    box.querySelectorAll('[data-history-prediction]').forEach(button=>button.addEventListener('mousedown',event=>{
+      event.preventDefault();
+      const value=button.dataset.historyPrediction;
+      const input=document.getElementById('churchHistorySearchInput');
+      if(input) input.value=value;
+      churchHistoryQuery=value;
+      churchHistoryActiveFilter=null;
+      churchHistoryTranslatedQuery='';
+      box.classList.remove('history-predictions--visible');
+      renderChurchHistoryBody();
+      scheduleChurchHistoryQueryTranslation(value);
+      scheduleChurchHistorySemanticSearch(value);
+    }));
   }
 
   async function renderChurchHistoryPanel(){
     els.panelTitle.textContent=t('historia.title');
     els.panelToolbar.innerHTML=`<form class="search-panel-form" id="churchHistorySearchForm">
-      <input id="churchHistorySearchInput" class="search-panel-input" type="search" placeholder="${t('historia.buscarPlaceholder')}" autocomplete="off" value="${escapeHTML(churchHistoryQuery)}">
+      <div class="history-search-autocomplete"><input id="churchHistorySearchInput" class="search-panel-input" type="search" placeholder="${t('historia.buscarPlaceholder')}" autocomplete="off" value="${escapeHTML(churchHistoryQuery)}"><div id="churchHistoryPredictions" class="history-predictions"></div></div>
     </form>`;
     const input=document.getElementById('churchHistorySearchInput');
     document.getElementById('churchHistorySearchForm')?.addEventListener('submit',e=>e.preventDefault());
     input?.addEventListener('input',()=>{
       churchHistoryQuery=input.value;
+      churchHistoryActiveFilter=null;
       churchHistoryTranslatedQuery='';
+      churchHistorySemanticResults=[];
+      churchHistorySemanticQuery='';
       renderChurchHistoryBody();
       scheduleChurchHistoryQueryTranslation(churchHistoryQuery);
+      scheduleChurchHistorySemanticSearch(churchHistoryQuery);
+      renderChurchHistoryPredictions(churchHistoryQuery);
     });
+    input?.addEventListener('focus',()=>renderChurchHistoryPredictions(input.value));
+    input?.addEventListener('blur',()=>setTimeout(()=>document.getElementById('churchHistoryPredictions')?.classList.remove('history-predictions--visible'),120));
 
     if(!churchHistoryEntries){
       els.panelBody.innerHTML=emptyState('⌛',t('historia.cargando'));
       try{ churchHistoryEntries=await VerboModules.loadChurchHistory(); }
       catch(error){ console.error(error); churchHistoryEntries=[]; }
     }
-    churchHistorySuggestions=churchHistoryEntries.length?churchHistorySuggestionChips(churchHistoryEntries):[];
+    churchHistorySuggestions=churchHistoryEntries.length?churchHistorySuggestionGroups(churchHistoryEntries):{anios:[],temas:[],nombres:[]};
+    buildChurchHistoryPredictiveCandidates(churchHistoryEntries);
+    renderChurchHistoryPredictions(churchHistoryQuery);
     renderChurchHistoryBody();
     if(!churchHistoryOpenId) setTimeout(()=>input?.focus(),0);
   }
 
   function renderChurchHistorySuggestionChips(){
-    if(!churchHistorySuggestions.length) return '';
-    return `<div class="history-suggestions">${churchHistorySuggestions.map(label=>
-      `<button type="button" class="history-suggestions__chip" data-history-suggestion="${escapeHTML(label)}">${escapeHTML(label)}</button>`
-    ).join('')}</div>`;
+    const group=(label,items)=>`<section class="history-suggestions__group">
+      <div class="history-suggestions__label">${escapeHTML(label)}</div>
+      ${items.length?`<div class="history-suggestions__list">${items.map(item=>
+        `<button type="button" class="history-suggestions__chip" data-history-filter-type="${escapeHTML(item.type)}" data-history-filter-value="${escapeHTML(item.value)}" data-history-filter-label="${escapeHTML(item.label)}">${escapeHTML(item.label)}</button>`
+      ).join('')}</div>`:''}
+    </section>`;
+    return `<div class="history-suggestions">
+      ${group(t('historia.porAnio'),churchHistorySuggestions.anios)}
+      ${group(t('historia.porTema'),churchHistorySuggestions.temas)}
+      ${group(t('historia.nombresDestacados'),churchHistorySuggestions.nombres)}
+    </div>`;
   }
   function wireChurchHistorySuggestionChips(){
-    els.panelBody.querySelectorAll('[data-history-suggestion]').forEach(btn=>btn.addEventListener('click',()=>{
-      const term=btn.dataset.historySuggestion;
-      churchHistoryQuery=term;
+    els.panelBody.querySelectorAll('[data-history-filter-type]').forEach(btn=>btn.addEventListener('click',()=>{
+      const label=btn.dataset.historyFilterLabel||btn.textContent.trim();
+      clearTimeout(churchHistorySemanticDebounce);
+      churchHistorySemanticToken++;
+      churchHistorySemanticResults=[];
+      churchHistorySemanticQuery='';
+      const filterType=btn.dataset.historyFilterType;
+      churchHistoryActiveFilter=filterType==='query'?null:{type:filterType,value:btn.dataset.historyFilterValue,label};
+      churchHistoryQuery=label;
       churchHistoryTranslatedQuery='';
       const input=document.getElementById('churchHistorySearchInput');
-      if(input) input.value=term;
+      if(input) input.value=label;
       renderChurchHistoryBody();
-      scheduleChurchHistoryQueryTranslation(term);
+      if(filterType==='query'){
+        scheduleChurchHistoryQueryTranslation(label);
+        scheduleChurchHistorySemanticSearch(label);
+      }
     }));
   }
 
@@ -2039,11 +2200,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(churchHistoryOpenId){ renderChurchHistoryEntry(churchHistoryOpenId); return; }
     if(!churchHistoryEntries.length){ els.panelBody.innerHTML=emptyState('⛪',t('historia.sinContenido')); return; }
     if(!churchHistoryQuery.trim()){
-      els.panelBody.innerHTML=`<div class="panel-empty"><div class="panel-empty__icon">🔎</div><div class="panel-empty__text">${t('historia.intro')}</div>${renderChurchHistorySuggestionChips()}</div>`;
+      els.panelBody.innerHTML=renderChurchHistorySuggestionChips();
       wireChurchHistorySuggestionChips();
       return;
     }
-    const results=churchHistorySearch(churchHistoryEntries, churchHistoryQuery, churchHistoryTranslatedQuery);
+    const semanticReady=!churchHistoryActiveFilter
+      && normalizeSearchText(churchHistorySemanticQuery)===normalizeSearchText(churchHistoryQuery)
+      && churchHistorySemanticResults.length;
+    const lexicalResults=churchHistoryActiveFilter?[]:churchHistorySearch(churchHistoryEntries,churchHistoryQuery,churchHistoryTranslatedQuery);
+    const entriesById=semanticReady?new Map(churchHistoryEntries.map(entry=>[entry.id,entry])):null;
+    const semanticEntries=semanticReady?churchHistorySemanticResults.map(result=>entriesById.get(result.id)).filter(Boolean):[];
+    const lexicalIds=new Set(lexicalResults.map(entry=>entry.id));
+    const results=churchHistoryActiveFilter
+      ? churchHistoryFilterEntries(churchHistoryEntries,churchHistoryActiveFilter)
+      : semanticReady
+        ? [...lexicalResults,...semanticEntries.filter(entry=>!lexicalIds.has(entry.id))]
+        : lexicalResults;
     if(!results.length){ els.panelBody.innerHTML=emptyState('🔎',t('historia.sinResultados',{query:escapeHTML(churchHistoryQuery)})); return; }
     els.panelBody.innerHTML=`<div class="search-results-list">${results.map(e=>{
       const years=e.anioInicio!=null?` · ${e.anioInicio}${e.anioFin && e.anioFin!==e.anioInicio?'–'+e.anioFin:''}`:'';
@@ -2101,24 +2273,50 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderChurchHistoryEntry(id){
     const entry=churchHistoryEntries.find(e=>e.id===id);
     if(!entry){ churchHistoryOpenId=null; els.panelBody.innerHTML=emptyState('⚠️',t('historia.entradaNoEncontrada')); return; }
+    const sourceKey=churchHistoryBookKey(entry);
+    const sourceEntries=churchHistoryEntries.filter(candidate=>churchHistoryBookKey(candidate)===sourceKey);
+    const sourceIndex=sourceEntries.findIndex(candidate=>candidate.id===entry.id);
+    const previous=sourceIndex>0?sourceEntries[sourceIndex-1]:null;
+    const next=sourceIndex>=0&&sourceIndex<sourceEntries.length-1?sourceEntries[sourceIndex+1]:null;
     const metaParts=[
       entry.personas?.length?`${t('historia.personajes')}: ${entry.personas.map(escapeHTML).join(', ')}`:null,
       entry.eventos?.length?`${t('historia.eventos')}: ${entry.eventos.map(escapeHTML).join(', ')}`:null,
       entry.periodo?`${t('historia.periodo')}: ${escapeHTML(entry.periodo)}`:null,
       entry.anioInicio!=null?`${t('historia.anio')}: ${entry.anioInicio}${entry.anioFin && entry.anioFin!==entry.anioInicio?'–'+entry.anioFin:''}`:null,
+      entry.tipo?`${t('historia.tipo')}: ${escapeHTML(entry.tipo.replaceAll('_',' '))}`:null,
     ].filter(Boolean).join(' · ');
     els.panelBody.innerHTML=`<article class="dict-entry">
       <div class="dict-entry__term" data-entry-id="${escapeHTML(entry.id)}">${escapeHTML(entry.title)}</div>
-      <div class="dict-entry__source">${escapeHTML(entry.sourceLabel||'')}</div>
+      <div class="dict-entry__source">${escapeHTML(churchHistoryBookLabel(sourceKey))}</div>
       ${metaParts?`<p class="note-card__translation-note">${metaParts}</p>`:''}
-      <button class="note-card__copy" id="backToChurchHistoryResults" type="button">← ${t('historia.volverResultados')}</button>
+      <div class="history-entry-actions">
+        <button class="note-card__copy" id="backToChurchHistoryResults" type="button">← ${t('historia.volverResultados')}</button>
+        <button id="churchHistoryExpand" class="history-panel-expand" type="button" aria-pressed="${els.side.classList.contains('side-panel--history-expanded')?'true':'false'}">${els.side.classList.contains('side-panel--history-expanded')?t('historia.vistaCompacta'):t('historia.ampliarLectura')}</button>
+      </div>
       <div class="dict-entry__def" data-entry-id="${escapeHTML(entry.id)}">${entry.content||entry.excerpt||''}</div>
+      <nav class="history-entry-nav" aria-label="${t('historia.navegacionLectura')}">
+        ${previous?`<button type="button" class="history-entry-nav__button" data-history-neighbor="${escapeHTML(previous.id)}">← ${t('historia.anterior')}</button>`:'<span></span>'}
+        ${next?`<button type="button" class="history-entry-nav__button" data-history-neighbor="${escapeHTML(next.id)}">${t('historia.siguiente')} →</button>`:'<span></span>'}
+      </nav>
     </article>`;
     document.getElementById('backToChurchHistoryResults')?.addEventListener('click',()=>{
+      els.side.classList.remove('side-panel--history-expanded');
       churchHistoryOpenId=null;
       renderChurchHistoryBody();
       els.panelBody.scrollTop=0;
     });
+    document.getElementById('churchHistoryExpand')?.addEventListener('click',event=>{
+      const scrollTop=els.panelBody.scrollTop;
+      const expanded=els.side.classList.toggle('side-panel--history-expanded');
+      event.currentTarget.setAttribute('aria-pressed',String(expanded));
+      event.currentTarget.textContent=expanded?t('historia.vistaCompacta'):t('historia.ampliarLectura');
+      requestAnimationFrame(()=>{ els.panelBody.scrollTop=scrollTop; });
+    });
+    els.panelBody.querySelectorAll('[data-history-neighbor]').forEach(button=>button.addEventListener('click',()=>{
+      churchHistoryOpenId=button.dataset.historyNeighbor;
+      renderChurchHistoryEntry(churchHistoryOpenId);
+      els.panelBody.scrollTop=0;
+    }));
     applyChurchHistoryTranslation(entry);
   }
 
