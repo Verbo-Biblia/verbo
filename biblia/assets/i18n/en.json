@@ -55,6 +55,8 @@
     "porEpoca": "By era",
     "porLibro": "By book",
     "porTema": "By topic",
+    "porAnio": "Years",
+    "nombresDestacados": "Featured names",
     "verTodos": "View all",
     "verMenos": "View less",
     "temas": {
