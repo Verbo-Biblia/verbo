@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "id": "npnf2-continuadores",
+  "type": "churchHistory",
+  "name": "Sócrates, Sozomeno y Teodoreto — Historias Eclesiásticas (NPNF2-2/3)",
+  "abbreviation": "NPNF2-2/3",
+  "language": "es",
+  "authors": [
+    "Sócrates Escolástico",
+    "Sozomeno",
+    "Teodoreto de Ciro"
+  ],
+  "editor": "Philip Schaff",
+  "translator": "Traducción automática editorial de Verbo desde el texto inglés de NPNF2-2 y NPNF2-3",
+  "year": 1890,
+  "coverage": {
+    "start": 305,
+    "end": 439
+  },
+  "description": "Las Historias Eclesiásticas completas de Sócrates Escolástico, Sozomeno y Teodoreto de Ciro, segmentadas por libro y capítulo.",
+  "license": "Dominio público. Traducción propia desde las ediciones inglesas NPNF2-2 y NPNF2-3.",
+  "sourceUrls": [
+    "https://ccel.org/ccel/schaff/npnf202.html",
+    "https://ccel.org/ccel/schaff/npnf203.html"
+  ],
+  "entriesFile": "entries.json",
+  "totalEntries": 654
+}
