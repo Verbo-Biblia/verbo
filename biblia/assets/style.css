@@ -714,6 +714,20 @@ body {
   font-size: 12px;
   font-style: italic;
 }
+
+.history-suggestions__more {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: .15rem .35rem;
+}
+
+.history-suggestions__more:hover {
+  text-decoration: underline;
+}
 .history-entry-actions {
   display: flex;
   align-items: center;
