@@ -2,17 +2,17 @@
 
 ## Próximo punto exacto
 
-- Continuar con `Joel 1–3`.
-- El avance desde Génesis hasta Oseas ya fue revisado y validado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/JOL.json`.
-- Oseas quedó completamente revisado; el próximo punto exacto es Joel 1.
+- Continuar con `Amós 1–9`.
+- El avance desde Génesis hasta Joel ya fue revisado y validado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/AMO.json`.
+- Joel quedó completamente revisado; el próximo punto exacto es Amós 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 38 libros: Joel–Apocalipsis.
-- Restan 313 capítulos desde Joel 1 hasta Apocalipsis.
+- Restan 37 libros: Amós–Apocalipsis.
+- Restan 310 capítulos desde Amós 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -38,7 +38,8 @@
 - Ezequiel: 48 capítulos y 1.273 versículos; candidato editorial publicado.
 - Daniel: 12 capítulos y 357 versículos; candidato editorial publicado.
 - Oseas: 14 capítulos y 197 versículos; candidato editorial publicado.
-- Total terminado: 27 libros y 828 capítulos.
+- Joel: 3 capítulos y 73 versículos; candidato editorial publicado.
+- Total terminado: 28 libros y 831 capítulos.
 
 ## Método obligatorio restante
 
