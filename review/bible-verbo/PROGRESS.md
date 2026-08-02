@@ -68,19 +68,21 @@ Un libro solo puede marcarse como cerrado cuando:
 | Jeremías | 52 | candidato | Revisión integral completada: 52 capítulos y 1.364 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, cifras, oráculos y continuidad validados |
 | Lamentaciones | 5 | candidato | Revisión integral completada: 5 capítulos y 154 versículos; JSON, estructura acróstica, conteos frente a BSB y ASV, imágenes poéticas y continuidad validados |
 | Ezequiel | 48 | candidato | Revisión integral completada: 48 capítulos y 1.273 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, cifras, visiones, oráculos y medidas del templo validados |
-| Daniel–Apocalipsis | 339 | pendiente | Restan 40 libros después de Ezequiel |
+| Daniel | 12 | candidato | Revisión integral completada: 12 capítulos y 357 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, cifras, visiones, profecías y continuidad validados |
+| Oseas–Apocalipsis | 327 | pendiente | Restan 39 libros después de Daniel |
 
 ## Orden de trabajo
 
 Se seguirá el orden canónico, cerrando cada libro antes de declarar terminado el
 proyecto: Génesis, Éxodo, Levítico, Números, Deuteronomio y así sucesivamente
-hasta Apocalipsis. Ezequiel quedó completamente revisado; el próximo punto
-exacto es Daniel 1.
+hasta Apocalipsis. Daniel quedó completamente revisado; el próximo punto exacto
+es Oseas 1.
 
 ## Publicación
 
-Juan autorizó expresamente subir cada libro cuando quede cerrado. Jeremías y
-Lamentaciones y Ezequiel quedaron completamente revisados, validados y publicados. La
-revisión continúa desde Daniel 1.
+Juan autorizó expresamente subir cada libro cuando quede cerrado. Jeremías,
+Lamentaciones y Ezequiel quedaron completamente revisados, validados y publicados.
+Daniel quedó completamente revisado, validado y publicado; la revisión continúa
+desde Oseas 1.
 No se declarará completa ni oficial la Biblia hasta cerrar los 66
 libros.
