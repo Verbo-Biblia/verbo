@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 2,
+  "id": "npnf214-concilios-ecumenicos",
+  "type": "churchHistory",
+  "name": "Los siete concilios ecuménicos (NPNF2-14)",
+  "abbreviation": "NPNF2-14",
+  "language": "es",
+  "author": "Philip Schaff (editor)",
+  "translator": "Traducción automática editorial de Verbo desde el texto inglés de NPNF2-14",
+  "year": 1899,
+  "description": "Credos, cánones, decretos, cartas y excursus de los siete concilios ecuménicos; incluye los Cánones Apostólicos y Cartago bajo Cipriano.",
+  "license": "Dominio público. Traducción propia desde la edición inglesa NPNF2-14.",
+  "sourceUrl": "https://ccel.org/ccel/schaff/npnf214.html",
+  "entriesFile": "entries.json",
+  "totalEntries": 342
+}

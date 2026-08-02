@@ -56,7 +56,8 @@
   "library": [],
   "churchHistory": [
     "church-history/eusebio-historia-eclesiastica/manifest.json",
-    "church-history/eusebio-vida-constantino/manifest.json"
+    "church-history/eusebio-vida-constantino/manifest.json",
+    "church-history/npnf214-concilios-ecumenicos/manifest.json"
   ],
   "gospel": [
     "gospel/evangelio-uf/manifest.json"
