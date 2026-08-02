@@ -2,17 +2,17 @@
 
 ## Próximo punto exacto
 
-- Continuar con `Sofonías 1–3`.
-- El avance desde Génesis hasta Habacuc ya fue revisado y validado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/ZEP.json`.
-- Habacuc quedó completamente revisado; el próximo punto exacto es Sofonías 1.
+- Continuar con `Hageo 1–2`.
+- El avance desde Génesis hasta Sofonías ya fue revisado y validado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/HAG.json`.
+- Sofonías quedó completamente revisado; el próximo punto exacto es Hageo 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 31 libros: Sofonías–Apocalipsis.
-- Restan 283 capítulos desde Sofonías 1 hasta Apocalipsis.
+- Restan 30 libros: Hageo–Apocalipsis.
+- Restan 280 capítulos desde Hageo 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -45,7 +45,8 @@
 - Miqueas: 7 capítulos y 105 versículos; candidato editorial publicado.
 - Nahúm: 3 capítulos y 47 versículos; candidato editorial publicado.
 - Habacuc: 3 capítulos y 56 versículos; candidato editorial publicado.
-- Total terminado: 34 libros y 858 capítulos.
+- Sofonías: 3 capítulos y 53 versículos; candidato editorial publicado.
+- Total terminado: 35 libros y 861 capítulos.
 
 ## Método obligatorio restante
 
