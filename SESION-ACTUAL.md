@@ -2,17 +2,17 @@
 
 ## Próximo punto exacto
 
-- Continuar con `Jeremías 1–52`.
-- El avance desde Génesis hasta Isaías ya fue revisado y validado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/JER.json`.
-- Isaías quedó completamente revisado; el próximo punto exacto es Jeremías 1.
+- Continuar con `Lamentaciones 1–5`.
+- El avance desde Génesis hasta Jeremías ya fue revisado y validado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/LAM.json`.
+- Jeremías 1–52 quedaron revisados; el próximo punto exacto es Lamentaciones 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 43 libros: Jeremías–Apocalipsis.
-- Restan 444 capítulos desde Jeremías 1 hasta Apocalipsis.
+- Restan 42 libros: Lamentaciones–Apocalipsis.
+- Restan 392 capítulos desde Lamentaciones 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -33,7 +33,8 @@
 - Proverbios: 31 capítulos y 915 versículos; candidato editorial publicado.
 - Eclesiastés: 12 capítulos y 222 versículos; candidato editorial publicado.
 - Cantares: 8 capítulos y 117 versículos; candidato editorial publicado.
-- Total terminado: 21 libros y 529 capítulos.
+- Jeremías: 52 capítulos y 1.364 versículos; candidato editorial listo para publicar.
+- Total terminado: 24 libros y 797 capítulos.
 
 ## Método obligatorio restante
 
