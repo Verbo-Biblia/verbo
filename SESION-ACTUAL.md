@@ -2,17 +2,17 @@
 
 ## Próximo punto exacto
 
-- Continuar con `Isaías 1–66`.
-- El avance desde Génesis hasta Cantares ya fue revisado y validado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/ISA.json`.
-- Cantares quedó cerrado; el próximo punto exacto es Isaías 1.
+- Continuar con `Jeremías 1–52`.
+- El avance desde Génesis hasta Isaías ya fue revisado y validado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/JER.json`.
+- Isaías quedó completamente revisado; el próximo punto exacto es Jeremías 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 44 libros: Isaías–Apocalipsis.
-- Restan 510 capítulos desde Isaías 1 hasta Apocalipsis.
+- Restan 43 libros: Jeremías–Apocalipsis.
+- Restan 444 capítulos desde Jeremías 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -32,14 +32,16 @@
 - Job: 42 capítulos y 1.070 versículos; candidato editorial publicado.
 - Proverbios: 31 capítulos y 915 versículos; candidato editorial publicado.
 - Eclesiastés: 12 capítulos y 222 versículos; candidato editorial publicado.
-- Cantares: 8 capítulos y 117 versículos; candidato editorial pendiente de publicación.
+- Cantares: 8 capítulos y 117 versículos; candidato editorial publicado.
 - Total terminado: 21 libros y 529 capítulos.
 
 ## Método obligatorio restante
 
-1. Usar BV2026 como texto base; RV1909 solo como control histórico.
-2. Usar LBLA, RVM, RVG u otras versiones conocidas únicamente para contrastar
-   alternativas léxicas, sin copiar su redacción como base.
+1. Usar BV2026 como texto base; RVA1909 solo para controlar estructura,
+   numeración e historia textual, nunca como modelo de redacción.
+2. Usar BSB y ASV como guías textuales principales disponibles; contrastar
+   también LBLA cuando sea accesible y RVG u otras versiones conocidas para
+   alternativas léxicas, sin copiar la redacción de ninguna como base.
 3. Corregir errores, conversiones defectuosas, arcaísmos y nombres anticuados
    mediante revisión contextual, nunca con sustituciones globales ciegas.
 4. Verificar estructura, numeración, textos no vacíos, cifras, negaciones,

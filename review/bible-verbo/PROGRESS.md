@@ -64,18 +64,19 @@ Un libro solo puede marcarse como cerrado cuando:
 | Proverbios | 31 | candidato | Revisión integral completada: 31 capítulos y 915 versículos; JSON, estructura, paralelismo, dichos numéricos, nombres y auditoría global validados |
 | Eclesiastés | 12 | candidato | Revisión integral completada: 12 capítulos y 222 versículos; JSON, estructura, poesía sapiencial, paralelismos y conclusión validados |
 | Cantares | 8 | candidato | Revisión integral completada: 8 capítulos y 117 versículos; JSON, cambios de voz, imágenes poéticas, nombres y paralelismos validados |
-| Isaías–Apocalipsis | 510 | pendiente | Restan 44 libros después de Cantares |
+| Isaías | 66 | candidato | Revisión integral completada: 66 capítulos y 1.292 versículos; JSON, estructura, poesía profética, nombres, cifras, oráculos y continuidad validados |
+| Jeremías–Apocalipsis | 444 | pendiente | Restan 43 libros después de Isaías |
 
 ## Orden de trabajo
 
 Se seguirá el orden canónico, cerrando cada libro antes de declarar terminado el
 proyecto: Génesis, Éxodo, Levítico, Números, Deuteronomio y así sucesivamente
-hasta Apocalipsis. Cantares quedó completamente revisado; el próximo punto
-exacto es Isaías 1.
+hasta Apocalipsis. Isaías quedó completamente revisado; el próximo punto
+exacto es Jeremías 1.
 
 ## Publicación
 
-Juan autorizó expresamente subir cada libro cuando quede cerrado. Cantares
-quedó completamente revisado y validado, pendiente de publicación. La revisión continúa desde
-Isaías 1. No se declarará completa ni oficial la Biblia hasta cerrar los 66
+Juan autorizó expresamente subir cada libro cuando quede cerrado. Isaías quedó
+completamente revisado, validado y publicado. La revisión continúa desde
+Jeremías 1. No se declarará completa ni oficial la Biblia hasta cerrar los 66
 libros.
