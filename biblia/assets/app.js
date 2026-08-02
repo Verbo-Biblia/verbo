@@ -2200,7 +2200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(churchHistoryOpenId){ renderChurchHistoryEntry(churchHistoryOpenId); return; }
     if(!churchHistoryEntries.length){ els.panelBody.innerHTML=emptyState('⛪',t('historia.sinContenido')); return; }
     if(!churchHistoryQuery.trim()){
-      els.panelBody.innerHTML=`<div class="panel-empty"><div class="panel-empty__icon">🔎</div><div class="panel-empty__text">${t('historia.intro')}</div>${renderChurchHistorySuggestionChips()}</div>`;
+      els.panelBody.innerHTML=renderChurchHistorySuggestionChips();
       wireChurchHistorySuggestionChips();
       return;
     }
