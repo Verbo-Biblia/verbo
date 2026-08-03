@@ -79,21 +79,22 @@ Un libro solo puede marcarse como cerrado cuando:
 | Habacuc | 3 | candidato | Revisión integral completada: 3 capítulos y 56 versículos; JSON, estructura, conteos frente a BSB y ASV, diálogo profético, cinco ayes, oración e indicaciones musicales validados |
 | Sofonías | 3 | candidato | Revisión integral completada: 3 capítulos y 53 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, día de Jehová, oráculos contra las naciones y restauración validados |
 | Hageo | 2 | candidato | Revisión integral completada: 2 capítulos y 38 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, fechas, medidas y cuatro mensajes proféticos validados |
-| Zacarías–Apocalipsis | 278 | pendiente | Restan 29 libros después de Hageo |
+| Zacarías | 14 | candidato | Revisión integral completada: 14 capítulos y 211 versículos; JSON, estructura, conteos frente a BSB y ASV, nombres, fechas, visiones, oráculos, medidas y transiciones de voz validados |
+| Malaquías–Apocalipsis | 264 | pendiente | Restan 28 libros después de Zacarías |
 
 ## Orden de trabajo
 
 Se seguirá el orden canónico, cerrando cada libro antes de declarar terminado el
 proyecto: Génesis, Éxodo, Levítico, Números, Deuteronomio y así sucesivamente
-hasta Apocalipsis. Hageo quedó completamente revisado; el próximo punto exacto
-es Zacarías 1.
+hasta Apocalipsis. Zacarías quedó completamente revisado; el próximo punto exacto
+es Malaquías 1.
 
 ## Publicación
 
 Juan autorizó expresamente subir cada libro cuando quede cerrado. Jeremías,
 Lamentaciones y Ezequiel quedaron completamente revisados, validados y publicados.
 Daniel, Oseas, Joel, Amós, Abdías, Jonás, Miqueas, Nahúm, Habacuc, Sofonías y
-Hageo quedaron completamente revisados, validados y publicados; la revisión
-continúa desde Zacarías 1.
+Hageo y Zacarías quedaron completamente revisados, validados y publicados; la
+revisión continúa desde Malaquías 1.
 No se declarará completa ni oficial la Biblia hasta cerrar los 66
 libros.
