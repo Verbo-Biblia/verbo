@@ -2,17 +2,17 @@
 
 ## Próximo punto exacto
 
-- Continuar con `Malaquías 1–4`.
-- El avance desde Génesis hasta Zacarías ya fue revisado y validado.
-- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/MAL.json`.
-- Zacarías quedó completamente revisado; el próximo punto exacto es Malaquías 1.
+- Continuar con `Mateo 1–28`.
+- El avance desde Génesis hasta Malaquías ya fue revisado y validado.
+- Archivo siguiente: `biblia/modules/bibles/rv-verbo/books/MAT.json`.
+- Malaquías quedó completamente revisado; el próximo punto exacto es Mateo 1.
 - Trabajar desde el texto BV2026 actual, preservando mejoras válidas.
 - Revisar cada versículo en contexto y validar cada capítulo antes de avanzar.
 
 ## Trabajo restante
 
-- Restan 28 libros: Malaquías–Apocalipsis.
-- Restan 264 capítulos desde Malaquías 1 hasta Apocalipsis.
+- Restan 27 libros: Mateo–Apocalipsis.
+- Restan 260 capítulos desde Mateo 1 hasta Apocalipsis.
 - Las fusiones históricas que aún queden se corregirán al revisar cada libro.
 
 ## Cierres ya descontados
@@ -48,7 +48,8 @@
 - Sofonías: 3 capítulos y 53 versículos; candidato editorial publicado.
 - Hageo: 2 capítulos y 38 versículos; candidato editorial publicado.
 - Zacarías: 14 capítulos y 211 versículos; candidato editorial publicado.
-- Total terminado: 37 libros y 877 capítulos.
+- Malaquías: 4 capítulos y 55 versículos; candidato editorial publicado.
+- Total terminado: 38 libros y 881 capítulos.
 
 ## Método obligatorio restante
 
